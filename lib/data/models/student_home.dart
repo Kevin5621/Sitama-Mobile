@@ -1,7 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
 import 'package:sistem_magang/data/models/guidance.dart';
+import 'package:sistem_magang/data/models/lecturer_detail_student.dart';
+import 'package:sistem_magang/data/models/log_book.dart';
 import 'package:sistem_magang/domain/entities/guidance_entity.dart';
+import 'package:sistem_magang/domain/entities/lecturer_detail_student.dart';
+import 'package:sistem_magang/domain/entities/log_book_entity.dart';
 import 'package:sistem_magang/domain/entities/student_home_entity.dart';
 
 class StudentHomeModel {
@@ -49,25 +53,60 @@ extension StudentHomeXModel on StudentHomeModel {
           .toList(),
       latest_log_books: latest_log_books
           .map<LogBookEntity>((data) => LogBookEntity(
-              title: data.title, activity: data.activity, date: data.date))
+              id: data.id,
+              title: data.title,
+              activity: data.activity,
+              date: data.date))
           .toList(),
     );
   }
 }
 
-class LogBookModel {
-  final String title;
-  final String activity;
-  final String date;
+class StudentProfileModel {
+  final String name;
+  final String username;
+  final String email;
+  final String photo_profile;
+  final List<InternshipStudentModel>? internship;
 
-  LogBookModel(
-      {required this.title, required this.activity, required this.date});
+  StudentProfileModel(
+      {required this.name,
+      required this.username,
+      required this.email,
+      required this.photo_profile,
+      this.internship});
 
-  factory LogBookModel.fromMap(Map<String, dynamic> map) {
-    return LogBookModel(
-      title: map['title'] as String,
-      activity: map['activity'] as String,
-      date: map['date'] as String,
+  factory StudentProfileModel.fromMap(Map<String, dynamic> map) {
+    return StudentProfileModel(
+      name: map['name'] as String,
+      username: map['username'] as String,
+      email: map['email'] as String,
+      photo_profile: map['photo_profile'] as String,
+      internship: map['internship'] != null
+          ? List<InternshipStudentModel>.from(
+              (map['internship'] as List<dynamic>).map<InternshipStudentModel?>(
+                (x) =>
+                    InternshipStudentModel.fromMap(x as Map<String, dynamic>),
+              ),
+            )
+          : null,
+    );
+  }
+}
+
+extension StudentProfileXModel on StudentProfileModel {
+  StudentProfileEntity toEntity() {
+    return StudentProfileEntity(
+      name: name,
+      username: username,
+      email: email,
+      photo_profile: photo_profile,
+      internship: internship
+          ?.map<InternshipStudentEntity>((data) => InternshipStudentEntity(
+              name: data.name,
+              start_date: data.start_date,
+              end_date: data.end_date))
+          .toList(),
     );
   }
 }

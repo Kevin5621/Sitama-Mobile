@@ -47,78 +47,80 @@ class GuidanceCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(description, textAlign: TextAlign.left),
-                  SizedBox(height: 10),
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return EditGuidance(
-                                id: id,
-                                title: title,
-                                date: date,
-                                description: description,
-                                curentPage: curentPage,
-                              );
-                            },
-                          );
-                        },
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.edit,
-                              color: AppColors.info,
-                              size: 18,
-                            ),
-                            SizedBox(width: 2),
-                            Text(
-                              'Edit',
-                              style: TextStyle(
+                  if(status != GuidanceStatus.approved) ...[
+                    SizedBox(height: 10),
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return EditGuidance(
+                                  id: id,
+                                  title: title,
+                                  date: date,
+                                  description: description,
+                                  curentPage: curentPage,
+                                );
+                              },
+                            );
+                          },
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.edit,
                                 color: AppColors.info,
+                                size: 18,
                               ),
-                            )
-                          ],
+                              SizedBox(width: 2),
+                              Text(
+                                'Edit',
+                                style: TextStyle(
+                                  color: AppColors.info,
+                                ),
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                      SizedBox(width: 10),
-                      GestureDetector(
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return DeleteGuidance(
-                                id: id,
-                                title: title,
-                                curentPage: curentPage,
-                              );
-                            },
-                          );
-                        },
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.delete,
-                              color: AppColors.danger,
-                              size: 18,
-                            ),
-                            SizedBox(width: 2),
-                            Text(
-                              'Delete',
-                              style: TextStyle(
+                        SizedBox(width: 10),
+                        GestureDetector(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return DeleteGuidance(
+                                  id: id,
+                                  title: title,
+                                  curentPage: curentPage,
+                                );
+                              },
+                            );
+                          },
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.delete,
                                 color: AppColors.danger,
+                                size: 18,
                               ),
-                            )
-                          ],
+                              SizedBox(width: 2),
+                              Text(
+                                'Delete',
+                                style: TextStyle(
+                                  color: AppColors.danger,
+                                ),
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
+                      ],
+                    ),
+                  ],
                 ],
               ),
             ),

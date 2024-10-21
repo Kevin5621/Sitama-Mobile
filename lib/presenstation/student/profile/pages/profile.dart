@@ -1,29 +1,48 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sistem_magang/common/widgets/setting_button.dart';
 import 'package:sistem_magang/core/config/assets/app_images.dart';
 import 'package:sistem_magang/core/config/themes/app_color.dart';
 import 'package:sistem_magang/common/widgets/log_out_alert.dart';
+import 'package:sistem_magang/domain/entities/student_home_entity.dart';
 import 'package:sistem_magang/presenstation/lecturer/reset_password/pages/reset_password.dart';
+import 'package:sistem_magang/presenstation/student/profile/bloc/profile_student_cubit.dart';
+import 'package:sistem_magang/presenstation/student/profile/bloc/profile_student_state.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            _header(),
-            SizedBox(height: 22),
-            _industry(),
-            SizedBox(height: 120),
-
-            _settingsList(context),
-          ],
-        ),
+    return BlocProvider(
+      create: (context) => ProfileStudentCubit()..displayStudent(),
+      child: BlocBuilder<ProfileStudentCubit, ProfileStudentState>(
+        builder: (context, state) {
+          if (state is StudentLoading) {
+            return Center(child: CircularProgressIndicator());
+          }
+          if (state is StudentLoaded) {
+            return Scaffold(
+              body: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    _header(state.studentProfileEntity),
+                    SizedBox(height: 22),
+                    _industry(),
+                    SizedBox(height: 120),
+                    _settingsList(context),
+                  ],
+                ),
+              ),
+            );
+          }
+          if (state is LoadStudentFailure) {
+            return Text(state.errorMessage);
+          }
+          return Container();
+        },
       ),
     );
   }
@@ -127,7 +146,7 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Stack _header() {
+  Stack _header(StudentProfileEntity student) {
     return Stack(
       children: [
         Container(
@@ -161,7 +180,7 @@ class ProfilePage extends StatelessWidget {
                 ),
                 borderRadius: BorderRadius.circular(32),
                 image: DecorationImage(
-                  image: AssetImage(AppImages.photoProfile),
+                  image: NetworkImage(student.photo_profile),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -188,14 +207,14 @@ class ProfilePage extends StatelessWidget {
             ),
             SizedBox(height: 16),
             Text(
-              'Lucas Scott',
+              student.name,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
               ),
             ),
             Text(
-              '3.34.23.2.24',
+              student.username,
               style: TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: 12,
@@ -203,7 +222,7 @@ class ProfilePage extends StatelessWidget {
               ),
             ),
             Text(
-              'lucasScott@polines.com',
+              student.email,
               style: TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: 10,

@@ -1,4 +1,5 @@
 import 'package:sistem_magang/domain/entities/guidance_entity.dart';
+import 'package:sistem_magang/domain/entities/log_book_entity.dart';
 import 'package:sistem_magang/domain/entities/student_home_entity.dart';
 
 class DetailStudentEntity {
