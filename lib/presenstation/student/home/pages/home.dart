@@ -194,31 +194,46 @@ class _HomeContent extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'HELLO,',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                  ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'HELLO,',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Text(
+                      student.name,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
-                Text(
-                  student.name,
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.primary,
+                    shape: BoxShape.circle,
                   ),
-                ),
+                  child: IconButton(
+                    icon: Icon(Icons.notifications, color: AppColors.white,),
+                    onPressed: (){},
+                  ),
+                )
               ],
             ),
           ),
           const SizedBox(height: 16),
           Container(
             color: Colors.white,
-            child: NotificationWidget(
+            child: LoadNotification(
               onClose: () {},
             ),
           ),
@@ -281,6 +296,41 @@ class NotificationWidget extends StatelessWidget {
                 color: AppColors.white,
               ),
               onPressed: onClose,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+class LoadNotification extends StatelessWidget {
+  final VoidCallback onClose;
+
+  const LoadNotification({Key? key, required this.onClose}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 2,
+      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+      color: AppColors.warning,
+      child: Theme(
+        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+        child: ExpansionTile(
+          leading: Icon(Icons.info_rounded, color: AppColors.white,),
+          title: Text("Informasi Baru !", style: TextStyle(color: AppColors.white),),
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Divider(color: AppColors.white,),
+                  Text("21/11/2024", style: TextStyle(color: AppColors.gray)), 
+                  Text("Anda telah dijadwalkan bimbingan 3 yang dilaksanakan pada Kamis, 17 Oktober 2024.", textAlign: TextAlign.left, style: TextStyle(color: AppColors.white)),                   SizedBox(height: 10),
+
+                ],
+              ),
             ),
           ],
         ),
