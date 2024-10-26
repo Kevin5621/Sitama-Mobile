@@ -170,6 +170,7 @@ class _HomeContent extends StatelessWidget {
                       ? GuidanceStatus.rejected
                       : GuidanceStatus.updated,
           description: student.latest_guidances[index].activity,
+          lecturerNote: student.latest_guidances[index].lecturer_note,
           curentPage: 0,
         ),
         childCount: student.latest_guidances.length,
