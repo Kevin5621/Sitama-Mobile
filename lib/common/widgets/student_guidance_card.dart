@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'dart:html' as html;
 import 'package:sistem_magang/core/config/themes/app_color.dart';
+import 'package:sistem_magang/presenstation/general/pdf_viewer/pages/pdf_viewer.dart';
 import 'package:sistem_magang/presenstation/student/guidance/widgets/delete_guidance.dart';
 import 'package:sistem_magang/presenstation/student/guidance/widgets/edit_guidance.dart';
 
@@ -15,6 +18,7 @@ class GuidanceCard extends StatelessWidget {
   final GuidanceStatus status;
   final String description;
   final String lecturerNote;
+  final String nameFile;
   final int curentPage;
 
   const GuidanceCard({
@@ -25,6 +29,7 @@ class GuidanceCard extends StatelessWidget {
     required this.status,
     required this.description,
     required this.lecturerNote,
+    required this.nameFile,
     required this.curentPage,
   }) : super(key: key);
 
@@ -60,9 +65,38 @@ class GuidanceCard extends StatelessWidget {
                       child: Text(lecturerNote, textAlign: TextAlign.left),
                     ),
                   ],
+                  if (nameFile != "tidak ada file") ...[
+                    SizedBox(height: 20),
+                    InkWell(
+                      onTap: () {
+                        kIsWeb
+                            ? html.window.open(nameFile, "_blank")
+                            : Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      PDFViewerPage(pdfUrl: nameFile),
+                                ),
+                              );
+                      },
+                      child: InputDecorator(
+                        decoration: const InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.picture_as_pdf_rounded,
+                            size: 16,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(12)),
+                          ),
+                        ),
+                        child: Text("File Bimbingan"),
+                      ),
+                    ),
+                  ],
                   if (status != GuidanceStatus.approved) ...[
                     SizedBox(height: 10),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         GestureDetector(
                           onTap: () {
