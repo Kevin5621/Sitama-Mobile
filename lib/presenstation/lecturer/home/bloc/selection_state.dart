@@ -22,3 +22,4 @@ class SelectionState extends Equatable {
   @override
   List<Object> get props => [isSelectionMode, selectedIds];
 }
+

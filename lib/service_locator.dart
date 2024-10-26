@@ -5,6 +5,7 @@ import 'package:sistem_magang/data/repository/lecturer.dart';
 import 'package:sistem_magang/data/repository/student.dart';
 import 'package:sistem_magang/data/source/auth_api_service.dart';
 import 'package:sistem_magang/data/source/auth_local_service.dart';
+import 'package:sistem_magang/data/source/industry_api_service.dart';
 import 'package:sistem_magang/data/source/lecturer_api_service.dart';
 import 'package:sistem_magang/data/source/student_api_service.dart';
 import 'package:sistem_magang/domain/repository/auth.dart';
@@ -64,6 +65,9 @@ void setupServiceLocator() {
   sl.registerSingleton<GetDetailStudentUseCase>(GetDetailStudentUseCase());
   sl.registerSingleton<UpdateStatusGuidanceUseCase>(
       UpdateStatusGuidanceUseCase());
+
+  // Services
+  sl.registerLazySingleton<IndustryApiService>(() => IndustryApiServiceImpl());
 
   sl.registerSingleton<LogoutUseCase>(LogoutUseCase());
 }

@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
     final List<Widget> _pages = [
       GuidancePage(),
       const LogBookPage(),
-      const ProfilePage(),
+      ProfilePage(),
     ];
 
     return Scaffold(
