@@ -64,12 +64,14 @@ class StudentApiServiceImpl extends StudentApiService {
           await SharedPreferences.getInstance();
       var token = sharedPreferences.get('token');
 
+      final formData = await request.toFormData();
+
       var response = await sl<DioClient>().post(
         ApiUrls.studentGuidance,
         options: Options(headers: {
           'Authorization': 'Bearer $token',
         }),
-        data: request.toMap(),
+        data: formData,
       );
 
       return Right(response);

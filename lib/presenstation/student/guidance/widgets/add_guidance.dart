@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,12 +23,26 @@ class _AddGuidanceState extends State<AddGuidance> {
 
   final TextEditingController _title = TextEditingController();
   final TextEditingController _activity = TextEditingController();
+  PlatformFile? _selectedFile;
 
   @override
   void dispose() {
     _title.dispose();
     _activity.dispose();
     super.dispose();
+  }
+
+  Future<void> _pickFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf'],
+      withData: true,
+    );
+    if (result != null){
+      setState(() {
+        _selectedFile = result.files.first;
+      });
+    }
   }
 
   @override
@@ -53,6 +68,7 @@ class _AddGuidanceState extends State<AddGuidance> {
 
           if (state is ButtonFailurState) {
             var snackBar = SnackBar(content: Text(state.errorMessage));
+            print(state.errorMessage);
             ScaffoldMessenger.of(context).showSnackBar(snackBar);
           }
         },
@@ -108,6 +124,19 @@ class _AddGuidanceState extends State<AddGuidance> {
                       ),
                     ),
                   ),
+                  SizedBox(height: 20),
+                  InkWell(
+                    onTap:_pickFile,
+                    child: InputDecorator(
+                      decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.file_upload),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(12)),
+                        ),
+                      ),
+                      child: Text(_selectedFile != null ? _selectedFile!.name : "Upload File (Opsional)"),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -122,6 +151,7 @@ class _AddGuidanceState extends State<AddGuidance> {
                           title: _title.text,
                           activity: _activity.text,
                           date: _date,
+                          file: _selectedFile
                         ),
                       );
                 },

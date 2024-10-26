@@ -23,6 +23,7 @@ dependencies:
     shared_preferences:
     dropdown_button2:
     equatable:
+    file_picker: ^5.2.3
 
 dev_dependencies:
     flutter_test:
