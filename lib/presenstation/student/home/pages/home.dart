@@ -170,6 +170,7 @@ class _HomeContent extends StatelessWidget {
                       ? GuidanceStatus.rejected
                       : GuidanceStatus.updated,
           description: student.latest_guidances[index].activity,
+          lecturerNote: student.latest_guidances[index].lecturer_note,
           curentPage: 0,
         ),
         childCount: student.latest_guidances.length,
@@ -230,13 +231,12 @@ class _HomeContent extends StatelessWidget {
       delegate: SliverChildBuilderDelegate(
         (context, index) => LogBookCard(
           item: LogBookItem(
+            id: student.latest_log_books[index].id,
             title: student.latest_log_books[index].title,
-            date: DateTime(2024, 1, 21 + index * 7),
+            date: student.latest_log_books[index].date,
             description: student.latest_log_books[index].activity,
+            curentPage: 0,
           ),
-          onEdit: (updatedItem) {
-            // Implement edit functionality
-          },
         ),
         childCount: student.latest_log_books.length,
       ),

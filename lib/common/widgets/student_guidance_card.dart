@@ -14,6 +14,7 @@ class GuidanceCard extends StatelessWidget {
   final DateTime date;
   final GuidanceStatus status;
   final String description;
+  final String lecturerNote;
   final int curentPage;
 
   const GuidanceCard({
@@ -23,6 +24,7 @@ class GuidanceCard extends StatelessWidget {
     required this.date,
     required this.status,
     required this.description,
+    required this.lecturerNote,
     required this.curentPage,
   }) : super(key: key);
 
@@ -42,83 +44,96 @@ class GuidanceCard extends StatelessWidget {
           subtitle: Text(DateFormat('dd/MM/yyyy').format(date)),
           children: [
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.only(left: 16.0, right: 16, bottom: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(description, textAlign: TextAlign.left),
-                  SizedBox(height: 10),
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return EditGuidance(
-                                id: id,
-                                title: title,
-                                date: date,
-                                description: description,
-                                curentPage: curentPage,
-                              );
-                            },
-                          );
-                        },
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.edit,
-                              color: AppColors.info,
-                              size: 18,
-                            ),
-                            SizedBox(width: 2),
-                            Text(
-                              'Edit',
-                              style: TextStyle(
-                                color: AppColors.info,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      SizedBox(width: 10),
-                      GestureDetector(
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return DeleteGuidance(
-                                id: id,
-                                title: title,
-                                curentPage: curentPage,
-                              );
-                            },
-                          );
-                        },
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.delete,
-                              color: AppColors.danger,
-                              size: 18,
-                            ),
-                            SizedBox(width: 2),
-                            Text(
-                              'Delete',
-                              style: TextStyle(
-                                color: AppColors.danger,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(description, textAlign: TextAlign.left),
                   ),
+                  if (lecturerNote != "tidak ada catatan") ...[
+                    const SizedBox(height: 16),
+                    Text('Catatan Dosen :'),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(lecturerNote, textAlign: TextAlign.left),
+                    ),
+                  ],
+                  if (status != GuidanceStatus.approved) ...[
+                    SizedBox(height: 10),
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return EditGuidance(
+                                  id: id,
+                                  title: title,
+                                  date: date,
+                                  description: description,
+                                  curentPage: curentPage,
+                                );
+                              },
+                            );
+                          },
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.edit,
+                                color: AppColors.info,
+                                size: 18,
+                              ),
+                              SizedBox(width: 2),
+                              Text(
+                                'Edit',
+                                style: TextStyle(
+                                  color: AppColors.info,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        GestureDetector(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return DeleteGuidance(
+                                  id: id,
+                                  title: title,
+                                  curentPage: curentPage,
+                                );
+                              },
+                            );
+                          },
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.delete,
+                                color: AppColors.danger,
+                                size: 18,
+                              ),
+                              SizedBox(width: 2),
+                              Text(
+                                'Delete',
+                                style: TextStyle(
+                                  color: AppColors.danger,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ],
               ),
             ),

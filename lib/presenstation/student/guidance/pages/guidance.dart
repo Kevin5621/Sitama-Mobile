@@ -78,6 +78,7 @@ class _GuidancePageState extends State<GuidancePage> {
                                     ? GuidanceStatus.rejected
                                     : GuidanceStatus.updated,
                         description: guidances[index].activity,
+                        lecturerNote: guidances[index].lecturer_note,
                         curentPage: 1,
                       ),
                       childCount: guidances.length,

@@ -1,4 +1,6 @@
 import 'package:sistem_magang/domain/entities/guidance_entity.dart';
+import 'package:sistem_magang/domain/entities/lecturer_detail_student.dart';
+import 'package:sistem_magang/domain/entities/log_book_entity.dart';
 
 class StudentHomeEntity {
   final String name;
@@ -9,12 +11,20 @@ class StudentHomeEntity {
 
 }
 
+class StudentProfileEntity {
+  final String name;
+  final String username;
+  final String email;
+  final String photo_profile;
+  final List<InternshipStudentEntity>? internship;
 
-
-class LogBookEntity {
-  final String title;
-  final String activity;
-  final String date;
-
-  LogBookEntity({required this.title, required this.activity, required this.date});
+  StudentProfileEntity(
+      {required this.name,
+      required this.username,
+      required this.email,
+      required this.photo_profile,
+      this.internship});
 }
+
+
+

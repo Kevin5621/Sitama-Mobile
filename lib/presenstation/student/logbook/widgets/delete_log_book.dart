@@ -4,16 +4,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sistem_magang/common/bloc/button/button_state.dart';
 import 'package:sistem_magang/common/bloc/button/button_state_cubit.dart';
 import 'package:sistem_magang/common/widgets/basic_app_button.dart';
-import 'package:sistem_magang/domain/usecases/delete_guidance_student.dart';
+import 'package:sistem_magang/domain/usecases/delete_log_book_student.dart';
 import 'package:sistem_magang/presenstation/student/home/pages/home.dart';
 import 'package:sistem_magang/service_locator.dart';
 
-class DeleteGuidance extends StatefulWidget {
+class DeleteLogBook extends StatefulWidget {
   final int id;
   final String title;
   final int curentPage;
 
-  const DeleteGuidance({
+  const DeleteLogBook({
     super.key,
     required this.id,
     required this.curentPage,
@@ -21,11 +21,10 @@ class DeleteGuidance extends StatefulWidget {
   });
 
   @override
-  State<DeleteGuidance> createState() => _DeleteGuidanceState();
+  State<DeleteLogBook> createState() => _DeleteLogBookState();
 }
 
-class _DeleteGuidanceState extends State<DeleteGuidance> {
-
+class _DeleteLogBookState extends State<DeleteLogBook> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -34,7 +33,7 @@ class _DeleteGuidanceState extends State<DeleteGuidance> {
         listener: (context, state) async {
           if (state is ButtonSuccessState) {
             var snackBar =
-                SnackBar(content: Text('Berhasil Menghapus Bimbingan'));
+                SnackBar(content: Text('Berhasil Menghapus Log Book'));
             ScaffoldMessenger.of(context).showSnackBar(snackBar);
             Navigator.pushAndRemoveUntil(
               context,
@@ -53,14 +52,15 @@ class _DeleteGuidanceState extends State<DeleteGuidance> {
           }
         },
         child: AlertDialog(
-          title: Text('Hapus Bimbingan'),
-          content: Text('Apakah anda ingin menghapus bimbingan "${widget.title}"?'),
+          title: Text('Hapus Log Book'),
+          content:
+              Text('Apakah anda ingin menghapus log book "${widget.title}"?'),
           actions: [
             Builder(builder: (context) {
               return BasicAppButton(
                 onPressed: () {
                   context.read<ButtonStateCubit>().excute(
-                        usecase: sl<DeleteGuidanceUseCase>(),
+                        usecase: sl<DeleteLogBookUseCase>(),
                         params: widget.id,
                       );
                 },

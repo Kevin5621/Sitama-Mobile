@@ -12,12 +12,17 @@ import 'package:sistem_magang/domain/repository/auth.dart';
 import 'package:sistem_magang/domain/repository/lecturer.dart';
 import 'package:sistem_magang/domain/repository/student.dart';
 import 'package:sistem_magang/domain/usecases/add_guidance_student.dart';
+import 'package:sistem_magang/domain/usecases/add_log_book_student.dart';
 import 'package:sistem_magang/domain/usecases/delete_guidance_student.dart';
+import 'package:sistem_magang/domain/usecases/delete_log_book_student.dart';
 import 'package:sistem_magang/domain/usecases/edit_guidance_student.dart';
+import 'package:sistem_magang/domain/usecases/edit_log_book_student.dart';
 import 'package:sistem_magang/domain/usecases/get_detail_student.dart';
 import 'package:sistem_magang/domain/usecases/get_guidances_student.dart';
 import 'package:sistem_magang/domain/usecases/get_home_lecturer.dart';
 import 'package:sistem_magang/domain/usecases/get_home_student.dart';
+import 'package:sistem_magang/domain/usecases/get_log_book_student.dart';
+import 'package:sistem_magang/domain/usecases/get_profile_student.dart';
 import 'package:sistem_magang/domain/usecases/is_logged_in.dart';
 import 'package:sistem_magang/domain/usecases/log_out.dart';
 import 'package:sistem_magang/domain/usecases/signin.dart';
@@ -48,6 +53,13 @@ void setupServiceLocator() {
   sl.registerSingleton<AddGuidanceUseCase>(AddGuidanceUseCase());
   sl.registerSingleton<EditGuidanceUseCase>(EditGuidanceUseCase());
   sl.registerSingleton<DeleteGuidanceUseCase>(DeleteGuidanceUseCase());
+
+  sl.registerSingleton<GetLogBookStudentUseCase>(GetLogBookStudentUseCase());
+  sl.registerSingleton<AddLogBookUseCase>(AddLogBookUseCase());
+  sl.registerSingleton<EditLogBookUseCase>(EditLogBookUseCase());
+  sl.registerSingleton<DeleteLogBookUseCase>(DeleteLogBookUseCase());
+
+  sl.registerSingleton<GetProfileStudentUseCase>(GetProfileStudentUseCase());
 
   sl.registerSingleton<GetHomeLecturerUseCase>(GetHomeLecturerUseCase());
   sl.registerSingleton<GetDetailStudentUseCase>(GetDetailStudentUseCase());
