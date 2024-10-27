@@ -4,4 +4,5 @@ class AppVectors {
 
   static const String google = '${basePath}google$format';
   static const String loginVektor = '${basePath}login_vektor$format';
+  static const String loginIlustrations = '${basePath}loginIlustrations$format';
 }

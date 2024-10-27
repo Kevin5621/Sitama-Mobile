@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,8 +11,17 @@ import 'package:sistem_magang/presenstation/lecturer/reset_password/pages/reset_
 import 'package:sistem_magang/presenstation/student/profile/bloc/profile_student_cubit.dart';
 import 'package:sistem_magang/presenstation/student/profile/bloc/profile_student_state.dart';
 
+
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+  ProfilePage({super.key}) {
+    // Memastikan service sudah diregister
+    if (!sl.isRegistered<IndustryApiService>()) {
+      sl.registerLazySingleton<IndustryApiService>(
+          () => IndustryApiServiceImpl());
+    }
+  }
+
+  final IndustryApiService _apiService = sl<IndustryApiService>();
 
   @override
   Widget build(BuildContext context) {
@@ -43,13 +52,14 @@ class ProfilePage extends StatelessWidget {
           }
           return Container();
         },
+
       ),
     );
   }
 
   Padding _settingsList(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
           SettingButton(
@@ -70,7 +80,7 @@ class ProfilePage extends StatelessWidget {
               showDialog(
                 context: context,
                 builder: (context) {
-                  return LogOutAlert();
+                  return const LogOutAlert();
                 },
               );
             },
@@ -79,7 +89,6 @@ class ProfilePage extends StatelessWidget {
       ),
     );
   }
-
   Container _industry() {
     return Container(
       padding: EdgeInsets.all(20),

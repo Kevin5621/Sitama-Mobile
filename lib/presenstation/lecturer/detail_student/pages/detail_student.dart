@@ -225,7 +225,7 @@ class DetailStudentPage extends StatelessWidget {
             height: MediaQuery.of(context).size.height * 0.8,
             child: TabBarView(
               children: [
-                LecturerGuidanceTab(guidances: guidances, student_id: id,),
+                LecturerGuidanceTab(guidances: guidances, student_id: id, studentId: 1,),
                 LecturerLogBookTab(logBooks: logBooks,),
               ],
             ),
