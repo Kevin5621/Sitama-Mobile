@@ -171,6 +171,7 @@ class _HomeContent extends StatelessWidget {
                       : GuidanceStatus.updated,
           description: student.latest_guidances[index].activity,
           lecturerNote: student.latest_guidances[index].lecturer_note,
+          nameFile: student.latest_guidances[index].name_file,
           curentPage: 0,
         ),
         childCount: student.latest_guidances.length,
