@@ -2,7 +2,7 @@
   
 # 📱 Sitama
 
-### Streamline Your Internship Experience at Polytechnic Negeri Semarang
+### Simplify Your Internship Experience with Politeknik Negeri Semarang
 
 [![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](https://flutter.dev)
 [![Laravel](https://img.shields.io/badge/Laravel-%23FF2D20.svg?style=for-the-badge&logo=laravel&logoColor=white)](https://laravel.com)
