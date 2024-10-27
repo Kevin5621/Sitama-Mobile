@@ -1,11 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-
 import 'package:intl/intl.dart';
 import 'package:sistem_magang/data/models/guidance.dart';
-import 'package:sistem_magang/data/models/student_home.dart';
+import 'package:sistem_magang/data/models/log_book.dart';
 import 'package:sistem_magang/domain/entities/guidance_entity.dart';
 import 'package:sistem_magang/domain/entities/lecturer_detail_student.dart';
-import 'package:sistem_magang/domain/entities/student_home_entity.dart';
+import 'package:sistem_magang/domain/entities/log_book_entity.dart';
 
 class DetailStudentModel {
   final InfoStudentModel student;
@@ -66,7 +65,7 @@ extension DetailStudentXModel on DetailStudentModel {
             .toList(),
         log_book: log_book
             .map<LogBookEntity>((data) => LogBookEntity(
-                title: data.title, activity: data.activity, date: data.date))
+                id: data.id,title: data.title, activity: data.activity, date: data.date))
             .toList());
   }
 }

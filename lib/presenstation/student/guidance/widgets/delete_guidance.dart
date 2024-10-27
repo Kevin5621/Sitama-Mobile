@@ -54,7 +54,7 @@ class _DeleteGuidanceState extends State<DeleteGuidance> {
         },
         child: AlertDialog(
           title: Text('Hapus Bimbingan'),
-          content: Text('Apakah anda ingin menghapus bimbingan "${widget.title}?'),
+          content: Text('Apakah anda ingin menghapus bimbingan "${widget.title}"?'),
           actions: [
             Builder(builder: (context) {
               return BasicAppButton(

@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'dart:html' as html;
 import 'package:sistem_magang/core/config/themes/app_color.dart';
+import 'package:sistem_magang/presenstation/general/pdf_viewer/pdf_viewer.dart';
 import 'package:sistem_magang/presenstation/student/guidance/widgets/delete_guidance.dart';
 import 'package:sistem_magang/presenstation/student/guidance/widgets/edit_guidance.dart';
 
@@ -14,6 +17,8 @@ class GuidanceCard extends StatelessWidget {
   final DateTime date;
   final GuidanceStatus status;
   final String description;
+  final String lecturerNote;
+  final String nameFile;
   final int curentPage;
 
   const GuidanceCard({
@@ -23,6 +28,8 @@ class GuidanceCard extends StatelessWidget {
     required this.date,
     required this.status,
     required this.description,
+    required this.lecturerNote,
+    required this.nameFile,
     required this.curentPage,
   }) : super(key: key);
 
@@ -42,83 +49,125 @@ class GuidanceCard extends StatelessWidget {
           subtitle: Text(DateFormat('dd/MM/yyyy').format(date)),
           children: [
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.only(left: 16.0, right: 16, bottom: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(description, textAlign: TextAlign.left),
-                  SizedBox(height: 10),
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return EditGuidance(
-                                id: id,
-                                title: title,
-                                date: date,
-                                description: description,
-                                curentPage: curentPage,
-                              );
-                            },
-                          );
-                        },
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.edit,
-                              color: AppColors.info,
-                              size: 18,
-                            ),
-                            SizedBox(width: 2),
-                            Text(
-                              'Edit',
-                              style: TextStyle(
-                                color: AppColors.info,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      SizedBox(width: 10),
-                      GestureDetector(
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return DeleteGuidance(
-                                id: id,
-                                title: title,
-                                curentPage: curentPage,
-                              );
-                            },
-                          );
-                        },
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.delete,
-                              color: AppColors.danger,
-                              size: 18,
-                            ),
-                            SizedBox(width: 2),
-                            Text(
-                              'Delete',
-                              style: TextStyle(
-                                color: AppColors.danger,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(description, textAlign: TextAlign.left),
                   ),
+                  if (lecturerNote != "tidak ada catatan") ...[
+                    const SizedBox(height: 16),
+                    Text('Catatan Dosen :'),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(lecturerNote, textAlign: TextAlign.left),
+                    ),
+                  ],
+                  if (nameFile != "tidak ada file") ...[
+                    SizedBox(height: 20),
+                    InkWell(
+                      onTap: () {
+                        kIsWeb
+                            ? html.window.open(nameFile, "_blank")
+                            : Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      PDFViewerPage(pdfUrl: nameFile),
+                                ),
+                              );
+                      },
+                      child: InputDecorator(
+                        decoration: const InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.picture_as_pdf_rounded,
+                            size: 16,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(12)),
+                          ),
+                        ),
+                        child: Text("File Bimbingan"),
+                      ),
+                    ),
+                  ],
+                  if (status != GuidanceStatus.approved) ...[
+                    SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return EditGuidance(
+                                  id: id,
+                                  title: title,
+                                  date: date,
+                                  description: description,
+                                  curentPage: curentPage,
+                                );
+                              },
+                            );
+                          },
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.edit,
+                                color: AppColors.info,
+                                size: 18,
+                              ),
+                              SizedBox(width: 2),
+                              Text(
+                                'Edit',
+                                style: TextStyle(
+                                  color: AppColors.info,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        GestureDetector(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return DeleteGuidance(
+                                  id: id,
+                                  title: title,
+                                  curentPage: curentPage,
+                                );
+                              },
+                            );
+                          },
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.delete,
+                                color: AppColors.danger,
+                                size: 18,
+                              ),
+                              SizedBox(width: 2),
+                              Text(
+                                'Delete',
+                                style: TextStyle(
+                                  color: AppColors.danger,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -135,7 +184,7 @@ class GuidanceCard extends StatelessWidget {
       case GuidanceStatus.inProgress:
         return const Icon(Icons.remove_circle, color: AppColors.gray);
       case GuidanceStatus.rejected:
-        return const Icon(Icons.warning, color: AppColors.danger);
+        return const Icon(Icons.error, color: AppColors.danger);
       case GuidanceStatus.updated:
         return const Icon(Icons.help, color: AppColors.warning);
     }

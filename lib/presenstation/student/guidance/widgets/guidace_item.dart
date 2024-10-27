@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:sistem_magang/core/config/themes/app_color.dart';
 
-enum BimbinganStatus { revisi, pending, approved, revisipending }
+enum BimbinganStatus { revisi, pending, approved }
 
 class BimbinganItem extends StatelessWidget {
   final String title;
@@ -49,13 +48,11 @@ class BimbinganItem extends StatelessWidget {
   Widget _getStatusIcon() {
     switch (status) {
       case BimbinganStatus.revisi:
-        return const Icon(Icons.error, color: AppColors.danger);
+        return const Icon(Icons.error, color: Colors.orange);
       case BimbinganStatus.pending:
-        return const Icon(Icons.remove_circle, color: AppColors.gray);
-      case BimbinganStatus.revisipending:
-        return const Icon(Icons.add_circle, color: AppColors.gray);
+        return const Icon(Icons.remove_circle, color: Colors.grey);
       case BimbinganStatus.approved:
-        return const Icon(Icons.check_circle, color: AppColors.success);
+        return const Icon(Icons.check_circle, color: Colors.green);
     }
   }
 }

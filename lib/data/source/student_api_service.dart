@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sistem_magang/core/constansts/api_urls.dart';
 import 'package:sistem_magang/core/network/dio_client.dart';
 import 'package:sistem_magang/data/models/guidance.dart';
+import 'package:sistem_magang/data/models/log_book.dart';
 import 'package:sistem_magang/service_locator.dart';
 
 abstract class StudentApiService {
@@ -12,6 +13,13 @@ abstract class StudentApiService {
   Future<Either> addGuidances(AddGuidanceReqParams request);
   Future<Either> editGuidances(EditGuidanceReqParams request);
   Future<Either> deleteGuidances(int id);
+
+  Future<Either> getLogBook();
+  Future<Either> addLogBook(AddLogBookReqParams request);
+  Future<Either> editLogBook(EditLogBookReqParams request);
+  Future<Either> deleteLogBook(int id);
+
+  Future<Either> getStudentProfile();
 }
 
 class StudentApiServiceImpl extends StudentApiService {
@@ -56,12 +64,14 @@ class StudentApiServiceImpl extends StudentApiService {
           await SharedPreferences.getInstance();
       var token = sharedPreferences.get('token');
 
+      final formData = await request.toFormData();
+
       var response = await sl<DioClient>().post(
         ApiUrls.studentGuidance,
         options: Options(headers: {
           'Authorization': 'Bearer $token',
         }),
-        data: request.toMap(),
+        data: formData,
       );
 
       return Right(response);
@@ -120,6 +130,114 @@ class StudentApiServiceImpl extends StudentApiService {
       } else {
         return Left(e.message);
       }
+    }
+  }
+  
+  @override
+  Future<Either> getLogBook() async {
+    try {
+      SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+      var token = sharedPreferences.get('token');
+
+      var response = await sl<DioClient>().get(ApiUrls.studentLogBook,
+          options: Options(headers: {
+            'Authorization': 'Bearer $token',
+          }));
+      return Right(response);
+    } on DioException catch (e) {
+      return Left(e.response!.data['errors']['message']);
+    }
+  }
+  
+  @override
+  Future<Either> addLogBook(AddLogBookReqParams request) async {
+    try {
+      SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+      var token = sharedPreferences.get('token');
+
+      var response = await sl<DioClient>().post(
+        ApiUrls.studentLogBook,
+        options: Options(headers: {
+          'Authorization': 'Bearer $token',
+        }),
+        data: request.toMap(),
+      );
+
+      return Right(response);
+    } on DioException catch (e) {
+      if (e.response != null) {
+        return Left(e.response!.data['errors'].toString());
+      } else {
+        return Left(e.message);
+      }
+    }
+  }
+  
+  @override
+  Future<Either> editLogBook(EditLogBookReqParams request) async {
+    try {
+      SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+      var token = sharedPreferences.get('token');
+
+      var response = await sl<DioClient>().put(
+        "${ApiUrls.studentLogBook}/${request.id}",
+        options: Options(headers: {
+          'Authorization': 'Bearer $token',
+        }),
+        data: request.toMap(),
+      );
+
+      return Right(response);
+    } on DioException catch (e) {
+      if (e.response != null) {
+        return Left(e.response!.data['errors'].toString());
+      } else {
+        return Left(e.message);
+      }
+    }
+  }
+  
+  @override
+  Future<Either> deleteLogBook(int id) async {
+    try {
+      SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+      var token = sharedPreferences.get('token');
+
+      var response = await sl<DioClient>().delete(
+        "${ApiUrls.studentLogBook}/$id",
+        options: Options(headers: {
+          'Authorization': 'Bearer $token',
+        }),
+      );
+
+      return Right(response);
+    } on DioException catch (e) {
+      if (e.response != null) {
+        return Left(e.response!.data['errors'].toString());
+      } else {
+        return Left(e.message);
+      }
+    }
+  }
+  
+  @override
+  Future<Either> getStudentProfile() async {
+    try {
+      SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+      var token = sharedPreferences.get('token');
+
+      var response = await sl<DioClient>().get(ApiUrls.studentProfile,
+          options: Options(headers: {
+            'Authorization': 'Bearer $token',
+          }));
+      return Right(response);
+    } on DioException catch (e) {
+      return Left(e.response!.data['errors']['message']);
     }
   }
 }

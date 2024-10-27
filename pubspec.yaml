@@ -28,6 +28,8 @@ dependencies:
     crypto:
     mime:
     path:
+    file_picker: ^5.2.3
+    syncfusion_flutter_pdfviewer: ^20.3.44
 
 dev_dependencies:
     flutter_test:

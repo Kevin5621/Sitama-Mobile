@@ -1,6 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
+import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter/foundation.dart';
 
 import 'package:sistem_magang/domain/entities/guidance_entity.dart';
 
@@ -77,20 +80,44 @@ class AddGuidanceReqParams {
   final String title;
   final String activity;
   final DateTime date;
+  final PlatformFile? file;
 
   AddGuidanceReqParams({
     required this.title,
     required this.activity,
     required this.date,
+    this.file,
   });
 
-  Map<String, dynamic> toMap() {
-    String formattedDate = DateFormat('yyyy-MM-dd').format(date);
-    return <String, dynamic>{
-      'title': title,
-      'activity': activity,
-      'date': formattedDate,
-    };
+  Future<FormData> toFormData() async {
+    final formData = FormData();
+
+    formData.fields.addAll([
+      MapEntry('title', title),
+      MapEntry('activity', activity),
+      MapEntry('date', DateFormat('yyyy-MM-dd').format(date)),
+    ]);
+
+    if (file != null) {
+      if (kIsWeb) {
+        // Untuk aplikasi web, gunakan bytes
+        formData.files.add(
+          MapEntry(
+            'name_file',
+            MultipartFile.fromBytes(file!.bytes!, filename: file!.name),
+          ),
+        );
+      } else {
+        // Untuk mobile, gunakan path
+        formData.files.add(
+          MapEntry(
+            'name_file',
+            await MultipartFile.fromFile(file!.path!, filename: file!.name),
+          ),
+        );
+      }
+    }
+    return formData;
   }
 }
 
@@ -120,7 +147,7 @@ class EditGuidanceReqParams {
 class UpdateStatusGuidanceReqParams {
   final int id;
   final String status;
-  final String ? lecturer_note;
+  final String? lecturer_note;
 
   UpdateStatusGuidanceReqParams({
     required this.id,

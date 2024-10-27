@@ -33,7 +33,7 @@ class _FilterJurusanState extends State<FilterJurusan> {
       child: DropdownButton2<String>(
         isExpanded: true,
         hint: Text(
-          'Jurusan',
+          'Prodi',
           style: TextStyle(
             fontSize: 14,
             color: AppColors.gray,

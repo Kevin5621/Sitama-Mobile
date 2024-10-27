@@ -20,7 +20,6 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
 
   void _onToggleItemSelection(
       ToggleItemSelection event, Emitter<SelectionState> emit) {
-
     final selectedIds = Set<int>.from(state.selectedIds);
     if (selectedIds.contains(event.id)) {
       selectedIds.remove(event.id);
@@ -46,4 +45,3 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
     emit(state.copyWith(isSelectionMode: false, selectedIds: {}));
   }
 }
-

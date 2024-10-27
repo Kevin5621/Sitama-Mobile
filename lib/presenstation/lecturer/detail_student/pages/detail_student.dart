@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:sistem_magang/core/config/themes/app_color.dart';
 import 'package:sistem_magang/domain/entities/guidance_entity.dart';
 import 'package:sistem_magang/domain/entities/lecturer_detail_student.dart';
-import 'package:sistem_magang/domain/entities/student_home_entity.dart';
+import 'package:sistem_magang/domain/entities/log_book_entity.dart';
 import 'package:sistem_magang/domain/usecases/update_scores.dart';
 import 'package:sistem_magang/presenstation/lecturer/detail_student/bloc/detail_student_display_cubit.dart';
 import 'package:sistem_magang/presenstation/lecturer/detail_student/bloc/detail_student_display_state.dart';
@@ -225,7 +225,7 @@ class DetailStudentPage extends StatelessWidget {
             height: MediaQuery.of(context).size.height * 0.8,
             child: TabBarView(
               children: [
-                LecturerGuidanceTab(guidances: guidances, student_id: id, studentId: 1,),
+                LecturerGuidanceTab(guidances: guidances, student_id: id,),
                 LecturerLogBookTab(logBooks: logBooks,),
               ],
             ),

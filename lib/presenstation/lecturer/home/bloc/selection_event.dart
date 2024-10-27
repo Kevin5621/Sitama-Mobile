@@ -30,4 +30,3 @@ class SendMessage extends SelectionEvent {
   @override
   List<Object> get props => [message];
 }
-

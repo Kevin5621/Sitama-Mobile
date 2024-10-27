@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:sistem_magang/core/config/assets/app_images.dart';
 import 'package:sistem_magang/core/config/themes/app_color.dart';
 import 'package:sistem_magang/common/widgets/log_out_alert.dart';
-import 'package:sistem_magang/common/widgets/reset_password.dart';
 
 import '../../../../common/widgets/setting_button.dart';
 
@@ -32,17 +31,6 @@ class LecturerProfilePage extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
-          SettingButton(
-            icon: Icons.lock_reset,
-            title: 'Reset Password',
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const ResetPasswordPage()),
-              );
-            },
-          ),
           SettingButton(
             icon: Icons.logout,
             title: 'Log Out',

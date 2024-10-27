@@ -3,11 +3,9 @@ import 'package:sistem_magang/core/config/themes/app_theme.dart';
 import 'package:sistem_magang/presenstation/general/splash/pages/splash.dart';
 import 'package:sistem_magang/service_locator.dart';
 
-Future<void> main() async {
+void main() {
   setupServiceLocator();
-  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
-  await setupServiceLocator();
 }
 
 class MyApp extends StatelessWidget {
