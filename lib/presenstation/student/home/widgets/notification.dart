@@ -9,7 +9,7 @@ class NotificationModel {
   final String message;
   final String date;
   final String type;
-  final bool isRead;
+  bool isRead;
   final String? actionData;
   final String? detailText; 
 
@@ -35,33 +35,46 @@ class NotificationScreen extends StatefulWidget {
 
 class _NotificationScreenState extends State<NotificationScreen> {
   final RefreshController _refreshController = RefreshController();
-  // Example usage in NotificationScreen
-  final List<NotificationModel> _notifications = [
-    NotificationModel(
-      id: '1',
-      message: 'Anda telah dijadwalkan bimbingan 1 yang dilaksanakan pada Kamis, 17 Oktober 2024.',
-      date: '20-12-2024',
-      type: 'guidance',
-      isRead: false,
-      detailText: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-    ),
-    NotificationModel(
-      id: '2',
-      message: 'Anda belum mengisi logbook minggu ini. Harap segera mengisi logbook untuk memantau progress kegiatan Anda.',
-      date: '19-12-2024',
-      type: 'logbook',
-      isRead: true,
-      detailText: 'Untuk mengisi logbook, silakan kunjungi halaman logbook dan isi sesuai dengan kegiatan yang telah Anda lakukan selama seminggu terakhir.',
-    ),
-    NotificationModel(
-      id: '3',
-      message: 'Terdapat revisi pada dokumen proposal Anda. Silakan periksa komentar dan lakukan perbaikan sesuai masukan.',
-      date: '18-12-2024',
-      type: 'revision',
-      isRead: false,
-      detailText: 'Detail revisi:\n1. Bab 1: Perbaiki latar belakang\n2. Bab 2: Tambahkan referensi terbaru\n3. Bab 3: Detail metodologi kurang lengkap',
-    ),
-  ];
+  late List<NotificationModel> _notifications;
+
+@override
+  void initState() {
+    super.initState();
+    _notifications = [
+      NotificationModel(
+        id: '1',
+        message: 'Anda telah dijadwalkan bimbingan 1 yang dilaksanakan pada Kamis, 17 Oktober 2024.',
+        date: '20-12-2024',
+        type: 'guidance',
+        isRead: false,
+        detailText: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+      ),
+      NotificationModel(
+        id: '2',
+        message: 'Anda belum mengisi logbook minggu ini. Harap segera mengisi logbook untuk memantau progress kegiatan Anda.',
+        date: '19-12-2024',
+        type: 'logbook',
+        isRead: false,
+        detailText: 'Untuk mengisi logbook, silakan kunjungi halaman logbook dan isi sesuai dengan kegiatan yang telah Anda lakukan selama seminggu terakhir.',
+      ),
+      NotificationModel(
+        id: '3',
+        message: 'Anda belum mengisi logbook minggu ini. Harap segera mengisi logbook untuk memantau progress kegiatan Anda.',
+        date: '19-12-2024',
+        type: 'revision',
+        isRead: false,
+        detailText: 'Untuk mengisi logbook, silakan kunjungi halaman logbook dan isi sesuai dengan kegiatan yang telah Anda lakukan selama seminggu terakhir.',
+      ),NotificationModel(
+        id: '4',
+        message: 'Anda belum mengisi logbook minggu ini. Harap segera mengisi logbook untuk memantau progress kegiatan Anda.',
+        date: '19-12-2024',
+        type: 'General',
+        isRead: false,
+        detailText: 'Untuk mengisi logbook, silakan kunjungi halaman logbook dan isi sesuai dengan kegiatan yang telah Anda lakukan selama seminggu terakhir.',
+      ),
+    ];
+  }
+
 
   void _onRefresh() async {
     // Implement refresh logic here
@@ -74,6 +87,25 @@ class _NotificationScreenState extends State<NotificationScreen> {
     await Future.delayed(const Duration(seconds: 1));
     _refreshController.loadComplete();
   }
+
+  void _markAsRead(String id) {
+    setState(() {
+      final index = _notifications.indexWhere((notification) => notification.id == id);
+      if (index != -1) {
+        _notifications[index].isRead = true;
+      }
+    });
+  }
+
+  void _markAllAsRead() {
+    setState(() {
+      for (var notification in _notifications) {
+        notification.isRead = true;
+      }
+    });
+  }
+
+  int get _unreadCount => _notifications.where((notification) => !notification.isRead).length;
 
   @override
   Widget build(BuildContext context) {
@@ -95,12 +127,11 @@ class _NotificationScreenState extends State<NotificationScreen> {
           ),
         ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.done_all, color: Colors.blue),
-            onPressed: () {
-              // Mark all as read
-            },
-          ),
+          if (_unreadCount > 0)
+            IconButton(
+              icon: const Icon(Icons.done_all, color: Colors.blue),
+              onPressed: _markAllAsRead,
+            ),
         ],
       ),
       body: SmartRefresher(
@@ -118,10 +149,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             return NotificationCard(
               notification: notification,
               onTap: () {
-                // Handle notification tap
-                setState(() {
-                  // Update read status
-                });
+                _markAsRead(notification.id);
               },
             );
           },
@@ -183,8 +211,13 @@ class _NotificationCardState extends State<NotificationCard> {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: widget.onTap,
+      return GestureDetector(
+        onTap: () {
+          widget.onTap();
+          setState(() {
+            isExpanded = !isExpanded;
+          });
+        },
       child: Container(
         margin: const EdgeInsets.only(bottom: 8.0),
         decoration: BoxDecoration(
