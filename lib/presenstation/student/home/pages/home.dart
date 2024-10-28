@@ -9,11 +9,9 @@ import 'package:sistem_magang/domain/entities/student_home_entity.dart';
 import 'package:sistem_magang/presenstation/student/guidance/pages/guidance.dart';
 import 'package:sistem_magang/presenstation/student/home/bloc/student_display_cubit.dart';
 import 'package:sistem_magang/presenstation/student/home/bloc/student_display_state.dart';
+import 'package:sistem_magang/presenstation/student/home/widgets/notification.dart';
 import 'package:sistem_magang/presenstation/student/logbook/pages/logbook.dart';
 import 'package:sistem_magang/presenstation/student/profile/pages/profile.dart';
-// import 'm_bimbingan_page.dart';
-// import 'm_logbook_page.dart';
-// import 'm_settings_page.dart';
 
 class HomePage extends StatefulWidget {
   final int currentIndex;
@@ -36,7 +34,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> _pages = [
-      GuidancePage(),
+      const GuidancePage(),
       const LogBookPage(),
       const ProfilePage(),
     ];
@@ -91,7 +89,7 @@ class _HomeContent extends StatelessWidget {
       child: BlocBuilder<StudentDisplayCubit, StudentDisplayState>(
         builder: (context, state) {
           if (state is StudentLoading) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
           if (state is StudentLoaded) {
             return CustomScrollView(
@@ -113,7 +111,7 @@ class _HomeContent extends StatelessWidget {
                         ),
                         GestureDetector(
                           onTap: allGuidances,
-                          child: Icon(Icons.arrow_forward_ios, size: 14),
+                          child: const Icon(Icons.arrow_forward_ios, size: 14),
                         ),
                       ],
                     ),
@@ -136,7 +134,7 @@ class _HomeContent extends StatelessWidget {
                         ),
                         GestureDetector(
                           onTap: allLogBooks,
-                          child: Icon(Icons.arrow_forward_ios, size: 14),
+                          child: const Icon(Icons.arrow_forward_ios, size: 14),
                         ),
                       ],
                     ),
@@ -201,7 +199,7 @@ class _HomeContent extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       'HELLO,',
                       style: TextStyle(
                         fontSize: 12,
@@ -210,7 +208,7 @@ class _HomeContent extends StatelessWidget {
                     ),
                     Text(
                       student.name,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
@@ -218,15 +216,27 @@ class _HomeContent extends StatelessWidget {
                   ],
                 ),
                 Container(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: AppColors.primary,
                     shape: BoxShape.circle,
                   ),
-                  child: IconButton(
-                    icon: Icon(Icons.notifications, color: AppColors.white,),
-                    onPressed: (){},
+                  child: NotificationBadge(
+                    count: 3,
+                    child: Builder(  // Tambahkan Builder untuk mendapatkan context yang benar
+                      builder: (BuildContext ctx) => IconButton(
+                        icon: const Icon(Icons.notifications, color: AppColors.white),
+                        onPressed: () {
+                          Navigator.push(
+                            ctx,
+                            MaterialPageRoute(
+                              builder: (context) => const NotificationScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -241,6 +251,7 @@ class _HomeContent extends StatelessWidget {
       ),
     );
   }
+}
 
   SliverList _logBooksList(StudentHomeEntity student) {
     return SliverList(
@@ -258,7 +269,6 @@ class _HomeContent extends StatelessWidget {
       ),
     );
   }
-}
 
 class NotificationWidget extends StatelessWidget {
   final VoidCallback onClose;
@@ -270,7 +280,7 @@ class NotificationWidget extends StatelessWidget {
     return Center(
       child: Container(
         padding: const EdgeInsets.all(10),
-        margin: EdgeInsets.symmetric(horizontal: 16),
+        margin: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
           color: AppColors.warning,
           borderRadius: BorderRadius.circular(8),
@@ -282,8 +292,8 @@ class NotificationWidget extends StatelessWidget {
               color: AppColors.white,
             ),
             const SizedBox(width: 8),
-            Expanded(
-              child: const Text(
+            const Expanded(
+              child: Text(
                 'Anda belum dijadwalkan seminar',
                 style: TextStyle(
                   color: AppColors.white,
@@ -316,12 +326,12 @@ class LoadNotification extends StatelessWidget {
       color: AppColors.warning,
       child: Theme(
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-        child: ExpansionTile(
+        child: const ExpansionTile(
           leading: Icon(Icons.info_rounded, color: AppColors.white,),
           title: Text("Informasi Baru !", style: TextStyle(color: AppColors.white),),
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
