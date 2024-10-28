@@ -3,7 +3,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
-import 'dart:html' as html;
+
+
+// import 'dart:html' as html;
 import 'package:sistem_magang/core/config/themes/app_color.dart';
 import 'package:sistem_magang/presenstation/general/pdf_viewer/pages/pdf_viewer.dart';
 import 'package:sistem_magang/presenstation/student/guidance/widgets/delete_guidance.dart';
@@ -69,15 +71,17 @@ class GuidanceCard extends StatelessWidget {
                     SizedBox(height: 20),
                     InkWell(
                       onTap: () {
-                        kIsWeb
-                            ? html.window.open(nameFile, "_blank")
-                            : Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      PDFViewerPage(pdfUrl: nameFile),
-                                ),
-                              );
+                        if (kIsWeb) {
+                          // html.window.open(nameFile, "_blank");
+                        } else {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  PDFViewerPage(pdfUrl: nameFile),
+                            ),
+                          );
+                        }
                       },
                       child: InputDecorator(
                         decoration: const InputDecoration(

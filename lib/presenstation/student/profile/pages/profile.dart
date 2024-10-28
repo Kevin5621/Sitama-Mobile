@@ -2,18 +2,26 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:sistem_magang/common/widgets/edit_photo_profile_pop_up.dart';
 import 'package:sistem_magang/common/widgets/setting_button.dart';
 import 'package:sistem_magang/core/config/assets/app_images.dart';
 import 'package:sistem_magang/core/config/themes/app_color.dart';
 import 'package:sistem_magang/common/widgets/log_out_alert.dart';
+import 'package:sistem_magang/domain/entities/lecturer_detail_student.dart';
 import 'package:sistem_magang/domain/entities/student_home_entity.dart';
 import 'package:sistem_magang/presenstation/lecturer/reset_password/pages/reset_password.dart';
 import 'package:sistem_magang/presenstation/student/profile/bloc/profile_student_cubit.dart';
 import 'package:sistem_magang/presenstation/student/profile/bloc/profile_student_state.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -30,8 +38,8 @@ class ProfilePage extends StatelessWidget {
                   children: [
                     _header(state.studentProfileEntity),
                     SizedBox(height: 22),
-                    _industry(),
-                    SizedBox(height: 120),
+                    _industry(state.studentProfileEntity.internships, context),
+                    SizedBox(height: 40),
                     _settingsList(context),
                   ],
                 ),
@@ -80,7 +88,8 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Container _industry() {
+  Container _industry(
+      List<InternshipStudentEntity>? internships, BuildContext context) {
     return Container(
       padding: EdgeInsets.all(20),
       width: 300,
@@ -109,38 +118,61 @@ class ProfilePage extends StatelessWidget {
             ),
           ),
           SizedBox(height: 10),
-          Text(
-            'Industri 1',
-            style: TextStyle(
-              color: AppColors.gray,
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
+          if (internships != null) ...[
+            ListView.builder(
+                itemCount: internships.length,
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Industri ${index + 1}',
+                        style: TextStyle(
+                          color: AppColors.gray,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Text(
+                        'Nama : ${internships[index].name}', // Replace with actual property
+                        style: TextStyle(
+                          color: AppColors.gray,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Text(
+                        'Tanggal Mulai : ${DateFormat("dd-MM-yyyy").format(internships[index].start_date)}', // Replace with actual property
+                        style: TextStyle(
+                          color: AppColors.gray,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Text(
+                        'Tanggal Selesai : ${DateFormat("dd-MM-yyyy").format(internships[index].start_date)}', // Replace with actual property
+                        style: TextStyle(
+                          color: AppColors.gray,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                    ],
+                  );
+                }),
+          ] else ...[
+            Text(
+              'Tempat magang anda belum terdaftar !',
+              style: TextStyle(
+                color: AppColors.gray,
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
             ),
-          ),
-          Text(
-            'Nama : Pertamina',
-            style: TextStyle(
-              color: AppColors.gray,
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          Text(
-            'Tanggal Mulai : 11 Agustus 2024',
-            style: TextStyle(
-              color: AppColors.gray,
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          Text(
-            'Tanggal Selesai : 12 Agustus 2024',
-            style: TextStyle(
-              color: AppColors.gray,
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
+          ],
         ],
       ),
     );
@@ -180,7 +212,10 @@ class ProfilePage extends StatelessWidget {
                 ),
                 borderRadius: BorderRadius.circular(32),
                 image: DecorationImage(
-                  image: NetworkImage(student.photo_profile),
+                  image: student.photo_profile != null
+                      ? NetworkImage(student.photo_profile!)
+                      : AssetImage(AppImages.photoProfile)
+                          as ImageProvider<Object>,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -195,7 +230,11 @@ class ProfilePage extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                   child: IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) => EditPhotoProfilePopUp());
+                    },
                     icon: Icon(
                       Icons.edit,
                       color: AppColors.white,
