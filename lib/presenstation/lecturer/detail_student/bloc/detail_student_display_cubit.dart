@@ -13,8 +13,34 @@ class DetailStudentDisplayCubit extends Cubit<DetailStudentDisplayState> {
         emit(LoadLecturerFailure(errorMessage: error));
       },
       (data) {
-        emit(LecturerLoaded(detailStudentEntity: data));
+        emit(LecturerLoaded(
+          detailStudentEntity: data,
+          isChecked: false, // Default checkbox tidak dicentang
+          isStarRounded: false, // Default bintang tidak terpilih
+        ));
       },
     );
+  }
+
+  void toggleCheck() {
+    if (state is LecturerLoaded) {
+      final currentState = state as LecturerLoaded;
+      emit(LecturerLoaded(
+        detailStudentEntity: currentState.detailStudentEntity,
+        isChecked: !currentState.isChecked, // Toggle status checkbox
+        isStarRounded: currentState.isStarRounded, // Pertahankan status bintang
+      ));
+    }
+  }
+
+  void toggleStar() {
+    if (state is LecturerLoaded) {
+      final currentState = state as LecturerLoaded;
+      emit(LecturerLoaded(
+        detailStudentEntity: currentState.detailStudentEntity,
+        isChecked: currentState.isChecked, // Pertahankan status checkbox
+        isStarRounded: !currentState.isStarRounded, // Toggle status bintang
+      ));
+    }
   }
 }
