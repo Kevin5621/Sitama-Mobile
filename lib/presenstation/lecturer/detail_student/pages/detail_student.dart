@@ -5,13 +5,14 @@ import 'package:intl/intl.dart';
 import 'package:sistem_magang/core/config/themes/app_color.dart';
 import 'package:sistem_magang/domain/entities/guidance_entity.dart';
 import 'package:sistem_magang/domain/entities/lecturer_detail_student.dart';
-import 'package:sistem_magang/domain/entities/log_book_entity.dart';
+import 'package:sistem_magang/domain/entities/student_home_entity.dart';
 import 'package:sistem_magang/domain/usecases/update_scores.dart';
 import 'package:sistem_magang/presenstation/lecturer/detail_student/bloc/detail_student_display_cubit.dart';
 import 'package:sistem_magang/presenstation/lecturer/detail_student/bloc/detail_student_display_state.dart';
 import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/lecturer_guidance_tab.dart';
 import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/lecturer_log_book_tab.dart';
 import 'package:sistem_magang/presenstation/lecturer/input_score/pages/input_score.dart';
+import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/checklist.dart'; // Ganti dengan path yang sesuai
 
 class DetailStudentPage extends StatelessWidget {
   final int id;
@@ -74,12 +75,37 @@ class DetailStudentPage extends StatelessWidget {
                         ),
                       ),
                     ),
+                    actions: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            right: 16.0), // Jarak dari sisi kanan
+                        child: CheckButton(
+                          isChecked: state.isChecked,
+                          isStarRounded: state
+                              .isStarRounded, // Ambil status bintang dari state
+                          onToggle: () {
+                            context
+                                .read<DetailStudentDisplayCubit>()
+                                .toggleCheck(); // Panggil fungsi toggle untuk checkbox
+                          },
+                          onStarToggle: () {
+                            context
+                                .read<DetailStudentDisplayCubit>()
+                                .toggleStar(); // Panggil fungsi toggle untuk bintang
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                   SliverToBoxAdapter(
                     child: Column(
                       children: [
                         _buildInfoBoxes(context, detailStudent.internships),
-                        _buildTabSection(context, detailStudent.guidances, detailStudent.log_book),
+                        _buildTabSection(
+                          context,
+                          detailStudent.guidances,
+                          detailStudent.log_book,
+                        ),
                       ],
                     ),
                   ),
@@ -87,7 +113,7 @@ class DetailStudentPage extends StatelessWidget {
               );
             }
             if (state is LoadLecturerFailure) {
-              return Text(state.errorMessage);
+              return Center(child: Text(state.errorMessage));
             }
             return Container();
           },
