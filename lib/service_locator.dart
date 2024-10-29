@@ -1,8 +1,5 @@
 import 'package:get_it/get_it.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sistem_magang/common/bloc/bloc/photo_cubit.dart';
 import 'package:sistem_magang/core/network/dio_client.dart';
-import 'package:sistem_magang/core/service/secure_api.dart';
 import 'package:sistem_magang/data/repository/auth.dart';
 import 'package:sistem_magang/data/repository/lecturer.dart';
 import 'package:sistem_magang/data/repository/student.dart';
