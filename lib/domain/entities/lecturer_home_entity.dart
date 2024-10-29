@@ -14,6 +14,7 @@ class LecturerStudentsEntity {
   final String study_program;
   final String major;
   final String academic_year;
+  //menambahkan atribut notifikasi
   final int notificationStatus;
 
   LecturerStudentsEntity(
@@ -24,6 +25,6 @@ class LecturerStudentsEntity {
       required this.study_program,
       required this.major,
       required this.academic_year,
-        this.notificationStatus = 0,
+      this.notificationStatus = 0,
     });
 }
