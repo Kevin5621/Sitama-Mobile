@@ -14,6 +14,7 @@ class LecturerStudentsEntity {
   final String study_program;
   final String major;
   final String academic_year;
+  final int notificationStatus;
 
   LecturerStudentsEntity(
       {required this.id,
@@ -22,5 +23,7 @@ class LecturerStudentsEntity {
       required this.the_class,
       required this.study_program,
       required this.major,
-      required this.academic_year});
+      required this.academic_year,
+        this.notificationStatus = 0,
+    });
 }
