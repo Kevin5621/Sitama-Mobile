@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sistem_magang/core/config/themes/app_color.dart';
 
-// Widget untuk menampilkan kartu informasi mahasiswa dengan dukungan aksi 
-// tap dan long press. Termasuk dalam tampilan: gambar profil, nama, jurusan, 
-// NIM, serta indikator pemilihan saat mode seleksi aktif.
-
 class StudentCard extends StatelessWidget {
   final int id;
   final String imageUrl;
@@ -12,6 +8,7 @@ class StudentCard extends StatelessWidget {
   final String jurusan;
   final String nim;
   final bool isSelected;
+  final int notificationStatus;
   final VoidCallback onTap;
   final VoidCallback onLongPress;
 
@@ -23,9 +20,23 @@ class StudentCard extends StatelessWidget {
     required this.jurusan,
     required this.nim,
     required this.isSelected,
+    this.notificationStatus = 0,
     required this.onTap,
     required this.onLongPress,
   });
+//Menambhkan indikator warna sesuai dengan status notifikasi
+  Color _getNotificationColor() {
+    switch (notificationStatus) {
+      case 1:
+        return Colors.red; // Revisi
+      case 2:
+        return Colors.blue; // Pengajuan baru
+      case 3:
+        return Colors.green; // Disetujui
+      default:
+        return Colors.transparent; // Tidak ada notifikasi
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,34 +44,52 @@ class StudentCard extends StatelessWidget {
       onTap: onTap,
       onLongPress: onLongPress,
       child: Card(
-        elevation: 1, 
-        color: AppColors.white, 
+        elevation: 1,
+        color: AppColors.white,
         child: Padding(
-          padding: const EdgeInsets.all(16.0), 
+          padding: const EdgeInsets.all(16.0),
           child: Row(
             children: [
-              // Container untuk gambar profil yang ditampilkan dalam lingkaran
-              Container(
-                height: 40,
-                width: 40,
-                decoration: BoxDecoration(
-                color: isSelected 
-                      ? AppColors.info.withOpacity(0.1) 
-                      : AppColors.white, 
-                  shape: BoxShape.circle, 
-                  border: Border.all(
-                    color: isSelected ? AppColors.info : AppColors.gray, 
-                    width: isSelected ? 2 : 1, 
+              Stack(
+                children: [
+                  Container(
+                    height: 40,
+                    width: 40,
+                    decoration: BoxDecoration(
+                      color: isSelected ? AppColors.info.withOpacity(0.1) : AppColors.white,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: isSelected ? AppColors.info : AppColors.gray,
+                        width: isSelected ? 2 : 1,
+                      ),
+                    ),
+                    child: ClipOval(
+                      child: Image.network(
+                        imageUrl,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
-                ),
-                child: ClipOval(
-                  child: Image.network(
-                    imageUrl, 
-                    fit: BoxFit.cover, 
+                  // Indikator notifikasi
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: Container(
+                      width: 12,
+                      height: 12,
+                      decoration: BoxDecoration(
+                        color: _getNotificationColor(),
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: AppColors.white,
+                          width: 1.5,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
-              const SizedBox(width: 16), 
+              const SizedBox(width: 16),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -74,7 +103,7 @@ class StudentCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween, 
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           jurusan,
