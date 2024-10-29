@@ -24,7 +24,11 @@ class WelcomePages extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(AppImages.logo),
+              Image.asset(
+                AppImages.logo,
+                width: 200,  
+                height: 150, 
+              ),
               SizedBox(height: 10),
               Text(
                 'SITAMA',
