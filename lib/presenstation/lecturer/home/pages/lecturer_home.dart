@@ -126,13 +126,15 @@ class _LecturerHomeContentState extends State<LecturerHomeContent> {
                                   itemCount: students.length,
                                   separatorBuilder: (context, index) => const SizedBox(height: 14),
                                   itemBuilder: (context, index) {
+                                   // MODIFIED: Added static notificationStatus for testing
                                     return StudentCard(
                                       id: students[index].id,
-                                      imageUrl: 'https://picsum.photos/200/300', // Gambar dummy
+                                      imageUrl: 'https://picsum.photos/200/300',
                                       name: students[index].name,
                                       jurusan: students[index].major,
                                       nim: students[index].username,
                                       isSelected: selectionState.selectedIds.contains(students[index].id),
+                                      notificationStatus: 2, // MODIFIED: Mengatur notifikasi yang static untuk sementara
                                       onTap: () {
                                         if (selectionState.isSelectionMode) {
                                           context.read<SelectionBloc>().add(ToggleItemSelection(students[index].id));
