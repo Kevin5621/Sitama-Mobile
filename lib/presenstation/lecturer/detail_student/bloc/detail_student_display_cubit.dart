@@ -4,16 +4,16 @@ import 'package:sistem_magang/presenstation/lecturer/detail_student/bloc/detail_
 import 'package:sistem_magang/service_locator.dart';
 
 class DetailStudentDisplayCubit extends Cubit<DetailStudentDisplayState> {
-  DetailStudentDisplayCubit() : super(LecturerLoading());
+  DetailStudentDisplayCubit() : super(DetailLoading());
 
   void displayStudent(int id) async {
     var result = await sl<GetDetailStudentUseCase>().call(param: id);
     result.fold(
       (error) {
-        emit(LoadLecturerFailure(errorMessage: error));
+        emit(DetailFailure(errorMessage: error));
       },
       (data) {
-        emit(LecturerLoaded(
+        emit(DetailLoaded(
           detailStudentEntity: data,
           isChecked: false, // Default checkbox tidak dicentang
           isStarRounded: false, // Default bintang tidak terpilih
@@ -23,9 +23,9 @@ class DetailStudentDisplayCubit extends Cubit<DetailStudentDisplayState> {
   }
 
   void toggleCheck() {
-    if (state is LecturerLoaded) {
-      final currentState = state as LecturerLoaded;
-      emit(LecturerLoaded(
+    if (state is DetailLoaded) {
+      final currentState = state as DetailLoaded;
+      emit(DetailLoaded(
         detailStudentEntity: currentState.detailStudentEntity,
         isChecked: !currentState.isChecked, // Toggle status checkbox
         isStarRounded: currentState.isStarRounded, // Pertahankan status bintang
@@ -34,9 +34,9 @@ class DetailStudentDisplayCubit extends Cubit<DetailStudentDisplayState> {
   }
 
   void toggleStar() {
-    if (state is LecturerLoaded) {
-      final currentState = state as LecturerLoaded;
-      emit(LecturerLoaded(
+    if (state is DetailLoaded) {
+      final currentState = state as DetailLoaded;
+      emit(DetailLoaded(
         detailStudentEntity: currentState.detailStudentEntity,
         isChecked: currentState.isChecked, // Pertahankan status checkbox
         isStarRounded: !currentState.isStarRounded, // Toggle status bintang
