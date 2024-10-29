@@ -38,7 +38,7 @@ class _AddGuidanceState extends State<AddGuidance> {
       allowedExtensions: ['pdf'],
       withData: true,
     );
-    if (result != null){
+    if (result != null) {
       setState(() {
         _selectedFile = result.files.first;
       });
@@ -77,67 +77,71 @@ class _AddGuidanceState extends State<AddGuidance> {
           content: Form(
             child: Container(
               width: MediaQuery.of(context).size.width * 0.8,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  TextFormField(
-                    controller: _title,
-                    decoration: InputDecoration(
-                      labelText: 'Judul',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(12)),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  InkWell(
-                    onTap: () async {
-                      final DateTime? picked = await showDatePicker(
-                        context: context,
-                        initialDate: _date,
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime.now(),
-                      );
-                      if (picked != null && picked != _date) {
-                        setState(() {
-                          _date = picked;
-                        });
-                      }
-                    },
-                    child: InputDecorator(
-                      decoration: const InputDecoration(
-                        suffixIcon: Icon(Icons.calendar_month),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextFormField(
+                      controller: _title,
+                      decoration: InputDecoration(
+                        labelText: 'Judul',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(12)),
                         ),
                       ),
-                      child: Text(DateFormat('dd/MM/yyyy').format(_date)),
                     ),
-                  ),
-                  SizedBox(height: 20),
-                  TextFormField(
-                    controller: _activity,
-                    decoration: InputDecoration(
-                      labelText: 'Aktivitas',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                    SizedBox(height: 20),
+                    InkWell(
+                      onTap: () async {
+                        final DateTime? picked = await showDatePicker(
+                          context: context,
+                          initialDate: _date,
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime.now(),
+                        );
+                        if (picked != null && picked != _date) {
+                          setState(() {
+                            _date = picked;
+                          });
+                        }
+                      },
+                      child: InputDecorator(
+                        decoration: const InputDecoration(
+                          suffixIcon: Icon(Icons.calendar_month),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(12)),
+                          ),
+                        ),
+                        child: Text(DateFormat('dd/MM/yyyy').format(_date)),
                       ),
                     ),
-                  ),
-                  SizedBox(height: 20),
-                  InkWell(
-                    onTap:_pickFile,
-                    child: InputDecorator(
-                      decoration: const InputDecoration(
-                        prefixIcon: Icon(Icons.file_upload),
+                    SizedBox(height: 20),
+                    TextFormField(
+                      controller: _activity,
+                      decoration: InputDecoration(
+                        labelText: 'Aktivitas',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(12)),
                         ),
                       ),
-                      child: Text(_selectedFile != null ? _selectedFile!.name : "Upload File (Opsional)"),
                     ),
-                  ),
-                ],
+                    SizedBox(height: 20),
+                    InkWell(
+                      onTap: _pickFile,
+                      child: InputDecorator(
+                        decoration: const InputDecoration(
+                          prefixIcon: Icon(Icons.file_upload),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(12)),
+                          ),
+                        ),
+                        child: Text(_selectedFile != null
+                            ? _selectedFile!.name
+                            : "Upload File (Opsional)"),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -148,11 +152,10 @@ class _AddGuidanceState extends State<AddGuidance> {
                   context.read<ButtonStateCubit>().excute(
                         usecase: sl<AddGuidanceUseCase>(),
                         params: AddGuidanceReqParams(
-                          title: _title.text,
-                          activity: _activity.text,
-                          date: _date,
-                          file: _selectedFile
-                        ),
+                            title: _title.text,
+                            activity: _activity.text,
+                            date: _date,
+                            file: _selectedFile),
                       );
                 },
                 title: 'Add',
