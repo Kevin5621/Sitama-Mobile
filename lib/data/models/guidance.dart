@@ -100,7 +100,6 @@ class AddGuidanceReqParams {
 
     if (file != null) {
       if (kIsWeb) {
-        // Untuk aplikasi web, gunakan bytes
         formData.files.add(
           MapEntry(
             'name_file',
@@ -108,7 +107,6 @@ class AddGuidanceReqParams {
           ),
         );
       } else {
-        // Untuk mobile, gunakan path
         formData.files.add(
           MapEntry(
             'name_file',
@@ -126,21 +124,44 @@ class EditGuidanceReqParams {
   final String title;
   final String activity;
   final DateTime date;
+  final PlatformFile? file;
 
   EditGuidanceReqParams({
     required this.id,
     required this.title,
     required this.activity,
     required this.date,
+    this.file,
   });
 
-  Map<String, dynamic> toMap() {
-    String formattedDate = DateFormat('yyyy-MM-dd').format(date);
-    return <String, dynamic>{
-      'title': title,
-      'activity': activity,
-      'date': formattedDate,
-    };
+  Future<FormData> toFormData() async {
+    final formData = FormData();
+
+    formData.fields.addAll([
+      MapEntry('title', title),
+      MapEntry('activity', activity),
+      MapEntry('date', DateFormat('yyyy-MM-dd').format(date)),
+    ]);
+
+    if (file != null) {
+      if (kIsWeb) {
+        formData.files.add(
+          MapEntry(
+            'name_file',
+            MultipartFile.fromBytes(file!.bytes!, filename: file!.name),
+          ),
+        );
+      } else {
+        formData.files.add(
+          MapEntry(
+            'name_file',
+            await MultipartFile.fromFile(file!.path!, filename: file!.name),
+          ),
+        );
+      }
+    }
+
+    return formData;
   }
 }
 

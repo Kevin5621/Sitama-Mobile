@@ -37,7 +37,7 @@ class _AddGuidanceState extends State<AddGuidance> {
       allowedExtensions: ['pdf'],
       withData: true,
     );
-    if (result != null){
+    if (result != null) {
       setState(() {
         _selectedFile = result.files.first;
       });
@@ -112,168 +112,71 @@ class _AddGuidanceState extends State<AddGuidance> {
           content: Form(
             child: Container(
               width: MediaQuery.of(context).size.width * 0.8,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  TextFormField(
-                    controller: _title,
-                    decoration: InputDecoration(
-                      labelText: 'Judul',
-                      labelStyle: TextStyle(color: Theme.of(context).primaryColor),
-                      prefixIcon: Icon(Icons.title, color: Theme.of(context).primaryColor),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Theme.of(context).primaryColor),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Theme.of(context).primaryColor, width: 2),
-                      ),
-                      filled: true,
-                      fillColor: Theme.of(context).primaryColor.withOpacity(0.05),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  InkWell(
-                    onTap: () async {
-                      final DateTime? picked = await showDatePicker(
-                        context: context,
-                        initialDate: _date,
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime.now(),
-                        builder: (context, child) {
-                          return Theme(
-                            data: Theme.of(context).copyWith(
-                              colorScheme: ColorScheme.light(
-                                primary: Theme.of(context).primaryColor,
-                              ),
-                            ),
-                            child: child!,
-                          );
-                        },
-                      );
-                      if (picked != null && picked != _date) {
-                        setState(() {
-                          _date = picked;
-                        });
-                      }
-                    },
-                    child: InputDecorator(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextFormField(
+                      controller: _title,
                       decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.calendar_month, color: Theme.of(context).primaryColor),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Theme.of(context).primaryColor, width: 2),
-                        ),
-                        filled: true,
-                        fillColor: Theme.of(context).primaryColor.withOpacity(0.05),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            DateFormat('dd/MM/yyyy').format(_date),
-                            style: const TextStyle(fontSize: 16),
-                          ),
-                          Icon(Icons.arrow_drop_down, color: Theme.of(context).primaryColor),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  TextFormField(
-                    controller: _activity,
-                    maxLines: 3,
-                    decoration: InputDecoration(
-                      labelText: 'Aktivitas',
-                      labelStyle: TextStyle(color: Theme.of(context).primaryColor),
-                      prefixIcon: Padding(
-                        padding: const EdgeInsets.only(bottom: 45),
-                        child: Icon(Icons.assignment, color: Theme.of(context).primaryColor),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Theme.of(context).primaryColor, width: 2),
-                      ),
-                      filled: true,
-                      fillColor: Theme.of(context).primaryColor.withOpacity(0.05),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  InkWell(
-                    onTap: _pickFile,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: _selectedFile != null 
-                              ? Theme.of(context).primaryColor 
-                              : Colors.grey,
-                        ),
-                        borderRadius: BorderRadius.circular(12),
-                        color: _selectedFile != null
-                            ? Theme.of(context).primaryColor.withOpacity(0.05)
-                            : null,
-                      ),
-                      child: InputDecorator(
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.file_upload,
-                            color: _selectedFile != null
-                                ? Theme.of(context).primaryColor
-                                : Colors.grey,
-                          ),
-                          border: InputBorder.none,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                _selectedFile != null
-                                    ? _selectedFile!.name
-                                    : "Upload File (Opsional)",
-                                style: TextStyle(
-                                  color: _selectedFile != null
-                                      ? Theme.of(context).primaryColor
-                                      : Colors.grey,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            if (_selectedFile != null)
-                              IconButton(
-                                icon: const Icon(Icons.clear, color: Colors.red),
-                                onPressed: () {
-                                  setState(() {
-                                    _selectedFile = null;
-                                  });
-                                },
-                              ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  InkWell(
-                    onTap:_pickFile,
-                    child: InputDecorator(
-                      decoration: const InputDecoration(
-                        prefixIcon: Icon(Icons.file_upload),
+                        labelText: 'Judul',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(12)),
                         ),
                       ),
-                      child: Text(_selectedFile != null ? _selectedFile!.name : "Upload File (Opsional)"),
                     ),
-                  ),
-                ],
+                    SizedBox(height: 20),
+                    InkWell(
+                      onTap: () async {
+                        final DateTime? picked = await showDatePicker(
+                          context: context,
+                          initialDate: _date,
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime.now(),
+                        );
+                        if (picked != null && picked != _date) {
+                          setState(() {
+                            _date = picked;
+                          });
+                        }
+                      },
+                      child: InputDecorator(
+                        decoration: const InputDecoration(
+                          suffixIcon: Icon(Icons.calendar_month),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(12)),
+                          ),
+                        ),
+                        child: Text(DateFormat('dd/MM/yyyy').format(_date)),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    TextFormField(
+                      controller: _activity,
+                      decoration: InputDecoration(
+                        labelText: 'Aktivitas',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(12)),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    InkWell(
+                      onTap: _pickFile,
+                      child: InputDecorator(
+                        decoration: const InputDecoration(
+                          prefixIcon: Icon(Icons.file_upload),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(12)),
+                          ),
+                        ),
+                        child: Text(_selectedFile != null
+                            ? _selectedFile!.name
+                            : "Upload File (Opsional)"),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -284,11 +187,10 @@ class _AddGuidanceState extends State<AddGuidance> {
                   context.read<ButtonStateCubit>().excute(
                         usecase: sl<AddGuidanceUseCase>(),
                         params: AddGuidanceReqParams(
-                          title: _title.text,
-                          activity: _activity.text,
-                          date: _date,
-                          file: _selectedFile
-                        ),
+                            title: _title.text,
+                            activity: _activity.text,
+                            date: _date,
+                            file: _selectedFile),
                       );
                 },
                 title: 'Add',
