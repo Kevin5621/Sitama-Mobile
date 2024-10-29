@@ -66,25 +66,27 @@ class StudentProfileModel {
   final String name;
   final String username;
   final String email;
-  final String photo_profile;
-  final List<InternshipStudentModel>? internship;
+  final String? photo_profile;
+  final List<InternshipStudentModel>? internships;
 
-  StudentProfileModel(
-      {required this.name,
-      required this.username,
-      required this.email,
-      required this.photo_profile,
-      this.internship});
+  StudentProfileModel({
+    required this.name,
+    required this.username,
+    required this.email,
+    this.photo_profile,
+    this.internships,
+  });
 
   factory StudentProfileModel.fromMap(Map<String, dynamic> map) {
     return StudentProfileModel(
       name: map['name'] as String,
       username: map['username'] as String,
       email: map['email'] as String,
-      photo_profile: map['photo_profile'] as String,
-      internship: map['internship'] != null
+      photo_profile:
+          map['photo_profile'] != null ? map['photo_profile'] as String : null,
+      internships: map['internships'] != null
           ? List<InternshipStudentModel>.from(
-              (map['internship'] as List<dynamic>).map<InternshipStudentModel?>(
+              (map['internships'] as List<dynamic>).map<InternshipStudentModel?>(
                 (x) =>
                     InternshipStudentModel.fromMap(x as Map<String, dynamic>),
               ),
@@ -101,7 +103,7 @@ extension StudentProfileXModel on StudentProfileModel {
       username: username,
       email: email,
       photo_profile: photo_profile,
-      internship: internship
+      internships: internships
           ?.map<InternshipStudentEntity>((data) => InternshipStudentEntity(
               name: data.name,
               start_date: data.start_date,
