@@ -79,7 +79,8 @@ class DetailStudentPage extends StatelessWidget {
                     child: Column(
                       children: [
                         _buildInfoBoxes(context, detailStudent.internships),
-                        _buildTabSection(context, detailStudent.guidances, detailStudent.log_book),
+                        _buildTabSection(context, detailStudent.guidances,
+                            detailStudent.log_book),
                       ],
                     ),
                   ),
@@ -192,9 +193,7 @@ class DetailStudentPage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => InputScorePage(
-                          updateScoresUseCase: GetIt.I<UpdateScoresUseCase>(),
-                        ),
+                        builder: (context) => InputScorePage(),
                       ),
                     );
                   },
@@ -207,7 +206,8 @@ class DetailStudentPage extends StatelessWidget {
     );
   }
 
-  Widget _buildTabSection(BuildContext context, List<GuidanceEntity> guidances, List<LogBookEntity> logBooks) {
+  Widget _buildTabSection(BuildContext context, List<GuidanceEntity> guidances,
+      List<LogBookEntity> logBooks) {
     return DefaultTabController(
       length: 2,
       child: Column(
@@ -225,8 +225,13 @@ class DetailStudentPage extends StatelessWidget {
             height: MediaQuery.of(context).size.height * 0.8,
             child: TabBarView(
               children: [
-                LecturerGuidanceTab(guidances: guidances, student_id: id,),
-                LecturerLogBookTab(logBooks: logBooks,),
+                LecturerGuidanceTab(
+                  guidances: guidances,
+                  student_id: id,
+                ),
+                LecturerLogBookTab(
+                  logBooks: logBooks,
+                ),
               ],
             ),
           ),

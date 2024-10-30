@@ -188,6 +188,7 @@ class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
                 var snackBar = SnackBar(
                     content: Text('Berhasil mengupdate status bimbingan'));
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                Navigator.pop(context);
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
