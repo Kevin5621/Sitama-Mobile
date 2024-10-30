@@ -43,7 +43,7 @@ class HomeContent extends StatelessWidget {
               slivers: [
                 _header(state.studentHomeEntity),
                 // Section header for Recent Guidance
-                _buildSectionHeader('Bimbingan Terbaru', allGuidances),
+                _buildSectionHeader('Revisi Terbaru', allGuidances),
                 _guidancesList(state.studentHomeEntity),
                 // Section header for Recent Logbooks
                 _buildSectionHeader('Log Book Terbaru', allLogBooks),
@@ -87,21 +87,27 @@ class HomeContent extends StatelessWidget {
 
   /// Creates a scrollable list of recent guidance sessions
   /// Converts the guidance status string to corresponding enum value
-  SliverList _guidancesList(StudentHomeEntity student) {
+   SliverList _guidancesList(StudentHomeEntity student) {
+    // Filter guidance list to show only rejected and updated ones
+    final filteredGuidances = student.latest_guidances
+        .where((guidance) => 
+          guidance.status == 'rejected' || 
+          guidance.status == 'updated')
+        .toList();
+
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) => GuidanceCard(
-          id: student.latest_guidances[index].id,
-          title: student.latest_guidances[index].title,
-          date: student.latest_guidances[index].date,
-          // Map status string to GuidanceStatus enum
-          status: _mapGuidanceStatus(student.latest_guidances[index].status),
-          description: student.latest_guidances[index].activity,
-          lecturerNote: student.latest_guidances[index].lecturer_note,
-          nameFile: student.latest_guidances[index].name_file,
+          id: filteredGuidances[index].id,
+          title: filteredGuidances[index].title,
+          date: filteredGuidances[index].date,
+          status: _mapGuidanceStatus(filteredGuidances[index].status),
+          description: filteredGuidances[index].activity,
+          lecturerNote: filteredGuidances[index].lecturer_note,
+          nameFile: filteredGuidances[index].name_file,
           curentPage: 0,
         ),
-        childCount: student.latest_guidances.length,
+        childCount: filteredGuidances.length,
       ),
     );
   }

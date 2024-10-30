@@ -23,7 +23,7 @@ class _NotificationPageState extends State<NotificationPage> {
         id: '1',
         message: 'Anda telah dijadwalkan bimbingan 1 yang dilaksanakan pada Kamis, 17 Oktober 2024.',
         date: '20-12-2024',
-        type: 'guidance',
+        type: 'bimbingan',
         isRead: false,
         detailText: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
       ),
@@ -39,7 +39,7 @@ class _NotificationPageState extends State<NotificationPage> {
         id: '3',
         message: 'Anda belum mengisi logbook minggu ini. Harap segera mengisi logbook untuk memantau progress kegiatan Anda.',
         date: '19-12-2024',
-        type: 'revision',
+        type: 'revisi',
         isRead: false,
         detailText: 'Untuk mengisi logbook, silakan kunjungi halaman logbook dan isi sesuai dengan kegiatan yang telah Anda lakukan selama seminggu terakhir.',
       ),NotificationModel(

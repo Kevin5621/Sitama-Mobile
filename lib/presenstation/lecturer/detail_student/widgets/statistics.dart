@@ -13,14 +13,14 @@ class StatisticsSection extends StatelessWidget {
         children: [
           StatItem(
             label: 'Total Log',
-            value: '24',
+            value: '2',
             icon: Icons.book,
             color: Colors.blue,
           ),
           StatItem(
             label: 'Bimbingan',
-            value: '8',
-            icon: Icons.people,
+            value: '6',
+            icon: Icons.school,
             color: Colors.green,
           ),
         ],

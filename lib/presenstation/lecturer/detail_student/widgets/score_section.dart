@@ -55,10 +55,8 @@ class ScoreBox extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => InputScorePage(
-                        updateScoresUseCase: GetIt.I<UpdateScoresUseCase>(),
+                        builder: (context) => InputScorePage(),
                       ),
-                    ),
                   );
                 },
               ),
