@@ -4,13 +4,13 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:sistem_magang/common/widgets/edit_photo_profile_pop_up.dart';
+import 'package:sistem_magang/common/widgets/reset_password.dart';
 import 'package:sistem_magang/common/widgets/setting_button.dart';
 import 'package:sistem_magang/core/config/assets/app_images.dart';
 import 'package:sistem_magang/core/config/themes/app_color.dart';
 import 'package:sistem_magang/common/widgets/log_out_alert.dart';
 import 'package:sistem_magang/domain/entities/lecturer_detail_student.dart';
 import 'package:sistem_magang/domain/entities/student_home_entity.dart';
-import 'package:sistem_magang/presenstation/lecturer/reset_password/pages/reset_password.dart';
 import 'package:sistem_magang/presenstation/student/profile/bloc/profile_student_cubit.dart';
 import 'package:sistem_magang/presenstation/student/profile/bloc/profile_student_state.dart';
 
@@ -57,7 +57,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Padding _settingsList(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
           SettingButton(
@@ -78,7 +78,7 @@ class _ProfilePageState extends State<ProfilePage> {
               showDialog(
                 context: context,
                 builder: (context) {
-                  return LogOutAlert();
+                  return const LogOutAlert();
                 },
               );
             },
@@ -274,3 +274,5 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 }
+
+

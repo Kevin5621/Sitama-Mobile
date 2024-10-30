@@ -31,7 +31,11 @@ class _SplashPageState extends State<SplashPage> {
                   image: AssetImage(AppImages.pattern), fit: BoxFit.cover)),
         ),
         Center(
-          child: Image.asset(AppImages.logo),
+          child: Image.asset(
+                AppImages.logo,
+                width: 200,  
+                height: 150, 
+              ),
         ),
       ]),
     );

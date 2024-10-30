@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sistem_magang/core/config/themes/app_color.dart';
 import 'package:sistem_magang/domain/entities/log_book_entity.dart';
-import 'package:sistem_magang/domain/entities/student_home_entity.dart';
 
 class LecturerLogBookTab extends StatelessWidget {
   final List<LogBookEntity> logBooks;

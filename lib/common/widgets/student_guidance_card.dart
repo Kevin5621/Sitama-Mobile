@@ -188,7 +188,7 @@ class GuidanceCard extends StatelessWidget {
       case GuidanceStatus.inProgress:
         return const Icon(Icons.remove_circle, color: AppColors.gray);
       case GuidanceStatus.rejected:
-        return const Icon(Icons.warning, color: AppColors.danger);
+        return const Icon(Icons.error, color: AppColors.danger);
       case GuidanceStatus.updated:
         return const Icon(Icons.help, color: AppColors.warning);
     }

@@ -23,8 +23,9 @@ dependencies:
     shared_preferences:
     dropdown_button2:
     equatable:
-    file_picker: ^5.2.3
+    file_picker: 
     syncfusion_flutter_pdfviewer: ^20.3.44
+    pull_to_refresh:
 
 dev_dependencies:
     flutter_test:

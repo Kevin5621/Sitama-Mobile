@@ -74,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
                   height: 312,
                   color: AppColors.primary500,
                   child: Center(
-                    child: Image.asset(AppImages.loginIlustration),
+                    child: Image.asset(AppImages.loginvektor),
                   ),
                 ),
                 SizedBox(height: 20),

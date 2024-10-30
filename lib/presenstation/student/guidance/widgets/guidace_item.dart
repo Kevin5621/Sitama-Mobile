@@ -48,7 +48,7 @@ class BimbinganItem extends StatelessWidget {
   Widget _getStatusIcon() {
     switch (status) {
       case BimbinganStatus.revisi:
-        return const Icon(Icons.warning, color: Colors.orange);
+        return const Icon(Icons.error, color: Colors.orange);
       case BimbinganStatus.pending:
         return const Icon(Icons.remove_circle, color: Colors.grey);
       case BimbinganStatus.approved:

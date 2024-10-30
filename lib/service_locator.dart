@@ -48,8 +48,7 @@ void setupServiceLocator() {
   sl.registerSingleton<SigninUseCase>(SigninUseCase());
   sl.registerSingleton<IsLoggedInUseCase>(IsLoggedInUseCase());
   sl.registerSingleton<GetHomeStudentUseCase>(GetHomeStudentUseCase());
-  sl.registerSingleton<GetGuidancesStudentUseCase>(
-      GetGuidancesStudentUseCase());
+  sl.registerSingleton<GetGuidancesStudentUseCase>(GetGuidancesStudentUseCase());
   sl.registerSingleton<AddGuidanceUseCase>(AddGuidanceUseCase());
   sl.registerSingleton<EditGuidanceUseCase>(EditGuidanceUseCase());
   sl.registerSingleton<DeleteGuidanceUseCase>(DeleteGuidanceUseCase());
@@ -63,9 +62,12 @@ void setupServiceLocator() {
 
   sl.registerSingleton<GetHomeLecturerUseCase>(GetHomeLecturerUseCase());
   sl.registerSingleton<GetDetailStudentUseCase>(GetDetailStudentUseCase());
-  sl.registerSingleton<UpdateStatusGuidanceUseCase>(
-      UpdateStatusGuidanceUseCase());
+  sl.registerSingleton<UpdateStatusGuidanceUseCase>(UpdateStatusGuidanceUseCase());
 
   sl.registerSingleton<UpdatePhotoProfileUseCase>(UpdatePhotoProfileUseCase());
   sl.registerSingleton<LogoutUseCase>(LogoutUseCase());
+  // sl.registerLazySingleton(() => ProfileCubit(
+  // apiClient: sl<SecureApiClient>(),
+  // prefs: sl<SharedPreferences>(),
+// ));
 }
