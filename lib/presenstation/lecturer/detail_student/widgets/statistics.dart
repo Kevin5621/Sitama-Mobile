@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class StatisticsSection extends StatelessWidget {
-  const StatisticsSection({Key? key}) : super(key: key);
+  final int guidanceLength;
+  final int logBookLength;
+  const StatisticsSection(
+      {Key? key, required this.guidanceLength, required this.logBookLength})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,13 +17,13 @@ class StatisticsSection extends StatelessWidget {
         children: [
           StatItem(
             label: 'Total Log',
-            value: '2',
+            value: logBookLength.toString(),
             icon: Icons.book,
             color: Colors.blue,
           ),
           StatItem(
             label: 'Bimbingan',
-            value: '6',
+            value: guidanceLength.toString(),
             icon: Icons.school,
             color: Colors.green,
           ),
