@@ -80,45 +80,63 @@ class StudentCard extends StatelessWidget {
         color: AppColors.white,
         child: Stack(
           children: [
+            if (isSelected) ...[
+              Positioned(
+                top: 0,
+                bottom: 0,
+                right: 8,
+                child: Padding(
+                  padding: EdgeInsets.only(left: 12),
+                  child: Icon(Icons.check_circle, color: Colors.blue),
+                ),
+              ),
+            ],
             // Activity Icons Stack
             Positioned(
               top: 8,
               right: 8,
               child: SizedBox(
-                width: activities.length * 20.0, // Adjust width based on number of activities
+                width: activities.length *
+                    20.0, // Adjust width based on number of activities
                 height: 24,
                 child: Stack(
-                  children: activities.asMap().entries.map((entry) {
-                    // Calculate position for overlapping effect
-                    return Positioned(
-                      right: entry.key * 15.0, // Adjust overlap distance
-                      child: Container(
-                        width: 24,
-                        height: 24,
-                        decoration: BoxDecoration(
-                          color: _getActivityColor(entry.value),
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Colors.white,
-                            width: 1.5,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              spreadRadius: 1,
-                              blurRadius: 2,
-                              offset: const Offset(0, 1),
+                  children: activities
+                      .asMap()
+                      .entries
+                      .map((entry) {
+                        // Calculate position for overlapping effect
+                        return Positioned(
+                          right: entry.key * 15.0, // Adjust overlap distance
+                          child: Container(
+                            width: 24,
+                            height: 24,
+                            decoration: BoxDecoration(
+                              color: _getActivityColor(entry.value),
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: Colors.white,
+                                width: 1.5,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.1),
+                                  spreadRadius: 1,
+                                  blurRadius: 2,
+                                  offset: const Offset(0, 1),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                        child: Icon(
-                          _getActivityIcon(entry.value),
-                          size: 14,
-                          color: Colors.white,
-                        ),
-                      ),
-                    );
-                  }).toList().reversed.toList(), // Reverse to show first item on top
+                            child: Icon(
+                              _getActivityIcon(entry.value),
+                              size: 14,
+                              color: Colors.white,
+                            ),
+                          ),
+                        );
+                      })
+                      .toList()
+                      .reversed
+                      .toList(), // Reverse to show first item on top
                 ),
               ),
             ),
@@ -133,7 +151,9 @@ class StudentCard extends StatelessWidget {
                         height: 40,
                         width: 40,
                         decoration: BoxDecoration(
-                          color: isSelected ? AppColors.info.withOpacity(0.1) : AppColors.white,
+                          color: isSelected
+                              ? AppColors.info.withOpacity(0.1)
+                              : AppColors.white,
                           shape: BoxShape.circle,
                           border: Border.all(
                             color: isSelected ? AppColors.info : AppColors.gray,
@@ -178,6 +198,14 @@ class StudentCard extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 4),
+                        Text(
+                          nim,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: AppColors.gray,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -195,23 +223,11 @@ class StudentCard extends StatelessWidget {
                                 color: AppColors.gray,
                               ),
                             ),
-                            Text(
-                              nim,
-                              style: const TextStyle(
-                                fontSize: 14,
-                                color: AppColors.gray,
-                              ),
-                            ),
                           ],
                         ),
                       ],
                     ),
                   ),
-                  if (isSelected)
-                    const Padding(
-                      padding: EdgeInsets.only(left: 12),
-                      child: Icon(Icons.check_circle, color: Colors.blue),
-                    ),
                 ],
               ),
             ),
