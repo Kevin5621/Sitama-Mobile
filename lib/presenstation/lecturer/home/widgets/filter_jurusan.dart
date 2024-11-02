@@ -4,22 +4,42 @@ import 'package:flutter/material.dart';
 import 'package:sistem_magang/core/config/themes/app_color.dart';
 
 class FilterJurusan extends StatefulWidget {
-  const FilterJurusan({Key? key}) : super(key: key);
+  final Function(String?)? onProdiSelected;
+  final String? initialValue;
+  final List<String>? customProdiList;
+  final TextStyle? hintStyle;
+  final TextStyle? itemStyle;
+  
+  const FilterJurusan({
+    Key? key,
+    this.onProdiSelected,
+    this.initialValue,
+    this.customProdiList,
+    this.hintStyle,
+    this.itemStyle,
+  }) : super(key: key);
 
   @override
   State<FilterJurusan> createState() => _FilterJurusanState();
 }
 
 class _FilterJurusanState extends State<FilterJurusan> {
-  final List<String> items = [
+  final List<String> defaultItems = [
     'D3 - Informatika',
     'D3 - Elektronika',
     'D3 - Telekomunikasi',
     'D3 - Listrik',
     'D4 - Telekomunikasi',
   ];
+  
   String? selectedValue;
   final TextEditingController textEditingController = TextEditingController();
+  
+  @override
+  void initState() {
+    super.initState();
+    selectedValue = widget.initialValue;
+  }
 
   @override
   void dispose() {
@@ -29,85 +49,137 @@ class _FilterJurusanState extends State<FilterJurusan> {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButtonHideUnderline(
-      child: DropdownButton2<String>(
-        isExpanded: true,
-        hint: Text(
-          'Prodi',
-          style: TextStyle(
-            fontSize: 14,
-            color: AppColors.gray,
+    final items = widget.customProdiList ?? defaultItems;
+    
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: AppColors.primary.withOpacity(0.2)),
+        color: Colors.white,
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton2<String>(
+          isExpanded: true,
+          hint: Row(
+            children: [
+              Icon(
+                Icons.school_outlined,
+                size: 16,
+                color: AppColors.primary,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                'Prodi',
+                style: widget.hintStyle ?? TextStyle(
+                  fontSize: 14,
+                  color: AppColors.primary.withOpacity(0.7),
+                ),
+              ),
+            ],
           ),
-        ),
-        items: items
-            .map((item) => DropdownMenuItem(
-                  value: item,
-                  child: Text(
-                    item,
-                    style: const TextStyle(
-                      fontSize: 14,
+          items: items.map((item) => DropdownMenuItem(
+            value: item,
+            child: Row(
+              children: [
+                Icon(
+                  Icons.school,
+                  size: 16,
+                  color: AppColors.primary,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  item,
+                  style: widget.itemStyle ?? const TextStyle(
+                    fontSize: 14,
+                    color: Colors.black87,
+                  ),
+                ),
+              ],
+            ),
+          )).toList(),
+          value: selectedValue,
+          onChanged: (value) {
+            setState(() {
+              selectedValue = value;
+            });
+            if (widget.onProdiSelected != null) {
+              widget.onProdiSelected!(value);
+            }
+          },
+          buttonStyleData: ButtonStyleData(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            height: 40,
+            width: 150,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: Colors.white,
+            ),
+          ),
+          dropdownStyleData: DropdownStyleData(
+            maxHeight: 300,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: Colors.white,
+            ),
+            offset: const Offset(0, -4),
+            scrollbarTheme: ScrollbarThemeData(
+              radius: const Radius.circular(40),
+              thickness: MaterialStateProperty.all(6),
+              thumbVisibility: MaterialStateProperty.all(true),
+            ),
+          ),
+          menuItemStyleData: const MenuItemStyleData(
+            height: 40,
+            padding: EdgeInsets.symmetric(horizontal: 8),
+          ),
+          dropdownSearchData: DropdownSearchData(
+            searchController: textEditingController,
+            searchInnerWidgetHeight: 60,
+            searchInnerWidget: Container(
+              height: 60,
+              padding: const EdgeInsets.all(8),
+              child: TextFormField(
+                expands: true,
+                maxLines: null,
+                controller: textEditingController,
+                decoration: InputDecoration(
+                  isDense: true,
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 10,
+                  ),
+                  hintText: 'Cari program studi...',
+                  hintStyle: const TextStyle(fontSize: 12),
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: AppColors.primary,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                      color: AppColors.primary.withOpacity(0.2),
                     ),
                   ),
-                ))
-            .toList(),
-        value: selectedValue,
-        onChanged: (value) {
-          setState(() {
-            selectedValue = value;
-          });
-        },
-        buttonStyleData: const ButtonStyleData(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          height: 40,
-          width: 150,
-        ),
-        dropdownStyleData: const DropdownStyleData(
-          maxHeight: 200,
-        ),
-        menuItemStyleData: const MenuItemStyleData(
-          height: 40,
-        ),
-        dropdownSearchData: DropdownSearchData(
-          searchController: textEditingController,
-          searchInnerWidgetHeight: 50,
-          searchInnerWidget: Container(
-            height: 50,
-            padding: const EdgeInsets.only(
-              top: 8,
-              bottom: 4,
-              right: 8,
-              left: 8,
-            ),
-            child: TextFormField(
-              expands: true,
-              maxLines: null,
-              controller: textEditingController,
-              decoration: InputDecoration(
-                isDense: true,
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 8,
-                ),
-                hintText: 'Search for an item...',
-                hintStyle: const TextStyle(fontSize: 12),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                      color: AppColors.primary,
+                    ),
+                  ),
                 ),
               ),
             ),
+            searchMatchFn: (item, searchValue) {
+              return item.value.toString().toLowerCase()
+                  .contains(searchValue.toLowerCase());
+            },
           ),
-          searchMatchFn: (item, searchValue) {
-            return item.value
-                .toString()
-                .toLowerCase()
-                .contains(searchValue.toLowerCase());
+          onMenuStateChange: (isOpen) {
+            if (!isOpen) {
+              textEditingController.clear();
+            }
           },
         ),
-        onMenuStateChange: (isOpen) {
-          if (!isOpen) {
-            textEditingController.clear();
-          }
-        },
       ),
     );
   }
