@@ -3,8 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:sistem_magang/presenstation/student/logbook/widgets/delete_log_book.dart';
 import 'package:sistem_magang/presenstation/student/logbook/widgets/edit_log_book.dart';
 
-import '../../core/config/themes/app_color.dart';
-
 class LogBookItem {
   final int id;
   final String title;
@@ -31,23 +29,44 @@ class LogBookCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Card(
       elevation: 2,
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      color: AppColors.white,
+      // Menggunakan surface color dari color scheme
+      color: colorScheme.surface,
       child: Theme(
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
-          title: Text(item.title),
-          subtitle: Text(DateFormat('dd/MM/yyyy').format(item.date)),
+          // Menggunakan warna primary untuk title
+          title: Text(
+            item.title,
+            style: theme.textTheme.titleMedium?.copyWith(
+              color: colorScheme.onSurface,
+            ),
+          ),
+          // Menggunakan warna secondary untuk subtitle
+          subtitle: Text(
+            DateFormat('dd/MM/yyyy').format(item.date),
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: colorScheme.onSurfaceVariant,
+            ),
+          ),
           children: [
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(item.description),
-                  SizedBox(height: 10),
+                  Text(
+                    item.description,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: colorScheme.onSurface,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
                   Row(
                     children: [
                       GestureDetector(
@@ -71,20 +90,20 @@ class LogBookCard extends StatelessWidget {
                           children: [
                             Icon(
                               Icons.edit,
-                              color: AppColors.info,
+                              color: colorScheme.primary,
                               size: 18,
                             ),
-                            SizedBox(width: 2),
+                            const SizedBox(width: 2),
                             Text(
                               'Edit',
                               style: TextStyle(
-                                color: AppColors.info,
+                                color: colorScheme.primary,
                               ),
                             )
                           ],
                         ),
                       ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                       GestureDetector(
                         onTap: () {
                           showDialog(
@@ -104,14 +123,14 @@ class LogBookCard extends StatelessWidget {
                           children: [
                             Icon(
                               Icons.delete,
-                              color: AppColors.danger,
+                              color: colorScheme.error,
                               size: 18,
                             ),
-                            SizedBox(width: 2),
+                            const SizedBox(width: 2),
                             Text(
                               'Delete',
                               style: TextStyle(
-                                color: AppColors.danger,
+                                color: colorScheme.error,
                               ),
                             )
                           ],

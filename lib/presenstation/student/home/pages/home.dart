@@ -60,9 +60,9 @@ class _HomePageState extends State<HomePage> {
           child: BottomNavigationBar(
             currentIndex: _currentIndex,
             type: BottomNavigationBarType.fixed,
-            backgroundColor: Colors.white,
-            selectedItemColor: Theme.of(context).primaryColor,
-            unselectedItemColor: Colors.grey,
+            backgroundColor: Theme.of(context).colorScheme.surface,
+            selectedItemColor: Theme.of(context).colorScheme.primary,
+            unselectedItemColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
             selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
             elevation: 0,
             onTap: (index) {

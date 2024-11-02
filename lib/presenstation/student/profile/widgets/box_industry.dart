@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sistem_magang/core/config/themes/app_color.dart';
 import 'package:sistem_magang/data/models/industry_box_student.dart';
-// industry_card.dart
+
 class IndustryCard extends StatelessWidget {
   final InternshipModel? internship;
 
@@ -16,19 +15,22 @@ class IndustryCard extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Container(
       padding: const EdgeInsets.all(20),
       width: 300,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(
-            color: AppColors.gray500,
-            offset: Offset(0, 2),
+            color: colorScheme.surfaceVariant.withOpacity(0.3),
+            offset: const Offset(0, 2),
             blurRadius: 2,
           )
         ],
-        color: AppColors.white,
+        color: colorScheme.surface,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,9 +38,8 @@ class IndustryCard extends StatelessWidget {
           Center(
             child: Text(
               internship!.name,
-              style: const TextStyle(
-                color: AppColors.gray,
-                fontSize: 12,
+              style: theme.textTheme.labelMedium?.copyWith(
+                color: colorScheme.onSurfaceVariant,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -46,33 +47,29 @@ class IndustryCard extends StatelessWidget {
           const SizedBox(height: 10),
           Text(
             'Industri 1',
-            style: const TextStyle(
-              color: AppColors.gray,
-              fontSize: 14,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: colorScheme.onSurface,
               fontWeight: FontWeight.w500,
             ),
           ),
           Text(
             'Nama : ${internship!.companyName}',
-            style: const TextStyle(
-              color: AppColors.gray,
-              fontSize: 14,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: colorScheme.onSurface,
               fontWeight: FontWeight.w500,
             ),
           ),
           Text(
             'Tanggal Mulai : ${internship!.startDate}',
-            style: const TextStyle(
-              color: AppColors.gray,
-              fontSize: 14,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: colorScheme.onSurface,
               fontWeight: FontWeight.w500,
             ),
           ),
           Text(
             'Tanggal Selesai : ${internship!.endDate}',
-            style: const TextStyle(
-              color: AppColors.gray,
-              fontSize: 14,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: colorScheme.onSurface,
               fontWeight: FontWeight.w500,
             ),
           ),

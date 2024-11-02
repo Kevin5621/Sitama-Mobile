@@ -1,36 +1,62 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:sistem_magang/core/config/assets/app_images.dart';
-import 'package:sistem_magang/core/config/themes/app_color.dart';
+import 'package:provider/provider.dart';
 import 'package:sistem_magang/common/widgets/log_out_alert.dart';
-
-import '../../../../common/widgets/setting_button.dart';
+import 'package:sistem_magang/common/widgets/setting_button.dart';
+import 'package:sistem_magang/core/config/assets/app_images.dart';
+import 'package:sistem_magang/core/config/themes/theme_provider.dart';
 
 class LecturerProfilePage extends StatelessWidget {
   const LecturerProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final isDarkMode = themeProvider.isDarkMode;
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           children: [
-            _header(),
-            SizedBox(height: 26),
-            _about(),
-            SizedBox(height: 100),
-            _settingsList(context),
+            _header(colorScheme),
+            const SizedBox(height: 26),
+            _about(colorScheme),
+            const SizedBox(height: 100),
+            _settingsList(context, isDarkMode),
           ],
         ),
       ),
     );
   }
 
-  Padding _settingsList(BuildContext context) {
+  Padding _settingsList(BuildContext context, bool isDarkMode) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
+          SettingButton(
+            icon: isDarkMode ? Icons.light_mode : Icons.dark_mode,
+            title: isDarkMode ? 'Light Mode' : 'Dark Mode',
+            onTap: () {
+              themeProvider.toggleTheme();
+            },
+          ),
+          SettingButton(
+            icon: Icons.help_outline,
+            title: 'Help & Support',
+            onTap: () {
+              // Handle help and support
+            },
+          ),
+          SettingButton(
+            icon: Icons.info_outline,
+            title: 'About App',
+            onTap: () {
+              // Handle about app
+            },
+          ),
           SettingButton(
             icon: Icons.logout,
             title: 'Log Out',
@@ -48,40 +74,50 @@ class LecturerProfilePage extends StatelessWidget {
     );
   }
 
-  Stack _header() {
+  Stack _header(ColorScheme colorScheme) {
     return Stack(
       children: [
         Container(
           height: 160,
           decoration: BoxDecoration(
-            image: DecorationImage(
+            image: const DecorationImage(
               image: AssetImage(AppImages.homePattern),
               fit: BoxFit.cover,
             ),
+            color: colorScheme.primary,
           ),
         ),
         Column(
           children: [
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
             Center(
               child: Text(
                 'Profile',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
+                  color: colorScheme.onPrimary,
                 ),
               ),
             ),
-            SizedBox(height: 45),
+            const SizedBox(height: 45),
             Container(
-              height: 80,
-              width: 80,
+              height: 100,
+              width: 100,
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: AppColors.background,
+                  color: colorScheme.background,
+                  width: 2,
                 ),
-                borderRadius: BorderRadius.circular(32),
-                image: DecorationImage(
+                borderRadius: BorderRadius.circular(40),
+                boxShadow: [
+                  BoxShadow(
+                    color: colorScheme.shadow,
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+                image: const DecorationImage(
                   image: AssetImage(AppImages.photoProfile),
                   fit: BoxFit.cover,
                 ),
@@ -89,60 +125,68 @@ class LecturerProfilePage extends StatelessWidget {
               child: Align(
                 alignment: Alignment.bottomRight,
                 child: Container(
-                  width: 30,
-                  height: 30,
+                  width: 36,
+                  height: 36,
                   transform: Matrix4.translationValues(5, 5, 0),
                   decoration: BoxDecoration(
-                    color: AppColors.primary,
+                    color: colorScheme.primary,
                     shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: colorScheme.shadow,
+                        blurRadius: 4,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
                   ),
                   child: IconButton(
                     onPressed: () {},
                     icon: Icon(
                       Icons.edit,
-                      color: AppColors.white,
-                      size: 16,
+                      color: colorScheme.onPrimary,
+                      size: 18,
                     ),
                   ),
                 ),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Text(
               'AMRAN YOBIOKTABERA',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 16,
+                fontSize: 18,
+                color: colorScheme.onBackground,
               ),
             ),
             Text(
               'lucasScott@polines.com',
               style: TextStyle(
                 fontWeight: FontWeight.w500,
-                fontSize: 10,
-                color: AppColors.gray,
+                fontSize: 12,
+                color: colorScheme.onSurface.withOpacity(0.7),
               ),
             ),
           ],
-        )
+        ),
       ],
     );
   }
 
-  Container _about() {
+  Container _about(ColorScheme colorScheme) {
     return Container(
-      padding: EdgeInsets.all(20),
-      width: 300,
+      padding: const EdgeInsets.all(24),
+      width: 320,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: AppColors.gray500,
-            offset: Offset(0, 2),
-            blurRadius: 2,
+            color: colorScheme.shadow.withOpacity(0.2),
+            offset: const Offset(0, 2),
+            blurRadius: 8,
           )
         ],
-        color: AppColors.white,
+        color: colorScheme.surface,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -151,39 +195,80 @@ class LecturerProfilePage extends StatelessWidget {
             child: Text(
               'About',
               style: TextStyle(
-                color: AppColors.gray,
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
+                color: colorScheme.onSurface,
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),
-          SizedBox(height: 10),
-          Text(
-            'Nama : Amran Yobioktabera',
-            style: TextStyle(
-              color: AppColors.gray,
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-            ),
+          const SizedBox(height: 16),
+          InfoRow(
+            icon: Icons.person_outline,
+            label: 'Nama',
+            value: 'Amran Yobioktabera',
+            colorScheme: colorScheme,
           ),
-          Text(
-            'NIP : 332221123456',
-            style: TextStyle(
-              color: AppColors.gray,
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-            ),
+          InfoRow(
+            icon: Icons.badge_outlined,
+            label: 'NIP',
+            value: '332221123456',
+            colorScheme: colorScheme,
           ),
-          Text(
-            'Email : Yobioktaberann@polines.com',
-            style: TextStyle(
-              color: AppColors.gray,
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-            ),
+          InfoRow(
+            icon: Icons.email_outlined,
+            label: 'Email',
+            value: 'Yobioktaberann@polines.com',
+            colorScheme: colorScheme,
           ),
         ],
       ),
+    );
+  }
+}
+
+class InfoRow extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final String value;
+  final ColorScheme colorScheme;
+
+  const InfoRow({
+    Key? key,
+    required this.icon,
+    required this.label,
+    required this.value,
+    required this.colorScheme,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Icon(
+          icon,
+          size: 20,
+          color: colorScheme.onSurface,
+        ),
+        const SizedBox(width: 8),
+        Text(
+          '$label: ',
+          style: TextStyle(
+            color: colorScheme.onSurface,
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        Expanded(
+          child: Text(
+            value,
+            style: TextStyle(
+              color: colorScheme.onBackground,
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

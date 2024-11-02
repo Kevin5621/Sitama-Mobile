@@ -61,24 +61,24 @@ class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
             ? LecturerGuidanceStatus.inProgress
             : widget.guidance.status == 'rejected'
                 ? LecturerGuidanceStatus.rejected
-                : LecturerGuidanceStatus
-                    .updated; // Set status from GuidanceEntity
+                : LecturerGuidanceStatus.updated;
   }
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Card(
       margin: const EdgeInsets.all(8),
       color: currentStatus == LecturerGuidanceStatus.rejected
-          ? AppColors.danger500
-          : AppColors.white,
+          ? colorScheme.error
+          : colorScheme.surface,
       child: Theme(
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
-          leading: _buildLeadingIcon(), // Show the status icon
-          title: Text(widget.guidance.title), // Use title from GuidanceEntity
-          subtitle: Text(DateFormat('dd/MM/yyyy')
-              .format(widget.guidance.date)), // Use date from GuidanceEntity
+          leading: _buildLeadingIcon(colorScheme),
+          title: Text(widget.guidance.title),
+          subtitle: Text(DateFormat('dd/MM/yyyy').format(widget.guidance.date)),
           children: [
             Padding(
               padding: const EdgeInsets.all(16),
@@ -97,7 +97,7 @@ class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
                       currentStatus != LecturerGuidanceStatus.rejected) ...[
                     _buildRevisionField(),
                     const SizedBox(height: 16),
-                    _buildActionButtons(),
+                    _buildActionButtons(colorScheme),
                   ],
                 ],
               ),
@@ -108,19 +108,18 @@ class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
     );
   }
 
-  // Build the leading icon based on the status
-  Widget _buildLeadingIcon() {
+  Widget _buildLeadingIcon(ColorScheme colorScheme) {
     switch (currentStatus) {
       case LecturerGuidanceStatus.approved:
         return const Icon(Icons.check_circle, color: AppColors.success);
       case LecturerGuidanceStatus.inProgress:
-        return const Icon(Icons.remove_circle, color: AppColors.gray);
+        return Icon(Icons.remove_circle, color: colorScheme.onSurface);
       case LecturerGuidanceStatus.rejected:
         return const Icon(Icons.error, color: AppColors.danger);
       case LecturerGuidanceStatus.updated:
-        return const Icon(Icons.help, color: AppColors.warning);
+        return const Icon(Icons.add_circle, color: AppColors.warning);
       default:
-        return const Icon(Icons.circle, color: AppColors.gray);
+        return Icon(Icons.circle, color: colorScheme.onSurface);
     }
   }
 
@@ -136,38 +135,25 @@ class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
             const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       ),
       maxLines: 3,
-      onChanged: (value) {
-        // Update revision text if necessary
-      },
     );
   }
 
-  // Action buttons to approve or reject the guidance
-  Widget _buildActionButtons() {
+  Widget _buildActionButtons(ColorScheme colorScheme) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         ElevatedButton.icon(
-          icon: const Icon(
-            Icons.done,
-            color: AppColors.success,
-            size: 16,
-          ),
-          label:
-              const Text('Setujui', style: TextStyle(color: AppColors.white)),
-          style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary),
+          icon: Icon(Icons.done, color: colorScheme.onPrimary, size: 16),
+          label: Text('Setujui', style: TextStyle(color: colorScheme.onPrimary)),
+          style: ElevatedButton.styleFrom(backgroundColor: colorScheme.primary),
           onPressed: () =>
               _showConfirmationDialog(LecturerGuidanceStatus.approved),
         ),
-        SizedBox(width: 10),
+        const SizedBox(width: 10),
         ElevatedButton.icon(
-          icon: const Icon(
-            Icons.close,
-            color: AppColors.danger,
-            size: 16,
-          ),
-          label: const Text('Revisi', style: TextStyle(color: AppColors.white)),
-          style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary),
+          icon: Icon(Icons.close, color: colorScheme.onPrimary, size: 16),
+          label: Text('Revisi', style: TextStyle(color: colorScheme.onPrimary)),
+          style: ElevatedButton.styleFrom(backgroundColor: colorScheme.primary),
           onPressed: () =>
               _showConfirmationDialog(LecturerGuidanceStatus.rejected),
         ),
@@ -175,7 +161,6 @@ class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
     );
   }
 
-  // Confirmation dialog to change the status
   void _showConfirmationDialog(LecturerGuidanceStatus newStatus) {
     showDialog(
       context: context,

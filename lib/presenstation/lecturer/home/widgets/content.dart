@@ -132,7 +132,7 @@ class _LecturerHomeContentState extends State<LecturerHomeContent>
                 image: AssetImage(AppImages.homePattern),
                 fit: BoxFit.cover,
               ),
-              color: AppColors.primary,
+              color: Theme.of(context).colorScheme.primary,
             ),
             child: Header(
               name: data.name,

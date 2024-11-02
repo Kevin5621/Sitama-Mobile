@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:sistem_magang/core/config/themes/app_color.dart';
 
-class BottomNavigationBarWidget extends StatelessWidget {
+class Navbar extends StatelessWidget {
   final int currentIndex;
   final Function(int) onTap;
 
-  const BottomNavigationBarWidget({
+  const Navbar({
     Key? key,
     required this.currentIndex,
     required this.onTap,
@@ -17,9 +16,9 @@ class BottomNavigationBarWidget extends StatelessWidget {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 10,
-            offset: const Offset(0, -5),
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 20,
+              offset: const Offset(0, -2),
           ),
         ],
       ),
@@ -28,20 +27,30 @@ class BottomNavigationBarWidget extends StatelessWidget {
         child: BottomNavigationBar(
           currentIndex: currentIndex,
           type: BottomNavigationBarType.fixed,
-          backgroundColor: Colors.white,
-          selectedItemColor: AppColors.primary,
-          unselectedItemColor: Colors.grey,
+          backgroundColor: Theme.of(context).colorScheme.surface,
+          selectedItemColor: Theme.of(context).colorScheme.primary,
+          unselectedItemColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
           selectedFontSize: 12,
           unselectedFontSize: 12,
           elevation: 0,
           onTap: onTap,
           items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.home, color: currentIndex == 0 ? AppColors.primary : Colors.grey),
+              icon: Icon(
+                Icons.home,
+                color: currentIndex == 0
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+              ),
               label: 'Home',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.person, color: currentIndex == 1 ? AppColors.primary : Colors.grey),
+              icon: Icon(
+                Icons.person,
+                color: currentIndex == 1
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+              ),
               label: 'Profile',
             ),
           ],

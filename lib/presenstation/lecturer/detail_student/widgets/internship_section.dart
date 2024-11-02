@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:sistem_magang/core/config/themes/app_color.dart';
 import 'package:sistem_magang/domain/entities/lecturer_detail_student.dart';
 
 class InternshipBox extends StatelessWidget {
@@ -13,19 +12,21 @@ class InternshipBox extends StatelessWidget {
     required this.internship,
   }) : super(key: key);
 
-  Widget _buildInternshipInfo(IconData icon, String label, String value) {
+  Widget _buildInternshipInfo(BuildContext context, IconData icon, String label, String value) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Row(
       children: [
         Icon(
           icon,
           size: 18,
-          color: AppColors.primary,
+          color: colorScheme.primary,
         ),
         SizedBox(width: 8),
         Text(
           '$label:',
           style: TextStyle(
-            color: Colors.grey[600],
+            color: colorScheme.onSurface.withOpacity(0.6),
             fontSize: 14,
           ),
         ),
@@ -34,6 +35,7 @@ class InternshipBox extends StatelessWidget {
           child: Text(
             value,
             style: TextStyle(
+              color: colorScheme.onSurface,
               fontWeight: FontWeight.w500,
               fontSize: 14,
             ),
@@ -45,11 +47,13 @@ class InternshipBox extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
@@ -68,13 +72,13 @@ class InternshipBox extends StatelessWidget {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.1),
+                  color: colorScheme.primary.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
                   'Industri ${index + 1}',
                   style: TextStyle(
-                    color: AppColors.primary,
+                    color: colorScheme.primary,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -83,18 +87,21 @@ class InternshipBox extends StatelessWidget {
           ),
           SizedBox(height: 12),
           _buildInternshipInfo(
+            context,
             Icons.business,
             'Nama',
             internship.name,
           ),
           SizedBox(height: 8),
           _buildInternshipInfo(
+            context,
             Icons.calendar_today,
             'Tanggal Mulai',
             DateFormat('dd MMMM yyyy').format(internship.start_date),
           ),
           SizedBox(height: 8),
           _buildInternshipInfo(
+            context,
             Icons.event,
             'Tanggal Selesai',
             internship.end_date != null

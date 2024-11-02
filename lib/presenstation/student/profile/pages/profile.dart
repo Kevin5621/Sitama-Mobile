@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:sistem_magang/common/widgets/edit_photo_profile_pop_up.dart';
 import 'package:sistem_magang/common/widgets/reset_password.dart';
 import 'package:sistem_magang/common/widgets/setting_button.dart';
 import 'package:sistem_magang/core/config/assets/app_images.dart';
 import 'package:sistem_magang/core/config/themes/app_color.dart';
 import 'package:sistem_magang/common/widgets/log_out_alert.dart';
+import 'package:sistem_magang/core/config/themes/theme_provider.dart';
 import 'package:sistem_magang/domain/entities/lecturer_detail_student.dart';
 import 'package:sistem_magang/domain/entities/student_home_entity.dart';
 import 'package:sistem_magang/presenstation/student/profile/bloc/profile_student_cubit.dart';
@@ -24,23 +26,27 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final isDarkMode = themeProvider.isDarkMode;
+
     return BlocProvider(
       create: (context) => ProfileStudentCubit()..displayStudent(),
       child: BlocBuilder<ProfileStudentCubit, ProfileStudentState>(
         builder: (context, state) {
           if (state is StudentLoading) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
           if (state is StudentLoaded) {
+
             return Scaffold(
               body: SingleChildScrollView(
                 child: Column(
                   children: [
                     _header(state.studentProfileEntity),
-                    SizedBox(height: 22),
+                    const SizedBox(height: 22),
                     _industry(state.studentProfileEntity.internships, context),
-                    SizedBox(height: 40),
-                    _settingsList(context),
+                    const SizedBox(height: 40),
+                    _settingsList(context, isDarkMode),
                   ],
                 ),
               ),
@@ -55,11 +61,34 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Padding _settingsList(BuildContext context) {
+  Padding _settingsList(BuildContext context, bool isDarkMode) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+    
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
+          SettingButton(
+            icon: isDarkMode ? Icons.light_mode : Icons.dark_mode,
+            title: isDarkMode ? 'Light Mode' : 'Dark Mode',
+            onTap: () {
+              themeProvider.toggleTheme();
+            },
+          ),
+          SettingButton(
+            icon: Icons.help_outline,
+            title: 'Help & Support',
+            onTap: () {
+              // Handle help and support
+            },
+          ),
+          SettingButton(
+            icon: Icons.info_outline,
+            title: 'About App',
+            onTap: () {
+              // Handle about app
+            },
+          ),
           SettingButton(
             icon: Icons.lock_reset,
             title: 'Reset Password',
@@ -91,12 +120,12 @@ class _ProfilePageState extends State<ProfilePage> {
   Container _industry(
       List<InternshipStudentEntity>? internships, BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       width: 300,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
-          BoxShadow(
+          const BoxShadow(
             color: AppColors.gray500,
             offset: Offset(0, 2),
             blurRadius: 2,
@@ -107,7 +136,7 @@ class _ProfilePageState extends State<ProfilePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Center(
+          const Center(
             child: Text(
               'Industri',
               style: TextStyle(
@@ -117,19 +146,19 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           if (internships != null) ...[
             ListView.builder(
                 itemCount: internships.length,
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         'Industri ${index + 1}',
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: AppColors.gray,
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
@@ -137,7 +166,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       Text(
                         'Nama : ${internships[index].name}', // Replace with actual property
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: AppColors.gray,
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
@@ -145,7 +174,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       Text(
                         'Tanggal Mulai : ${DateFormat("dd-MM-yyyy").format(internships[index].start_date)}', // Replace with actual property
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: AppColors.gray,
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
@@ -153,18 +182,18 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       Text(
                         'Tanggal Selesai : ${DateFormat("dd-MM-yyyy").format(internships[index].start_date)}', // Replace with actual property
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: AppColors.gray,
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                     ],
                   );
                 }),
           ] else ...[
-            Text(
+            const Text(
               'Tempat magang anda belum terdaftar !',
               style: TextStyle(
                 color: AppColors.gray,
@@ -183,7 +212,7 @@ class _ProfilePageState extends State<ProfilePage> {
       children: [
         Container(
           height: 160,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             image: DecorationImage(
               image: AssetImage(AppImages.homePattern),
               fit: BoxFit.cover,
@@ -192,8 +221,8 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         Column(
           children: [
-            SizedBox(height: 40),
-            Center(
+            const SizedBox(height: 40),
+            const Center(
               child: Text(
                 'Profile',
                 style: TextStyle(
@@ -202,7 +231,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
             ),
-            SizedBox(height: 45),
+            const SizedBox(height: 45),
             Container(
               height: 80,
               width: 80,
@@ -214,7 +243,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 image: DecorationImage(
                   image: student.photo_profile != null
                       ? NetworkImage(student.photo_profile!)
-                      : AssetImage(AppImages.photoProfile)
+                      : const AssetImage(AppImages.photoProfile)
                           as ImageProvider<Object>,
                   fit: BoxFit.cover,
                 ),
@@ -225,7 +254,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   width: 30,
                   height: 30,
                   transform: Matrix4.translationValues(5, 5, 0),
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: AppColors.primary,
                     shape: BoxShape.circle,
                   ),
@@ -233,9 +262,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     onPressed: () {
                       showDialog(
                           context: context,
-                          builder: (context) => EditPhotoProfilePopUp());
+                          builder: (context) => const EditPhotoProfilePopUp());
                     },
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.edit,
                       color: AppColors.white,
                       size: 16,
@@ -244,17 +273,17 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Text(
               student.name,
-              style: TextStyle(
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
               ),
             ),
             Text(
               student.username,
-              style: TextStyle(
+              style: const TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: 12,
                 color: AppColors.gray,
@@ -262,7 +291,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             Text(
               student.email,
-              style: TextStyle(
+              style: const TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: 10,
                 color: AppColors.gray,

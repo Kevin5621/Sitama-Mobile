@@ -21,6 +21,7 @@ dependencies:
     dartz:
     logger:
     shared_preferences:
+    provider:
     dropdown_button2:
     equatable:
     file_picker: 

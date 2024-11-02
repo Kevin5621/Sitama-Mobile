@@ -1,15 +1,13 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:sistem_magang/core/config/themes/app_color.dart';
 
 class FilterTahun extends StatefulWidget {
   final Function(String?)? onYearSelected;
   final String? initialValue;
   final int startYear;
   final int endYear;
-  final Color primaryColor;
-  final Color backgroundColor;
+  final Color? primaryColor;
+  final Color? backgroundColor;
   final TextStyle? hintStyle;
   final TextStyle? itemStyle;
   
@@ -19,8 +17,8 @@ class FilterTahun extends StatefulWidget {
     this.initialValue,
     this.startYear = 2020,
     this.endYear = 2024,
-    this.primaryColor = Colors.blue,
-    this.backgroundColor = Colors.white,
+    this.primaryColor,
+    this.backgroundColor,
     this.hintStyle,
     this.itemStyle,
   }) : super(key: key);
@@ -53,11 +51,14 @@ class _FilterTahunState extends State<FilterTahun> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: AppColors.primary.withOpacity(0.2)),
-        color: widget.backgroundColor,
+        border: Border.all(color: (widget.primaryColor ?? colorScheme.primary).withOpacity(0.2)),
+        color: widget.backgroundColor ?? colorScheme.surface,
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton2<String>(
@@ -67,14 +68,14 @@ class _FilterTahunState extends State<FilterTahun> {
               Icon(
                 Icons.calendar_today_outlined,
                 size: 16,
-                color: AppColors.primary,
+                color: widget.primaryColor ?? colorScheme.primary,
               ),
               const SizedBox(width: 8),
               Text(
                 'Tahun',
                 style: widget.hintStyle ?? TextStyle(
                   fontSize: 14,
-                  color: AppColors.primary.withOpacity(0.7),
+                  color: (widget.primaryColor ?? colorScheme.primary).withOpacity(0.7),
                 ),
               ),
             ],
@@ -86,14 +87,14 @@ class _FilterTahunState extends State<FilterTahun> {
                 Icon(
                   Icons.calendar_month,
                   size: 16,
-                  color: AppColors.primary,
+                  color: widget.primaryColor ?? colorScheme.primary,
                 ),
                 const SizedBox(width: 8),
                 Text(
                   item,
                   style: widget.itemStyle ?? TextStyle(
                     fontSize: 14,
-                    color: Colors.black87,
+                    color: colorScheme.onSurface,
                   ),
                 ),
               ],
@@ -114,14 +115,14 @@ class _FilterTahunState extends State<FilterTahun> {
             width: 150,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              color: widget.backgroundColor,
+              color: widget.backgroundColor ?? colorScheme.surface,
             ),
           ),
           dropdownStyleData: DropdownStyleData(
             maxHeight: 300,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              color: widget.backgroundColor,
+              color: widget.backgroundColor ?? colorScheme.surface,
             ),
             offset: const Offset(0, -4),
             scrollbarTheme: ScrollbarThemeData(
@@ -151,21 +152,21 @@ class _FilterTahunState extends State<FilterTahun> {
                     vertical: 10,
                   ),
                   hintText: 'Cari tahun...',
-                  hintStyle: TextStyle(fontSize: 12),
+                  hintStyle: const TextStyle(fontSize: 12),
                   prefixIcon: Icon(
                     Icons.search,
-                    color: AppColors.primary,
+                    color: widget.primaryColor ?? colorScheme.primary,
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide(
-                      color: AppColors.primary.withOpacity(0.2),
+                      color: (widget.primaryColor ?? colorScheme.primary).withOpacity(0.2),
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide(
-                      color: AppColors.primary,
+                      color: widget.primaryColor ?? colorScheme.primary,
                     ),
                   ),
                 ),

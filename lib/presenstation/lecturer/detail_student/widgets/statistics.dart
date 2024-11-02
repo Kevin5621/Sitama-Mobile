@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class StatisticsSection extends StatelessWidget {
   final int guidanceLength;
@@ -16,16 +15,16 @@ class StatisticsSection extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           StatItem(
-            label: 'Total Log',
-            value: logBookLength.toString(),
-            icon: Icons.book,
-            color: Colors.blue,
-          ),
-          StatItem(
             label: 'Bimbingan',
             value: guidanceLength.toString(),
             icon: Icons.school,
             color: Colors.green,
+          ),
+          StatItem(
+            label: 'Total Log',
+            value: logBookLength.toString(),
+            icon: Icons.book,
+            color: Colors.blue,
           ),
         ],
       ),

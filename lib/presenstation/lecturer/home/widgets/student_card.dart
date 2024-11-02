@@ -29,7 +29,6 @@ class StudentCard extends StatelessWidget {
     required this.onLongPress,
   });
 
-  // Get icon based on activity type
   IconData _getActivityIcon(String activity) {
     switch (activity) {
       case 'unseen':
@@ -43,28 +42,27 @@ class StudentCard extends StatelessWidget {
     }
   }
 
-  // Get color based on activity type
-  Color _getActivityColor(String activity) {
+  Color _getActivityColor(String activity, bool isDark) {
     switch (activity) {
       case 'unseen':
-        return Colors.grey;
+        return isDark ? AppColors.grayDark : Colors.grey;
       case 'updated':
-        return Colors.orange;
+        return isDark ? AppColors.warningDark : Colors.orange;
       case 'revisi':
-        return Colors.red;
+        return isDark ? AppColors.dangerDark : Colors.red;
       default:
-        return Colors.grey;
+        return isDark ? AppColors.grayDark : Colors.grey;
     }
   }
 
-  Color _getNotificationColor() {
+  Color _getNotificationColor(bool isDark) {
     switch (notificationStatus) {
       case 1:
-        return Colors.red;
+        return isDark ? AppColors.dangerDark : Colors.red;
       case 2:
-        return Colors.blue;
+        return isDark ? AppColors.infoDark : Colors.blue;
       case 3:
-        return Colors.grey;
+        return isDark ? AppColors.grayDark : Colors.grey;
       default:
         return Colors.transparent;
     }
@@ -72,12 +70,18 @@ class StudentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final backgroundColor = isDark ? AppColors.gray500Dark : AppColors.white;
+    final textColor = isDark ? AppColors.whiteDark : AppColors.black;
+    final secondaryTextColor = isDark ? AppColors.grayDark : AppColors.gray;
+
     return InkWell(
       onTap: onTap,
       onLongPress: onLongPress,
       child: Card(
         elevation: 1,
-        color: AppColors.white,
+        color: backgroundColor,
         child: Stack(
           children: [
             if (isSelected) ...[
@@ -86,8 +90,11 @@ class StudentCard extends StatelessWidget {
                 bottom: 0,
                 right: 8,
                 child: Padding(
-                  padding: EdgeInsets.only(left: 12),
-                  child: Icon(Icons.check_circle, color: Colors.blue),
+                  padding: const EdgeInsets.only(left: 12),
+                  child: Icon(
+                    Icons.check_circle, 
+                    color: isDark ? AppColors.infoDark : Colors.blue
+                  ),
                 ),
               ),
             ],
@@ -96,25 +103,23 @@ class StudentCard extends StatelessWidget {
               top: 8,
               right: 8,
               child: SizedBox(
-                width: activities.length *
-                    20.0, // Adjust width based on number of activities
+                width: activities.length * 20.0,
                 height: 24,
                 child: Stack(
                   children: activities
                       .asMap()
                       .entries
                       .map((entry) {
-                        // Calculate position for overlapping effect
                         return Positioned(
-                          right: entry.key * 15.0, // Adjust overlap distance
+                          right: entry.key * 15.0,
                           child: Container(
                             width: 24,
                             height: 24,
                             decoration: BoxDecoration(
-                              color: _getActivityColor(entry.value),
+                              color: _getActivityColor(entry.value, isDark),
                               shape: BoxShape.circle,
                               border: Border.all(
-                                color: Colors.white,
+                                color: backgroundColor,
                                 width: 1.5,
                               ),
                               boxShadow: [
@@ -129,14 +134,14 @@ class StudentCard extends StatelessWidget {
                             child: Icon(
                               _getActivityIcon(entry.value),
                               size: 14,
-                              color: Colors.white,
+                              color: backgroundColor,
                             ),
                           ),
                         );
                       })
                       .toList()
                       .reversed
-                      .toList(), // Reverse to show first item on top
+                      .toList(),
                 ),
               ),
             ),
@@ -152,11 +157,13 @@ class StudentCard extends StatelessWidget {
                         width: 40,
                         decoration: BoxDecoration(
                           color: isSelected
-                              ? AppColors.info.withOpacity(0.1)
-                              : AppColors.white,
+                              ? (isDark ? AppColors.infoDark : AppColors.info).withOpacity(0.1)
+                              : backgroundColor,
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: isSelected ? AppColors.info : AppColors.gray,
+                            color: isSelected 
+                                ? (isDark ? AppColors.infoDark : AppColors.info)
+                                : (isDark ? AppColors.grayDark : AppColors.gray),
                             width: isSelected ? 2 : 1,
                           ),
                         ),
@@ -164,6 +171,12 @@ class StudentCard extends StatelessWidget {
                           child: Image.network(
                             imageUrl,
                             fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Icon(
+                                Icons.person,
+                                color: secondaryTextColor,
+                              );
+                            },
                           ),
                         ),
                       ),
@@ -174,10 +187,10 @@ class StudentCard extends StatelessWidget {
                           width: 12,
                           height: 12,
                           decoration: BoxDecoration(
-                            color: _getNotificationColor(),
+                            color: _getNotificationColor(isDark),
                             shape: BoxShape.circle,
                             border: Border.all(
-                              color: AppColors.white,
+                              color: backgroundColor,
                               width: 1.5,
                             ),
                           ),
@@ -192,17 +205,18 @@ class StudentCard extends StatelessWidget {
                       children: [
                         Text(
                           name,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
+                            color: textColor,
                           ),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           nim,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 14,
-                            color: AppColors.gray,
+                            color: secondaryTextColor,
                           ),
                         ),
                         const SizedBox(height: 4),
@@ -211,16 +225,16 @@ class StudentCard extends StatelessWidget {
                           children: [
                             Text(
                               jurusan,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 14,
-                                color: AppColors.gray,
+                                color: secondaryTextColor,
                               ),
                             ),
                             Text(
                               '($kelas)',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 14,
-                                color: AppColors.gray,
+                                color: secondaryTextColor,
                               ),
                             ),
                           ],

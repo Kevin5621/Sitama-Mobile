@@ -1,12 +1,13 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:sistem_magang/core/config/themes/app_color.dart';
 
 class FilterJurusan extends StatefulWidget {
   final Function(String?)? onProdiSelected;
   final String? initialValue;
   final List<String>? customProdiList;
+  final Color? primaryColor;
+  final Color? backgroundColor;
   final TextStyle? hintStyle;
   final TextStyle? itemStyle;
   
@@ -15,6 +16,8 @@ class FilterJurusan extends StatefulWidget {
     this.onProdiSelected,
     this.initialValue,
     this.customProdiList,
+    this.primaryColor,
+    this.backgroundColor,
     this.hintStyle,
     this.itemStyle,
   }) : super(key: key);
@@ -49,12 +52,14 @@ class _FilterJurusanState extends State<FilterJurusan> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     final items = widget.customProdiList ?? defaultItems;
     
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: AppColors.primary.withOpacity(0.2)),
+        border: Border.all(color: (widget.primaryColor ?? colorScheme.primary).withOpacity(0.2)),
         color: Colors.white,
       ),
       child: DropdownButtonHideUnderline(
@@ -65,14 +70,14 @@ class _FilterJurusanState extends State<FilterJurusan> {
               Icon(
                 Icons.school_outlined,
                 size: 16,
-                color: AppColors.primary,
+                color: widget.primaryColor ?? colorScheme.primary,
               ),
               const SizedBox(width: 8),
               Text(
                 'Prodi',
                 style: widget.hintStyle ?? TextStyle(
                   fontSize: 14,
-                  color: AppColors.primary.withOpacity(0.7),
+                  color: (widget.primaryColor ?? colorScheme.primary).withOpacity(0.7),
                 ),
               ),
             ],
@@ -84,14 +89,14 @@ class _FilterJurusanState extends State<FilterJurusan> {
                 Icon(
                   Icons.school,
                   size: 16,
-                  color: AppColors.primary,
+                  color: widget.primaryColor ?? colorScheme.primary,
                 ),
                 const SizedBox(width: 8),
                 Text(
                   item,
-                  style: widget.itemStyle ?? const TextStyle(
+                  style: widget.itemStyle ?? TextStyle(
                     fontSize: 14,
-                    color: Colors.black87,
+                    color: colorScheme.onSurface,
                   ),
                 ),
               ],
@@ -112,20 +117,20 @@ class _FilterJurusanState extends State<FilterJurusan> {
             width: 150,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              color: Colors.white,
+              color: widget.backgroundColor ?? colorScheme.surface,
             ),
           ),
           dropdownStyleData: DropdownStyleData(
             maxHeight: 300,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              color: Colors.white,
+              color: widget.backgroundColor ?? colorScheme.surface,
             ),
             offset: const Offset(0, -4),
             scrollbarTheme: ScrollbarThemeData(
               radius: const Radius.circular(40),
-              thickness: MaterialStateProperty.all(6),
-              thumbVisibility: MaterialStateProperty.all(true),
+              thickness: WidgetStateProperty.all(6),
+              thumbVisibility: WidgetStateProperty.all(true),
             ),
           ),
           menuItemStyleData: const MenuItemStyleData(
@@ -152,18 +157,18 @@ class _FilterJurusanState extends State<FilterJurusan> {
                   hintStyle: const TextStyle(fontSize: 12),
                   prefixIcon: Icon(
                     Icons.search,
-                    color: AppColors.primary,
+                    color: widget.primaryColor ?? colorScheme.primary,
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide(
-                      color: AppColors.primary.withOpacity(0.2),
+                      color: (widget.primaryColor ?? colorScheme.primary).withOpacity(0.2),
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide(
-                      color: AppColors.primary,
+                      color: widget.primaryColor ?? colorScheme.primary,
                     ),
                   ),
                 ),

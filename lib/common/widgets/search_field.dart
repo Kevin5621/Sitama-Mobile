@@ -18,7 +18,7 @@ class SearchField extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
-        color: AppColors.white,
+        color: Theme.of(context).colorScheme.surface,
         boxShadow: [
           BoxShadow(
             color: AppColors.black.withOpacity(0.25),

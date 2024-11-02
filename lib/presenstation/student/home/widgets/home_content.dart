@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sistem_magang/common/widgets/student_guidance_card.dart';
 import 'package:sistem_magang/common/widgets/student_log_book_card.dart';
 import 'package:sistem_magang/core/config/assets/app_images.dart';
-import 'package:sistem_magang/core/config/themes/app_color.dart';
 import 'package:sistem_magang/domain/entities/student_home_entity.dart';
 import 'package:sistem_magang/presenstation/student/home/bloc/student_display_cubit.dart';
 import 'package:sistem_magang/presenstation/student/home/bloc/student_display_state.dart';
@@ -15,35 +14,31 @@ import 'package:sistem_magang/presenstation/student/home/widgets/notification_pa
 /// It displays recent guidance sessions, logbooks, and notifications in a scrollable layout.
 /// Uses BLoC pattern for state management to handle student data loading and display.
 class HomeContent extends StatelessWidget {
-  /// Callback function to navigate to all guidances view
   final VoidCallback allGuidances;
-
-  /// Callback function to navigate to all logbooks view
   final VoidCallback allLogBooks;
 
-  const HomeContent(
-      {super.key, required this.allGuidances, required this.allLogBooks});
+  const HomeContent({
+    super.key, 
+    required this.allGuidances, 
+    required this.allLogBooks
+  });
 
   @override
   Widget build(BuildContext context) {
-    // Initialize and provide StudentDisplayCubit for state management
     return BlocProvider(
       create: (context) => StudentDisplayCubit()..displayStudent(),
       child: BlocBuilder<StudentDisplayCubit, StudentDisplayState>(
         builder: (context, state) {
-          // Handle different states of student data loading
           if (state is StudentLoading) {
             return const Center(child: CircularProgressIndicator());
           }
           if (state is StudentLoaded) {
             return CustomScrollView(
               slivers: [
-                _header(state.studentHomeEntity),
-                // Section header for Recent Guidance
-                _buildSectionHeader('Bimbinganp Terbaru', allGuidances),
+                _header(context, state.studentHomeEntity),
+                _buildSectionHeader(context, 'Bimbingan Terbaru', allGuidances),
                 _guidancesList(state.studentHomeEntity),
-                // Section header for Recent Logbooks
-                _buildSectionHeader('Log Book Terbaru', allLogBooks),
+                _buildSectionHeader(context, 'Log Book Terbaru', allLogBooks),
                 _logBooksList(state.studentHomeEntity),
               ],
             );
@@ -58,7 +53,9 @@ class HomeContent extends StatelessWidget {
   }
 
   /// Builds a section header with title and forward arrow
-  SliverToBoxAdapter _buildSectionHeader(String title, VoidCallback onTap) {
+  SliverToBoxAdapter _buildSectionHeader(BuildContext context, String title, VoidCallback onTap) {
+    final colorScheme = Theme.of(context).colorScheme;
+    
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 28),
@@ -67,14 +64,19 @@ class HomeContent extends StatelessWidget {
           children: [
             Text(
               title,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
+                color: colorScheme.onBackground,
               ),
             ),
             GestureDetector(
               onTap: onTap,
-              child: const Icon(Icons.arrow_forward_ios, size: 14),
+              child: Icon(
+                Icons.arrow_forward_ios, 
+                size: 14,
+                color: colorScheme.onBackground,
+              ),
             ),
           ],
         ),
@@ -124,12 +126,13 @@ class HomeContent extends StatelessWidget {
   /// - Notification button with badge
   /// - Background pattern
   /// - Notification loading widget
-  SliverToBoxAdapter _header(StudentHomeEntity student) {
+   SliverToBoxAdapter _header(BuildContext context, StudentHomeEntity student) {
+    final colorScheme = Theme.of(context).colorScheme;
+    
     return SliverToBoxAdapter(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header container with background pattern
           Container(
             width: double.infinity,
             height: 160,
@@ -143,35 +146,39 @@ class HomeContent extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Student greeting section
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
                       'HELLO,',
-                      style:
-                          TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                      style: TextStyle(
+                        fontSize: 12, 
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                     Text(
                       student.name,
                       style: const TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.bold),
+                        fontSize: 20, 
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ],
                 ),
-                // Notification button with badge
                 Container(
-                  decoration: const BoxDecoration(
-                    color: AppColors.primary,
+                  decoration: BoxDecoration(
+                    color: colorScheme.primary,
                     shape: BoxShape.circle,
                   ),
                   child: NotificationBadge(
                     count: 3,
                     child: Builder(
                       builder: (BuildContext ctx) => IconButton(
-                        icon: const Icon(Icons.notifications,
-                            color: AppColors.white),
+                        icon: Icon(
+                          Icons.notifications,
+                          color: colorScheme.onPrimary,
+                        ),
                         onPressed: () => _navigateToNotifications(ctx),
                       ),
                     ),
@@ -181,9 +188,9 @@ class HomeContent extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          // Notification loading widget
           Container(
-            color: Colors.white,
+            // ignore: deprecated_member_use
+            color: colorScheme.background,
             child: LoadNotification(onClose: () {}),
           ),
         ],
