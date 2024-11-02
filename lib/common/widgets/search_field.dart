@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sistem_magang/core/config/themes/app_color.dart';
 
 class SearchField extends StatelessWidget {
   final Function(String) onChanged;
@@ -13,30 +12,51 @@ class SearchField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    
     return Container(
-      height: 44,
-      padding: EdgeInsets.symmetric(horizontal: 8),
+      height: 40,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(30),
-        color: Theme.of(context).colorScheme.surface,
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.black.withOpacity(0.25),
-            spreadRadius: 0,
-            blurRadius: 2,
-            offset: Offset(0, 2),
-          ),
-        ],
+        borderRadius: BorderRadius.circular(8),
+        color: colorScheme.surfaceVariant.withOpacity(0.3),
       ),
       child: TextField(
         decoration: InputDecoration(
           hintText: 'Search',
-          prefixIcon: const Icon(Icons.search),
-          border: OutlineInputBorder(
-            borderSide: BorderSide.none,
+          hintStyle: TextStyle(
+            color: colorScheme.onSurfaceVariant,
+            fontSize: 14,
           ),
-          isDense: true,
+          prefixIcon: Icon(
+            Icons.search,
+            size: 20,
+            color: colorScheme.onSurfaceVariant,
+          ),
+          contentPadding: const EdgeInsets.symmetric(
+            vertical: 0,
+            horizontal: 16,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: BorderSide(
+              color: colorScheme.outline,
+              width: 1,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: BorderSide(
+              color: colorScheme.primary,
+              width: 1,
+            ),
+          ),
         ),
+        style: TextStyle(
+          fontSize: 14,
+          color: colorScheme.onSurface,
+        ),
+        cursorColor: colorScheme.primary,
         onChanged: onChanged,
       ),
     );
