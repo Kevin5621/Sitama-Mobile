@@ -12,7 +12,7 @@ class AppTheme {
     // Color Scheme
     colorScheme: ColorScheme.light(
       primary: AppColors.primary,
-      secondary: AppColors.secondary,
+      secondary: AppColors.warning.withOpacity(0.2),
       background: AppColors.background,
       surface: AppColors.white,
       error: AppColors.danger500,
@@ -106,7 +106,7 @@ class AppTheme {
     // Color Scheme
     colorScheme: ColorScheme.dark(
       primary: AppColors.primaryDark,
-      secondary: AppColors.secondaryDark,
+      secondary: AppColors.warningDark.withOpacity(0.2),
       background: AppColors.backgroundDark,
       surface: AppColors.gray500Dark,
       error: AppColors.danger500Dark,

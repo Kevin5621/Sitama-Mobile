@@ -21,14 +21,16 @@ class _GuidancePageState extends State<GuidancePage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    
     return Scaffold(
-      appBar: _appBar(),
+      appBar: _appBar(theme),
       body: BlocProvider(
         create: (context) => GuidanceStudentCubit()..displayGuidance(),
         child: BlocBuilder<GuidanceStudentCubit, GuidanceStudentState>(
           builder: (context, state) {
             if (state is GuidanceLoading) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             }
             if (state is GuidanceLoaded) {
               List<GuidanceEntity> guidances =
@@ -41,7 +43,7 @@ class _GuidancePageState extends State<GuidancePage> {
 
               return CustomScrollView(
                 slivers: [
-                  SliverToBoxAdapter(child: SizedBox(height: 12)),
+                  const SliverToBoxAdapter(child: SizedBox(height: 12)),
                   SliverToBoxAdapter(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -57,13 +59,16 @@ class _GuidancePageState extends State<GuidancePage> {
                               onFilterPressed: () {},
                             ),
                           ),
-                          SizedBox(width: 10),
-                          Icon(Icons.filter_list_outlined),
+                          const SizedBox(width: 10),
+                          Icon(
+                            Icons.filter_list_outlined,
+                            color: theme.colorScheme.onBackground,
+                          ),
                         ],
                       ),
                     ),
                   ),
-                  SliverToBoxAdapter(child: SizedBox(height: 20)),
+                  const SliverToBoxAdapter(child: SizedBox(height: 20)),
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) => GuidanceCard(
@@ -98,7 +103,7 @@ class _GuidancePageState extends State<GuidancePage> {
     );
   }
 
-  AppBar _appBar() {
+  AppBar _appBar(ThemeData theme) {
     return AppBar(
       toolbarHeight: 80.0,
       title: Text(
@@ -106,6 +111,7 @@ class _GuidancePageState extends State<GuidancePage> {
         style: TextStyle(
           fontSize: 24,
           fontWeight: FontWeight.bold,
+          color: theme.colorScheme.onBackground, // Mengatur warna teks sesuai theme
         ),
       ),
       centerTitle: true,
@@ -116,14 +122,20 @@ class _GuidancePageState extends State<GuidancePage> {
             showDialog(
               context: context,
               builder: (context) {
-                return AddGuidance();
+                return const AddGuidance();
               },
             );
           },
-          icon: Icon(Icons.add),
+          icon: Icon(
+            Icons.add,
+            color: theme.colorScheme.onBackground, 
+          ),
         )
       ],
       backgroundColor: Colors.transparent,
+      iconTheme: IconThemeData(
+        color: theme.colorScheme.onBackground, 
+      ),
     );
   }
 }

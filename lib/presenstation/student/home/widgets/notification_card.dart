@@ -1,4 +1,3 @@
-// notification_card.dart
 import 'package:flutter/material.dart';
 import 'package:sistem_magang/data/models/notification.dart';
 
@@ -32,7 +31,7 @@ class _NotificationCardState extends State<NotificationCard> {
     }
   }
 
-  Color _getNotificationColor() {
+  Color _getNotificationColor(ColorScheme colorScheme) {
     switch (widget.notification.type) {
       case 'bimbingan':
         return Colors.blue;
@@ -41,7 +40,7 @@ class _NotificationCardState extends State<NotificationCard> {
       case 'revisi':
         return Colors.red;
       default:
-        return Colors.grey;
+        return colorScheme.onSecondary;
     }
   }
 
@@ -53,21 +52,27 @@ class _NotificationCardState extends State<NotificationCard> {
 
   @override
   Widget build(BuildContext context) {
-      return GestureDetector(
-        onTap: () {
-          widget.onTap();
-          setState(() {
-            isExpanded = !isExpanded;
-          });
-        },
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final notificationColor = _getNotificationColor(colorScheme);
+
+    return GestureDetector(
+      onTap: () {
+        widget.onTap();
+        setState(() {
+          isExpanded = !isExpanded;
+        });
+      },
       child: Container(
         margin: const EdgeInsets.only(bottom: 8.0),
         decoration: BoxDecoration(
-          color: widget.notification.isRead ? Colors.white : Colors.blue.shade50,
+          color: widget.notification.isRead 
+          ? colorScheme.surface 
+          : colorScheme.secondary,
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: colorScheme.shadow.withOpacity(0.05),
               blurRadius: 4,
               offset: const Offset(0, 2),
             ),
@@ -76,43 +81,36 @@ class _NotificationCardState extends State<NotificationCard> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Header
-            Container(
+            // Header with seamless gradient
+            Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              decoration: BoxDecoration(
-                color: widget.notification.isRead 
-                    ? Colors.grey[100] 
-                    : Colors.blue.shade100,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(12),
-                  topRight: Radius.circular(12),
-                ),
-              ),
               child: Row(
                 children: [
-                  CircleAvatar(
-                    radius: 12,
-                    backgroundColor: _getNotificationColor(),
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: notificationColor.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     child: Icon(
                       _getNotificationIcon(),
                       size: 16,
-                      color: Colors.white,
+                      color: notificationColor,
                     ),
                   ),
                   const SizedBox(width: 8),
                   Text(
                     widget.notification.type.toUpperCase(),
-                    style: const TextStyle(
+                    style: theme.textTheme.labelMedium?.copyWith(
                       fontWeight: FontWeight.w500,
-                      color: Colors.black87,
+                      color: notificationColor,
                     ),
                   ),
                   const Spacer(),
                   Text(
                     widget.notification.date,
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 13,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: colorScheme.onSurfaceVariant,
                     ),
                   ),
                 ],
@@ -133,13 +131,12 @@ class _NotificationCardState extends State<NotificationCard> {
                           isExpanded 
                               ? widget.notification.message
                               : _truncateText(widget.notification.message),
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.black87,
+                          style: theme.textTheme.bodyMedium?.copyWith(
                             height: 1.3,
                             fontWeight: widget.notification.isRead 
                                 ? FontWeight.normal 
                                 : FontWeight.w500,
+                            color: colorScheme.onSurface,
                           ),
                         ),
                         if (isExpanded && widget.notification.detailText != null)
@@ -147,17 +144,16 @@ class _NotificationCardState extends State<NotificationCard> {
                             padding: const EdgeInsets.only(top: 8.0),
                             child: Text(
                               widget.notification.detailText!,
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey[600],
+                              style: theme.textTheme.bodySmall?.copyWith(
                                 height: 1.4,
+                                color: colorScheme.onSurfaceVariant,
                               ),
                             ),
                           ),
                       ],
                     ),
                   ),
-                  // Expand/Collapse button
+                  // Expand/Collapse button with gradient-aware styling
                   if (widget.notification.message.split(' ').length > 10 || 
                       widget.notification.detailText != null)
                     InkWell(
@@ -173,7 +169,9 @@ class _NotificationCardState extends State<NotificationCard> {
                           vertical: 8,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.grey[50],
+                          color: widget.notification.isRead
+                              ? colorScheme.surfaceContainerHighest.withOpacity(0.3)
+                              : colorScheme.primary.withOpacity(0.05),
                           borderRadius: const BorderRadius.only(
                             bottomLeft: Radius.circular(12),
                             bottomRight: Radius.circular(12),
@@ -184,8 +182,8 @@ class _NotificationCardState extends State<NotificationCard> {
                           children: [
                             Text(
                               isExpanded ? 'Show Less' : 'Read More',
-                              style: TextStyle(
-                                color: _getNotificationColor(),
+                              style: theme.textTheme.labelMedium?.copyWith(
+                                color: notificationColor,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -193,7 +191,7 @@ class _NotificationCardState extends State<NotificationCard> {
                               isExpanded 
                                   ? Icons.keyboard_arrow_up 
                                   : Icons.keyboard_arrow_down,
-                              color: _getNotificationColor(),
+                              color: notificationColor,
                               size: 20,
                             ),
                           ],

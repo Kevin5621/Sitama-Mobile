@@ -20,8 +20,10 @@ class _LogBookPageState extends State<LogBookPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    
     return Scaffold(
-      appBar: _appBar(context),
+      appBar: _appBar(theme),
       body: BlocProvider(
         create: (context) => LogBookStudentCubit()..displayLogBook(),
         child: BlocBuilder<LogBookStudentCubit, LogBookStudentState>(
@@ -75,14 +77,15 @@ class _LogBookPageState extends State<LogBookPage> {
     );
   }
 
-  AppBar _appBar(BuildContext context) {
+  AppBar _appBar(ThemeData theme) {
     return AppBar(
       toolbarHeight: 80.0,
       title: Text(
-        'Log Book',
+        'LogBook',
         style: TextStyle(
           fontSize: 24,
           fontWeight: FontWeight.bold,
+          color: theme.colorScheme.onBackground, // Mengatur warna teks sesuai theme
         ),
       ),
       centerTitle: true,
@@ -97,10 +100,16 @@ class _LogBookPageState extends State<LogBookPage> {
               },
             );
           },
-          icon: Icon(Icons.add),
+          icon: Icon(
+            Icons.add,
+            color: theme.colorScheme.onBackground, 
+          ),
         )
       ],
       backgroundColor: Colors.transparent,
+      iconTheme: IconThemeData(
+        color: theme.colorScheme.onBackground, 
+      ),
     );
   }
 

@@ -85,29 +85,31 @@ class _NotificationPageState extends State<NotificationPage> {
 
   int get _unreadCount => _notifications.where((notification) => !notification.isRead).length;
 
-  @override
+   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: colorScheme.background,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: colorScheme.surface,
         elevation: 0.5,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: Icon(Icons.arrow_back, color: colorScheme.onSurface),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
+        title: Text(
           'Notifikasi',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 20,
+          style: theme.textTheme.titleLarge?.copyWith(
+            color: colorScheme.onSurface,
             fontWeight: FontWeight.w500,
           ),
         ),
         actions: [
           if (_unreadCount > 0)
             IconButton(
-              icon: const Icon(Icons.done_all, color: Colors.blue),
+              icon: Icon(Icons.done_all, color: colorScheme.primary),
               onPressed: _markAllAsRead,
             ),
         ],
@@ -118,7 +120,9 @@ class _NotificationPageState extends State<NotificationPage> {
         onLoading: _onLoading,
         enablePullDown: true,
         enablePullUp: true,
-        header: const WaterDropHeader(),
+        header: WaterDropHeader(
+          waterDropColor: colorScheme.primary,
+        ),
         child: ListView.builder(
           itemCount: _notifications.length,
           padding: const EdgeInsets.all(16),
@@ -136,4 +140,3 @@ class _NotificationPageState extends State<NotificationPage> {
     );
   }
 }
-
