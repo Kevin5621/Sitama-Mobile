@@ -21,11 +21,11 @@ class _NotificationCardState extends State<NotificationCard> {
 
   IconData _getNotificationIcon() {
     switch (widget.notification.type) {
-      case 'guidance':
+      case 'bimbingan':
         return Icons.school;
       case 'logbook':
         return Icons.book;
-      case 'revision':
+      case 'revisi':
         return Icons.edit_document;
       default:
         return Icons.notifications;
@@ -34,11 +34,11 @@ class _NotificationCardState extends State<NotificationCard> {
 
   Color _getNotificationColor() {
     switch (widget.notification.type) {
-      case 'guidance':
+      case 'bimbingan':
         return Colors.blue;
       case 'logbook':
         return Colors.orange;
-      case 'revision':
+      case 'revisi':
         return Colors.red;
       default:
         return Colors.grey;

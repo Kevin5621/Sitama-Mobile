@@ -5,5 +5,5 @@ class AppImages {
   static const String pattern = '${basePath}pattern.png';
   static const String loginvektor = '${basePath}login_vektor.png';
   static const String homePattern = '${basePath}home_pattern.png';
-  static const String photoProfile = '${basePath}photo_profile.png';
+  static const String photoProfile = '${basePath}default-avatar.jpg';
 }

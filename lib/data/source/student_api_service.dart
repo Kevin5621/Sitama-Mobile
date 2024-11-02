@@ -91,12 +91,16 @@ class StudentApiServiceImpl extends StudentApiService {
           await SharedPreferences.getInstance();
       var token = sharedPreferences.get('token');
 
-      var response = await sl<DioClient>().put(
+      final formData = await request.toFormData();
+      formData.fields.add(MapEntry('_method', 'PUT'));
+
+      var response = await sl<DioClient>().post(
         "${ApiUrls.studentGuidance}/${request.id}",
         options: Options(headers: {
           'Authorization': 'Bearer $token',
+          'Content-Type': 'multipart/form-data',
         }),
-        data: request.toMap(),
+        data: formData,
       );
 
       return Right(response);
@@ -132,7 +136,7 @@ class StudentApiServiceImpl extends StudentApiService {
       }
     }
   }
-  
+
   @override
   Future<Either> getLogBook() async {
     try {
@@ -149,7 +153,7 @@ class StudentApiServiceImpl extends StudentApiService {
       return Left(e.response!.data['errors']['message']);
     }
   }
-  
+
   @override
   Future<Either> addLogBook(AddLogBookReqParams request) async {
     try {
@@ -174,7 +178,7 @@ class StudentApiServiceImpl extends StudentApiService {
       }
     }
   }
-  
+
   @override
   Future<Either> editLogBook(EditLogBookReqParams request) async {
     try {
@@ -199,7 +203,7 @@ class StudentApiServiceImpl extends StudentApiService {
       }
     }
   }
-  
+
   @override
   Future<Either> deleteLogBook(int id) async {
     try {
@@ -223,7 +227,7 @@ class StudentApiServiceImpl extends StudentApiService {
       }
     }
   }
-  
+
   @override
   Future<Either> getStudentProfile() async {
     try {

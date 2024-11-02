@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:sistem_magang/common/bloc/button/button_state.dart';
 import 'package:sistem_magang/common/bloc/button/button_state_cubit.dart';
+import 'package:sistem_magang/common/widgets/basic_app_button.dart';
 import 'package:sistem_magang/data/models/guidance.dart';
 import 'package:sistem_magang/domain/usecases/add_guidance_student.dart';
 import 'package:sistem_magang/presenstation/student/home/pages/home.dart';
@@ -36,7 +37,7 @@ class _AddGuidanceState extends State<AddGuidance> {
       allowedExtensions: ['pdf'],
       withData: true,
     );
-    if (result != null) {
+    if (result != null){
       setState(() {
         _selectedFile = result.files.first;
       });
@@ -76,22 +77,9 @@ class _AddGuidanceState extends State<AddGuidance> {
           }
 
           if (state is ButtonFailurState) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Row(
-                  children: [
-                    const Icon(Icons.error_outline, color: Colors.white),
-                    const SizedBox(width: 8),
-                    Text(state.errorMessage),
-                  ],
-                ),
-                backgroundColor: Colors.red,
-                behavior: SnackBarBehavior.floating,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-            );
+            var snackBar = SnackBar(content: Text(state.errorMessage));
+            print(state.errorMessage);
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
           }
         },
         child: AlertDialog(
@@ -277,72 +265,28 @@ class _AddGuidanceState extends State<AddGuidance> {
             ),
           ),
           actions: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  style: TextButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: const Text(
-                    'Cancel',
-                    style: TextStyle(color: Colors.grey),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Builder(
-                  builder: (context) {
-                    return ElevatedButton(
-                      onPressed: () {
-                        if (_title.text.isEmpty || _activity.text.isEmpty) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Harap isi semua field yang diperlukan'),
-                              backgroundColor: Colors.red,
-                              behavior: SnackBarBehavior.floating,
-                            ),
-                          );
-                          return;
-                        }
-                        context.read<ButtonStateCubit>().excute(
-                          usecase: sl<AddGuidanceUseCase>(),
-                          params: AddGuidanceReqParams(
-                            title: _title.text,
-                            activity: _activity.text,
-                            date: _date,
-                            file: _selectedFile,
-                          ),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).primaryColor,
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+            Builder(builder: (context) {
+              return BasicAppButton(
+                onPressed: () {
+                  context.read<ButtonStateCubit>().excute(
+                        usecase: sl<AddGuidanceUseCase>(),
+                        params: AddGuidanceReqParams(
+                          title: _title.text,
+                          activity: _activity.text,
+                          date: _date,
+                          file: _selectedFile
                         ),
-                      ),
-                      child: const Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.add, size: 20, color: Colors.white),
-                          SizedBox(width: 8),
-                          Text(
-                            'Tambah',
-                            style: TextStyle(
-                              color: Colors.white, // Mengatur warna teks menjadi putih
-                            ),
-                          )
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ],
+                      );
+                },
+                title: 'Add',
+                height: false,
+              );
+            }),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
             ),
           ],
         ),

@@ -23,12 +23,7 @@ dependencies:
     shared_preferences:
     dropdown_button2:
     equatable:
-    image_picker:
-    cached_network_image:
-    crypto:
-    mime:
-    path:
-    file_picker: ^5.2.3
+    file_picker: 
     syncfusion_flutter_pdfviewer: ^20.3.44
     pull_to_refresh:
 
