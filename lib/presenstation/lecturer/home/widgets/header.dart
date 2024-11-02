@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sistem_magang/common/widgets/search_field.dart';
+import 'package:sistem_magang/core/config/themes/app_color.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_bloc.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_event.dart';
 
@@ -30,12 +31,11 @@ class Header extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          _buildNormalHeader(),
+          const SizedBox(height: 26),
           if (isSelectionMode)
             _buildSelectionModeHeader(context)
           else
-            _buildNormalHeader(),
-          const SizedBox(height: 26),
-          if (!isSelectionMode)
             _buildSearchField(),
         ],
       ),
@@ -43,24 +43,40 @@ class Header extends StatelessWidget {
   }
 
   Widget _buildSelectionModeHeader(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        const Text(
-          'Select Items',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
+    return Container(
+      height: 44,
+      padding: EdgeInsets.symmetric(horizontal: 8),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(30),
+        color: AppColors.white,
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.black.withOpacity(0.25),
+            spreadRadius: 0,
+            blurRadius: 2,
+            offset: Offset(0, 2),
           ),
-        ),
-        IconButton(
-          icon: const Icon(Icons.close, color: Colors.white),
-          onPressed: () {
-            context.read<SelectionBloc>().add(ToggleSelectionMode());
-          },
-        ),
-      ],
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text(
+            'Select Items',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: AppColors.gray,
+            ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.close, color: AppColors.black),
+            onPressed: () {
+              context.read<SelectionBloc>().add(ToggleSelectionMode());
+            },
+          ),
+        ],
+      ),
     );
   }
 

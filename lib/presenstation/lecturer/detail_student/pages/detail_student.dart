@@ -19,7 +19,8 @@ class DetailStudentPage extends StatelessWidget {
     return Scaffold(
       body: BlocProvider(
         create: (context) => DetailStudentDisplayCubit()..displayStudent(id),
-        child: BlocBuilder<DetailStudentDisplayCubit, DetailStudentDisplayState>(
+        child:
+            BlocBuilder<DetailStudentDisplayCubit, DetailStudentDisplayState>(
           builder: (context, state) {
             if (state is DetailLoading) {
               return const Center(
@@ -52,7 +53,10 @@ class DetailStudentPage extends StatelessWidget {
                       child: Column(
                         children: [
                           const SizedBox(height: 16),
-                          const StatisticsSection(),
+                          StatisticsSection(
+                            guidanceLength: detailStudent.guidances.length,
+                            logBookLength: detailStudent.log_book.length,
+                          ),
                           InfoBoxes(internships: detailStudent.internships),
                           TabSection(
                             guidances: detailStudent.guidances,

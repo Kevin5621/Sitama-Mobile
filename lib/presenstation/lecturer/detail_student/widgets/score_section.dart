@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:sistem_magang/core/config/themes/app_color.dart';
-import 'package:sistem_magang/domain/usecases/update_scores.dart';
 import 'package:sistem_magang/presenstation/lecturer/input_score/pages/input_score.dart';
 
 /// A widget that displays a score box with score items and a button to navigate to the input score page.

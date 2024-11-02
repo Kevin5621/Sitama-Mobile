@@ -4,7 +4,6 @@ class NotificationModel {
   final String date;
   final String type;
   bool isRead;
-  final String? actionData;
   final String? detailText; 
 
   NotificationModel({
@@ -13,7 +12,6 @@ class NotificationModel {
     required this.date,
     required this.type,
     this.isRead = false,
-    this.actionData,
     this.detailText,
   });
 }

@@ -17,15 +17,12 @@ import 'package:sistem_magang/presenstation/student/home/widgets/notification_pa
 class HomeContent extends StatelessWidget {
   /// Callback function to navigate to all guidances view
   final VoidCallback allGuidances;
-  
+
   /// Callback function to navigate to all logbooks view
   final VoidCallback allLogBooks;
 
-  const HomeContent({
-    super.key, 
-    required this.allGuidances, 
-    required this.allLogBooks
-  });
+  const HomeContent(
+      {super.key, required this.allGuidances, required this.allLogBooks});
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +40,7 @@ class HomeContent extends StatelessWidget {
               slivers: [
                 _header(state.studentHomeEntity),
                 // Section header for Recent Guidance
-                _buildSectionHeader('Revisi Terbaru', allGuidances),
+                _buildSectionHeader('Bimbinganp Terbaru', allGuidances),
                 _guidancesList(state.studentHomeEntity),
                 // Section header for Recent Logbooks
                 _buildSectionHeader('Log Book Terbaru', allLogBooks),
@@ -87,13 +84,9 @@ class HomeContent extends StatelessWidget {
 
   /// Creates a scrollable list of recent guidance sessions
   /// Converts the guidance status string to corresponding enum value
-   SliverList _guidancesList(StudentHomeEntity student) {
+  SliverList _guidancesList(StudentHomeEntity student) {
     // Filter guidance list to show only rejected and updated ones
-    final filteredGuidances = student.latest_guidances
-        .where((guidance) => 
-          guidance.status == 'rejected' || 
-          guidance.status == 'updated')
-        .toList();
+    final filteredGuidances = student.latest_guidances;
 
     return SliverList(
       delegate: SliverChildBuilderDelegate(
@@ -157,11 +150,13 @@ class HomeContent extends StatelessWidget {
                   children: [
                     const Text(
                       'HELLO,',
-                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                      style:
+                          TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
                     ),
                     Text(
                       student.name,
-                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
@@ -175,7 +170,8 @@ class HomeContent extends StatelessWidget {
                     count: 3,
                     child: Builder(
                       builder: (BuildContext ctx) => IconButton(
-                        icon: const Icon(Icons.notifications, color: AppColors.white),
+                        icon: const Icon(Icons.notifications,
+                            color: AppColors.white),
                         onPressed: () => _navigateToNotifications(ctx),
                       ),
                     ),

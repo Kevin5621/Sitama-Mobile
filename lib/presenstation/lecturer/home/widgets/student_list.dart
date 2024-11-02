@@ -78,7 +78,7 @@ class StudentList extends StatelessWidget {
           imageUrl: 'https://picsum.photos/200/300',
           name: student.name,
           jurusan: student.major,
-          kelas: student.study_program,
+          kelas: student.the_class,
           nim: student.username,
           isSelected: selectionState.selectedIds.contains(student.id),
           notificationStatus: 2,
@@ -103,7 +103,8 @@ class StudentList extends StatelessWidget {
     }
   }
 
-  void _handleStudentLongPress(BuildContext context, LecturerStudentsEntity student) {
+  void _handleStudentLongPress(
+      BuildContext context, LecturerStudentsEntity student) {
     if (!selectionState.isSelectionMode) {
       context.read<SelectionBloc>().add(ToggleSelectionMode());
       context.read<SelectionBloc>().add(ToggleItemSelection(student.id));
