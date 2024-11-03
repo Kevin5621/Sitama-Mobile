@@ -50,7 +50,7 @@ class InternshipStatusBox extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: currentStatus ? Colors.red : colorScheme.primary,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(12),
                 ),
               ),
               child: Text(
@@ -94,38 +94,136 @@ class InternshipStatusBox extends StatelessWidget {
     );
   }
 
-  Widget _buildStatusBadge(BuildContext context, ColorScheme colorScheme) {
+  Widget _buildInternshipHeader(BuildContext context, ColorScheme colorScheme) {
     final statusColor = _getStatusColor(colorScheme);
-    
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: statusColor.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                _getStatusIcon(),
+                color: statusColor,
+                size: 24,
+              ),
+            ),
+            const SizedBox(width: 16),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  status,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: statusColor,
+                  ),
+                ),
+                Text(
+                  'Status saat ini',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: colorScheme.onSurface.withOpacity(0.6),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+        _buildApproveButton(context, false),
+      ],
+    );
+  }
+
+  Widget _buildStudentInfo(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: statusColor.withOpacity(0.15),
-        borderRadius: BorderRadius.circular(24),
+        color: colorScheme.surface,
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: statusColor.withOpacity(0.3),
-          width: 1,
+          color: colorScheme.outline.withOpacity(0.1),
         ),
       ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
+      child: Column(
         children: [
-          Icon(
-            _getStatusIcon(),
-            size: 20,
-            color: statusColor,
+          _buildInfoRow(
+            context,
+            'NIM',
+            '2141720180',
+            Icons.assignment_ind_outlined,
           ),
-          const SizedBox(width: 8),
-          Text(
-            status,
-            style: TextStyle(
-              color: statusColor,
-              fontWeight: FontWeight.w600,
-              fontSize: 15,
-            ),
+          const SizedBox(height: 12),
+          _buildInfoRow(
+            context,
+            'Kelas',
+            'TI-3H',
+            Icons.class_outlined,
+          ),
+          const SizedBox(height: 12),
+          _buildInfoRow(
+            context,
+            'No Absen',
+            '20',
+            Icons.format_list_numbered_outlined,
+          ),
+          const SizedBox(height: 12),
+          _buildInfoRow(
+            context,
+            'Jurusan',
+            'Teknologi Informasi',
+            Icons.school_outlined,
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildInfoRow(BuildContext context, String label, String value, IconData icon) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: colorScheme.primary.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Icon(
+            icon,
+            size: 20,
+            color: colorScheme.primary,
+          ),
+        ),
+        const SizedBox(width: 12),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 12,
+                color: colorScheme.onSurface.withOpacity(0.6),
+              ),
+            ),
+            Text(
+              value,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: colorScheme.onSurface,
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 
@@ -158,11 +256,12 @@ class InternshipStatusBox extends StatelessWidget {
                 width: 1,
               ),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildStatusBadge(context, colorScheme),
-                _buildApproveButton(context, isApproved),
+                _buildInternshipHeader(context, colorScheme),
+                const SizedBox(height: 16),
+                _buildStudentInfo(context),
               ],
             ),
           );
