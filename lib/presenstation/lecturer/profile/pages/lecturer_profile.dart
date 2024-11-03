@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sistem_magang/common/widgets/log_out_alert.dart';
@@ -44,17 +46,24 @@ class LecturerProfilePage extends StatelessWidget {
             },
           ),
           SettingButton(
+            icon: Icons.notifications_active_outlined,
+            title: 'Notification',
+            onTap: () {
+              // TODO
+            },
+          ),
+          SettingButton(
             icon: Icons.help_outline,
             title: 'Help & Support',
             onTap: () {
-              // Handle help and support
+              // TODO
             },
           ),
           SettingButton(
             icon: Icons.info_outline,
             title: 'About App',
             onTap: () {
-              // Handle about app
+              // TODO
             },
           ),
           SettingButton(
@@ -64,7 +73,7 @@ class LecturerProfilePage extends StatelessWidget {
               showDialog(
                 context: context,
                 builder: (context) {
-                  return LogOutAlert();
+                  return const LogOutAlert();
                 },
               );
             },
@@ -173,6 +182,8 @@ class LecturerProfilePage extends StatelessWidget {
     );
   }
 
+//TODO :  API
+
   Container _about(ColorScheme colorScheme) {
     return Container(
       padding: const EdgeInsets.all(24),
@@ -233,12 +244,12 @@ class InfoRow extends StatelessWidget {
   final ColorScheme colorScheme;
 
   const InfoRow({
-    Key? key,
+    super.key,
     required this.icon,
     required this.label,
     required this.value,
     required this.colorScheme,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

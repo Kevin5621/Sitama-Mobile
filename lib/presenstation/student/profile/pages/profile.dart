@@ -76,17 +76,24 @@ class _ProfilePageState extends State<ProfilePage> {
             },
           ),
           SettingButton(
+            icon: Icons.notifications_active_outlined,
+            title: 'Notification',
+            onTap: () {
+              // TODO
+            },
+          ),
+          SettingButton(
             icon: Icons.help_outline,
             title: 'Help & Support',
             onTap: () {
-              // Handle help and support
+              // TODO
             },
           ),
           SettingButton(
             icon: Icons.info_outline,
             title: 'About App',
             onTap: () {
-              // Handle about app
+              // TODO
             },
           ),
           SettingButton(
