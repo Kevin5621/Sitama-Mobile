@@ -72,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                 Container(
                   width: double.infinity,
                   height: 312,
-                  color: AppColors.primary500,
+                  color: AppColors.lightPrimary500,
                   child: Center(
                     child: Image.asset(AppImages.loginvektor),
                   ),
@@ -140,7 +140,7 @@ class _LoginPageState extends State<LoginPage> {
                       Text(
                         'Lupa Kata Sandi ?',
                         style: TextStyle(
-                          color: AppColors.info,
+                          color: AppColors.lightInfo,
                           fontSize: 12,
                         ),
                       ),

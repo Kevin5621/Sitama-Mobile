@@ -76,17 +76,24 @@ class _ProfilePageState extends State<ProfilePage> {
             },
           ),
           SettingButton(
+            icon: Icons.notifications_active_outlined,
+            title: 'Notification',
+            onTap: () {
+              // TODO
+            },
+          ),
+          SettingButton(
             icon: Icons.help_outline,
             title: 'Help & Support',
             onTap: () {
-              // Handle help and support
+              // TODO
             },
           ),
           SettingButton(
             icon: Icons.info_outline,
             title: 'About App',
             onTap: () {
-              // Handle about app
+              // TODO
             },
           ),
           SettingButton(
@@ -126,12 +133,12 @@ class _ProfilePageState extends State<ProfilePage> {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           const BoxShadow(
-            color: AppColors.gray500,
+            color: AppColors.lightGray500,
             offset: Offset(0, 2),
             blurRadius: 2,
           )
         ],
-        color: AppColors.white,
+        color: AppColors.lightWhite,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,7 +147,7 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Text(
               'Industri',
               style: TextStyle(
-                color: AppColors.gray,
+                color: AppColors.lightGray,
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
               ),
@@ -159,7 +166,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       Text(
                         'Industri ${index + 1}',
                         style: const TextStyle(
-                          color: AppColors.gray,
+                          color: AppColors.lightGray,
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
                         ),
@@ -167,7 +174,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       Text(
                         'Nama : ${internships[index].name}', // Replace with actual property
                         style: const TextStyle(
-                          color: AppColors.gray,
+                          color: AppColors.lightGray,
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
                         ),
@@ -175,7 +182,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       Text(
                         'Tanggal Mulai : ${DateFormat("dd-MM-yyyy").format(internships[index].start_date)}', // Replace with actual property
                         style: const TextStyle(
-                          color: AppColors.gray,
+                          color: AppColors.lightGray,
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
                         ),
@@ -183,7 +190,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       Text(
                         'Tanggal Selesai : ${DateFormat("dd-MM-yyyy").format(internships[index].start_date)}', // Replace with actual property
                         style: const TextStyle(
-                          color: AppColors.gray,
+                          color: AppColors.lightGray,
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
                         ),
@@ -196,7 +203,7 @@ class _ProfilePageState extends State<ProfilePage> {
             const Text(
               'Tempat magang anda belum terdaftar !',
               style: TextStyle(
-                color: AppColors.gray,
+                color: AppColors.lightGray,
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
               ),
@@ -237,7 +244,7 @@ class _ProfilePageState extends State<ProfilePage> {
               width: 80,
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: AppColors.background,
+                  color: AppColors.lightBackground,
                 ),
                 borderRadius: BorderRadius.circular(32),
                 image: DecorationImage(
@@ -255,7 +262,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   height: 30,
                   transform: Matrix4.translationValues(5, 5, 0),
                   decoration: const BoxDecoration(
-                    color: AppColors.primary,
+                    color: AppColors.lightPrimary,
                     shape: BoxShape.circle,
                   ),
                   child: IconButton(
@@ -266,7 +273,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     },
                     icon: const Icon(
                       Icons.edit,
-                      color: AppColors.white,
+                      color: AppColors.lightWhite,
                       size: 16,
                     ),
                   ),
@@ -286,7 +293,7 @@ class _ProfilePageState extends State<ProfilePage> {
               style: const TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: 12,
-                color: AppColors.gray,
+                color: AppColors.lightGray,
               ),
             ),
             Text(
@@ -294,7 +301,7 @@ class _ProfilePageState extends State<ProfilePage> {
               style: const TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: 10,
-                color: AppColors.gray,
+                color: AppColors.lightGray,
               ),
             ),
           ],

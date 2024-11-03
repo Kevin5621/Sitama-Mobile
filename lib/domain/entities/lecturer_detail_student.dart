@@ -7,11 +7,12 @@ class DetailStudentEntity {
   final List<GuidanceEntity> guidances;
   final List<LogBookEntity> log_book;
 
-  DetailStudentEntity(
-      {required this.student,
-      required this.internships,
-      required this.guidances,
-      required this.log_book});
+  DetailStudentEntity({
+    required this.student,
+    required this.internships,
+    required this.guidances,
+    required this.log_book,
+  });
 }
 
 class InfoStudentEntity {
@@ -19,17 +20,25 @@ class InfoStudentEntity {
   final String username;
   final String email;
 
-  InfoStudentEntity(
-      {required this.name, required this.username, required this.email});
+  InfoStudentEntity({
+    required this.name, 
+    required this.username, 
+    required this.email,
+  });
 }
 
 class InternshipStudentEntity {
   final String name;
   final DateTime start_date;
-  final DateTime ? end_date;
+  final DateTime? end_date;
+  final String status; 
+  final bool isApproved; 
 
-  InternshipStudentEntity(
-      {required this.name,
-      required this.start_date,
-      required this.end_date});
+  InternshipStudentEntity({
+    required this.name,
+    required this.start_date,
+    required this.end_date,
+    this.status = 'Magang', 
+    this.isApproved = false, 
+  });
 }

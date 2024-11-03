@@ -18,7 +18,7 @@ class LoadNotification extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           gradient: const LinearGradient(
-            colors: [AppColors.warning, AppColors.primary],
+            colors: [AppColors.lightWarning, AppColors.lightPrimary],
             end: Alignment.bottomRight,
           ),
         ),

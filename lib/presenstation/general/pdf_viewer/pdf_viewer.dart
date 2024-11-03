@@ -12,7 +12,7 @@ class PDFViewerPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('File Bimbingan'),
-        backgroundColor: AppColors.background,
+        backgroundColor: AppColors.lightBackground,
       ),
       body: SfPdfViewer.network(pdfUrl),
     );

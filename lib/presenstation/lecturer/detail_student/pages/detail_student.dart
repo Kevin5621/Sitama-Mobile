@@ -33,13 +33,10 @@ class DetailStudentPage extends StatelessWidget {
                   SliverAppBar(
                     expandedHeight: 250,
                     pinned: true,
-                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    backgroundColor: Theme.of(context).colorScheme.inversePrimary,
                     flexibleSpace: FlexibleSpaceBar(
                       background: ProfileHeader(detailStudent: detailStudent),
                     ),
-                    actions: [
-                      ActionButtons(state: state),
-                    ],
                   ),
                   SliverToBoxAdapter(
                     child: Container(

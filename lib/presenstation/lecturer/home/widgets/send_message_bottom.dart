@@ -89,7 +89,7 @@ Widget _buildSendButton(BuildContext context, TextEditingController controller) 
         child: ElevatedButton(
           onPressed: () => _handleSendMessage(context, controller),
           style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.primary,
+            backgroundColor: AppColors.lightPrimary,
             foregroundColor: Colors.white,
             padding: const EdgeInsets.symmetric(vertical: 16),
             shape: RoundedRectangleBorder(

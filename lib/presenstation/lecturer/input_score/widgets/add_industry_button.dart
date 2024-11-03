@@ -22,10 +22,10 @@ class AddIndustryButton extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.add, color: AppColors.primary),
+              Icon(Icons.add, color: AppColors.lightPrimary),
               SizedBox(width: 8),
               Text('Tambah Nilai Industri',
-                  style: TextStyle(color: AppColors.primary)),
+                  style: TextStyle(color: AppColors.lightPrimary)),
             ],
           ),
         ),
