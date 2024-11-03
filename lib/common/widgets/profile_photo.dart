@@ -20,7 +20,7 @@
 //               height: 80,
 //               width: 80,
 //               decoration: BoxDecoration(
-//                 border: Border.all(color: AppColors.background),
+//                 border: Border.all(color: AppColors.lightBackground),
 //                 borderRadius: BorderRadius.circular(32),
 //               ),
 //               child: ClipRRect(
@@ -79,7 +79,7 @@
 //       width: 30,
 //       height: 30,
 //       decoration: BoxDecoration(
-//         color: AppColors.primary,
+//         color: AppColors.lightPrimary,
 //         shape: BoxShape.circle,
 //       ),
 //       child: IconButton(

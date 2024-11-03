@@ -45,24 +45,24 @@ class StudentCard extends StatelessWidget {
   Color _getActivityColor(String activity, bool isDark) {
     switch (activity) {
       case 'unseen':
-        return isDark ? AppColors.grayDark : Colors.grey;
+        return isDark ? AppColors.lightGray : Colors.grey;
       case 'updated':
-        return isDark ? AppColors.warningDark : Colors.orange;
+        return isDark ? AppColors.lightWarning : Colors.orange;
       case 'revisi':
-        return isDark ? AppColors.dangerDark : Colors.red;
+        return isDark ? AppColors.lightDanger : Colors.red;
       default:
-        return isDark ? AppColors.grayDark : Colors.grey;
+        return isDark ? AppColors.darkGray : Colors.grey;
     }
   }
 
   Color _getNotificationColor(bool isDark) {
     switch (notificationStatus) {
       case 1:
-        return isDark ? AppColors.dangerDark : Colors.red;
+        return isDark ? AppColors.darkDanger : Colors.red;
       case 2:
-        return isDark ? AppColors.infoDark : Colors.blue;
+        return isDark ? AppColors.darkInfo : Colors.blue;
       case 3:
-        return isDark ? AppColors.grayDark : Colors.grey;
+        return isDark ? AppColors.darkGray : Colors.grey;
       default:
         return Colors.transparent;
     }
@@ -72,9 +72,9 @@ class StudentCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final backgroundColor = isDark ? AppColors.gray500Dark : AppColors.white;
-    final textColor = isDark ? AppColors.whiteDark : AppColors.black;
-    final secondaryTextColor = isDark ? AppColors.grayDark : AppColors.gray;
+    final backgroundColor = isDark ? AppColors.darkGray500 : AppColors.lightWhite;
+    final textColor = isDark ? AppColors.lightWhite : AppColors.lightBlack;
+    final secondaryTextColor = isDark ? AppColors.darkGray : AppColors.lightGray;
 
     return InkWell(
       onTap: onTap,
@@ -93,7 +93,7 @@ class StudentCard extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 12),
                   child: Icon(
                     Icons.check_circle, 
-                    color: isDark ? AppColors.infoDark : Colors.blue
+                    color: isDark ? AppColors.darkInfo : Colors.blue
                   ),
                 ),
               ),
@@ -157,13 +157,13 @@ class StudentCard extends StatelessWidget {
                         width: 40,
                         decoration: BoxDecoration(
                           color: isSelected
-                              ? (isDark ? AppColors.infoDark : AppColors.info).withOpacity(0.1)
+                              ? (isDark ? AppColors.darkInfo : AppColors.lightInfo).withOpacity(0.1)
                               : backgroundColor,
                           shape: BoxShape.circle,
                           border: Border.all(
                             color: isSelected 
-                                ? (isDark ? AppColors.infoDark : AppColors.info)
-                                : (isDark ? AppColors.grayDark : AppColors.gray),
+                                ? (isDark ? AppColors.darkInfo : AppColors.lightInfo)
+                                : (isDark ? AppColors.darkGray : AppColors.lightGray),
                             width: isSelected ? 2 : 1,
                           ),
                         ),

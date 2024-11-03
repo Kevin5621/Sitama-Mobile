@@ -79,7 +79,7 @@ class _LecturerHomeContentState extends State<LecturerHomeContent>
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+            valueColor: AlwaysStoppedAnimation<Color>(AppColors.lightPrimary),
           ),
           SizedBox(height: 16),
           Text(
@@ -132,7 +132,7 @@ class _LecturerHomeContentState extends State<LecturerHomeContent>
                 image: AssetImage(AppImages.homePattern),
                 fit: BoxFit.cover,
               ),
-              color: Theme.of(context).colorScheme.primary,
+              color: Theme.of(context).colorScheme.inversePrimary,
             ),
             child: Header(
               name: data.name,
@@ -172,12 +172,12 @@ class _LecturerHomeContentState extends State<LecturerHomeContent>
             scale: value,
             child: FloatingActionButton(
               onPressed: () => showSendMessageBottomSheet(context),
-              backgroundColor: AppColors.primary,
+              backgroundColor: AppColors.lightPrimary,
               elevation: 6,
               shape: const CircleBorder(),
               child: const Icon(
                 Icons.add,
-                color: AppColors.white,
+                color: AppColors.lightWhite,
                 size: 24,
               ),
             ),
@@ -212,7 +212,7 @@ class _LecturerHomeContentState extends State<LecturerHomeContent>
               context.read<LecturerDisplayCubit>().displayLecturer();
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
+              backgroundColor: AppColors.lightPrimary,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),

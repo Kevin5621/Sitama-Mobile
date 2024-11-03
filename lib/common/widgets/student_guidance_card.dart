@@ -242,14 +242,14 @@ class GuidanceCard extends StatelessWidget {
   Widget _getStatusIcon(ColorScheme colorScheme) {
     switch (status) {
       case GuidanceStatus.approved:
-        return const Icon(Icons.check_circle, color: AppColors.success);
+        return const Icon(Icons.check_circle, color: AppColors.lightSuccess);
       case GuidanceStatus.inProgress:
         return Icon(Icons.remove_circle,
             color: colorScheme.onSurface.withOpacity(0.5));
       case GuidanceStatus.rejected:
-        return const Icon(Icons.error, color: AppColors.danger);
+        return const Icon(Icons.error, color: AppColors.lightDanger);
       case GuidanceStatus.updated:
-        return const Icon(Icons.add_circle, color: AppColors.warning);
+        return const Icon(Icons.add_circle, color: AppColors.lightWarning);
     }
   }
 }

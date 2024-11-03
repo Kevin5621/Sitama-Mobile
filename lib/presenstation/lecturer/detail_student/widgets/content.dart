@@ -29,9 +29,9 @@ class TabSection extends StatelessWidget {
               Tab(text: 'Bimbingan'),
               Tab(text: 'Log Book'),
             ],
-            labelColor: AppColors.primary,
-            unselectedLabelColor: AppColors.gray,
-            indicatorColor: AppColors.primary,
+            labelColor: AppColors.lightPrimary,
+            unselectedLabelColor: AppColors.lightGray,
+            indicatorColor: AppColors.lightPrimary,
           ),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.8,

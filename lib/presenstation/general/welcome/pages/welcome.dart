@@ -51,7 +51,7 @@ class WelcomePages extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 12,
-                  color: AppColors.gray,
+                  color: AppColors.lightGray,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -61,7 +61,7 @@ class WelcomePages extends StatelessWidget {
               Text(
                 'Or continue with',
                 style: TextStyle(
-                  color: AppColors.gray,
+                  color: AppColors.lightGray,
                 ),
               ),
               SizedBox(height: 16),
@@ -82,7 +82,7 @@ class WelcomePages extends StatelessWidget {
         );
       },
       style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.primary,
+        backgroundColor: AppColors.lightPrimary,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(55),
         ),
@@ -91,7 +91,7 @@ class WelcomePages extends StatelessWidget {
       child: const Text(
         'Login',
         style: TextStyle(
-          color: AppColors.white,
+          color: AppColors.lightWhite,
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -104,7 +104,7 @@ class WelcomePages extends StatelessWidget {
         // TODO: Google Sign
       },
       style: OutlinedButton.styleFrom(
-        side: const BorderSide(color: AppColors.gray),
+        side: const BorderSide(color: AppColors.lightGray),
         minimumSize: const Size(324, 52),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(55),
@@ -118,7 +118,7 @@ class WelcomePages extends StatelessWidget {
           Text(
             'Lanjut Dengan Google',
             style: TextStyle(
-              color: AppColors.gray,
+              color: AppColors.lightGray,
               fontWeight: FontWeight.bold,
             ),
           )

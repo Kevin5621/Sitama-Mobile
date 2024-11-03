@@ -84,7 +84,7 @@ class LecturerProfilePage extends StatelessWidget {
               image: AssetImage(AppImages.homePattern),
               fit: BoxFit.cover,
             ),
-            color: colorScheme.primary,
+            color: colorScheme.inversePrimary,
           ),
         ),
         Column(

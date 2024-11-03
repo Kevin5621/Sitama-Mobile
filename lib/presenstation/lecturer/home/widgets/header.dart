@@ -48,10 +48,10 @@ class Header extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
-        color: AppColors.white,
+        color: AppColors.lightWhite,
         boxShadow: [
           BoxShadow(
-            color: AppColors.black.withOpacity(0.25),
+            color: AppColors.lightBlack.withOpacity(0.25),
             spreadRadius: 0,
             blurRadius: 2,
             offset: Offset(0, 2),
@@ -66,11 +66,11 @@ class Header extends StatelessWidget {
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: AppColors.gray,
+              color: AppColors.lightGray,
             ),
           ),
           IconButton(
-            icon: const Icon(Icons.close, color: AppColors.black),
+            icon: const Icon(Icons.close, color: AppColors.lightBlack),
             onPressed: () {
               context.read<SelectionBloc>().add(ToggleSelectionMode());
             },

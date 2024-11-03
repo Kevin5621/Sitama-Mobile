@@ -111,13 +111,13 @@ class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
   Widget _buildLeadingIcon(ColorScheme colorScheme) {
     switch (currentStatus) {
       case LecturerGuidanceStatus.approved:
-        return const Icon(Icons.check_circle, color: AppColors.success);
+        return const Icon(Icons.check_circle, color: AppColors.lightSuccess);
       case LecturerGuidanceStatus.inProgress:
         return Icon(Icons.remove_circle, color: colorScheme.onSurface);
       case LecturerGuidanceStatus.rejected:
-        return const Icon(Icons.error, color: AppColors.danger);
+        return const Icon(Icons.error, color: AppColors.lightDanger);
       case LecturerGuidanceStatus.updated:
-        return const Icon(Icons.add_circle, color: AppColors.warning);
+        return const Icon(Icons.add_circle, color: AppColors.lightWarning);
       default:
         return Icon(Icons.circle, color: colorScheme.onSurface);
     }

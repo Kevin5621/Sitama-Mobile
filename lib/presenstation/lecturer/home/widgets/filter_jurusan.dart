@@ -60,7 +60,7 @@ class _FilterJurusanState extends State<FilterJurusan> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: (widget.primaryColor ?? colorScheme.primary).withOpacity(0.2)),
-        color: Colors.white,
+        color: widget.backgroundColor ?? colorScheme.surface,
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton2<String>(

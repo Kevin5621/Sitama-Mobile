@@ -15,86 +15,159 @@ class InternshipStatusBox extends StatelessWidget {
     this.onApprove,
   }) : super(key: key);
 
-  Widget _buildApproveButton(BuildContext context, bool isApproved) {
+  Future<void> _showConfirmationDialog(BuildContext context, bool currentStatus) async {
     final colorScheme = Theme.of(context).colorScheme;
-
-    return IconButton(
-      icon: Icon(
-        isApproved ? Icons.check_circle : Icons.check_circle_outline,
-        color: isApproved ? Colors.green : colorScheme.onPrimary,
-        size: 24,
-      ),
-      onPressed: () {
-        context.read<DetailStudentDisplayCubit>().toggleInternshipApproval(index);
-        if (onApprove != null) {
-          onApprove!();
-        }
+    
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: Text(
+            currentStatus ? 'Batalkan Persetujuan?' : 'Setujui Status Magang?',
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+            ),
+          ),
+          content: Text(
+            currentStatus 
+              ? 'Anda yakin ingin membatalkan persetujuan status magang ini?'
+              : 'Anda yakin ingin menyetujui status magang ini?'
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(
+                'Batal',
+                style: TextStyle(color: colorScheme.secondary),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: currentStatus ? Colors.red : colorScheme.primary,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: Text(
+                currentStatus ? 'Batalkan' : 'Setujui',
+                style: const TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        );
       },
     );
   }
 
-  Widget _buildStatusInfo(BuildContext context, bool isApproved) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          decoration: BoxDecoration(
-            color: _getStatusColor(colorScheme).withOpacity(0.1),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                _getStatusIcon(),
-                size: 18,
-                color: _getStatusColor(colorScheme),
-              ),
-              SizedBox(width: 8),
-              Text(
-                status,
-                style: TextStyle(
-                  color: _getStatusColor(colorScheme),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
+  Widget _buildApproveButton(BuildContext context, bool isApproved) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(50),
+        onTap: () async {
+          final shouldProceed = await _showConfirmationDialog(context, isApproved);
+          // if (shouldProceed == true) {
+          //   context.read<DetailStudentDisplayCubit>().toggleInternshipApproval(index);
+          //   if (onApprove != null) {
+          //     onApprove!();
+          //   }
+          // }
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 200),
+            child: Icon(
+              isApproved ? Icons.check_circle : Icons.check_circle_outline,
+              key: ValueKey<bool>(isApproved),
+              color: isApproved ? Colors.green : Colors.grey,
+              size: 28,
+            ),
           ),
         ),
-        _buildApproveButton(context, isApproved),
-      ],
+      ),
     );
   }
-  
+
+  Widget _buildStatusBadge(BuildContext context, ColorScheme colorScheme) {
+    final statusColor = _getStatusColor(colorScheme);
+    
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      decoration: BoxDecoration(
+        color: statusColor.withOpacity(0.15),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: statusColor.withOpacity(0.3),
+          width: 1,
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            _getStatusIcon(),
+            size: 20,
+            color: statusColor,
+          ),
+          const SizedBox(width: 8),
+          Text(
+            status,
+            style: TextStyle(
+              color: statusColor,
+              fontWeight: FontWeight.w600,
+              fontSize: 15,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<DetailStudentDisplayCubit, DetailStudentDisplayState>(
       builder: (context, state) {
         if (state is DetailLoaded) {
           final isApproved = state.isInternshipApproved(index);
-          
+          final colorScheme = Theme.of(context).colorScheme;
+
           return Container(
             width: double.infinity,
+            margin: const EdgeInsets.symmetric(vertical: 8),
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              borderRadius: BorderRadius.circular(12),
+              color: colorScheme.surface,
+              borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
-                  spreadRadius: 1,
-                  blurRadius: 10,
-                  offset: Offset(0, 4),
+                  color: Colors.black.withOpacity(0.04),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
                 ),
               ],
+              border: Border.all(
+                color: isApproved 
+                  ? Colors.green.withOpacity(0.3)
+                  : Colors.grey.withOpacity(0.2),
+                width: 1,
+              ),
             ),
-            child: _buildStatusInfo(context, isApproved),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _buildStatusBadge(context, colorScheme),
+                _buildApproveButton(context, isApproved),
+              ],
+            ),
           );
         }
-        return SizedBox(); // or some loading/error state
+        return const SizedBox.shrink();
       },
     );
   }
@@ -113,11 +186,11 @@ class InternshipStatusBox extends StatelessWidget {
   IconData _getStatusIcon() {
     switch (status.toLowerCase()) {
       case 'magang':
-        return Icons.work;
+        return Icons.work_outline;
       case 'selesai magang':
-        return Icons.check_circle;
+        return Icons.check_circle_outline;
       default:
-        return Icons.work;
+        return Icons.work_outline;
     }
   }
 }

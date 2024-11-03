@@ -32,13 +32,13 @@ class BasicAppButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: null,
       style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.primary,
+        backgroundColor: AppColors.lightPrimary,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(55),
         ),
-        minimumSize: height ? Size.fromHeight(65) : null,
+        minimumSize: height ? const Size.fromHeight(65) : null,
       ),
-      child: CircularProgressIndicator(),
+      child: const CircularProgressIndicator(),
     );
   }
 
@@ -46,16 +46,16 @@ class BasicAppButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.primary,
+        backgroundColor: AppColors.lightPrimary,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(55),
         ),
-        minimumSize: height ? Size.fromHeight(65) : null,
+        minimumSize: height ? const Size.fromHeight(65) : null,
       ),
       child: Text(
         title,
-        style: TextStyle(
-          color: AppColors.white,
+        style: const TextStyle(
+          color: AppColors.lightWhite,
           fontWeight: FontWeight.bold,
         ),
       ),
