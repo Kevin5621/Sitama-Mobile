@@ -13,22 +13,30 @@ class DetailStudentDisplayCubit extends Cubit<DetailStudentDisplayState> {
         emit(DetailFailure(errorMessage: error));
       },
       (data) {
+        // Inisialisasi Map untuk status approval internship
+        final internshipApprovalStatus = Map<int, bool>.fromIterable(
+          Iterable.generate(data.internships.length),
+          key: (i) => i,
+          value: (_) => false,
+        );
+
         emit(DetailLoaded(
           detailStudentEntity: data,
-          isChecked: false, // Default checkbox tidak dicentang
-          isStarRounded: false, // Default bintang tidak terpilih
+          internshipApprovalStatus: internshipApprovalStatus,
+          isStarRounded: false,
         ));
       },
     );
   }
 
-  void toggleCheck() {
+  void toggleInternshipApproval(int index) {
     if (state is DetailLoaded) {
       final currentState = state as DetailLoaded;
-      emit(DetailLoaded(
-        detailStudentEntity: currentState.detailStudentEntity,
-        isChecked: !currentState.isChecked, // Toggle status checkbox
-        isStarRounded: currentState.isStarRounded, // Pertahankan status bintang
+      final newApprovalStatus = Map<int, bool>.from(currentState.internshipApprovalStatus);
+      newApprovalStatus[index] = !(newApprovalStatus[index] ?? false);
+
+      emit(currentState.copyWith(
+        internshipApprovalStatus: newApprovalStatus,
       ));
     }
   }
@@ -36,10 +44,24 @@ class DetailStudentDisplayCubit extends Cubit<DetailStudentDisplayState> {
   void toggleStar() {
     if (state is DetailLoaded) {
       final currentState = state as DetailLoaded;
-      emit(DetailLoaded(
-        detailStudentEntity: currentState.detailStudentEntity,
-        isChecked: currentState.isChecked, // Pertahankan status checkbox
-        isStarRounded: !currentState.isStarRounded, // Toggle status bintang
+      emit(currentState.copyWith(
+        isStarRounded: !currentState.isStarRounded,
+      ));
+    }
+  }
+
+  // Optional: Method untuk mengatur semua status approval sekaligus
+  void setAllInternshipApproval(bool approved) {
+    if (state is DetailLoaded) {
+      final currentState = state as DetailLoaded;
+      final newApprovalStatus = Map<int, bool>.fromIterable(
+        currentState.internshipApprovalStatus.keys,
+        key: (k) => k,
+        value: (_) => approved,
+      );
+
+      emit(currentState.copyWith(
+        internshipApprovalStatus: newApprovalStatus,
       ));
     }
   }

@@ -37,9 +37,6 @@ class DetailStudentPage extends StatelessWidget {
                     flexibleSpace: FlexibleSpaceBar(
                       background: ProfileHeader(detailStudent: detailStudent),
                     ),
-                    actions: [
-                      ActionButtons(state: state),
-                    ],
                   ),
                   SliverToBoxAdapter(
                     child: Container(

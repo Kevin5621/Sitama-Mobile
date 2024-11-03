@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:sistem_magang/domain/entities/lecturer_detail_student.dart';
 import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/internship_section.dart';
+import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/internship_status.dart';
 import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/score_section.dart';
 
 class InfoBoxes extends StatelessWidget {
@@ -18,20 +19,32 @@ class InfoBoxes extends StatelessWidget {
       child: Column(
         children: [
           ListView.separated(
-            physics: NeverScrollableScrollPhysics(),
-            separatorBuilder: (context, index) => SizedBox(height: 12),
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            separatorBuilder: (context, index) => const SizedBox(height: 12),
+            itemCount: internships.length,
             itemBuilder: (context, index) {
               final internship = internships[index];
-              return InternshipBox(
-                index: index,
-                internship: internship,
-              );
-            },
-            shrinkWrap: true,
-            itemCount: internships.length,
-          ),
-          SizedBox(height: 16),
-          ScoreBox(),
+              return Column(
+                      children: [
+                        InternshipStatusBox(
+                          index: index,
+                          status: internship.status,
+                          onApprove: () {
+                            // Additional actions if needed after approval
+                          },
+                        ),
+                        const SizedBox(height: 8),
+                        InternshipBox(
+                          index: index,
+                          internship: internship,
+                        ),
+                      ],
+                    );
+                  },
+                ),
+          const SizedBox(height: 16),
+          const ScoreBox(),
         ],
       ),
     );

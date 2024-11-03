@@ -1,43 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sistem_magang/core/config/themes/app_color.dart';
 import 'package:sistem_magang/domain/entities/guidance_entity.dart';
 import 'package:sistem_magang/domain/entities/log_book_entity.dart';
-import 'package:sistem_magang/presenstation/lecturer/detail_student/bloc/detail_student_display_cubit.dart';
-import 'package:sistem_magang/presenstation/lecturer/detail_student/bloc/detail_student_display_state.dart';
 import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/lecturer_guidance_tab.dart';
 import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/lecturer_log_book_tab.dart';
-
-class ActionButtons extends StatelessWidget {
-  final DetailLoaded state;
-
-  const ActionButtons({
-    Key? key,
-    required this.state,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: Row(
-        children: [
-          IconButton(
-            icon: Icon(
-              state.isChecked ? Icons.check_circle : Icons.check_circle_outline,
-              color: state.isChecked ? Colors.green : Colors.white,
-              weight: 12,
-            ),
-            onPressed: () {
-              context.read<DetailStudentDisplayCubit>().toggleCheck();
-            },
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 class TabSection extends StatelessWidget {
   final List<GuidanceEntity> guidances;
