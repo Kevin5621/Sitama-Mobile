@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sistem_magang/common/bloc/button/button_state.dart';
 import 'package:sistem_magang/common/bloc/button/button_state_cubit.dart';
 import 'package:sistem_magang/common/widgets/alert.dart';
+import 'package:sistem_magang/core/config/themes/app_color.dart';
 import 'package:sistem_magang/domain/usecases/delete_guidance_student.dart';
 import 'package:sistem_magang/presenstation/student/home/pages/home.dart';
 import 'package:sistem_magang/service_locator.dart';
@@ -64,9 +65,9 @@ class _DeleteGuidanceState extends State<DeleteGuidance> {
           message: 'Apakah anda ingin menghapus bimbingan "${widget.title}"?',
           cancelText: 'Batal',
           confirmText: 'Hapus',
-          confirmColor: Theme.of(context).colorScheme.error, // Warna merah untuk delete
-          icon: Icons.delete_outline, // Icon delete
-          iconColor: Theme.of(context).colorScheme.error,
+          confirmColor: AppColors.lightDanger, 
+          icon: Icons.delete_outline, 
+          iconColor: AppColors.lightDanger,
           onCancel: () {
             Navigator.of(context).pop();
           },

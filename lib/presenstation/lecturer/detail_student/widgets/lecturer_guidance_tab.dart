@@ -112,7 +112,7 @@ class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
       case LecturerGuidanceStatus.approved:
         return const Icon(Icons.check_circle, color: AppColors.lightSuccess);
       case LecturerGuidanceStatus.inProgress:
-        return Icon(Icons.remove_circle, color: colorScheme.onSurface);
+        return Icon(Icons.remove_circle, color: colorScheme.onSurface.withOpacity(0.5));
       case LecturerGuidanceStatus.rejected:
         return const Icon(Icons.error, color: AppColors.lightDanger);
       case LecturerGuidanceStatus.updated:

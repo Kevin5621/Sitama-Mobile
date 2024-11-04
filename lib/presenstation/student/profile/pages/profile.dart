@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sistem_magang/common/widgets/edit_photo_profile_pop_up.dart';
 import 'package:sistem_magang/common/widgets/reset_password.dart';
@@ -11,10 +10,10 @@ import 'package:sistem_magang/core/config/assets/app_images.dart';
 import 'package:sistem_magang/core/config/themes/app_color.dart';
 import 'package:sistem_magang/common/widgets/log_out_alert.dart';
 import 'package:sistem_magang/core/config/themes/theme_provider.dart';
-import 'package:sistem_magang/domain/entities/lecturer_detail_student.dart';
 import 'package:sistem_magang/domain/entities/student_home_entity.dart';
 import 'package:sistem_magang/presenstation/student/profile/bloc/profile_student_cubit.dart';
 import 'package:sistem_magang/presenstation/student/profile/bloc/profile_student_state.dart';
+import 'package:sistem_magang/presenstation/student/profile/widgets/box_industry.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -44,7 +43,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   children: [
                     _header(state.studentProfileEntity),
                     const SizedBox(height: 22),
-                    _industry(state.studentProfileEntity.internships, context),
+                    IndustryCard(internships: state.studentProfileEntity.internships),
                     const SizedBox(height: 40),
                     _settingsList(context, isDarkMode),
                   ],
@@ -124,96 +123,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Container _industry(
-      List<InternshipStudentEntity>? internships, BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      width: 300,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          const BoxShadow(
-            color: AppColors.lightGray500,
-            offset: Offset(0, 2),
-            blurRadius: 2,
-          )
-        ],
-        color: AppColors.lightWhite,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Center(
-            child: Text(
-              'Industri',
-              style: TextStyle(
-                color: AppColors.lightGray,
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-          const SizedBox(height: 10),
-          if (internships != null) ...[
-            ListView.builder(
-                itemCount: internships.length,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Industri ${index + 1}',
-                        style: const TextStyle(
-                          color: AppColors.lightGray,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Text(
-                        'Nama : ${internships[index].name}', // Replace with actual property
-                        style: const TextStyle(
-                          color: AppColors.lightGray,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Text(
-                        'Tanggal Mulai : ${DateFormat("dd-MM-yyyy").format(internships[index].start_date)}', // Replace with actual property
-                        style: const TextStyle(
-                          color: AppColors.lightGray,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Text(
-                        'Tanggal Selesai : ${DateFormat("dd-MM-yyyy").format(internships[index].start_date)}', // Replace with actual property
-                        style: const TextStyle(
-                          color: AppColors.lightGray,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                    ],
-                  );
-                }),
-          ] else ...[
-            const Text(
-              'Tempat magang anda belum terdaftar !',
-              style: TextStyle(
-                color: AppColors.lightGray,
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ],
-        ],
-      ),
-    );
-  }
-
+  
   Stack _header(StudentProfileEntity student) {
     return Stack(
       children: [

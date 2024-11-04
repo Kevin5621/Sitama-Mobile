@@ -183,7 +183,7 @@ class GuidanceCard extends StatelessWidget {
                           context: context,
                           icon: Icons.delete,
                           label: 'Delete',
-                          color: colorScheme.error,
+                          color: AppColors.lightDanger,
                           onTap: () {
                             showDialog(
                               context: context,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:sistem_magang/core/config/themes/app_color.dart';
 import 'package:sistem_magang/presenstation/student/logbook/widgets/delete_log_book.dart';
 import 'package:sistem_magang/presenstation/student/logbook/widgets/edit_log_book.dart';
 
@@ -127,10 +128,10 @@ class LogBookCard extends StatelessWidget {
                               size: 18,
                             ),
                             const SizedBox(width: 2),
-                            Text(
+                            const Text(
                               'Delete',
                               style: TextStyle(
-                                color: colorScheme.error,
+                                color: AppColors.lightDanger,
                               ),
                             )
                           ],

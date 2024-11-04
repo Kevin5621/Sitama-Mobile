@@ -96,7 +96,6 @@ class CustomAlertDialog extends StatelessWidget {
     String cancelText = 'Batal',
     String confirmText = 'Lanjutkan',
   }) {
-    final colorScheme = Theme.of(context).colorScheme;
     return show(
       context: context,
       title: title,
