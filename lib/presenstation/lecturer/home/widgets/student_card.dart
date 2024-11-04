@@ -55,19 +55,6 @@ class StudentCard extends StatelessWidget {
     }
   }
 
-  Color _getNotificationColor(bool isDark) {
-    switch (notificationStatus) {
-      case 1:
-        return isDark ? AppColors.darkDanger : Colors.red;
-      case 2:
-        return isDark ? AppColors.darkInfo : Colors.blue;
-      case 3:
-        return isDark ? AppColors.darkGray : Colors.grey;
-      default:
-        return Colors.transparent;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -84,20 +71,6 @@ class StudentCard extends StatelessWidget {
         color: backgroundColor,
         child: Stack(
           children: [
-            if (isSelected) ...[
-              Positioned(
-                top: 0,
-                bottom: 0,
-                right: 8,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 12),
-                  child: Icon(
-                    Icons.check_circle, 
-                    color: isDark ? AppColors.darkInfo : Colors.blue
-                  ),
-                ),
-              ),
-            ],
             // Activity Icons Stack
             Positioned(
               top: 8,
@@ -150,53 +123,34 @@ class StudentCard extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: Row(
                 children: [
-                  Stack(
-                    children: [
-                      Container(
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(
-                          color: isSelected
-                              ? (isDark ? AppColors.darkInfo : AppColors.lightInfo).withOpacity(0.1)
-                              : backgroundColor,
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: isSelected 
-                                ? (isDark ? AppColors.darkInfo : AppColors.lightInfo)
-                                : (isDark ? AppColors.darkGray : AppColors.lightGray),
-                            width: isSelected ? 2 : 1,
-                          ),
-                        ),
-                        child: ClipOval(
-                          child: Image.network(
-                            imageUrl,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Icon(
-                                Icons.person,
-                                color: secondaryTextColor,
-                              );
-                            },
-                          ),
-                        ),
+                  // Profile Picture without Blue Dot
+                  Container(
+                    height: 40,
+                    width: 40,
+                    decoration: BoxDecoration(
+                      color: isSelected
+                          ? (isDark ? AppColors.darkInfo : AppColors.lightInfo).withOpacity(0.1)
+                          : backgroundColor,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: isSelected 
+                            ? (isDark ? AppColors.darkInfo : AppColors.lightInfo)
+                            : (isDark ? AppColors.darkGray : AppColors.lightGray),
+                        width: isSelected ? 2 : 1,
                       ),
-                      Positioned(
-                        top: 0,
-                        right: 0,
-                        child: Container(
-                          width: 12,
-                          height: 12,
-                          decoration: BoxDecoration(
-                            color: _getNotificationColor(isDark),
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: backgroundColor,
-                              width: 1.5,
-                            ),
-                          ),
-                        ),
+                    ),
+                    child: ClipOval(
+                      child: Image.network(
+                        imageUrl,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Icon(
+                            Icons.person,
+                            color: secondaryTextColor,
+                          );
+                        },
                       ),
-                    ],
+                    ),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
