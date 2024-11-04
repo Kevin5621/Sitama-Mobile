@@ -8,6 +8,7 @@ import 'package:sistem_magang/domain/entities/guidance_entity.dart';
 import 'package:sistem_magang/presenstation/student/guidance/bloc/guidance_student_cubit.dart';
 import 'package:sistem_magang/presenstation/student/guidance/bloc/guidance_student_state.dart';
 import 'package:sistem_magang/presenstation/student/guidance/widgets/add_guidance.dart';
+import 'package:sistem_magang/presenstation/student/guidance/widgets/filter_dialog.dart';
 
 class GuidancePage extends StatefulWidget {
   const GuidancePage({super.key});
@@ -18,6 +19,25 @@ class GuidancePage extends StatefulWidget {
 
 class _GuidancePageState extends State<GuidancePage> {
   String _search = '';
+  String _selectedFilter = 'All';
+
+  List<GuidanceEntity> _filterGuidances(List<GuidanceEntity> guidances) {
+    return guidances.where((guidance) {
+      // First apply search filter
+      bool matchesSearch = guidance.title
+          .toLowerCase()
+          .contains(_search.toLowerCase());
+
+      // Then apply status filter
+      bool matchesStatus = _selectedFilter == 'All' ||
+          (_selectedFilter == 'Approved' && guidance.status == 'approved') ||
+          (_selectedFilter == 'InProgress' && guidance.status == 'in-progress') ||
+          (_selectedFilter == 'Rejected' && guidance.status == 'rejected') ||
+          (_selectedFilter == 'Updated' && guidance.status == 'updated');
+
+      return matchesSearch && matchesStatus;
+    }).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,13 +53,8 @@ class _GuidancePageState extends State<GuidancePage> {
               return const Center(child: CircularProgressIndicator());
             }
             if (state is GuidanceLoaded) {
-              List<GuidanceEntity> guidances =
-                  state.guidanceEntity.guidances.where((guidance) {
-                var search = guidance.title
-                    .toLowerCase()
-                    .contains(_search.toLowerCase());
-                return search;
-              }).toList();
+              List<GuidanceEntity> filteredGuidances = 
+                _filterGuidances(state.guidanceEntity.guidances);
 
               return CustomScrollView(
                 slivers: [
@@ -60,10 +75,13 @@ class _GuidancePageState extends State<GuidancePage> {
                             ),
                           ),
                           const SizedBox(width: 10),
-                          Icon(
-                            Icons.filter_list_outlined,
-                            color: theme.colorScheme.onBackground,
-                          ),
+                          FilterDropdown(
+                            onFilterChanged: (String selectedFilter) {
+                              setState(() {
+                                _selectedFilter = selectedFilter;
+                              });
+                            },
+                          )
                         ],
                       ),
                     ),
@@ -72,22 +90,22 @@ class _GuidancePageState extends State<GuidancePage> {
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) => GuidanceCard(
-                        id: guidances[index].id,
-                        title: guidances[index].title,
+                        id: filteredGuidances[index].id,
+                        title: filteredGuidances[index].title,
                         date: DateTime(2024, 1, 28 - index),
-                        status: guidances[index].status == 'approved'
+                        status: filteredGuidances[index].status == 'approved'
                             ? GuidanceStatus.approved
-                            : guidances[index].status == 'in-progress'
+                            : filteredGuidances[index].status == 'in-progress'
                                 ? GuidanceStatus.inProgress
-                                : guidances[index].status == 'rejected'
+                                : filteredGuidances[index].status == 'rejected'
                                     ? GuidanceStatus.rejected
                                     : GuidanceStatus.updated,
-                        description: guidances[index].activity,
-                        lecturerNote: guidances[index].lecturer_note,
-                        nameFile: guidances[index].name_file,
+                        description: filteredGuidances[index].activity,
+                        lecturerNote: filteredGuidances[index].lecturer_note,
+                        nameFile: filteredGuidances[index].name_file,
                         curentPage: 1,
                       ),
-                      childCount: guidances.length,
+                      childCount: filteredGuidances.length,
                     ),
                   ),
                 ],

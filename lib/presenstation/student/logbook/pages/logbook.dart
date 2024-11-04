@@ -7,6 +7,7 @@ import 'package:sistem_magang/domain/entities/log_book_entity.dart';
 import 'package:sistem_magang/presenstation/student/logbook/bloc/log_book_student_cubit.dart';
 import 'package:sistem_magang/presenstation/student/logbook/bloc/log_book_student_state.dart';
 import 'package:sistem_magang/presenstation/student/logbook/widgets/add_log_book.dart';
+import 'package:sistem_magang/presenstation/student/logbook/widgets/filter_dilog.dart';
 
 class LogBookPage extends StatefulWidget {
   const LogBookPage({super.key});
@@ -17,8 +18,29 @@ class LogBookPage extends StatefulWidget {
 
 class _LogBookPageState extends State<LogBookPage> {
   String _search = '';
+  SortMode _sortMode = SortMode.newest;
 
-  @override
+  // Function to sort logbooks
+  List<LogBookEntity> _getSortedAndFilteredLogBooks(List<LogBookEntity> logBooks) {
+    // Filter berdasarkan pencarian
+    var filteredBooks = logBooks.where((logBook) {
+      return logBook.title.toLowerCase().contains(_search.toLowerCase());
+    }).toList();
+
+    // Urutkan berdasarkan tanggal
+    filteredBooks.sort((a, b) {
+      if (_sortMode == SortMode.newest) {
+        return b.date.compareTo(a.date);
+      } else {
+        return a.date.compareTo(b.date);
+      }
+    });
+
+    return filteredBooks;
+  }
+
+
+   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     
@@ -32,12 +54,9 @@ class _LogBookPageState extends State<LogBookPage> {
               return Center(child: CircularProgressIndicator());
             }
             if (state is LogBookLoaded) {
-              List<LogBookEntity> logBooks =
-                  state.logBookEntity.log_books.where((logBook) {
-                var search =
-                    logBook.title.toLowerCase().contains(_search.toLowerCase());
-                return search;
-              }).toList();
+              final sortedAndFilteredLogBooks = 
+                _getSortedAndFilteredLogBooks(state.logBookEntity.log_books);
+              
               return CustomScrollView(
                 slivers: [
                   SliverToBoxAdapter(child: SizedBox(height: 12)),
@@ -56,19 +75,25 @@ class _LogBookPageState extends State<LogBookPage> {
                               onFilterPressed: () {},
                             ),
                           ),
-                          SizedBox(width: 10),
-                          Icon(Icons.filter_list_outlined),
+                          const SizedBox(width: 10),
+                          SortFilterButton(
+                            onSortModeChanged: (SortMode newMode) {
+                              setState(() {
+                                _sortMode = newMode;
+                              });
+                            },
+                          ),
                         ],
                       ),
                     ),
                   ),
                   SliverToBoxAdapter(child: SizedBox(height: 20)),
-                  _listLogBook(logBooks),
+                  _listLogBook(sortedAndFilteredLogBooks),
                 ],
               );
             }
             if (state is LoadLogBookFailure) {
-              return Text(state.errorMessage);
+              return Center(child: Text(state.errorMessage));
             }
             return Container();
           },
