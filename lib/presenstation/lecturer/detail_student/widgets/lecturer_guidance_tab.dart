@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:sistem_magang/common/bloc/button/button_state.dart';
 import 'package:sistem_magang/common/bloc/button/button_state_cubit.dart';
-import 'package:sistem_magang/common/widgets/basic_app_button.dart';
+import 'package:sistem_magang/common/widgets/alert.dart';
 import 'package:sistem_magang/core/config/themes/app_color.dart';
 import 'package:sistem_magang/data/models/guidance.dart';
 import 'package:sistem_magang/domain/entities/guidance_entity.dart';
@@ -162,65 +161,58 @@ class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
   }
 
   void _showConfirmationDialog(LecturerGuidanceStatus newStatus) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return BlocProvider(
-          create: (context) => ButtonStateCubit(),
-          child: BlocListener<ButtonStateCubit, ButtonState>(
-            listener: (context, state) async {
-              if (state is ButtonSuccessState) {
-                var snackBar = SnackBar(
-                    content: Text('Berhasil mengupdate status bimbingan'));
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                Navigator.pop(context);
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        DetailStudentPage(id: widget.student_id),
-                  ),
-                );
-              }
-              if (state is ButtonFailurState) {
-                var snackBar = SnackBar(content: Text(state.errorMessage));
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
-              }
-            },
-            child: AlertDialog(
-              title: const Text('Konfirmasi'),
-              content: Text(
-                  'Apakah Anda yakin ingin ${newStatus == LecturerGuidanceStatus.approved ? 'menyetujui' : 'merevisi'} bimbingan ini?'),
-              actions: [
-                TextButton(
-                  child: const Text('Batal'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-                Builder(builder: (context) {
-                  return BasicAppButton(
-                    onPressed: () {
-                      context.read<ButtonStateCubit>().excute(
-                            usecase: sl<UpdateStatusGuidanceUseCase>(),
-                            params: UpdateStatusGuidanceReqParams(
-                                id: widget.guidance.id,
-                                status:
-                                    newStatus == LecturerGuidanceStatus.approved
-                                        ? "approved"
-                                        : "rejected",
-                                lecturer_note: _lecturerNote.text),
-                          );
-                    },
-                    title: 'Konfirmasi',
-                    height: false,
-                  );
-                }),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
+  CustomAlertDialog.showConfirmation(
+    context: context,
+    title: 'Konfirmasi',
+    message: 'Apakah Anda yakin ingin ${newStatus == LecturerGuidanceStatus.approved ? 'menyetujui' : 'merevisi'} bimbingan ini?',
+    cancelText: 'Batal',
+    confirmText: 'Konfirmasi',
+  ).then((confirmed) {
+    if (confirmed == true) {
+      // Wrap dengan BlocProvider untuk menggunakan ButtonStateCubit
+      final buttonCubit = ButtonStateCubit();
+      
+      // Execute the update status
+      buttonCubit.excute(
+        usecase: sl<UpdateStatusGuidanceUseCase>(),
+        params: UpdateStatusGuidanceReqParams(
+          id: widget.guidance.id,
+          status: newStatus == LecturerGuidanceStatus.approved 
+            ? "approved" 
+            : "rejected",
+          lecturer_note: _lecturerNote.text
+        ),
+      );
+
+      // Listen to state changes
+      buttonCubit.stream.listen((state) {
+        if (state is ButtonSuccessState) {
+          // Show success message
+          CustomAlertDialog.showSuccess(
+            context: context,
+            title: 'Berhasil',
+            message: 'Berhasil mengupdate status bimbingan',
+          ).then((_) {
+            // Navigate after showing success message
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DetailStudentPage(id: widget.student_id),
+              ),
+            );
+          });
+        }
+        
+        if (state is ButtonFailurState) {
+          // Show error message
+          CustomAlertDialog.showError(
+            context: context,
+            title: 'Gagal',
+            message: state.errorMessage,
+          );
+        }
+      });
+    }
+  });
+}
 }

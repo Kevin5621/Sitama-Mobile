@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sistem_magang/common/widgets/alert.dart';
 import 'package:sistem_magang/presenstation/lecturer/detail_student/bloc/detail_student_display_cubit.dart';
 import 'package:sistem_magang/presenstation/lecturer/detail_student/bloc/detail_student_display_state.dart';
 
@@ -15,50 +16,19 @@ class InternshipStatusBox extends StatelessWidget {
     this.onApprove,
   }) : super(key: key);
 
-  Future<void> _showConfirmationDialog(BuildContext context, bool currentStatus) async {
-    final colorScheme = Theme.of(context).colorScheme;
-    
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          title: Text(
-            currentStatus ? 'Batalkan Persetujuan?' : 'Setujui Status Magang?',
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              color: colorScheme.onSurface,
-            ),
-          ),
-          content: Text(
-            currentStatus 
-              ? 'Anda yakin ingin membatalkan persetujuan status magang ini?'
-              : 'Anda yakin ingin menyetujui status magang ini?',
-            style: TextStyle(color: colorScheme.onSurfaceVariant),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: Text('Batal', style: TextStyle(color: colorScheme.primary)),
-            ),
-            ElevatedButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: currentStatus ? colorScheme.error : colorScheme.primary,
-                foregroundColor: colorScheme.onPrimary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              child: Text(currentStatus ? 'Batalkan' : 'Setujui'),
-            ),
-          ],
-        );
-      },
-    );
-  }
+  Future<bool?> _showConfirmationDialog(BuildContext context, bool currentStatus) async {
+  final colorScheme = Theme.of(context).colorScheme;
+  
+  return CustomAlertDialog.showConfirmation(
+    context: context,
+    title: currentStatus ? 'Batalkan Persetujuan?' : 'Setujui Status Magang?',
+    message: currentStatus 
+      ? 'Anda yakin ingin membatalkan persetujuan status magang ini?'
+      : 'Anda yakin ingin menyetujui status magang ini?',
+    cancelText: 'Batal',
+    confirmText: currentStatus ? 'Batalkan' : 'Setujui',
+  );
+}
 
   Widget _buildApproveButton(BuildContext context, bool isApproved) {
     final colorScheme = Theme.of(context).colorScheme;
