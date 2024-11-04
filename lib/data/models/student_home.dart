@@ -56,7 +56,8 @@ extension StudentHomeXModel on StudentHomeModel {
               id: data.id,
               title: data.title,
               activity: data.activity,
-              date: data.date))
+              date: data.date, 
+              lecturer_note: ''))
           .toList(),
     );
   }

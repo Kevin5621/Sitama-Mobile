@@ -18,20 +18,34 @@ class TabSection extends StatelessWidget {
     required this.studentId,
   }) : super(key: key);
 
-  @override
+    @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
       child: Column(
         children: [
-          TabBar(
-            tabs: [
-              Tab(text: 'Bimbingan'),
-              Tab(text: 'Log Book'),
-            ],
-            labelColor: AppColors.lightPrimary,
-            unselectedLabelColor: AppColors.lightGray,
-            indicatorColor: AppColors.lightPrimary,
+          Container(
+            decoration: const BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  color: Colors.transparent, // Menghilangkan garis bawah
+                ),
+              ),
+            ),
+            child: TabBar(
+              dividerColor: Colors.transparent, // Menghilangkan garis pemisah
+              tabs: const [
+                Tab(text: 'Bimbingan'),
+                Tab(text: 'Log Book'),
+              ],
+              labelColor: AppColors.lightPrimary,
+              unselectedLabelColor: AppColors.lightGray,
+              indicatorColor: AppColors.lightPrimary,
+              indicatorSize: TabBarIndicatorSize.label, // Membuat indicator sesuai dengan lebar teks
+              labelStyle: const TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.8,

@@ -41,7 +41,7 @@ class _NotificationPageState extends State<NotificationPage> {
         date: '19-12-2024',
         type: 'revisi',
         isRead: false,
-        detailText: 'Untuk mengisi logbook, silakan kunjungi halaman logbook dan isi sesuai dengan kegiatan yang telah Anda lakukan selama seminggu terakhir.',
+        detailText: 'Untuk mengisi logbook, silakan kunjungi halaman logbook dan isi sesuai dengan kegiatan yang telah Anda lakukan selama seminggu terakhir. TestttttttttttttttttttttttttttttttttttttttttttttttttttttttTestttttttttttttttttttttttttttttttttttttttttttttttttttttttTestttttttttttttttttttttttttttttttttttttttttttttttttttttttTestttttttttttttttttttttttttttttttttttttttttttttttttttttttTesttttttttttttttttttttttttttttttttttttttttttttttttttttttt',
       ),NotificationModel(
         id: '4',
         message: 'Anda belum mengisi logbook minggu ini. Harap segera mengisi logbook untuk memantau progress kegiatan Anda.',

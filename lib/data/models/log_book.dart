@@ -28,7 +28,8 @@ extension ListLogBookXModel on ListLogBookModel {
                 id: data.id,
                 title: data.title,
                 activity: data.activity,
-                date: data.date))
+                date: data.date, 
+                lecturer_note: ''))
             .toList());
   }
 }

@@ -9,7 +9,13 @@ class LogBookEntity {
   final String title;
   final String activity;
   final DateTime date;
+  final String lecturer_note;
 
-  LogBookEntity(
-      {required this.id, required this.title, required this.activity, required this.date});
+  LogBookEntity({
+  required this.id, 
+  required this.title, 
+  required this.activity, 
+  required this.date,
+  required this.lecturer_note,
+  });
 }

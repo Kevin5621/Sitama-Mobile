@@ -65,7 +65,11 @@ extension DetailStudentXModel on DetailStudentModel {
             .toList(),
         log_book: log_book
             .map<LogBookEntity>((data) => LogBookEntity(
-                id: data.id,title: data.title, activity: data.activity, date: data.date))
+                id: data.id,
+                title: data.title,
+                activity: data.activity, 
+                date: data.date, 
+                lecturer_note: ''))
             .toList());
   }
 }

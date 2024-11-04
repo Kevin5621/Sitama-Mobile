@@ -85,11 +85,17 @@ class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Catatan Mahasiswa :'),
-                  Text(widget.guidance.activity),
+                  Text(
+                    widget.guidance.activity,
+                    textAlign: TextAlign.start, 
+                    ),
                   const SizedBox(height: 16),
                   if (currentStatus != LecturerGuidanceStatus.inProgress) ...[
                     Text('Catatan Anda :'),
-                    Text(widget.guidance.lecturer_note),
+                    Text(
+                      widget.guidance.lecturer_note,
+                      textAlign: TextAlign.start, 
+                    ),
                     const SizedBox(height: 16),
                   ],
                   if (currentStatus != LecturerGuidanceStatus.approved &&
