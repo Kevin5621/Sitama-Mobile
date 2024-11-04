@@ -27,6 +27,8 @@ dependencies:
     file_picker: 
     syncfusion_flutter_pdfviewer: ^20.3.44
     pull_to_refresh:
+    flutter_local_notifications: ^18.0.0
+    permission_handler:
 
 dev_dependencies:
     flutter_test:

@@ -3,9 +3,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sistem_magang/common/widgets/log_out_alert.dart';
+import 'package:sistem_magang/common/widgets/notification.dart';
 import 'package:sistem_magang/common/widgets/setting_button.dart';
 import 'package:sistem_magang/core/config/assets/app_images.dart';
 import 'package:sistem_magang/core/config/themes/theme_provider.dart';
+import 'package:sistem_magang/core/service/notification_service.dart';
 
 class LecturerProfilePage extends StatelessWidget {
   const LecturerProfilePage({super.key});
@@ -49,7 +51,14 @@ class LecturerProfilePage extends StatelessWidget {
             icon: Icons.notifications_active_outlined,
             title: 'Notification',
             onTap: () {
-              // TODO
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const NotificationSettingsScreen(
+                    userRole: UserRole.dosen,
+                  ),
+                ),
+              );
             },
           ),
           SettingButton(

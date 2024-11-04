@@ -1,11 +1,26 @@
+// import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:permission_handler/permission_handler.dart';
 import 'package:sistem_magang/common/bloc/auth/auth_state.dart';
 import 'package:sistem_magang/common/bloc/auth/auth_state_cubit.dart';
 import 'package:sistem_magang/core/config/assets/app_images.dart';
 import 'package:sistem_magang/presenstation/general/welcome/pages/welcome.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/pages/lecturer_home.dart';
 import 'package:sistem_magang/presenstation/student/home/pages/home.dart';
+
+// Future<void> requestNotificationPermissions() async {
+//   if (Platform.isAndroid) {
+//     final status = await Permission.notification.request();
+//     if (status.isGranted) {
+//       print('Notification permission granted');
+//     } else if (status.isDenied) {
+//       print('Notification permission denied');
+//     }
+//   }
+// }
+
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -66,3 +81,5 @@ class _SplashPageState extends State<SplashPage> {
     );
   }
 }
+
+

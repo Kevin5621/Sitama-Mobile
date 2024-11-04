@@ -16,9 +16,7 @@ class InternshipStatusBox extends StatelessWidget {
     this.onApprove,
   }) : super(key: key);
 
-  Future<bool?> _showConfirmationDialog(BuildContext context, bool currentStatus) async {
-  final colorScheme = Theme.of(context).colorScheme;
-  
+  Future<bool?> _showConfirmationDialog(BuildContext context, bool currentStatus) async {  
   return CustomAlertDialog.showConfirmation(
     context: context,
     title: currentStatus ? 'Batalkan Persetujuan?' : 'Setujui Status Magang?',
@@ -74,7 +72,6 @@ class InternshipStatusBox extends StatelessWidget {
   }
 
   Widget _buildStudentInfo(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

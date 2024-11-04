@@ -2,12 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sistem_magang/core/config/themes/app_theme.dart';
 import 'package:sistem_magang/core/config/themes/theme_provider.dart';
+import 'package:sistem_magang/core/service/notification_service.dart';
 import 'package:sistem_magang/presenstation/general/splash/pages/splash.dart';
 import 'package:sistem_magang/service_locator.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   setupServiceLocator();
+
+  // Initialize notification service
+  final notificationService = NotificationService();
+  await notificationService.initialize();
+  await notificationService.setupNotificationActions();
   
   runApp(
     MultiProvider(
