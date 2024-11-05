@@ -32,7 +32,7 @@ class InternshipStatusBox extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     return IconButton(
       onPressed: () async {
-        final shouldProceed = await _showConfirmationDialog(context, isApproved);
+        // final shouldProceed = await _showConfirmationDialog(context, isApproved);
         // if (shouldProceed == true) {
         //   context.read<DetailStudentDisplayCubit>().toggleInternshipApproval(index);
         //   if (onApprove != null) {

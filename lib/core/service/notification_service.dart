@@ -79,6 +79,11 @@ class NotificationService {
   factory NotificationService() => _instance;
   NotificationService._();
 
+  /// Initializes the Awesome Notifications plugin with the basic channel configuration.
+  ///
+  /// This method should be called during app initialization to set up the necessary
+  /// notification infrastructure.
+  /// 
   Future<void> initialize() async {
     await AwesomeNotifications().initialize(
       null, // null = use default app icon
@@ -95,6 +100,13 @@ class NotificationService {
     );
   }
 
+  /// Requests permission to send notifications to the user.
+  ///
+  /// This method checks if the app has permission to send notifications and requests
+  /// permission if it hasn't been granted yet.
+  ///
+  /// Returns:
+  ///   `true` if the app has permission to send notifications, `false` otherwise.
   Future<bool> requestPermissions() async {
     final isAllowed = await AwesomeNotifications().isNotificationAllowed();
     if (!isAllowed) {
@@ -103,6 +115,11 @@ class NotificationService {
     return isAllowed;
   }
 
+  /// Shows a notification with the given title, body, and payload.
+  ///
+  /// The notification is shown based on the provided [NotificationSettings]. If the
+  /// notification is disabled in the settings, this method will not show the notification.
+  ///
   Future<void> showNotification({
     required String title,
     required String body,
@@ -125,16 +142,23 @@ class NotificationService {
       ),
     );
   }
-
+  /// Cancels all scheduled and active notifications.
   Future<void> cancelAll() async {
     await AwesomeNotifications().cancelAll();
   }
-
+  /// Updates the notification settings and saves them to SharedPreferences.
+  ///
+  /// Parameters:
+  ///   [settings]: The new notification settings to save.
   Future<void> updateSettings(NotificationSettings settings) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('notification_settings', jsonEncode(settings.toJson()));
   }
-
+  /// Retrieves the current notification settings from SharedPreferences.
+  ///
+  /// Returns:
+  ///   The [NotificationSettings] instance stored in SharedPreferences, or a default
+  ///   instance if no settings are found.
   Future<NotificationSettings> getSettings() async {
     final prefs = await SharedPreferences.getInstance();
     final settingsJson = prefs.getString('notification_settings');
@@ -143,7 +167,11 @@ class NotificationService {
     }
     return NotificationSettings();
   }
-
+  /// Sends a notification for a student-related event.
+  ///
+  /// This method checks the notification settings and sends a notification if it is
+  /// enabled for the given notification type.
+  ///
   Future<void> sendMahasiswaNotification({
     required String title,
     required String body,
@@ -177,7 +205,11 @@ class NotificationService {
       );
     }
   }
-
+  /// Sends a notification for a lecturer-related event.
+  ///
+  /// This method checks the notification settings and sends a notification if it is
+  /// enabled for the given notification type.
+  ///
   Future<void> sendDosenNotification({
     required String title,
     required String body,
@@ -210,20 +242,5 @@ class NotificationService {
         settings: settings,
       );
     }
-  }
-
-  // Setup notification tap handling
-  void setupNotificationActions() {
-    AwesomeNotifications().actionStream.listen((receivedNotification) {
-      if (receivedNotification.payload != null) {
-        print('Notification payload: ${receivedNotification.payload}');
-        // Add navigation logic here
-      }
-    });
-  }
-
-  // Method to be called in your app's dispose/deactivate
-  void dispose() {
-    AwesomeNotifications().actionStream.close();
   }
 }

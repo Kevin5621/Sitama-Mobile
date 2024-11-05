@@ -89,8 +89,7 @@ class _LogBookCardState extends State<LogBookCard> {
                   ),
                   const SizedBox(height: 16),
                   // Existing Note Section
-                  if (widget.logBook.lecturer_note != null && 
-                      widget.logBook.lecturer_note!.isNotEmpty)
+                  if (widget.logBook.lecturer_note.isNotEmpty)
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.all(12),
@@ -108,7 +107,7 @@ class _LogBookCardState extends State<LogBookCard> {
                             ),
                           ),
                           const SizedBox(height: 4),
-                          Text(widget.logBook.lecturer_note!),
+                          Text(widget.logBook.lecturer_note),
                         ],
                       ),
                     ),
