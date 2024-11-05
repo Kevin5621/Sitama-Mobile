@@ -12,23 +12,22 @@ dependencies:
     flutter:
         sdk: flutter
 
-    cupertino_icons: ^1.0.6
-    flutter_svg:
-    intl:
-    flutter_bloc:
-    dio:
-    get_it:
-    dartz:
-    logger:
-    shared_preferences:
-    provider:
-    dropdown_button2:
-    equatable:
-    file_picker: 
-    syncfusion_flutter_pdfviewer: ^20.3.44
-    pull_to_refresh:
-    flutter_local_notifications: ^18.0.0
-    permission_handler:
+    cupertino_icons: any 
+    flutter_svg: any 
+    intl: any 
+    flutter_bloc: any 
+    dio: any 
+    get_it: any 
+    dartz: any 
+    logger: any 
+    shared_preferences: any 
+    provider: any 
+    dropdown_button2: any 
+    equatable: any 
+    file_picker: any 
+    syncfusion_flutter_pdfviewer: any 
+    pull_to_refresh: any 
+    awesome_notifications: any 
 
 dev_dependencies:
     flutter_test:

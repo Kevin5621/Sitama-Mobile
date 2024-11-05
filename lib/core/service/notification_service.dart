@@ -1,21 +1,19 @@
 import 'dart:convert';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sistem_magang/core/config/themes/app_color.dart';
 
-// Enum untuk role user
 enum UserRole {
   mahasiswa,
   dosen,
 }
 
-// Class untuk menyimpan settings notifikasi
 class NotificationSettings {
   final bool isEnabled;
   final bool soundEnabled;
   final bool vibrationEnabled;
   final bool showPreview;
   
-  // Role-specific settings
   // Mahasiswa settings
   final bool? guidanceApprovalNotifications;
   final bool? guidanceRejectionNotifications;
@@ -33,12 +31,10 @@ class NotificationSettings {
     this.soundEnabled = true,
     this.vibrationEnabled = true,
     this.showPreview = true,
-    // Mahasiswa settings
     this.guidanceApprovalNotifications,
     this.guidanceRejectionNotifications,
     this.logbookCommentNotifications,
     this.announcementNotifications,
-    // Dosen settings
     this.newGuidanceNotifications,
     this.revisedGuidanceNotifications,
     this.newLogbookNotifications,
@@ -83,40 +79,28 @@ class NotificationService {
   factory NotificationService() => _instance;
   NotificationService._();
 
-  final FlutterLocalNotificationsPlugin _notifications = FlutterLocalNotificationsPlugin();
-
   Future<void> initialize() async {
-    const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
-    const iosSettings = DarwinInitializationSettings(
-      requestAlertPermission: true,
-      requestBadgePermission: true,
-      requestSoundPermission: true,
+    await AwesomeNotifications().initialize(
+      null, // null = use default app icon
+      [
+        NotificationChannel(
+          channelKey: 'basic_channel',
+          channelName: 'Basic Notifications',
+          channelDescription: 'Channel for basic notifications',
+          defaultColor: AppColors.lightPrimary,
+          ledColor: AppColors.lightWhite,
+          importance: NotificationImportance.High,
+        ),
+      ],
     );
-
-    const settings = InitializationSettings(
-      android: androidSettings,
-      iOS: iosSettings,
-    );
-
-    await _notifications.initialize(settings);
   }
 
   Future<bool> requestPermissions() async {
-    final androidPermissions = await _notifications
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
-        ?.requestNotificationsPermission();
-
-    final iosPermissions = await _notifications
-        .resolvePlatformSpecificImplementation<
-            IOSFlutterLocalNotificationsPlugin>()
-        ?.requestPermissions(
-          alert: true,
-          badge: true,
-          sound: true,
-        );
-
-    return (androidPermissions ?? false) || (iosPermissions ?? false);
+    final isAllowed = await AwesomeNotifications().isNotificationAllowed();
+    if (!isAllowed) {
+      return await AwesomeNotifications().requestPermissionToSendNotifications();
+    }
+    return isAllowed;
   }
 
   Future<void> showNotification({
@@ -127,49 +111,30 @@ class NotificationService {
   }) async {
     if (!settings.isEnabled) return;
 
-    final androidDetails = AndroidNotificationDetails(
-      'default_channel',
-      'Default Channel',
-      importance: Importance.high,
-      priority: Priority.high,
-      playSound: settings.soundEnabled,
-      enableVibration: settings.vibrationEnabled,
-      styleInformation: settings.showPreview
-          ? BigTextStyleInformation(body)
-          : const DefaultStyleInformation(false, false),
-    );
-
-    final iosDetails = DarwinNotificationDetails(
-      presentAlert: true,
-      presentBadge: true,
-      presentSound: settings.soundEnabled,
-    );
-
-    final details = NotificationDetails(
-      android: androidDetails,
-      iOS: iosDetails,
-    );
-
-    await _notifications.show(
-      DateTime.now().millisecond,
-      title,
-      body,
-      details,
-      payload: payload,
+    await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: DateTime.now().millisecond,
+        channelKey: 'basic_channel',
+        title: title,
+        body: body,
+        payload: {'data': payload},
+        notificationLayout: settings.showPreview 
+            ? NotificationLayout.BigText 
+            : NotificationLayout.Default,
+        category: NotificationCategory.Message,
+      ),
     );
   }
 
   Future<void> cancelAll() async {
-    await _notifications.cancelAll();
+    await AwesomeNotifications().cancelAll();
   }
 
-  // Method untuk update settings
   Future<void> updateSettings(NotificationSettings settings) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('notification_settings', jsonEncode(settings.toJson()));
   }
 
-  // Method untuk mendapatkan current settings
   Future<NotificationSettings> getSettings() async {
     final prefs = await SharedPreferences.getInstance();
     final settingsJson = prefs.getString('notification_settings');
@@ -178,16 +143,15 @@ class NotificationService {
     }
     return NotificationSettings();
   }
-   // Helper method untuk mengirim notifikasi mahasiswa
+
   Future<void> sendMahasiswaNotification({
     required String title,
     required String body,
-    required String type, // 'announcement', 'guidance_approval', 'guidance_rejection', 'logbook_comment'
+    required String type,
     String? payload,
   }) async {
     final settings = await getSettings();
     
-    // Cek apakah notifikasi tipe ini diaktifkan
     bool shouldSend = false;
     switch (type) {
       case 'announcement':
@@ -214,16 +178,14 @@ class NotificationService {
     }
   }
 
-  // Helper method untuk mengirim notifikasi dosen
   Future<void> sendDosenNotification({
     required String title,
     required String body,
-    required String type, // 'new_guidance', 'revised_guidance', 'new_logbook', 'student_progress'
+    required String type,
     String? payload,
   }) async {
     final settings = await getSettings();
     
-    // Cek apakah notifikasi tipe ini diaktifkan
     bool shouldSend = false;
     switch (type) {
       case 'new_guidance':
@@ -250,32 +212,18 @@ class NotificationService {
     }
   }
 
-  void handleNotificationResponse(NotificationResponse response) {
-    if (response.payload != null) {
-      print('Notification payload: ${response.payload}');
-      // Add logic to handle payload, such as navigation
-    }
+  // Setup notification tap handling
+  void setupNotificationActions() {
+    AwesomeNotifications().actionStream.listen((receivedNotification) {
+      if (receivedNotification.payload != null) {
+        print('Notification payload: ${receivedNotification.payload}');
+        // Add navigation logic here
+      }
+    });
   }
 
-  // Method untuk handle notification tap
-  Future<void> setupNotificationActions() async {
-  final details = await _notifications.getNotificationAppLaunchDetails();
-
-  if (details != null && details.didNotificationLaunchApp) {
-    // Check if notificationResponse is present in details
-    if (details.notificationResponse != null) {
-      handleNotificationResponse(details.notificationResponse!);
-    } else {
-      print('No notification response data found');
-    }
+  // Method to be called in your app's dispose/deactivate
+  void dispose() {
+    AwesomeNotifications().actionStream.close();
   }
-
-  // Check if `onDidReceiveNotificationResponse` is available in the latest version
-  // _notifications.onDidReceiveNotificationResponse?.listen((response) {
-  //   if (response != null) {
-  //     handleNotificationResponse(response);
-  //   } 
-  // });
-}
-
 }
