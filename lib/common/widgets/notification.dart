@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sistem_magang/core/service/notification_service.dart';
 
 class NotificationSettingsScreen extends StatefulWidget {
@@ -14,7 +16,7 @@ class NotificationSettingsScreen extends StatefulWidget {
 }
 
 class _NotificationSettingsScreenState extends State<NotificationSettingsScreen> {
-  final NotificationService _notificationService = NotificationService();
+  final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   
   // General Settings
   bool _generalNotifications = true;
@@ -42,51 +44,107 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
   }
 
   Future<void> _initializeNotifications() async {
-    await _notificationService.initialize();
-    await _notificationService.requestPermissions();
+    // Initialize Flutter Local Notifications
+    const androidInitialize = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const iOSInitialize = DarwinInitializationSettings(
+      requestAlertPermission: true,
+      requestBadgePermission: true,
+      requestSoundPermission: true,
+    );
+    
+    const initializationSettings = InitializationSettings(
+      android: androidInitialize,
+      iOS: iOSInitialize,
+    );
+
+    await _flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onDidReceiveNotificationResponse: (NotificationResponse response) {
+        // Handle notification tap
+        if (response.payload != null) {
+          // Navigate based on payload
+        }
+      },
+    );
+
+    // Request permissions for iOS
+    await _flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>()
+        ?.requestPermissions(
+          alert: true,
+          badge: true,
+          sound: true,
+        );
   }
 
   Future<void> _loadNotificationSettings() async {
-    final settings = await _notificationService.getSettings();
+    final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _generalNotifications = settings.isEnabled;
-      _soundEnabled = settings.soundEnabled;
-      _vibrationEnabled = settings.vibrationEnabled;
-      _showPreview = settings.showPreview;
+      _generalNotifications = prefs.getBool('generalNotifications') ?? true;
+      _soundEnabled = prefs.getBool('soundEnabled') ?? true;
+      _vibrationEnabled = prefs.getBool('vibrationEnabled') ?? true;
+      _showPreview = prefs.getBool('showPreview') ?? true;
 
       if (widget.userRole == UserRole.mahasiswa) {
-        _announcementNotifications = settings.announcementNotifications ?? true;
-        _guidanceApprovalNotifications = settings.guidanceApprovalNotifications ?? true;
-        _guidanceRejectionNotifications = settings.guidanceRejectionNotifications ?? true;
-        _logbookCommentNotifications = settings.logbookCommentNotifications ?? true;
+        _announcementNotifications = prefs.getBool('announcementNotifications') ?? true;
+        _guidanceApprovalNotifications = prefs.getBool('guidanceApprovalNotifications') ?? true;
+        _guidanceRejectionNotifications = prefs.getBool('guidanceRejectionNotifications') ?? true;
+        _logbookCommentNotifications = prefs.getBool('logbookCommentNotifications') ?? true;
       } else {
-        _newGuidanceNotifications = settings.newGuidanceNotifications ?? true;
-        _revisedGuidanceNotifications = settings.revisedGuidanceNotifications ?? true;
-        _newLogbookNotifications = settings.newLogbookNotifications ?? true;
-        _studentProgressAlerts = settings.studentProgressAlerts ?? true;
+        _newGuidanceNotifications = prefs.getBool('newGuidanceNotifications') ?? true;
+        _revisedGuidanceNotifications = prefs.getBool('revisedGuidanceNotifications') ?? true;
+        _newLogbookNotifications = prefs.getBool('newLogbookNotifications') ?? true;
+        _studentProgressAlerts = prefs.getBool('studentProgressAlerts') ?? true;
       }
     });
   }
 
   Future<void> _saveNotificationSettings() async {
-    final settings = NotificationSettings(
-      isEnabled: _generalNotifications,
-      soundEnabled: _soundEnabled,
-      vibrationEnabled: _vibrationEnabled,
-      showPreview: _showPreview,
-      // Mahasiswa settings
-      announcementNotifications: widget.userRole == UserRole.mahasiswa ? _announcementNotifications : null,
-      guidanceApprovalNotifications: widget.userRole == UserRole.mahasiswa ? _guidanceApprovalNotifications : null,
-      guidanceRejectionNotifications: widget.userRole == UserRole.mahasiswa ? _guidanceRejectionNotifications : null,
-      logbookCommentNotifications: widget.userRole == UserRole.mahasiswa ? _logbookCommentNotifications : null,
-      // Dosen settings
-      newGuidanceNotifications: widget.userRole == UserRole.dosen ? _newGuidanceNotifications : null,
-      revisedGuidanceNotifications: widget.userRole == UserRole.dosen ? _revisedGuidanceNotifications : null,
-      newLogbookNotifications: widget.userRole == UserRole.dosen ? _newLogbookNotifications : null,
-      studentProgressAlerts: widget.userRole == UserRole.dosen ? _studentProgressAlerts : null,
+    final prefs = await SharedPreferences.getInstance();
+    
+    // Save general settings
+    await prefs.setBool('generalNotifications', _generalNotifications);
+    await prefs.setBool('soundEnabled', _soundEnabled);
+    await prefs.setBool('vibrationEnabled', _vibrationEnabled);
+    await prefs.setBool('showPreview', _showPreview);
+
+    // Save role-specific settings
+    if (widget.userRole == UserRole.mahasiswa) {
+      await prefs.setBool('announcementNotifications', _announcementNotifications);
+      await prefs.setBool('guidanceApprovalNotifications', _guidanceApprovalNotifications);
+      await prefs.setBool('guidanceRejectionNotifications', _guidanceRejectionNotifications);
+      await prefs.setBool('logbookCommentNotifications', _logbookCommentNotifications);
+    } else {
+      await prefs.setBool('newGuidanceNotifications', _newGuidanceNotifications);
+      await prefs.setBool('revisedGuidanceNotifications', _revisedGuidanceNotifications);
+      await prefs.setBool('newLogbookNotifications', _newLogbookNotifications);
+      await prefs.setBool('studentProgressAlerts', _studentProgressAlerts);
+    }
+
+    // Update notification channel settings
+    await _updateNotificationChannels();
+  }
+
+  Future<void> _updateNotificationChannels() async {
+    if (!_generalNotifications) {
+      await _flutterLocalNotificationsPlugin.cancelAll();
+      return;
+    }
+
+    // Create or update the default channel with current settings
+    const AndroidNotificationChannel channel = AndroidNotificationChannel(
+      'default_channel',
+      'Default Notifications',
+      description: 'Default notification channel',
+      importance: Importance.high,
+      playSound: true,
+      enableVibration: true,
+      enableLights: true,
     );
 
-    await _notificationService.updateSettings(settings);
+    await _flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(channel);
   }
 
   @override

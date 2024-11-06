@@ -1,7 +1,8 @@
+// lib/core/service/notification_service.dart
 import 'dart:convert';
-import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sistem_magang/core/config/themes/app_color.dart';
 
 enum UserRole {
   mahasiswa,
@@ -79,86 +80,199 @@ class NotificationService {
   factory NotificationService() => _instance;
   NotificationService._();
 
-  /// Initializes the Awesome Notifications plugin with the basic channel configuration.
-  ///
-  /// This method should be called during app initialization to set up the necessary
-  /// notification infrastructure.
-  /// 
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  final FlutterLocalNotificationsPlugin _localNotifications = FlutterLocalNotificationsPlugin();
+  
+  /// Initialize Firebase Cloud Messaging and Local Notifications
   Future<void> initialize() async {
-    await AwesomeNotifications().initialize(
-      null, // null = use default app icon
-      [
-        NotificationChannel(
-          channelKey: 'basic_channel',
-          channelName: 'Basic Notifications',
-          channelDescription: 'Channel for basic notifications',
-          defaultColor: AppColors.lightPrimary,
-          ledColor: AppColors.lightWhite,
-          importance: NotificationImportance.High,
-        ),
-      ],
+    // Request permission for iOS
+    await _firebaseMessaging.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+
+    // Initialize local notifications
+    const androidInitialize = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const iOSInitialize = DarwinInitializationSettings();
+    const initializationSettings = InitializationSettings(
+      android: androidInitialize,
+      iOS: iOSInitialize,
+    );
+
+    await _localNotifications.initialize(
+      initializationSettings,
+      onDidReceiveNotificationResponse: _onNotificationTapped,
+    );
+
+    // Handle background messages
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+    // Handle foreground messages
+    FirebaseMessaging.onMessage.listen(_handleForegroundMessage);
+
+    // Handle when notification is tapped and app is in background
+    FirebaseMessaging.onMessageOpenedApp.listen(_handleNotificationTapped);
+
+    // Get FCM token
+    final token = await _firebaseMessaging.getToken();
+    print('FCM Token: $token'); // Save this token to your backend
+  }
+
+  void _onNotificationTapped(NotificationResponse response) {
+    if (response.payload != null) {
+      // Handle notification tap
+      final Map<String, dynamic> data = json.decode(response.payload!);
+      _handleNotificationNavigation(data);
+    }
+  }
+
+  Future<void> _handleForegroundMessage(RemoteMessage message) async {
+    final settings = await getSettings();
+    if (!settings.isEnabled) return;
+
+    // Check if notification type is enabled in settings
+    if (!_isNotificationTypeEnabled(message.data['type'], settings)) return;
+
+    // Show local notification
+    await _showLocalNotification(
+      title: message.notification?.title ?? '',
+      body: message.notification?.body ?? '',
+      payload: json.encode(message.data),
     );
   }
 
-  /// Requests permission to send notifications to the user.
-  ///
-  /// This method checks if the app has permission to send notifications and requests
-  /// permission if it hasn't been granted yet.
-  ///
-  /// Returns:
-  ///   `true` if the app has permission to send notifications, `false` otherwise.
-  Future<bool> requestPermissions() async {
-    final isAllowed = await AwesomeNotifications().isNotificationAllowed();
-    if (!isAllowed) {
-      return await AwesomeNotifications().requestPermissionToSendNotifications();
-    }
-    return isAllowed;
+  void _handleNotificationTapped(RemoteMessage message) {
+    _handleNotificationNavigation(message.data);
   }
 
-  /// Shows a notification with the given title, body, and payload.
-  ///
-  /// The notification is shown based on the provided [NotificationSettings]. If the
-  /// notification is disabled in the settings, this method will not show the notification.
-  ///
-  Future<void> showNotification({
+  void _handleNotificationNavigation(Map<String, dynamic> data) {
+    // Implement your navigation logic here based on the notification data
+    // Example:
+    switch (data['route']) {
+      case 'guidance':
+        // Navigate to guidance page
+        break;
+      case 'logbook':
+        // Navigate to logbook page
+        break;
+      // Add more cases as needed
+    }
+  }
+
+  Future<void> _showLocalNotification({
     required String title,
     required String body,
     required String payload,
-    required NotificationSettings settings,
   }) async {
-    if (!settings.isEnabled) return;
+    const androidDetails = AndroidNotificationDetails(
+      'default_channel',
+      'Default Channel',
+      channelDescription: 'Default notification channel',
+      importance: Importance.max,
+      priority: Priority.high,
+    );
 
-    await AwesomeNotifications().createNotification(
-      content: NotificationContent(
-        id: DateTime.now().millisecond,
-        channelKey: 'basic_channel',
-        title: title,
-        body: body,
-        payload: {'data': payload},
-        notificationLayout: settings.showPreview 
-            ? NotificationLayout.BigText 
-            : NotificationLayout.Default,
-        category: NotificationCategory.Message,
-      ),
+    const iOSDetails = DarwinNotificationDetails();
+
+    const notificationDetails = NotificationDetails(
+      android: androidDetails,
+      iOS: iOSDetails,
+    );
+
+    await _localNotifications.show(
+      DateTime.now().millisecond,
+      title,
+      body,
+      notificationDetails,
+      payload: payload,
     );
   }
-  /// Cancels all scheduled and active notifications.
-  Future<void> cancelAll() async {
-    await AwesomeNotifications().cancelAll();
+
+  bool _isNotificationTypeEnabled(String? type, NotificationSettings settings) {
+    if (type == null) return false;
+
+    switch (type) {
+      // Mahasiswa notifications
+      case 'announcement':
+        return settings.announcementNotifications ?? false;
+      case 'guidance_approval':
+        return settings.guidanceApprovalNotifications ?? false;
+      case 'guidance_rejection':
+        return settings.guidanceRejectionNotifications ?? false;
+      case 'logbook_comment':
+        return settings.logbookCommentNotifications ?? false;
+
+      // Dosen notifications
+      case 'new_guidance':
+        return settings.newGuidanceNotifications ?? false;
+      case 'revised_guidance':
+        return settings.revisedGuidanceNotifications ?? false;
+      case 'new_logbook':
+        return settings.newLogbookNotifications ?? false;
+      case 'student_progress':
+        return settings.studentProgressAlerts ?? false;
+      
+      default:
+        return false;
+    }
   }
-  /// Updates the notification settings and saves them to SharedPreferences.
-  ///
-  /// Parameters:
-  ///   [settings]: The new notification settings to save.
-  Future<void> updateSettings(NotificationSettings settings) async {
+
+  /// Subscribe to topics based on user role and settings
+  Future<void> subscribeToTopics(UserRole role) async {
+    final settings = await getSettings();
+    if (!settings.isEnabled) return;
+
+    if (role == UserRole.mahasiswa) {
+      if (settings.guidanceApprovalNotifications ?? false) {
+        await _firebaseMessaging.subscribeToTopic('guidance_approval');
+      }
+      if (settings.guidanceRejectionNotifications ?? false) {
+        await _firebaseMessaging.subscribeToTopic('guidance_rejection');
+      }
+      // Add more topic subscriptions
+    } else if (role == UserRole.dosen) {
+      if (settings.newGuidanceNotifications ?? false) {
+        await _firebaseMessaging.subscribeToTopic('new_guidance');
+      }
+      if (settings.newLogbookNotifications ?? false) {
+        await _firebaseMessaging.subscribeToTopic('new_logbook');
+      }
+      // Add more topic subscriptions
+    }
+  }
+
+  /// Update notification settings and resubscribe to topics
+  Future<void> updateSettings(NotificationSettings settings, UserRole role) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('notification_settings', jsonEncode(settings.toJson()));
+    
+    // Unsubscribe from all topics first
+    await _unsubscribeFromAllTopics();
+    
+    // Resubscribe based on new settings
+    if (settings.isEnabled) {
+      await subscribeToTopics(role);
+    }
   }
-  /// Retrieves the current notification settings from SharedPreferences.
-  ///
-  /// Returns:
-  ///   The [NotificationSettings] instance stored in SharedPreferences, or a default
-  ///   instance if no settings are found.
+
+  Future<void> _unsubscribeFromAllTopics() async {
+    final topics = [
+      'guidance_approval',
+      'guidance_rejection',
+      'logbook_comment',
+      'announcement',
+      'new_guidance',
+      'revised_guidance',
+      'new_logbook',
+      'student_progress',
+    ];
+
+    for (final topic in topics) {
+      await _firebaseMessaging.unsubscribeFromTopic(topic);
+    }
+  }
+
   Future<NotificationSettings> getSettings() async {
     final prefs = await SharedPreferences.getInstance();
     final settingsJson = prefs.getString('notification_settings');
@@ -167,80 +281,10 @@ class NotificationService {
     }
     return NotificationSettings();
   }
-  /// Sends a notification for a student-related event.
-  ///
-  /// This method checks the notification settings and sends a notification if it is
-  /// enabled for the given notification type.
-  ///
-  Future<void> sendMahasiswaNotification({
-    required String title,
-    required String body,
-    required String type,
-    String? payload,
-  }) async {
-    final settings = await getSettings();
-    
-    bool shouldSend = false;
-    switch (type) {
-      case 'announcement':
-        shouldSend = settings.announcementNotifications ?? false;
-        break;
-      case 'guidance_approval':
-        shouldSend = settings.guidanceApprovalNotifications ?? false;
-        break;
-      case 'guidance_rejection':
-        shouldSend = settings.guidanceRejectionNotifications ?? false;
-        break;
-      case 'logbook_comment':
-        shouldSend = settings.logbookCommentNotifications ?? false;
-        break;
-    }
+}
 
-    if (shouldSend && settings.isEnabled) {
-      await showNotification(
-        title: title,
-        body: body,
-        payload: payload ?? '',
-        settings: settings,
-      );
-    }
-  }
-  /// Sends a notification for a lecturer-related event.
-  ///
-  /// This method checks the notification settings and sends a notification if it is
-  /// enabled for the given notification type.
-  ///
-  Future<void> sendDosenNotification({
-    required String title,
-    required String body,
-    required String type,
-    String? payload,
-  }) async {
-    final settings = await getSettings();
-    
-    bool shouldSend = false;
-    switch (type) {
-      case 'new_guidance':
-        shouldSend = settings.newGuidanceNotifications ?? false;
-        break;
-      case 'revised_guidance':
-        shouldSend = settings.revisedGuidanceNotifications ?? false;
-        break;
-      case 'new_logbook':
-        shouldSend = settings.newLogbookNotifications ?? false;
-        break;
-      case 'student_progress':
-        shouldSend = settings.studentProgressAlerts ?? false;
-        break;
-    }
-
-    if (shouldSend && settings.isEnabled) {
-      await showNotification(
-        title: title,
-        body: body,
-        payload: payload ?? '',
-        settings: settings,
-      );
-    }
-  }
+// Background message handler - must be top-level function
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // Handle background message
+  print('Handling background message: ${message.messageId}');
 }

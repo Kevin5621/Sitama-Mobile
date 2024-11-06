@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:sistem_magang/core/network/dio_client.dart';
+import 'package:sistem_magang/core/service/notification_handler_service.dart';
 import 'package:sistem_magang/data/repository/auth.dart';
 import 'package:sistem_magang/data/repository/lecturer.dart';
 import 'package:sistem_magang/data/repository/student.dart';
@@ -70,4 +71,9 @@ void setupServiceLocator() {
   // apiClient: sl<SecureApiClient>(),
   // prefs: sl<SharedPreferences>(),
 // ));
+  sl.registerLazySingleton(() => NotificationHandlerService(
+    notificationService: sl(),
+    studentApiService: sl(),
+    lecturerApiService: sl(),
+  ));
 }

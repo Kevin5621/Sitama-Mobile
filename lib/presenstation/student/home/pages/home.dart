@@ -1,4 +1,3 @@
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:sistem_magang/presenstation/student/guidance/pages/guidance.dart';
 import 'package:sistem_magang/presenstation/student/home/widgets/home_content.dart';
@@ -24,12 +23,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    // Notification pop up premission
-    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
-      if (!isAllowed) {
-        AwesomeNotifications().requestPermissionToSendNotifications();
-      }
-    });
     super.initState();
     // Initialize the current index with the value passed to the widget
     _currentIndex = widget.currentIndex;

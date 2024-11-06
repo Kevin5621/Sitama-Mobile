@@ -1,4 +1,3 @@
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/widgets/content.dart';
 import 'package:sistem_magang/presenstation/lecturer/profile/pages/lecturer_profile.dart';
@@ -28,12 +27,6 @@ class _LecturerHomePageState extends State<LecturerHomePage> {
 
   @override
   void initState() {
-    // Notification pop up premission
-    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
-      if (!isAllowed) {
-        AwesomeNotifications().requestPermissionToSendNotifications();
-      }
-    });
     super.initState();
     // Initialize the current index with the value passed to the widget
     _currentIndex = widget.currentIndex;
