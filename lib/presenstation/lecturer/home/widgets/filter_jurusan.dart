@@ -84,22 +84,26 @@ class _FilterJurusanState extends State<FilterJurusan> {
           ),
           items: items.map((item) => DropdownMenuItem(
             value: item,
-            child: Row(
-              children: [
-                Icon(
-                  Icons.school,
-                  size: 16,
-                  color: widget.primaryColor ?? colorScheme.primary,
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  item,
-                  style: widget.itemStyle ?? TextStyle(
-                    fontSize: 14,
-                    color: colorScheme.onSurface,
-                  ),
-                ),
-              ],
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                if (constraints.maxWidth < 150) {
+                  return Text(
+                    item.length > 12 ? '${item.substring(0, 12)}...' : item,
+                    style: widget.itemStyle ?? TextStyle(
+                      fontSize: 14,
+                      color: colorScheme.onSurface,
+                    ),
+                  );
+                } else {
+                  return Text(
+                    item,
+                    style: widget.itemStyle ?? TextStyle(
+                      fontSize: 14,
+                      color: colorScheme.onSurface,
+                    ),
+                  );
+                }
+              },
             ),
           )).toList(),
           value: selectedValue,

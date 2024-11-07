@@ -80,26 +80,34 @@ class _FilterTahunState extends State<FilterTahun> {
               ),
             ],
           ),
-          items: items.map((item) => DropdownMenuItem(
-            value: item,
-            child: Row(
-              children: [
-                Icon(
-                  Icons.calendar_month,
-                  size: 16,
-                  color: widget.primaryColor ?? colorScheme.primary,
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  item,
-                  style: widget.itemStyle ?? TextStyle(
-                    fontSize: 14,
-                    color: colorScheme.onSurface,
+        items: items.map((item) => DropdownMenuItem(
+          value: item,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              if (constraints.maxWidth < 150) {
+                return Center(
+                  child: Text(
+                    item.length > 12 ? '${item.substring(0, 12)}...' : item,
+                    style: widget.itemStyle ?? TextStyle(
+                      fontSize: 14,
+                      color: colorScheme.onSurface,
+                    ),
                   ),
-                ),
-              ],
-            ),
-          )).toList(),
+                );
+              } else {
+                return Center(
+                  child: Text(
+                    item,
+                    style: widget.itemStyle ?? TextStyle(
+                      fontSize: 14,
+                      color: colorScheme.onSurface,
+                    ),
+                  ),
+                );
+              }
+            },
+          ),
+        )).toList(),
           value: selectedValue,
           onChanged: (value) {
             setState(() {
