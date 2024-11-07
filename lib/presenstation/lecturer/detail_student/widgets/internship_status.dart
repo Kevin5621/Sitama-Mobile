@@ -16,17 +16,18 @@ class InternshipStatusBox extends StatelessWidget {
     this.onApprove,
   }) : super(key: key);
 
-  Future<bool?> _showConfirmationDialog(BuildContext context, bool currentStatus) async {  
-  return CustomAlertDialog.showConfirmation(
-    context: context,
-    title: currentStatus ? 'Batalkan Persetujuan?' : 'Setujui Status Magang?',
-    message: currentStatus 
-      ? 'Anda yakin ingin membatalkan persetujuan status magang ini?'
-      : 'Anda yakin ingin menyetujui status magang ini?',
-    cancelText: 'Batal',
-    confirmText: currentStatus ? 'Batalkan' : 'Setujui',
-  );
-}
+  Future<bool?> _showConfirmationDialog(
+      BuildContext context, bool currentStatus) async {
+    return CustomAlertDialog.showConfirmation(
+      context: context,
+      title: currentStatus ? 'Batalkan Persetujuan?' : 'Setujui Status Magang?',
+      message: currentStatus
+          ? 'Anda yakin ingin membatalkan persetujuan status magang ini?'
+          : 'Anda yakin ingin menyetujui status magang ini?',
+      cancelText: 'Batal',
+      confirmText: currentStatus ? 'Batalkan' : 'Setujui',
+    );
+  }
 
   Widget _buildApproveButton(BuildContext context, bool isApproved) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -72,17 +73,20 @@ class InternshipStatusBox extends StatelessWidget {
   }
 
   Widget _buildStudentInfo(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildInfoRow('NIM', '2141720180'),
-        const SizedBox(height: 8),
-        _buildInfoRow('Kelas', 'TI-3H'),
-        const SizedBox(height: 8),
-        _buildInfoRow('No Absen', '20'),
-        const SizedBox(height: 8),
-        _buildInfoRow('Jurusan', 'Teknologi Informasi'),
-      ],
+    return Container(
+      padding: const EdgeInsets.all(12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildInfoRow('NIM', '2141720180'),
+          const SizedBox(height: 8),
+          _buildInfoRow('Kelas', 'TI-3H'),
+          const SizedBox(height: 8),
+          _buildInfoRow('No Absen', '20'),
+          const SizedBox(height: 8),
+          _buildInfoRow('Jurusan', 'Teknologi Informasi'),
+        ],
+      ),
     );
   }
 
@@ -130,11 +134,11 @@ class InternshipStatusBox extends StatelessWidget {
           final colorScheme = Theme.of(context).colorScheme;
 
           return Card(
-            elevation: 0,
+            elevation: 4, // Menambahkan efek bayangan pada Card
             margin: const EdgeInsets.symmetric(vertical: 8),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
-                          ),
+            ),
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
