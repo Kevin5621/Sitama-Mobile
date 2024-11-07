@@ -12,11 +12,11 @@ class DetailStudentModel {
   final List<GuidanceModel> guidances;
   final List<LogBookModel> log_book;
 
-  DetailStudentModel(
-      {required this.student,
-      required this.internships,
-      required this.guidances,
-      required this.log_book});
+  DetailStudentModel({
+    required this.student,
+    required this.internships,
+    required this.guidances,
+    required this.log_book});
 
   factory DetailStudentModel.fromMap(Map<String, dynamic> map) {
     return DetailStudentModel(
@@ -47,6 +47,9 @@ extension DetailStudentXModel on DetailStudentModel {
             name: student.name,
             email: student.email,
             username: student.username),
+        username: student.username, 
+        the_class: student.the_class,
+        major: student.major,
         internships: internships
             .map<InternshipStudentEntity>((data) => InternshipStudentEntity(
                 name: data.name,
@@ -78,15 +81,24 @@ class InfoStudentModel {
   final String name;
   final String username;
   final String email;
+  final String the_class;
+  final String major;
 
-  InfoStudentModel(
-      {required this.name, required this.username, required this.email});
+  InfoStudentModel({
+      required this.name, 
+      required this.username, 
+      required this.email,
+      required this.the_class,
+      required this.major,
+      });
 
   factory InfoStudentModel.fromMap(Map<String, dynamic> map) {
     return InfoStudentModel(
       name: map['name'] as String,
       username: map['username'] as String,
       email: map['email'] as String,
+      the_class: map['class'] as String,
+      major: map['major'] as String,
     );
   }
 }

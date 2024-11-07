@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sistem_magang/common/widgets/alert.dart';
+import 'package:sistem_magang/domain/entities/lecturer_detail_student.dart';
 import 'package:sistem_magang/presenstation/lecturer/detail_student/bloc/detail_student_display_cubit.dart';
 import 'package:sistem_magang/presenstation/lecturer/detail_student/bloc/detail_student_display_state.dart';
 
 class InternshipStatusBox extends StatelessWidget {
+  final List<DetailStudentEntity> students;
   final int index;
   final String status;
   final VoidCallback? onApprove;
 
   const InternshipStatusBox({
     Key? key,
+    required this.students,
     required this.index,
     required this.status,
     this.onApprove,
@@ -33,13 +36,13 @@ class InternshipStatusBox extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     return IconButton(
       onPressed: () async {
-        // final shouldProceed = await _showConfirmationDialog(context, isApproved);
-        // if (shouldProceed == true) {
-        //   context.read<DetailStudentDisplayCubit>().toggleInternshipApproval(index);
-        //   if (onApprove != null) {
-        //     onApprove!();
-        //   }
-        // }
+        final shouldProceed = await _showConfirmationDialog(context, isApproved);
+        if (shouldProceed == true) {
+          context.read<DetailStudentDisplayCubit>().toggleInternshipApproval(index);
+          if (onApprove != null) {
+            onApprove!();
+          }
+        }
       },
       icon: Icon(
         isApproved ? Icons.check_circle : Icons.check_circle_outline,
@@ -72,19 +75,17 @@ class InternshipStatusBox extends StatelessWidget {
     );
   }
 
-  Widget _buildStudentInfo(BuildContext context) {
+  Widget _buildStudentInfo(BuildContext context, DetailStudentEntity student) {
     return Container(
       padding: const EdgeInsets.all(12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildInfoRow('NIM', '2141720180'),
+          _buildInfoRow('NIM', student.username),
           const SizedBox(height: 8),
-          _buildInfoRow('Kelas', 'TI-3H'),
+          _buildInfoRow('Kelas', student.the_class),
           const SizedBox(height: 8),
-          _buildInfoRow('No Absen', '20'),
-          const SizedBox(height: 8),
-          _buildInfoRow('Jurusan', 'Teknologi Informasi'),
+          _buildInfoRow('Jurusan', student.major),
         ],
       ),
     );
@@ -130,11 +131,11 @@ class InternshipStatusBox extends StatelessWidget {
     return BlocBuilder<DetailStudentDisplayCubit, DetailStudentDisplayState>(
       builder: (context, state) {
         if (state is DetailLoaded) {
-          state.isInternshipApproved(index);
-          final colorScheme = Theme.of(context).colorScheme;
+          final student = students[index];
+          // final isApproved = state.isInternshipApproved(index);
 
           return Card(
-            elevation: 4, // Menambahkan efek bayangan pada Card
+            elevation: 4,
             margin: const EdgeInsets.symmetric(vertical: 8),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
@@ -144,9 +145,9 @@ class InternshipStatusBox extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildInternshipHeader(context, colorScheme),
+                  _buildInternshipHeader(context, Theme.of(context).colorScheme),
                   const Divider(height: 24),
-                  _buildStudentInfo(context),
+                  _buildStudentInfo(context, student),
                 ],
               ),
             ),

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sistem_magang/domain/entities/lecturer_detail_student.dart';
 import 'package:sistem_magang/presenstation/lecturer/detail_student/bloc/detail_student_display_cubit.dart';
 import 'package:sistem_magang/presenstation/lecturer/detail_student/bloc/detail_student_display_state.dart';
 import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/content.dart';
@@ -27,7 +25,7 @@ class DetailStudentPage extends StatelessWidget {
               );
             }
             if (state is DetailLoaded) {
-              DetailStudentEntity detailStudent = state.detailStudentEntity;
+              final detailStudent = state.detailStudentEntity;
               return CustomScrollView(
                 slivers: [
                   SliverAppBar(
@@ -53,7 +51,10 @@ class DetailStudentPage extends StatelessWidget {
                             guidanceLength: detailStudent.guidances.length,
                             logBookLength: detailStudent.log_book.length,
                           ),
-                          InfoBoxes(internships: detailStudent.internships),
+                          InfoBoxes(
+                            internships: detailStudent.internships,
+                            students: detailStudent,
+                          ),
                           TabSection(
                             guidances: detailStudent.guidances,
                             logBooks: detailStudent.log_book,

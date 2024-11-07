@@ -6,10 +6,12 @@ import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/scor
 
 class InfoBoxes extends StatelessWidget {
   final List<InternshipStudentEntity> internships;
+  final DetailStudentEntity students;
 
   const InfoBoxes({
     Key? key,
     required this.internships,
+    required this.students,
   }) : super(key: key);
 
   @override
@@ -26,23 +28,25 @@ class InfoBoxes extends StatelessWidget {
             itemBuilder: (context, index) {
               final internship = internships[index];
               return Column(
-                      children: [
-                        InternshipStatusBox(
-                          index: index,
-                          status: internship.status,
-                          onApprove: () {
-                            // Additional actions if needed after approval
-                          },
-                        ),
-                        const SizedBox(height: 8),
-                        InternshipBox(
-                          index: index,
-                          internship: internship,
-                        ),
-                      ],
-                    );
-                  },
-                ),
+                children: [
+                  if (index == 0)
+                    InternshipStatusBox(
+                      students: [students],
+                      index: index,
+                      status: internship.status,
+                      onApprove: () {
+                        // Additional actions if needed after approval
+                      },
+                    ),
+                  const SizedBox(height: 8),
+                  InternshipBox(
+                    index: index,
+                    internship: internship,
+                  ),
+                ],
+              );
+            },
+          ),
           const SizedBox(height: 16),
           const ScoreBox(),
         ],
