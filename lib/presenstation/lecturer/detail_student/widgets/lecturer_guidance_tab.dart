@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sistem_magang/common/bloc/button/button_state.dart';
@@ -7,6 +8,7 @@ import 'package:sistem_magang/core/config/themes/app_color.dart';
 import 'package:sistem_magang/data/models/guidance.dart';
 import 'package:sistem_magang/domain/entities/guidance_entity.dart';
 import 'package:sistem_magang/domain/usecases/update_status_guidance.dart';
+import 'package:sistem_magang/presenstation/general/pdf_viewer/pages/pdf_viewer.dart';
 import 'package:sistem_magang/presenstation/lecturer/detail_student/pages/detail_student.dart';
 import 'package:sistem_magang/service_locator.dart';
 
@@ -64,54 +66,122 @@ class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+Widget build(BuildContext context) {
+  final colorScheme = Theme.of(context).colorScheme;
+  final textTheme = Theme.of(context).textTheme;
 
-    return Card(
-      margin: const EdgeInsets.all(8),
-      color: currentStatus == LecturerGuidanceStatus.rejected
-          ? colorScheme.error
-          : colorScheme.surface,
-      child: Theme(
-        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-        child: ExpansionTile(
-          leading: _buildLeadingIcon(colorScheme),
-          title: Text(widget.guidance.title),
-          subtitle: Text(DateFormat('dd/MM/yyyy').format(widget.guidance.date)),
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Catatan Mahasiswa :'),
-                  Text(
-                    widget.guidance.activity,
-                    textAlign: TextAlign.start, 
-                    ),
-                  const SizedBox(height: 16),
-                  if (currentStatus != LecturerGuidanceStatus.inProgress) ...[
-                    Text('Catatan Anda :'),
-                    Text(
-                      widget.guidance.lecturer_note,
-                      textAlign: TextAlign.start, 
-                    ),
-                    const SizedBox(height: 16),
-                  ],
-                  if (currentStatus != LecturerGuidanceStatus.approved &&
-                      currentStatus != LecturerGuidanceStatus.rejected) ...[
-                    _buildRevisionField(),
-                    const SizedBox(height: 16),
-                    _buildActionButtons(colorScheme),
-                  ],
-                ],
+  return Card(
+    margin: const EdgeInsets.all(8),
+    color: currentStatus == LecturerGuidanceStatus.rejected
+        ? colorScheme.error
+        : colorScheme.surface,
+    child: Theme(
+      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+      child: ExpansionTile(
+        leading: _buildLeadingIcon(colorScheme),
+        title: Text(widget.guidance.title),
+        subtitle: Text(DateFormat('dd/MM/yyyy').format(widget.guidance.date)),
+        children: [
+          _buildCardContent(colorScheme, textTheme),
+        ],
+      ),
+    ),
+  );
+}
+
+  Widget _buildCardContent(ColorScheme colorScheme, TextTheme textTheme) {
+  return Padding(
+    padding: const EdgeInsets.all(16),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        ),
+        const SizedBox(height: 16),
+        if (widget.guidance.name_file != "tidak ada file") ...[
+          InkWell(
+            onTap: () {
+              if (kIsWeb) {
+                // html.window.open(widget.guidance.name_file, "_blank");
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        PDFViewerPage(pdfUrl: widget.guidance.name_file),
+                  ),
+                );
+              }
+            },
+            child: InputDecorator(
+              decoration: InputDecoration(
+                prefixIcon: Icon(
+                  Icons.picture_as_pdf_rounded,
+                  size: 16,
+                  color: currentStatus == LecturerGuidanceStatus.rejected
+                      ? colorScheme.onError
+                      : colorScheme.onSurface,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: const BorderRadius.all(Radius.circular(12)),
+                  borderSide: BorderSide(
+                    color: currentStatus == LecturerGuidanceStatus.rejected
+                        ? colorScheme.onError.withOpacity(0.5)
+                        : colorScheme.outline,
+                  ),
+                ),
+              ),
+              child: Text(
+                "File Bimbingan",
+                style: textTheme.bodyMedium?.copyWith(
+                  color: currentStatus == LecturerGuidanceStatus.rejected
+                      ? colorScheme.onError
+                      : colorScheme.onSurface,
+                ),
               ),
             ),
-          ],
+          ),
+          const SizedBox(height: 16),
+        ],
+        Text(
+          'Catatan Mahasiswa:',
+          style: textTheme.bodyMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
         ),
-      ),
-    );
-  }
+        const SizedBox(height: 8),
+        Text(
+          widget.guidance.activity,
+          style: textTheme.bodyMedium,
+          textAlign: TextAlign.start,
+        ),
+        const SizedBox(height: 16),
+        if (currentStatus != LecturerGuidanceStatus.inProgress) ...[
+          Text(
+            'Catatan Anda:',
+            style: textTheme.bodyMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            widget.guidance.lecturer_note,
+            style: textTheme.bodyMedium,
+            textAlign: TextAlign.start,
+          ),
+        ],
+        if (currentStatus != LecturerGuidanceStatus.approved &&
+            currentStatus != LecturerGuidanceStatus.rejected) ...[
+          const SizedBox(height: 16),
+          _buildRevisionField(),
+          const SizedBox(height: 16),
+          _buildActionButtons(colorScheme),
+        ],
+      ],
+    ),
+  );
+}
 
   Widget _buildLeadingIcon(ColorScheme colorScheme) {
     switch (currentStatus) {

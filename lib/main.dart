@@ -1,4 +1,4 @@
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,23 +11,23 @@ import 'package:sistem_magang/service_locator.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
-  // Initialize Firebase
-  await Firebase.initializeApp();
-  
+
   // Setup service locator
   setupServiceLocator();
+
+  // Initialize Firebase
+  // await Firebase.initializeApp();
   
   // Get stored user role and initialize notifications if user is logged in
-  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-  var role = sharedPreferences.getString('role');
+  // SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  // var role = sharedPreferences.getString('role');
   
-  // Determine user role based on the stored value
-  var userRole = (role == 'Student' || role == 'Lecturer') ? role : null;
+  // // Determine user role based on the stored value
+  // var userRole = (role == 'Student' || role == 'Lecturer') ? role : null;
 
-  if (userRole != null) {
-    await sl<NotificationHandlerService>().initialize(userRole as UserRole);
-  }
+  // if (userRole != null) {
+  //   await sl<NotificationHandlerService>().initialize(userRole as UserRole);
+  // }
   
   runApp(
     MultiProvider(
