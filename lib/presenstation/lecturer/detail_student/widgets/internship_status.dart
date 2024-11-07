@@ -85,6 +85,8 @@ class InternshipStatusBox extends StatelessWidget {
           const SizedBox(height: 8),
           _buildInfoRow('Kelas', student.the_class),
           const SizedBox(height: 8),
+          _buildInfoRow('Absen', student.username.substring(student.username.length - 2)),
+          const SizedBox(height: 8),
           _buildInfoRow('Jurusan', student.major),
         ],
       ),

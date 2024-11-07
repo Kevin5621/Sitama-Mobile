@@ -7,15 +7,59 @@ import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/head
 import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/info_section.dart';
 import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/statistics.dart';
 
-class DetailStudentPage extends StatelessWidget {
+class DetailStudentPage extends StatefulWidget {
   final int id;
+
   const DetailStudentPage({super.key, required this.id});
+
+  @override
+  _DetailStudentPageState createState() => _DetailStudentPageState();
+}
+
+class _DetailStudentPageState extends State<DetailStudentPage> {
+  late ScrollController _scrollController;
+  bool _isButtonVisible = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+    _scrollController.addListener(_scrollListener);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_scrollListener);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollListener() {
+    // Replace 600.0 with the actual offset where TabSection starts
+    if (_scrollController.position.pixels >= 600.0 && _isButtonVisible) {
+      setState(() {
+        _isButtonVisible = false;
+      });
+    } else if (_scrollController.position.pixels < 600.0 && !_isButtonVisible) {
+      setState(() {
+        _isButtonVisible = true;
+      });
+    }
+  }
+
+  void _scrollToTabSection() {
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent, // Adjust this offset as needed.
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocProvider(
-        create: (context) => DetailStudentDisplayCubit()..displayStudent(id),
+        create: (context) => DetailStudentDisplayCubit()..displayStudent(widget.id),
         child:
             BlocBuilder<DetailStudentDisplayCubit, DetailStudentDisplayState>(
           builder: (context, state) {
@@ -27,6 +71,7 @@ class DetailStudentPage extends StatelessWidget {
             if (state is DetailLoaded) {
               final detailStudent = state.detailStudentEntity;
               return CustomScrollView(
+                controller: _scrollController,
                 slivers: [
                   SliverAppBar(
                     expandedHeight: 250,
@@ -58,7 +103,7 @@ class DetailStudentPage extends StatelessWidget {
                           TabSection(
                             guidances: detailStudent.guidances,
                             logBooks: detailStudent.log_book,
-                            studentId: id,
+                            studentId: widget.id,
                           ),
                         ],
                       ),
@@ -71,7 +116,7 @@ class DetailStudentPage extends StatelessWidget {
               return ErrorView(
                 errorMessage: state.errorMessage,
                 onRetry: () {
-                  context.read<DetailStudentDisplayCubit>().displayStudent(id);
+                  context.read<DetailStudentDisplayCubit>().displayStudent(widget.id);
                 },
               );
             }
@@ -79,6 +124,13 @@ class DetailStudentPage extends StatelessWidget {
           },
         ),
       ),
+      floatingActionButton: _isButtonVisible
+          ? FloatingActionButton(
+              onPressed: _scrollToTabSection,
+              child: const Icon(Icons.arrow_downward),
+              tooltip: 'Scroll to Tab Section',
+            )
+          : null,
     );
   }
 }

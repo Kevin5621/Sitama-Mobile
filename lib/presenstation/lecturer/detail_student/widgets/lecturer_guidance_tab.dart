@@ -98,7 +98,6 @@ Widget build(BuildContext context) {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
         ),
-        const SizedBox(height: 16),
         if (widget.guidance.name_file != "tidak ada file") ...[
           InkWell(
             onTap: () {
