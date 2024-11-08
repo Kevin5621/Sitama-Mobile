@@ -16,7 +16,10 @@ class LecturerGuidanceTab extends StatelessWidget {
   final List<GuidanceEntity> guidances;
   final int student_id;
 
-  const LecturerGuidanceTab({super.key, required this.guidances, required this.student_id});
+  const LecturerGuidanceTab({
+    super.key, 
+    required this.guidances, 
+    required this.student_id});
 
   @override
   Widget build(BuildContext context) {

@@ -1,11 +1,14 @@
+// ignore_for_file: non_constant_identifier_names
 class LecturerHomeEntity {
   final String name;
   final List<LecturerStudentsEntity> ? students;
+  final Map<String, bool>? activities;
 
   LecturerHomeEntity({
     required this.name, 
-    required this.students});
-
+    required this.students,
+    required this.activities,
+    });
 }
 
 class LecturerStudentsEntity {
@@ -16,8 +19,7 @@ class LecturerStudentsEntity {
   final String study_program;
   final String major;
   final String academic_year;
-  //menambahkan atribut notifikasi
-  final int notificationStatus;
+  final Map<String, bool> activities;
 
   LecturerStudentsEntity(
       {required this.id,
@@ -27,6 +29,6 @@ class LecturerStudentsEntity {
       required this.study_program,
       required this.major,
       required this.academic_year,
-      this.notificationStatus = 0,
+      required this.activities,
     });
 }

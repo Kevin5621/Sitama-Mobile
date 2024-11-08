@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names
 import 'package:sistem_magang/domain/entities/lecturer_home_entity.dart';
 
 class LecturerHomeModel {
@@ -24,14 +24,16 @@ extension LecturerHomeXModel on LecturerHomeModel {
     return LecturerHomeEntity(
       name: name,
       students: students?.map<LecturerStudentsEntity>((data) => LecturerStudentsEntity(
-              id: data.id,
-              name: data.name,
-              username: data.username,
-              the_class: data.the_class,
-              study_program: data.study_program,
-              major: data.major,
-              academic_year: data.academic_year))
-          .toList(),
+        id: data.id,
+        name: data.name,
+        username: data.username,
+        the_class: data.the_class,
+        study_program: data.study_program,
+        major: data.major,
+        academic_year: data.academic_year,
+        activities: data.activities,
+      )).toList(),
+      activities: {}, 
     );
   }
 }
@@ -44,15 +46,18 @@ class LecturerStudentsModel {
   final String study_program;
   final String major;
   final String academic_year;
+  final Map<String, bool> activities;
 
-  LecturerStudentsModel(
-      {required this.id,
+  LecturerStudentsModel({
+      required this.id,
       required this.name,
       required this.username,
       required this.the_class,
       required this.study_program,
       required this.major,
-      required this.academic_year});
+      required this.academic_year,
+      required this.activities,
+      });
 
   factory LecturerStudentsModel.fromMap(Map<String, dynamic> map) {
     return LecturerStudentsModel(
@@ -63,6 +68,7 @@ class LecturerStudentsModel {
       study_program: map['study_program'] as String,
       major: map['major'] as String,
       academic_year: map['academic_year'] as String,
+      activities: Map<String, bool>.from(map['activities'] as Map),
     );
   }
 }

@@ -10,7 +10,6 @@ class StudentCard extends StatelessWidget {
   final String nim;
   final bool isSelected;
   final List<String> activities;
-  final int notificationStatus;
   final VoidCallback onTap;
   final VoidCallback onLongPress;
 
@@ -24,31 +23,30 @@ class StudentCard extends StatelessWidget {
     required this.nim,
     required this.isSelected,
     this.activities = const [],
-    this.notificationStatus = 0,
     required this.onTap,
     required this.onLongPress,
   });
 
-  IconData _getActivityIcon(String activity) {
+  IconData _getactivitiesIcon(String activity) {
     switch (activity) {
-      case 'unseen':
+      case 'in-progress':
         return Icons.visibility_off;
       case 'updated':
         return Icons.help;
-      case 'revisi':
+      case 'rejected':
         return Icons.edit_document;
       default:
         return Icons.circle;
     }
   }
 
-  Color _getActivityColor(String activity, bool isDark) {
+  Color _getactivitiesColor(String activity, bool isDark) {
     switch (activity) {
-      case 'unseen':
+      case 'in-progress':
         return isDark ? AppColors.lightGray : Colors.grey;
       case 'updated':
         return isDark ? AppColors.lightWarning : Colors.orange;
-      case 'revisi':
+      case 'rejected':
         return isDark ? AppColors.lightDanger : Colors.red;
       default:
         return isDark ? AppColors.darkGray : Colors.grey;
@@ -89,7 +87,7 @@ class StudentCard extends StatelessWidget {
                             width: 24,
                             height: 24,
                             decoration: BoxDecoration(
-                              color: _getActivityColor(entry.value, isDark),
+                              color: _getactivitiesColor(entry.value, isDark),
                               shape: BoxShape.circle,
                               border: Border.all(
                                 color: backgroundColor,
@@ -105,7 +103,7 @@ class StudentCard extends StatelessWidget {
                               ],
                             ),
                             child: Icon(
-                              _getActivityIcon(entry.value),
+                              _getactivitiesIcon(entry.value),
                               size: 14,
                               color: backgroundColor,
                             ),

@@ -66,6 +66,13 @@ class StudentList extends StatelessWidget {
 
   Widget _buildStudentItem(BuildContext context, int index) {
     final student = students[index];
+    
+    // Konversi activities dari Map ke List
+    List<String> activitiesList = [];
+    if (student.activities['is_in_progress'] == true) activitiesList.add('in-progress');
+    if (student.activities['is_updated'] == true) activitiesList.add('updated');
+    if (student.activities['is_rejected'] == true) activitiesList.add('rejected');
+
     return FadeTransition(
       opacity: searchAnimation,
       child: SlideTransition(
@@ -81,8 +88,7 @@ class StudentList extends StatelessWidget {
           kelas: student.the_class,
           nim: student.username,
           isSelected: selectionState.selectedIds.contains(student.id),
-          notificationStatus: 2,
-          activities: ['revisi', 'updated', 'unseen'],
+          activities: activitiesList,  // Gunakan list yang sudah dikonversi
           onTap: () => _handleStudentTap(context, student),
           onLongPress: () => _handleStudentLongPress(context, student),
         ),
