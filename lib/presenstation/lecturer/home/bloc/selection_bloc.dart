@@ -26,7 +26,14 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
     } else {
       selectedIds.add(event.id);
     }
+
+    // Emit perubahan state dengan daftar ID yang diperbarui
     emit(state.copyWith(selectedIds: selectedIds));
+
+    // Jika tidak ada ID yang dipilih, keluar dari Selection Mode
+    if (selectedIds.isEmpty) {
+      emit(state.copyWith(isSelectionMode: false));
+    }
   }
 
   void _onSelectAll(SelectAll event, Emitter<SelectionState> emit) {

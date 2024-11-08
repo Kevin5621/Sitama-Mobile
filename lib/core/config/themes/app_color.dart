@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
+
 class AppColors {
   // Light Theme Colors
   static const lightPrimary = Color(0xFF3D568F);
@@ -23,15 +25,15 @@ class AppColors {
   static var darkPrimary500 = Color(0xFF5B7AC7).withOpacity(0.2);
   
   static const darkBackground = Color(0xFF121212);    
-  static const darkGray = Color(0xFFB3B4BB);         
+  static const darkGray = Colors.grey;        
   static const darkGray500 = Color(0xFF404040);      
   static const darkWhite = Color(0xFF2C2C2C);       
   static const darkBlack = Color(0xFFE1E1E1);        
   
   // Status colors untuk dark theme - dibuat lebih terang dan saturated
   static const darkInfo = Color(0xFF4B9FFF);        
-  static const darkWarning = Color(0xFFFAD352);     
-  static const darkDanger = Color(0xFFFF4D5B);      
+  static const darkWarning = Colors.orange;     
+  static const darkDanger = Colors.red;      
   static const darkSuccess = Color(0xFF4DE4BE);     
   static const darkDanger500 = Color(0xFF331A1A);   
   static const darkSecondary = Color(0xFF4A4D3A);   

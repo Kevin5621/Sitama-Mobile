@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+// ignore_for_file: deprecated_member_use
 import 'package:flutter/material.dart';
 import 'package:sistem_magang/core/config/themes/app_color.dart';
 
@@ -109,9 +109,9 @@ class AppTheme {
       primary: AppColors.darkPrimaryLight,
       secondary: AppColors.darkWarning.withOpacity(0.2),
       background: AppColors.darkBackground,
-      surface: AppColors.darkWhite, // Using darkWhite as surface color
+      surface: AppColors.darkWhite, 
       error: AppColors.darkDanger500,
-      onPrimary: AppColors.lightWhite, // Using lightWhite for better contrast
+      onPrimary: AppColors.lightWhite, 
       onSecondary: AppColors.lightWhite,
       onBackground: AppColors.lightWhite,
       onSurface: AppColors.lightWhite,

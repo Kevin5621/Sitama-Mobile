@@ -43,42 +43,51 @@ class Header extends StatelessWidget {
   }
 
   Widget _buildSelectionModeHeader(BuildContext context) {
-    return Container(
-      height: 44,
-      padding: EdgeInsets.symmetric(horizontal: 8),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(30),
-        color: AppColors.lightWhite,
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.lightBlack.withOpacity(0.25),
-            spreadRadius: 0,
-            blurRadius: 2,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const Text(
+  final theme = Theme.of(context);
+  final colorScheme = theme.colorScheme;
+
+  return Container(
+    height: 40,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(8),
+      color: AppColors.lightWhite,
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.1),
+          spreadRadius: 1,
+          blurRadius: 2,
+          offset: const Offset(0, 1),
+        ),
+      ],
+    ),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Text(
             'Select Items',
             style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: AppColors.lightGray,
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: colorScheme.onSurfaceVariant,
             ),
           ),
-          IconButton(
-            icon: const Icon(Icons.close, color: AppColors.lightBlack),
-            onPressed: () {
-              context.read<SelectionBloc>().add(ToggleSelectionMode());
-            },
+        ),
+        IconButton(
+          icon: Icon(
+            Icons.close,
+            color: colorScheme.onSurfaceVariant,
+            size: 20,
           ),
-        ],
-      ),
-    );
-  }
+          onPressed: () {
+            context.read<SelectionBloc>().add(ToggleSelectionMode());
+          },
+        ),
+      ],
+    ),
+  );
+}
 
   Widget _buildNormalHeader() {
     return Column(
