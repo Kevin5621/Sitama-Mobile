@@ -44,20 +44,38 @@ class StudentCard extends StatelessWidget {
     switch (activity) {
       case 'in-progress':
         return isDark 
-        ? AppColors.lightGray 
-        : Colors.grey;
+          ? AppColors.lightGray 
+          : const Color(0xFF757575); // Darker grey
       case 'updated':
         return isDark 
-        ? AppColors.lightWarning 
-        : Colors.orange;
+          ? AppColors.lightWarning 
+          : const Color(0xFFE65100); // Darker orange
       case 'rejected':
         return isDark 
-        ? AppColors.lightDanger 
-        : Colors.red;
+          ? AppColors.lightDanger 
+          : const Color(0xFFB71C1C); // Darker red
       default:
         return isDark 
-        ? AppColors.darkGray 
-        : Colors.grey;
+          ? AppColors.darkGray 
+          : const Color(0xFF424242); // Even darker grey
+    }
+  }
+
+  Color _getIconColor(String activity, bool isDark, Color backgroundColor) {
+    // Kontras dengan background untuk memastikan visibility
+    if (isSelected) {
+      return Colors.white; // Warna icon selalu putih saat card selected
+    }
+    
+    switch (activity) {
+      case 'in-progress':
+        return isDark ? Colors.black87 : Colors.white;
+      case 'updated':
+        return Colors.white;
+      case 'rejected':
+        return Colors.white;
+      default:
+        return isDark ? Colors.white : Colors.white;
     }
   }
 
@@ -101,22 +119,26 @@ class StudentCard extends StatelessWidget {
                               color: _getactivitiesColor(entry.value, isDark),
                               shape: BoxShape.circle,
                               border: Border.all(
-                                color: backgroundColor,
+                                color: isSelected 
+                                  ? Colors.white.withOpacity(0.8)
+                                  : backgroundColor,
                                 width: 1.5,
                               ),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(0.1),
+                                  color: Colors.black.withOpacity(0.2),
                                   spreadRadius: 1,
                                   blurRadius: 2,
                                   offset: const Offset(0, 1),
                                 ),
                               ],
                             ),
-                            child: Icon(
-                              _getactivitiesIcon(entry.value),
-                              size: 14,
-                              color: backgroundColor,
+                            child: Center(
+                              child: Icon(
+                                _getactivitiesIcon(entry.value),
+                                size: 14,
+                                color: _getIconColor(entry.value, isDark, backgroundColor),
+                              ),
                             ),
                           ),
                         );
@@ -127,12 +149,11 @@ class StudentCard extends StatelessWidget {
                 ),
               ),
             ),
-            // Main Content
+            // Main Content remains the same
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Row(
                 children: [
-                  // Profile Picture without Blue Dot
                   Container(
                     height: 40,
                     width: 40,
