@@ -26,6 +26,7 @@ import 'package:sistem_magang/domain/usecases/get_log_book_student.dart';
 import 'package:sistem_magang/domain/usecases/get_profile_student.dart';
 import 'package:sistem_magang/domain/usecases/is_logged_in.dart';
 import 'package:sistem_magang/domain/usecases/log_out.dart';
+import 'package:sistem_magang/domain/usecases/reset_password.dart';
 import 'package:sistem_magang/domain/usecases/signin.dart';
 import 'package:sistem_magang/domain/usecases/update_photo_profile.dart';
 import 'package:sistem_magang/domain/usecases/update_status_guidance.dart';
@@ -67,6 +68,7 @@ void setupServiceLocator() {
   sl.registerSingleton<UpdateStatusGuidanceUseCase>(UpdateStatusGuidanceUseCase());
 
   sl.registerSingleton<UpdatePhotoProfileUseCase>(UpdatePhotoProfileUseCase());
+  sl.registerSingleton<ResetPasswordUseCase>(ResetPasswordUseCase());
   sl.registerSingleton<LogoutUseCase>(LogoutUseCase());
 
   sl.registerLazySingleton<NotificationHandlerService>(() => NotificationHandlerService(

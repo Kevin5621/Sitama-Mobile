@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sistem_magang/data/models/reset_password_req_params.dart';
 import 'package:sistem_magang/data/models/signin_req_params.dart';
 import 'package:sistem_magang/data/models/update_profile_req_params.dart';
 import 'package:sistem_magang/data/source/auth_api_service.dart';
@@ -51,5 +52,13 @@ class AuthRepostoryImpl extends AuthRepostory{
     );
   }
   
-  
+  @override
+  Future<Either> resetPassword(ResetPasswordReqParams request) async {
+    Either result = await sl<AuthApiService>().resetPassword(request);
+    return result.fold(
+      (error) => Left(error),
+      (data) => Right(data),
+    );
+  }
+
 }
