@@ -115,45 +115,53 @@ class IndustryCard extends StatelessWidget {
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 20, bottom: 16),
-              child: Text(
-                'Industri',
-                style: TextStyle(
-                  color: colorScheme.onSurface,
-                  fontSize: 18,
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.only(left: 24, right: 24, top: 20, bottom: 16),
+              child: Align(
+                alignment: Alignment.center,
+                child: Text(
+                  'Industri',
+                  style: TextStyle(
+                    color: colorScheme.onSurface,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
+            if (internships!.length > 1) // Tampilkan TabBar hanya jika ada lebih dari 1 internship
+              TabBar(
+                isScrollable: true,
+                dividerColor: Colors.transparent,
+                labelColor: colorScheme.primary,
+                unselectedLabelColor: colorScheme.onSurface.withOpacity(0.5),
+                indicatorSize: TabBarIndicatorSize.label,
+                indicatorWeight: 3,
+                indicatorColor: colorScheme.primary,
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                tabAlignment: TabAlignment.center, // Atur TabBar agar di tengah
+                labelPadding: const EdgeInsets.only(right: 24),
+                labelStyle: const TextStyle(
+                  fontSize: 15,
                   fontWeight: FontWeight.w600,
                 ),
-              ),
-            ),
-            TabBar(
-              isScrollable: true,
-              dividerColor: Colors.transparent,
-              labelColor: colorScheme.primary,
-              unselectedLabelColor: colorScheme.onSurface.withOpacity(0.5),
-              indicatorSize: TabBarIndicatorSize.label,
-              indicatorWeight: 3,
-              indicatorColor: colorScheme.primary,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              labelStyle: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
-              ),
-              unselectedLabelStyle: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w500,
-              ),
-              tabs: List.generate(
-                internships!.length,
-                (index) => Tab(
-                  text: 'Industri ${index + 1}',
+                unselectedLabelStyle: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                ),
+                tabs: List.generate(
+                  internships!.length,
+                  (index) => Tab(
+                    text: 'Industri ${index + 1}',
+                  ),
                 ),
               ),
-            ),
             const SizedBox(height: 20),
             SizedBox(
-              height: 180, // Increased height
+              height: 180,
               child: TabBarView(
                 children: internships!.map((internship) {
                   return Padding(
