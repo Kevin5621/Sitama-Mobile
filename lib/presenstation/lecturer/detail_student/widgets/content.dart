@@ -26,15 +26,17 @@ class TabSection extends StatefulWidget {
 class _TabSectionState extends State<TabSection> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   bool _hasUnreadLogBooks = false;
-  final String _lastReadKey = 'last_read_logbook_time';
+  
+  // Helper class untuk mengelola notifikasi
+  late final NotificationManager _notificationManager;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    _notificationManager = NotificationManager();
     _checkUnreadLogBooks();
 
-    // Listen to tab changes
     _tabController.addListener(() {
       if (_tabController.index == 1 && _hasUnreadLogBooks) {
         setState(() {
@@ -54,27 +56,18 @@ class _TabSectionState extends State<TabSection> with SingleTickerProviderStateM
   void _checkUnreadLogBooks() async {
     if (widget.logBooks.isEmpty) return;
 
-    // Mendapatkan waktu terakhir kali tab LogBook dibuka
-    final prefs = await SharedPreferences.getInstance();
-    final lastReadTime = prefs.getString(_lastReadKey);
+    final hasUnread = await _notificationManager.hasUnreadLogBooks(
+      studentId: widget.studentId,
+      logBooks: widget.logBooks,
+    );
 
-    if (lastReadTime == null) {
-      setState(() => _hasUnreadLogBooks = true);
-      return;
-    }
-
-    // Mengecek apakah ada LogBook yang lebih baru dari waktu terakhir dibaca
-    final lastRead = DateTime.parse(lastReadTime);
-    final hasNewLogBooks = widget.logBooks.any((logBook) {
-      return logBook.date.isAfter(lastRead);
-    });
-
-    setState(() => _hasUnreadLogBooks = hasNewLogBooks);
+    setState(() => _hasUnreadLogBooks = hasUnread);
   }
 
   Future<void> _updateLastReadTime() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_lastReadKey, DateTime.now().toIso8601String());
+    await _notificationManager.markLogBooksAsRead(
+      studentId: widget.studentId,
+    );
   }
 
   @override
@@ -150,6 +143,51 @@ class _TabSectionState extends State<TabSection> with SingleTickerProviderStateM
         ],
       ),
     );
+  }
+}
+
+// Kelas terpisah untuk mengelola notifikasi
+class NotificationManager {
+  static const String _keyPrefix = 'logbook_last_read';
+  
+  // Mendapatkan key yang unik untuk setiap mahasiswa
+  String _getKey(int studentId) => '${_keyPrefix}_$studentId';
+
+  // Mengecek apakah ada logbook yang belum dibaca
+  Future<bool> hasUnreadLogBooks({
+    required int studentId,
+    required List<LogBookEntity> logBooks,
+  }) async {
+    if (logBooks.isEmpty) return false;
+
+    final prefs = await SharedPreferences.getInstance();
+    final key = _getKey(studentId);
+    final lastReadTime = prefs.getString(key);
+
+    if (lastReadTime == null) return true;
+
+    final lastRead = DateTime.parse(lastReadTime);
+    return logBooks.any((logBook) => logBook.date.isAfter(lastRead));
+  }
+
+  // Menandai semua logbook sebagai sudah dibaca
+  Future<void> markLogBooksAsRead({
+    required int studentId,
+  }) async {
+    final prefs = await SharedPreferences.getInstance();
+    final key = _getKey(studentId);
+    await prefs.setString(key, DateTime.now().toIso8601String());
+  }
+
+  // Method untuk membersihkan data (optional, bisa digunakan untuk testing atau logout)
+  Future<void> clearAllNotifications() async {
+    final prefs = await SharedPreferences.getInstance();
+    final keys = prefs.getKeys();
+    for (final key in keys) {
+      if (key.startsWith(_keyPrefix)) {
+        await prefs.remove(key);
+      }
+    }
   }
 }
 
