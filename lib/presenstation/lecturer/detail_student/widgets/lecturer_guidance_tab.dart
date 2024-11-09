@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:sistem_magang/common/bloc/button/button_state.dart';
 import 'package:sistem_magang/common/bloc/button/button_state_cubit.dart';
 import 'package:sistem_magang/common/widgets/alert.dart';
+import 'package:sistem_magang/common/widgets/date_relative_time.dart';
 import 'package:sistem_magang/core/config/themes/app_color.dart';
 import 'package:sistem_magang/data/models/guidance.dart';
 import 'package:sistem_magang/domain/entities/guidance_entity.dart';
@@ -69,28 +69,35 @@ class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
   }
 
   @override
-Widget build(BuildContext context) {
-  final colorScheme = Theme.of(context).colorScheme;
-  final textTheme = Theme.of(context).textTheme;
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
 
-  return Card(
-    margin: const EdgeInsets.all(8),
-    color: currentStatus == LecturerGuidanceStatus.rejected
-        ? colorScheme.error
-        : colorScheme.surface,
-    child: Theme(
-      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-      child: ExpansionTile(
-        leading: _buildLeadingIcon(colorScheme),
-        title: Text(widget.guidance.title),
-        subtitle: Text(DateFormat('dd/MM/yyyy').format(widget.guidance.date)),
-        children: [
-          _buildCardContent(colorScheme, textTheme),
-        ],
+    return Card(
+      margin: const EdgeInsets.all(8),
+      color: currentStatus == LecturerGuidanceStatus.rejected
+          ? colorScheme.error
+          : colorScheme.surface,
+      child: Theme(
+        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+        child: ExpansionTile(
+          leading: _buildLeadingIcon(colorScheme),
+          title: Text(widget.guidance.title),
+          subtitle: Text(
+            RelativeTimeUtil.getRelativeTime(widget.guidance.date),
+            style: textTheme.bodySmall?.copyWith(
+              color: currentStatus == LecturerGuidanceStatus.rejected
+                  ? colorScheme.onError.withOpacity(0.7)
+                  : colorScheme.onSurface.withOpacity(0.7),
+            ),
+          ),
+          children: [
+            _buildCardContent(colorScheme, textTheme),
+          ],
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 
   Widget _buildCardContent(ColorScheme colorScheme, TextTheme textTheme) {
   return Padding(

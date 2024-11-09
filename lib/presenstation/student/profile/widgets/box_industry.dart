@@ -10,94 +10,187 @@ class IndustryCard extends StatelessWidget {
     required this.internships,
   }) : super(key: key);
 
+  Widget _buildInternshipInfo({
+    required BuildContext context,
+    required IconData icon,
+    required String label,
+    required String value,
+  }) {
+    final colorScheme = Theme.of(context).colorScheme;
+    
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: colorScheme.primary.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Icon(
+            icon,
+            size: 20,
+            color: colorScheme.primary,
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: TextStyle(
+                  color: colorScheme.onSurface.withOpacity(0.6),
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                value,
+                style: TextStyle(
+                  color: colorScheme.onSurface,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                ),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    
-    return Container(
-      padding: const EdgeInsets.all(24),
-      width: 320,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: colorScheme.shadow.withOpacity(0.2),
-            offset: const Offset(0, 2),
-            blurRadius: 8,
-          )
-        ],
-        color: colorScheme.surface,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Center(
-            child: Text(
-              'Industri',
-              style: TextStyle(
-                color: colorScheme.onSurface,
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-              ),
+    final size = MediaQuery.of(context).size;
+    final cardWidth = size.width > 400 ? 380.0 : size.width * 0.9;
+
+    if (internships == null || internships!.isEmpty) {
+      return Container(
+        padding: const EdgeInsets.all(24),
+        width: cardWidth,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: colorScheme.shadow.withOpacity(0.08),
+              offset: const Offset(0, 4),
+              blurRadius: 12,
+            )
+          ],
+          color: colorScheme.surface,
+        ),
+        child: Center(
+          child: Text(
+            'Tempat magang anda belum terdaftar !',
+            style: TextStyle(
+              color: colorScheme.onSurface,
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
             ),
           ),
-          const SizedBox(height: 16),
-          if (internships != null) ...[
-            ListView.builder(
-                itemCount: internships!.length,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Industri ${index + 1}',
-                        style: TextStyle(
-                          color: colorScheme.onSurface,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      Text(
-                        'Nama : ${internships![index].name}',
-                        style: TextStyle(
-                          color: colorScheme.onSurface,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Text(
-                        'Tanggal Mulai : ${DateFormat("dd-MM-yyyy").format(internships![index].start_date)}',
-                        style: TextStyle(
-                          color: colorScheme.onSurface,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Text(
-                        'Tanggal Selesai : ${DateFormat("dd-MM-yyyy").format(internships![index].start_date)}',
-                        style: TextStyle(
-                          color: colorScheme.onSurface,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                    ],
-                  );
-                }),
-          ] else ...[
-            Text(
-              'Tempat magang anda belum terdaftar !',
-              style: TextStyle(
-                color: colorScheme.onSurface,
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
+        ),
+      );
+    }
+
+    return DefaultTabController(
+      length: internships!.length,
+      child: Container(
+        width: cardWidth,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: colorScheme.shadow.withOpacity(0.08),
+              offset: const Offset(0, 4),
+              blurRadius: 12,
+            )
+          ],
+          color: colorScheme.surface,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 20, bottom: 16),
+              child: Text(
+                'Industri',
+                style: TextStyle(
+                  color: colorScheme.onSurface,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
+            TabBar(
+              isScrollable: true,
+              dividerColor: Colors.transparent,
+              labelColor: colorScheme.primary,
+              unselectedLabelColor: colorScheme.onSurface.withOpacity(0.5),
+              indicatorSize: TabBarIndicatorSize.label,
+              indicatorWeight: 3,
+              indicatorColor: colorScheme.primary,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              labelStyle: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+              ),
+              unselectedLabelStyle: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+              ),
+              tabs: List.generate(
+                internships!.length,
+                (index) => Tab(
+                  text: 'Industri ${index + 1}',
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            SizedBox(
+              height: 180, // Increased height
+              child: TabBarView(
+                children: internships!.map((internship) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Column(
+                      children: [
+                        _buildInternshipInfo(
+                          context: context,
+                          icon: Icons.business_rounded,
+                          label: 'Nama Perusahaan',
+                          value: internship.name,
+                        ),
+                        const SizedBox(height: 16),
+                        _buildInternshipInfo(
+                          context: context,
+                          icon: Icons.calendar_today_rounded,
+                          label: 'Tanggal Mulai',
+                          value: DateFormat('dd MMMM yyyy').format(internship.start_date),
+                        ),
+                        const SizedBox(height: 16),
+                        _buildInternshipInfo(
+                          context: context,
+                          icon: Icons.event_rounded,
+                          label: 'Tanggal Selesai',
+                          value: internship.end_date != null
+                              ? DateFormat('dd MMMM yyyy').format(internship.end_date!)
+                              : "Belum selesai",
+                        ),
+                      ],
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+            const SizedBox(height: 20),
           ],
-        ],
+        ),
       ),
     );
   }

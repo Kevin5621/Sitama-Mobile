@@ -5,7 +5,10 @@ class LecturerHomeModel {
   final String name;
   final List<LecturerStudentsModel> ? students;
 
-  LecturerHomeModel({required this.name, required this.students});
+  LecturerHomeModel({
+    required this.name, 
+    required this.students
+    });
 
   factory LecturerHomeModel.fromMap(Map<String, dynamic> map) {
     return LecturerHomeModel(

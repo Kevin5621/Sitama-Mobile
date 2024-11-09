@@ -64,12 +64,12 @@ class StudentCard extends StatelessWidget {
   Color _getIconColor(String activity, bool isDark, Color backgroundColor) {
     // Kontras dengan background untuk memastikan visibility
     if (isSelected) {
-      return Colors.white; // Warna icon selalu putih saat card selected
+      return Colors.white; 
     }
     
     switch (activity) {
       case 'in-progress':
-        return isDark ? Colors.black87 : Colors.white;
+        return isDark ? Colors.white : Colors.white;
       case 'updated':
         return Colors.white;
       case 'rejected':

@@ -21,14 +21,14 @@ class LecturerStudentsEntity {
   final String academic_year;
   final Map<String, bool> activities;
 
-  LecturerStudentsEntity(
-      {required this.id,
-      required this.name,
-      required this.username,
-      required this.the_class,
-      required this.study_program,
-      required this.major,
-      required this.academic_year,
-      required this.activities,
+  LecturerStudentsEntity({
+    required this.id,
+    required this.name,
+    required this.username,
+    required this.the_class,
+    required this.study_program,
+    required this.major,
+    required this.academic_year,
+    required this.activities,
     });
 }

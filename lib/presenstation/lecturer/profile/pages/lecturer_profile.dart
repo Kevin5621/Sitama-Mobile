@@ -24,8 +24,6 @@ class LecturerProfilePage extends StatelessWidget {
           children: [
             _header(colorScheme),
             const SizedBox(height: 26),
-            _about(colorScheme),
-            const SizedBox(height: 100),
             _settingsList(context, isDarkMode),
           ],
         ),
@@ -178,7 +176,7 @@ class LecturerProfilePage extends StatelessWidget {
               ),
             ),
             Text(
-              'lucasScott@polines.com',
+              '7849372391',
               style: TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: 12,
@@ -188,60 +186,6 @@ class LecturerProfilePage extends StatelessWidget {
           ],
         ),
       ],
-    );
-  }
-
-//TODO :  API
-
-  Container _about(ColorScheme colorScheme) {
-    return Container(
-      padding: const EdgeInsets.all(24),
-      width: 320,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: colorScheme.shadow.withOpacity(0.2),
-            offset: const Offset(0, 2),
-            blurRadius: 8,
-          )
-        ],
-        color: colorScheme.surface,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Center(
-            child: Text(
-              'About',
-              style: TextStyle(
-                color: colorScheme.onSurface,
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
-          InfoRow(
-            icon: Icons.person_outline,
-            label: 'Nama',
-            value: 'Amran Yobioktabera',
-            colorScheme: colorScheme,
-          ),
-          InfoRow(
-            icon: Icons.badge_outlined,
-            label: 'NIP',
-            value: '332221123456',
-            colorScheme: colorScheme,
-          ),
-          InfoRow(
-            icon: Icons.email_outlined,
-            label: 'Email',
-            value: 'Yobioktaberann@polines.com',
-            colorScheme: colorScheme,
-          ),
-        ],
-      ),
     );
   }
 }

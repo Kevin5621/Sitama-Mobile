@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sistem_magang/common/widgets/date_relative_time.dart';
 import 'package:sistem_magang/domain/entities/log_book_entity.dart';
 
 class LecturerLogBookTab extends StatelessWidget {
@@ -8,15 +9,12 @@ class LecturerLogBookTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
     return ListView.builder(
       shrinkWrap: true,
       itemCount: logBooks.length,
       itemBuilder: (context, index) {
         return LogBookCard(
           logBook: logBooks[index],
-          colorScheme: colorScheme,
         );
       },
     );
@@ -25,12 +23,10 @@ class LecturerLogBookTab extends StatelessWidget {
 
 class LogBookCard extends StatefulWidget {
   final LogBookEntity logBook;
-  final ColorScheme colorScheme;
 
   const LogBookCard({
     super.key,
     required this.logBook,
-    required this.colorScheme,
   });
 
   @override
@@ -58,90 +54,106 @@ class _LogBookCardState extends State<LogBookCard> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     return Card(
       margin: const EdgeInsets.all(8),
-      color: widget.colorScheme.surface,
+      color: colorScheme.surface,
       child: Theme(
-        data: Theme.of(context).copyWith(
-          dividerColor: Colors.transparent,
-          textTheme: Theme.of(context).textTheme.copyWith(
-            bodyMedium: TextStyle(color: widget.colorScheme.onSurface),
-          ),
-        ),
+        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
           title: Text(
             widget.logBook.title,
-            style: TextStyle(color: widget.colorScheme.onSurface),
+            style: textTheme.titleMedium?.copyWith(
+              color: colorScheme.onSurface,
+            ),
           ),
           subtitle: Text(
-            'Date: ${widget.logBook.date}',
-            style: TextStyle(color: widget.colorScheme.onSurfaceVariant),
+            RelativeTimeUtil.getRelativeTime(widget.logBook.date),
+            style: textTheme.bodySmall?.copyWith(
+              color: colorScheme.onSurface.withOpacity(0.7),
+            ),
           ),
           children: [
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.logBook.activity,
-                    style: TextStyle(color: widget.colorScheme.onBackground),
-                  ),
-                  const SizedBox(height: 16),
-                  // Existing Note Section
-                  if (widget.logBook.lecturer_note.isNotEmpty)
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: widget.colorScheme.surfaceVariant,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Catatan Anda:',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(widget.logBook.lecturer_note),
-                        ],
-                      ),
-                    ),
-                  const SizedBox(height: 16),
-                  // Note Input Section
-                  TextField(
-                    controller: _noteController,
-                    decoration: const InputDecoration(
-                      hintText: 'Masukkan catatan...',
-                      border: OutlineInputBorder(),
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 8,
-                      ),
-                    ),
-                    maxLines: 3,
-                  ),
-                  const SizedBox(height: 8),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: ElevatedButton(
-                      onPressed: _submitNote,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: widget.colorScheme.primary,
-                        foregroundColor: widget.colorScheme.onPrimary,
-                      ),
-                      child: const Text('Kirim'),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            _buildCardContent(colorScheme, textTheme),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildCardContent(ColorScheme colorScheme, TextTheme textTheme) {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Aktivitas:',
+            style: textTheme.bodyMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            widget.logBook.activity,
+            style: textTheme.bodyMedium,
+            textAlign: TextAlign.start,
+          ),
+          const SizedBox(height: 16),
+          if (widget.logBook.lecturer_note.isNotEmpty) ...[
+            Text(
+              'Catatan Anda:',
+              style: textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              widget.logBook.lecturer_note,
+              style: textTheme.bodyMedium,
+              textAlign: TextAlign.start,
+            ),
+            const SizedBox(height: 16),
+          ],
+          Text(
+            'Tambah Catatan:',
+            style: textTheme.bodyMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          TextField(
+            controller: _noteController,
+            decoration: InputDecoration(
+              hintText: 'Masukkan catatan...',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 10,
+              ),
+            ),
+            maxLines: 3,
+          ),
+          const SizedBox(height: 16),
+          Align(
+            alignment: Alignment.centerRight,
+            child: ElevatedButton.icon(
+              icon: Icon(Icons.send, color: colorScheme.onPrimary, size: 16),
+              label: Text(
+                'Kirim',
+                style: TextStyle(color: colorScheme.onPrimary),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: colorScheme.primary,
+              ),
+              onPressed: _submitNote,
+            ),
+          ),
+        ],
       ),
     );
   }
