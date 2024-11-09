@@ -1,10 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:sistem_magang/core/config/themes/app_color.dart';
 
-class LoadNotification extends StatelessWidget {
+class LoadNotification extends StatefulWidget {
   final VoidCallback onClose;
 
   const LoadNotification({Key? key, required this.onClose}) : super(key: key);
+
+  @override
+  _LoadNotificationState createState() => _LoadNotificationState();
+}
+
+class _LoadNotificationState extends State<LoadNotification> {
+  late List<Color> _colors;
+  late int _colorIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _colorIndex = 0;
+    _colors = [
+      AppColors.lightWarning,
+      Colors.orangeAccent,
+      Colors.purpleAccent,
+      Colors.deepPurpleAccent,
+      AppColors.lightPrimary,
+      Colors.purpleAccent,
+    ];
+    _startGradientAnimation();
+  }
+
+  void _startGradientAnimation() {
+    Future.delayed(const Duration(seconds: 3), () {
+      setState(() {
+        _colorIndex = (_colorIndex + 1) % _colors.length;
+      });
+      _startGradientAnimation();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,11 +46,15 @@ class LoadNotification extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
       ),
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      child: Container(
+      child: AnimatedContainer(
+        duration: const Duration(seconds: 3),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          gradient: const LinearGradient(
-            colors: [AppColors.lightWarning, AppColors.lightPrimary],
+          gradient: LinearGradient(
+            colors: [
+              _colors[_colorIndex],
+              _colors[(_colorIndex + 1) % _colors.length],
+            ],
             end: Alignment.bottomRight,
           ),
         ),
@@ -32,7 +68,7 @@ class LoadNotification extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: const Icon(
-                Icons.notifications_active_rounded,
+                Icons.campaign,
                 color: Colors.white,
                 size: 24,
               ),
