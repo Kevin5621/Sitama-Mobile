@@ -23,6 +23,7 @@ import 'package:sistem_magang/domain/usecases/get_guidances_student.dart';
 import 'package:sistem_magang/domain/usecases/get_home_lecturer.dart';
 import 'package:sistem_magang/domain/usecases/get_home_student.dart';
 import 'package:sistem_magang/domain/usecases/get_log_book_student.dart';
+import 'package:sistem_magang/domain/usecases/get_profile_Lecturer.dart';
 import 'package:sistem_magang/domain/usecases/get_profile_student.dart';
 import 'package:sistem_magang/domain/usecases/is_logged_in.dart';
 import 'package:sistem_magang/domain/usecases/log_out.dart';
@@ -30,6 +31,7 @@ import 'package:sistem_magang/domain/usecases/reset_password.dart';
 import 'package:sistem_magang/domain/usecases/signin.dart';
 import 'package:sistem_magang/domain/usecases/update_photo_profile.dart';
 import 'package:sistem_magang/domain/usecases/update_status_guidance.dart';
+import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_bloc.dart';
 
 final sl = GetIt.instance;
 
@@ -47,6 +49,9 @@ void setupServiceLocator() {
   sl.registerSingleton<StudentRepository>(StudentRepositoryImpl());
   sl.registerSingleton<LecturerRepository>(LecturerRepositoryImpl());
 
+  //bloc
+  sl.registerSingleton<SelectionBloc>(SelectionBloc());
+  
   // Usecase
   sl.registerSingleton<SigninUseCase>(SigninUseCase());
   sl.registerSingleton<IsLoggedInUseCase>(IsLoggedInUseCase());
@@ -62,6 +67,7 @@ void setupServiceLocator() {
   sl.registerSingleton<DeleteLogBookUseCase>(DeleteLogBookUseCase());
 
   sl.registerSingleton<GetProfileStudentUseCase>(GetProfileStudentUseCase());
+  sl.registerSingleton<GetProfileLecturerUseCase>(GetProfileLecturerUseCase());
 
   sl.registerSingleton<GetHomeLecturerUseCase>(GetHomeLecturerUseCase());
   sl.registerSingleton<GetDetailStudentUseCase>(GetDetailStudentUseCase());

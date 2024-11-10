@@ -30,6 +30,7 @@ extension LecturerHomeXModel on LecturerHomeModel {
         id: data.id,
         name: data.name,
         username: data.username,
+        photo_profile: data.photo_profile,
         the_class: data.the_class,
         study_program: data.study_program,
         major: data.major,
@@ -45,6 +46,7 @@ class LecturerStudentsModel {
   final int id;
   final String name;
   final String username;
+  final String? photo_profile;
   final String the_class;
   final String study_program;
   final String major;
@@ -55,6 +57,7 @@ class LecturerStudentsModel {
       required this.id,
       required this.name,
       required this.username,
+      this.photo_profile,
       required this.the_class,
       required this.study_program,
       required this.major,
@@ -67,6 +70,7 @@ class LecturerStudentsModel {
       id: map['id'] as int,
       name: map['name'] as String,
       username: map['username'] as String,
+      photo_profile: map['photo_profile'] as String?,
       the_class: map['class'] as String,
       study_program: map['study_program'] as String,
       major: map['major'] as String,

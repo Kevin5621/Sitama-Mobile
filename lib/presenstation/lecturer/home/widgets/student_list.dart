@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sistem_magang/core/config/assets/app_images.dart';
 import 'package:sistem_magang/domain/entities/lecturer_home_entity.dart';
 import 'package:sistem_magang/presenstation/lecturer/detail_student/pages/detail_student.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_bloc.dart';
@@ -82,7 +83,7 @@ class StudentList extends StatelessWidget {
         ).animate(animationController),
         child: StudentCard(
           id: student.id,
-          imageUrl: 'https://picsum.photos/200/300',
+          imageUrl: student.photo_profile ??AppImages.defaultProfile,
           name: student.name,
           jurusan: student.major,
           kelas: student.the_class,

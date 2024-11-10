@@ -30,3 +30,11 @@ class SendMessage extends SelectionEvent {
   @override
   List<Object> get props => [message];
 }
+
+class ArchiveSelectedItems extends SelectionEvent {}
+
+class UnarchiveItems extends SelectionEvent {
+  final Set<int> ids;
+  
+  const UnarchiveItems(this.ids);
+}

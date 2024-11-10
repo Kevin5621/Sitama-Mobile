@@ -10,6 +10,7 @@ abstract class LecturerApiService {
   Future<Either> getLecturerHome();
   Future<Either> getDetailStudent(int id);
   Future<Either> updateStatusGuidance(UpdateStatusGuidanceReqParams request);
+  Future<Either> getLecturerProfile();
 }
 
 class LecturerApiServiceImpl extends LecturerApiService {
@@ -69,6 +70,23 @@ class LecturerApiServiceImpl extends LecturerApiService {
       } else {
         return Left(e.message);
       }
+    }
+  }
+  @override
+  Future<Either> getLecturerProfile() async {
+    try {
+      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      var token = sharedPreferences.get('token');
+
+      var response = await sl<DioClient>().get(
+        ApiUrls.updateStatusProfile,
+        options: Options(headers: {
+          'Authorization': 'Bearer $token',
+        }),
+      );
+      return Right(response);
+    } on DioException catch (e) {
+      return Left(e.response!.data['errors']['message']);
     }
   }
 }

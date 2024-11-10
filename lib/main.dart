@@ -1,39 +1,18 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sistem_magang/core/config/themes/app_theme.dart';
 import 'package:sistem_magang/core/config/themes/theme_provider.dart';
-import 'package:sistem_magang/core/service/notification_handler_service.dart';
-import 'package:sistem_magang/core/service/notification_service.dart';
 import 'package:sistem_magang/presenstation/general/splash/pages/splash.dart';
 import 'package:sistem_magang/service_locator.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  // Setup service locator
   setupServiceLocator();
-
-  // Initialize Firebase
-  // await Firebase.initializeApp();
-  
-  // Get stored user role and initialize notifications if user is logged in
-  // SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-  // var role = sharedPreferences.getString('role');
-  
-  // // Determine user role based on the stored value
-  // var userRole = (role == 'Student' || role == 'Lecturer') ? role : null;
-
-  // if (userRole != null) {
-  //   await sl<NotificationHandlerService>().initialize(userRole as UserRole);
-  // }
   
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
-        // Add other providers as needed
       ],
       child: const MyApp(),
     ),

@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:sistem_magang/common/widgets/log_out_alert.dart';
 import 'package:sistem_magang/common/widgets/notification.dart';
@@ -8,26 +9,152 @@ import 'package:sistem_magang/common/widgets/setting_button.dart';
 import 'package:sistem_magang/core/config/assets/app_images.dart';
 import 'package:sistem_magang/core/config/themes/theme_provider.dart';
 import 'package:sistem_magang/core/service/notification_service.dart';
+import 'package:sistem_magang/domain/entities/lecturer_profile_entity.dart';
+import 'package:sistem_magang/presenstation/lecturer/profile/bloc/profile_lecturer_cubit.dart';
+import 'package:sistem_magang/presenstation/lecturer/profile/bloc/profile_lecturer_state.dart';
 
-class LecturerProfilePage extends StatelessWidget {
+class LecturerProfilePage extends StatefulWidget {
   const LecturerProfilePage({super.key});
 
+  @override
+  State<LecturerProfilePage> createState() => _LecturerProfilePageState();
+}
+
+class _LecturerProfilePageState extends State<LecturerProfilePage> {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
     final isDarkMode = themeProvider.isDarkMode;
     final colorScheme = Theme.of(context).colorScheme;
 
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
+    return BlocProvider(
+      create: (context) => ProfileLecturerCubit()..displayLecturer(),
+      child: BlocBuilder<ProfileLecturerCubit, ProfileLecturerState>(
+        builder: (context, state) {
+          if (state is LecturerLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (state is LecturerLoaded) {
+
+            return Scaffold(
+              body: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    _header(state.lecturerProfileEntity, colorScheme as LecturerProfileEntity),
+                    const SizedBox(height: 22),
+                    _settingsList(context, isDarkMode),
+                  ],
+                ),
+              ),
+            );
+          }
+          if (state is LoadLecturerFailure) {
+            return Text(state.errorMessage);
+          }
+          return Container();
+        },
+      ),
+    );
+  }
+
+  Stack _header(colorScheme, LecturerProfileEntity profile) {
+    return Stack(
+      children: [
+        Container(
+          height: 160,
+          decoration: BoxDecoration(
+            image: const DecorationImage(
+              image: AssetImage(AppImages.homePattern),
+              fit: BoxFit.cover,
+            ),
+            color: colorScheme.inversePrimary,
+          ),
+        ),
+        Column(
           children: [
-            _header(colorScheme),
-            const SizedBox(height: 26),
-            _settingsList(context, isDarkMode),
+            const SizedBox(height: 40),
+            Center(
+              child: Text(
+                'Profile',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: colorScheme.onPrimary,
+                ),
+              ),
+            ),
+            const SizedBox(height: 45),
+            Container(
+              height: 100,
+              width: 100,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: colorScheme.background,
+                  width: 2,
+                ),
+                borderRadius: BorderRadius.circular(40),
+                boxShadow: [
+                  BoxShadow(
+                    color: colorScheme.shadow,
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+                image: DecorationImage(
+                  image: profile.photo_profile != null
+                      ? NetworkImage(profile.photo_profile!)
+                      : const AssetImage(AppImages.defaultProfile) as ImageProvider,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              child: Align(
+                alignment: Alignment.bottomRight,
+                child: Container(
+                  width: 36,
+                  height: 36,
+                  transform: Matrix4.translationValues(5, 5, 0),
+                  decoration: BoxDecoration(
+                    color: colorScheme.primary,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: colorScheme.shadow,
+                        blurRadius: 4,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.edit,
+                      color: colorScheme.onPrimary,
+                      size: 18,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              profile.name,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+                color: colorScheme.onBackground,
+              ),
+            ),
+            Text(
+              profile.username,
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 12,
+                color: colorScheme.onSurface.withOpacity(0.7),
+              ),
+            ),
           ],
         ),
-      ),
+      ],
     );
   }
 
@@ -87,105 +214,6 @@ class LecturerProfilePage extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-
-  Stack _header(ColorScheme colorScheme) {
-    return Stack(
-      children: [
-        Container(
-          height: 160,
-          decoration: BoxDecoration(
-            image: const DecorationImage(
-              image: AssetImage(AppImages.homePattern),
-              fit: BoxFit.cover,
-            ),
-            color: colorScheme.inversePrimary,
-          ),
-        ),
-        Column(
-          children: [
-            const SizedBox(height: 40),
-            Center(
-              child: Text(
-                'Profile',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: colorScheme.onPrimary,
-                ),
-              ),
-            ),
-            const SizedBox(height: 45),
-            Container(
-              height: 100,
-              width: 100,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: colorScheme.background,
-                  width: 2,
-                ),
-                borderRadius: BorderRadius.circular(40),
-                boxShadow: [
-                  BoxShadow(
-                    color: colorScheme.shadow,
-                    blurRadius: 8,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-                image: const DecorationImage(
-                  image: AssetImage(AppImages.photoProfile),
-                  fit: BoxFit.cover,
-                ),
-              ),
-              child: Align(
-                alignment: Alignment.bottomRight,
-                child: Container(
-                  width: 36,
-                  height: 36,
-                  transform: Matrix4.translationValues(5, 5, 0),
-                  decoration: BoxDecoration(
-                    color: colorScheme.primary,
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: colorScheme.shadow,
-                        blurRadius: 4,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: IconButton(
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.edit,
-                      color: colorScheme.onPrimary,
-                      size: 18,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'AMRAN YOBIOKTABERA',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-                color: colorScheme.onBackground,
-              ),
-            ),
-            Text(
-              '7849372391',
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 12,
-                color: colorScheme.onSurface.withOpacity(0.7),
-              ),
-            ),
-          ],
-        ),
-      ],
     );
   }
 }

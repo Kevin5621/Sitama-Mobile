@@ -27,11 +27,13 @@ class InfoStudentEntity {
   final String name;
   final String username;
   final String email;
+  final String? photo_profile;
 
   InfoStudentEntity({
     required this.name, 
     required this.username, 
     required this.email,
+    this.photo_profile,
   });
 }
 

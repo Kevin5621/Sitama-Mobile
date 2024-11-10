@@ -1,17 +1,30 @@
+// ignore_for_file: invalid_use_of_visible_for_testing_member
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'selection_event.dart';
 import 'selection_state.dart';
 
 class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
   SelectionBloc()
-      : super(const SelectionState(isSelectionMode: false, selectedIds: {})) {
+      : super(const SelectionState(
+          isSelectionMode: false, 
+          selectedIds: {},
+          archivedIds: {},
+        )) {
     on<ToggleSelectionMode>(_onToggleSelectionMode);
     on<ToggleItemSelection>(_onToggleItemSelection);
     on<SelectAll>(_onSelectAll);
     on<DeselectAll>(_onDeselectAll);
     on<SendMessage>(_onSendMessage);
+    on<ArchiveSelectedItems>(_onArchiveSelectedItems);
+    on<UnarchiveItems>(_onUnarchiveItems);
+    
+    // Load archived items when bloc is created
+    _loadArchivedItems();
   }
 
+  // Existing event handlers
   void _onToggleSelectionMode(
       ToggleSelectionMode event, Emitter<SelectionState> emit) {
     emit(state
@@ -27,10 +40,8 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
       selectedIds.add(event.id);
     }
 
-    // Emit perubahan state dengan daftar ID yang diperbarui
     emit(state.copyWith(selectedIds: selectedIds));
 
-    // Jika tidak ada ID yang dipilih, keluar dari Selection Mode
     if (selectedIds.isEmpty) {
       emit(state.copyWith(isSelectionMode: false));
     }
@@ -46,9 +57,60 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
   }
 
   void _onSendMessage(SendMessage event, Emitter<SelectionState> emit) {
-    // Implement send message logic here
     print('Sending message: ${event.message} to ${state.selectedIds}');
-    // After sending, you might want to clear the selection
     emit(state.copyWith(isSelectionMode: false, selectedIds: {}));
+  }
+
+  // New archive-related methods
+  Future<void> _loadArchivedItems() async {
+    final archivedIds = await _getArchivedIds();
+    emit(state.copyWith(archivedIds: archivedIds));
+  }
+
+  Future<void> _onArchiveSelectedItems(
+  ArchiveSelectedItems event, 
+  Emitter<SelectionState> emit,
+) async {
+  if (state.selectedIds.isEmpty) return;
+  
+  final newArchivedIds = {...state.archivedIds, ...state.selectedIds};
+  
+  // Save to persistent storage
+  await _saveArchivedIds(newArchivedIds);
+  
+  // Update state
+  emit(state.copyWith(
+    isSelectionMode: false,
+    selectedIds: {},
+    archivedIds: newArchivedIds,
+  ));
+}
+  Future<void> _onUnarchiveItems(
+    UnarchiveItems event, 
+    Emitter<SelectionState> emit,
+  ) async {
+    // Remove specified ids from archived items
+    final newArchivedIds = {...state.archivedIds}..removeAll(event.ids);
+    
+    // Save to persistent storage
+    await _saveArchivedIds(newArchivedIds);
+    
+    // Update state
+    emit(state.copyWith(archivedIds: newArchivedIds));
+  }
+
+  // Persistent storage methods
+  static const String _archiveKey = 'archived_students';
+
+  Future<Set<int>> _getArchivedIds() async {
+    final prefs = await SharedPreferences.getInstance();
+    final List<String> archived = prefs.getStringList(_archiveKey) ?? [];
+    return archived.map((id) => int.parse(id)).toSet();
+  }
+
+  Future<void> _saveArchivedIds(Set<int> ids) async {
+    final prefs = await SharedPreferences.getInstance();
+    final List<String> archived = ids.map((id) => id.toString()).toList();
+    await prefs.setStringList(_archiveKey, archived);
   }
 }

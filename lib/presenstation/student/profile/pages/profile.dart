@@ -167,7 +167,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 image: DecorationImage(
                   image: student.photo_profile != null
                       ? NetworkImage(student.photo_profile!)
-                      : const AssetImage(AppImages.photoProfile)
+                      : const AssetImage(AppImages.defaultProfile)
                           as ImageProvider<Object>,
                   fit: BoxFit.cover,
                 ),

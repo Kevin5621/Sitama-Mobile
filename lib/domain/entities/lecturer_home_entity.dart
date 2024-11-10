@@ -15,6 +15,7 @@ class LecturerStudentsEntity {
   final int id;
   final String name;
   final String username;
+  final String? photo_profile;
   final String the_class;
   final String study_program;
   final String major;
@@ -25,6 +26,7 @@ class LecturerStudentsEntity {
     required this.id,
     required this.name,
     required this.username,
+    this.photo_profile,
     required this.the_class,
     required this.study_program,
     required this.major,
