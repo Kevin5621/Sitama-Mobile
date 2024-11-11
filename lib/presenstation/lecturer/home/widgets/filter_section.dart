@@ -7,7 +7,12 @@ import 'package:sistem_magang/presenstation/lecturer/home/widgets/filter_jurusan
 import 'package:sistem_magang/presenstation/lecturer/home/widgets/filter_tahun.dart';
 
 class FilterSection extends StatelessWidget {
-  const FilterSection({super.key});
+  final VoidCallback? onArchiveTap;
+
+  const FilterSection({
+    super.key,
+    this.onArchiveTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +53,11 @@ class FilterSection extends StatelessWidget {
   Widget _buildArchiveButton(BuildContext context) {
     return ElevatedButton.icon(
       onPressed: () {
-        context.read<SelectionBloc>().add(ArchiveSelectedItems());
+        if (onArchiveTap != null) {
+          onArchiveTap!();
+        } else {
+          context.read<SelectionBloc>().add(ArchiveSelectedItems());
+        }
       },
       icon: const Icon(Icons.archive),
       label: const Text('Archive'),

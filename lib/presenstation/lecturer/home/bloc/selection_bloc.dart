@@ -6,9 +6,11 @@ import 'selection_event.dart';
 import 'selection_state.dart';
 
 class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
+  static const String _archiveKey = 'archived_students';
+
   SelectionBloc()
       : super(const SelectionState(
-          isSelectionMode: false, 
+          isSelectionMode: false,
           selectedIds: {},
           archivedIds: {},
         )) {
@@ -19,16 +21,18 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
     on<SendMessage>(_onSendMessage);
     on<ArchiveSelectedItems>(_onArchiveSelectedItems);
     on<UnarchiveItems>(_onUnarchiveItems);
-    
+    on<LoadArchivedItems>(_onLoadArchivedItems);
+
     // Load archived items when bloc is created
-    _loadArchivedItems();
+    add(LoadArchivedItems());
   }
 
-  // Existing event handlers
   void _onToggleSelectionMode(
       ToggleSelectionMode event, Emitter<SelectionState> emit) {
-    emit(state
-        .copyWith(isSelectionMode: !state.isSelectionMode, selectedIds: {}));
+    emit(state.copyWith(
+      isSelectionMode: !state.isSelectionMode,
+      selectedIds: const {},
+    ));
   }
 
   void _onToggleItemSelection(
@@ -40,77 +44,139 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
       selectedIds.add(event.id);
     }
 
-    emit(state.copyWith(selectedIds: selectedIds));
-
-    if (selectedIds.isEmpty) {
-      emit(state.copyWith(isSelectionMode: false));
-    }
+    emit(state.copyWith(
+      selectedIds: selectedIds,
+      isSelectionMode: selectedIds.isNotEmpty,
+    ));
   }
 
   void _onSelectAll(SelectAll event, Emitter<SelectionState> emit) {
-    // Implement select all logic here
-    // You'll need to pass the list of all student IDs to this method
+    final selectedIds = Set<int>.from(event.ids);
+    emit(state.copyWith(
+      selectedIds: selectedIds,
+      isSelectionMode: selectedIds.isNotEmpty,
+    ));
   }
 
   void _onDeselectAll(DeselectAll event, Emitter<SelectionState> emit) {
-    emit(state.copyWith(selectedIds: {}));
+    emit(state.copyWith(
+      selectedIds: {},
+      isSelectionMode: false,
+    ));
   }
 
   void _onSendMessage(SendMessage event, Emitter<SelectionState> emit) {
+    // Implement message sending logic here
     print('Sending message: ${event.message} to ${state.selectedIds}');
-    emit(state.copyWith(isSelectionMode: false, selectedIds: {}));
+    emit(state.copyWith(
+      isSelectionMode: false,
+      selectedIds: {},
+    ));
   }
 
-  // New archive-related methods
-  Future<void> _loadArchivedItems() async {
-    final archivedIds = await _getArchivedIds();
-    emit(state.copyWith(archivedIds: archivedIds));
+  Future<void> _onLoadArchivedItems(
+    LoadArchivedItems event,
+    Emitter<SelectionState> emit,
+  ) async {
+    try {
+      emit(state.copyWith(isLoading: true, error: null));
+      final archivedIds = await _getArchivedIds();
+      emit(state.copyWith(
+        archivedIds: archivedIds,
+        isLoading: false,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        isLoading: false,
+        error: 'Failed to load archived items: $e',
+      ));
+    }
   }
 
   Future<void> _onArchiveSelectedItems(
-  ArchiveSelectedItems event, 
-  Emitter<SelectionState> emit,
-) async {
-  if (state.selectedIds.isEmpty) return;
-  
-  final newArchivedIds = {...state.archivedIds, ...state.selectedIds};
-  
-  // Save to persistent storage
-  await _saveArchivedIds(newArchivedIds);
-  
-  // Update state
-  emit(state.copyWith(
-    isSelectionMode: false,
-    selectedIds: {},
-    archivedIds: newArchivedIds,
-  ));
-}
-  Future<void> _onUnarchiveItems(
-    UnarchiveItems event, 
+    ArchiveSelectedItems event,
     Emitter<SelectionState> emit,
   ) async {
-    // Remove specified ids from archived items
-    final newArchivedIds = {...state.archivedIds}..removeAll(event.ids);
-    
-    // Save to persistent storage
-    await _saveArchivedIds(newArchivedIds);
-    
-    // Update state
-    emit(state.copyWith(archivedIds: newArchivedIds));
+    if (state.selectedIds.isEmpty) return;
+
+    try {
+      emit(state.copyWith(isLoading: true, error: null));
+      
+      final newArchivedIds = {...state.archivedIds, ...state.selectedIds};
+      await _saveArchivedIds(newArchivedIds);
+
+      emit(state.copyWith(
+        isSelectionMode: false,
+        selectedIds: {},
+        archivedIds: newArchivedIds,
+        isLoading: false,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        isLoading: false,
+        error: 'Failed to archive items: $e',
+      ));
+    }
   }
 
-  // Persistent storage methods
-  static const String _archiveKey = 'archived_students';
+  Future<void> _onUnarchiveItems(
+    UnarchiveItems event,
+    Emitter<SelectionState> emit,
+  ) async {
+    try {
+      emit(state.copyWith(isLoading: true, error: null));
+
+      final updatedArchivedIds = Set<int>.from(state.archivedIds)
+        ..removeAll(event.ids);
+      
+      await _saveArchivedIds(updatedArchivedIds);
+
+      // Emit state dua kali untuk memastikan perubahan terdeteksi
+      emit(state.copyWith(
+        archivedIds: updatedArchivedIds,
+        selectedIds: {},
+        isSelectionMode: false,
+        isLoading: false,
+      ));
+
+      // Emit state lagi dengan nilai yang sama untuk memaksa rebuild
+      emit(state.copyWith(
+        archivedIds: updatedArchivedIds,
+        isLoading: false,
+      ));
+
+      print('Unarchived IDs: ${event.ids}');
+      print('Remaining archived IDs: $updatedArchivedIds');
+    } catch (e) {
+      print('Error in unarchive: $e');
+      emit(state.copyWith(
+        isLoading: false,
+        error: 'Failed to unarchive items: $e',
+      ));
+    }
+  }
 
   Future<Set<int>> _getArchivedIds() async {
-    final prefs = await SharedPreferences.getInstance();
-    final List<String> archived = prefs.getStringList(_archiveKey) ?? [];
-    return archived.map((id) => int.parse(id)).toSet();
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final List<String>? archived = prefs.getStringList(_archiveKey);
+      if (archived == null || archived.isEmpty) return {};
+      return archived.map((id) => int.parse(id)).toSet();
+    } catch (e) {
+      print('Error getting archived IDs: $e');
+      rethrow;
+    }
   }
 
   Future<void> _saveArchivedIds(Set<int> ids) async {
-    final prefs = await SharedPreferences.getInstance();
-    final List<String> archived = ids.map((id) => id.toString()).toList();
-    await prefs.setStringList(_archiveKey, archived);
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final List<String> archived = ids.map((id) => id.toString()).toList();
+      await prefs.setStringList(_archiveKey, archived);
+      print('Saved archived IDs: $archived');
+    } catch (e) {
+      print('Error saving archived IDs: $e');
+      rethrow;
+    }
   }
 }

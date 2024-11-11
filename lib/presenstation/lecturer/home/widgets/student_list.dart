@@ -6,6 +6,7 @@ import 'package:sistem_magang/presenstation/lecturer/detail_student/pages/detail
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_bloc.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_event.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_state.dart';
+import 'package:sistem_magang/presenstation/lecturer/home/widgets/archive_card.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/widgets/filter_section.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/widgets/student_card.dart';
 
@@ -22,19 +23,6 @@ class StudentList extends StatelessWidget {
     required this.animationController,
     required this.selectionState,
   });
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverList(
-      delegate: SliverChildListDelegate([
-        _buildTitle(),
-        const SizedBox(height: 16),
-        const FilterSection(),
-        const SizedBox(height: 16),
-        _buildStudentsList(context),
-      ]),
-    );
-  }
 
   Widget _buildTitle() {
     return FadeTransition(
@@ -55,19 +43,7 @@ class StudentList extends StatelessWidget {
     );
   }
 
-  Widget _buildStudentsList(BuildContext context) {
-    return ListView.separated(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: students.length,
-      separatorBuilder: (context, index) => const SizedBox(height: 14),
-      itemBuilder: (context, index) => _buildStudentItem(context, index),
-    );
-  }
-
-  Widget _buildStudentItem(BuildContext context, int index) {
-    final student = students[index];
-    
+  Widget _buildStudentItem(BuildContext context, LecturerStudentsEntity student) {
     // Konversi activities dari Map ke List
     List<String> activitiesList = [];
     if (student.activities['is_in_progress'] == true) activitiesList.add('in-progress');
@@ -83,13 +59,13 @@ class StudentList extends StatelessWidget {
         ).animate(animationController),
         child: StudentCard(
           id: student.id,
-          imageUrl: student.photo_profile ??AppImages.defaultProfile,
+          imageUrl: student.photo_profile ?? AppImages.defaultProfile,
           name: student.name,
           jurusan: student.major,
           kelas: student.the_class,
           nim: student.username,
           isSelected: selectionState.selectedIds.contains(student.id),
-          activities: activitiesList,  // Gunakan list yang sudah dikonversi
+          activities: activitiesList,
           onTap: () => _handleStudentTap(context, student),
           onLongPress: () => _handleStudentLongPress(context, student),
         ),
@@ -116,5 +92,90 @@ class StudentList extends StatelessWidget {
       context.read<SelectionBloc>().add(ToggleSelectionMode());
       context.read<SelectionBloc>().add(ToggleItemSelection(student.id));
     }
+  }
+
+  Future<void> _showArchiveConfirmation(BuildContext context) async {
+    final bloc = context.read<SelectionBloc>();
+    final state = bloc.state;
+    
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirm Archive'),
+          content: Text(
+              'Are you sure you want to archive ${state.selectedIds.length} item(s)?'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            TextButton(
+              child: const Text('Archive'),
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+            ),
+          ],
+        );
+      },
+    ).then((confirmed) {
+      if (confirmed == true) {
+        bloc.add(ArchiveSelectedItems());
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<SelectionBloc, SelectionState>( // Ubah ke BlocConsumer
+      listener: (context, state) {
+        if (animationController.status == AnimationStatus.completed) {
+          animationController.reset();
+          animationController.forward();
+        }
+      },
+      builder: (context, state) {
+        return SliverList(
+          delegate: SliverChildListDelegate([
+            _buildTitle(),
+            const SizedBox(height: 16),
+            BlocBuilder<SelectionBloc, SelectionState>(
+              builder: (context, state) {
+                return FilterSection(
+                  onArchiveTap: state.selectedIds.isNotEmpty
+                      ? () => _showArchiveConfirmation(context)
+                      : null,
+                );
+              },
+            ),
+            const SizedBox(height: 16),
+            Column(
+              children: [
+                ArchiveCard(
+                  archivedStudents: students
+                      .where((student) => state.archivedIds.contains(student.id))
+                      .toList(),
+                ),
+                ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: students
+                      .where((student) => !state.archivedIds.contains(student.id))
+                      .length,
+                  separatorBuilder: (context, index) => const SizedBox(height: 14),
+                  itemBuilder: (context, index) {
+                    final activeStudents = students
+                        .where((student) => !state.archivedIds.contains(student.id))
+                        .toList();
+                    return _buildStudentItem(context, activeStudents[index]);
+                  },
+                ),
+              ],
+            ),
+          ]),
+        );
+      },
+    );
   }
 }
