@@ -22,7 +22,7 @@ class FilterSection extends StatelessWidget {
           duration: const Duration(milliseconds: 300),
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(8),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.05),
@@ -32,7 +32,7 @@ class FilterSection extends StatelessWidget {
             ],
           ),
           child: Padding(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(8),
             child: Row(
               children: [
                 const Expanded(child: FilterJurusan()),
@@ -50,21 +50,23 @@ class FilterSection extends StatelessWidget {
     );
   }
 
-  Widget _buildArchiveButton(BuildContext context) {
-    return ElevatedButton.icon(
-      onPressed: () {
-        if (onArchiveTap != null) {
-          onArchiveTap!();
-        } else {
-          context.read<SelectionBloc>().add(ArchiveSelectedItems());
-        }
-      },
-      icon: const Icon(Icons.archive),
-      label: const Text('Archive'),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        foregroundColor: Colors.white,
-      ),
-    );
-  }
+Widget _buildArchiveButton(BuildContext context) {
+  return ElevatedButton.icon(
+    onPressed: () {
+      if (onArchiveTap != null) {
+        onArchiveTap!();
+      } else {
+        context.read<SelectionBloc>().add(ArchiveSelectedItems());
+      }
+    },
+    icon: const Icon(Icons.archive),
+    label: const Text('Archive'),
+    style: ElevatedButton.styleFrom(
+      backgroundColor: Theme.of(context).colorScheme.primary,
+      foregroundColor: Colors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      fixedSize: const Size(150, 40),
+    ),
+  );
+}
 }

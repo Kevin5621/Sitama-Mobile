@@ -128,13 +128,7 @@ class StudentList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<SelectionBloc, SelectionState>( // Ubah ke BlocConsumer
-      listener: (context, state) {
-        if (animationController.status == AnimationStatus.completed) {
-          animationController.reset();
-          animationController.forward();
-        }
-      },
+    return BlocBuilder<SelectionBloc, SelectionState>(
       builder: (context, state) {
         return SliverList(
           delegate: SliverChildListDelegate([
