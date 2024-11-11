@@ -5,6 +5,7 @@ class SelectionState extends Equatable {
   final Set<int> archivedIds;
   final bool isLoading;
   final String? error;
+  final bool isLocalOperation; 
 
   const SelectionState({
     required this.isSelectionMode,
@@ -12,6 +13,7 @@ class SelectionState extends Equatable {
     required this.archivedIds,
     this.isLoading = false,
     this.error,
+    this.isLocalOperation = false,
   });
 
   SelectionState copyWith({
@@ -20,6 +22,7 @@ class SelectionState extends Equatable {
     Set<int>? archivedIds,
     bool? isLoading,
     String? error,
+    bool? isLocalOperation,
   }) {
     return SelectionState(
       isSelectionMode: isSelectionMode ?? this.isSelectionMode,
@@ -27,6 +30,7 @@ class SelectionState extends Equatable {
       archivedIds: archivedIds ?? this.archivedIds,
       isLoading: isLoading ?? this.isLoading,
       error: error,
+      isLocalOperation: isLocalOperation ?? this.isLocalOperation,
     );
   }
 
@@ -37,5 +41,6 @@ class SelectionState extends Equatable {
         archivedIds,
         isLoading,
         error,
+        isLocalOperation,
       ];
 }

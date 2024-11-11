@@ -6,6 +6,7 @@ import 'package:sistem_magang/domain/entities/lecturer_home_entity.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/lecturer_display_cubit.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/lecturer_display_state.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_bloc.dart';
+import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_event.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_state.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/widgets/header.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/widgets/send_message_bottom.dart';
@@ -47,14 +48,27 @@ class _LecturerHomeContentState extends State<LecturerHomeContent>
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: MultiBlocProvider(
-        providers: [
-          BlocProvider(create: (context) => LecturerDisplayCubit()..displayLecturer()),
-          BlocProvider(create: (context) => SelectionBloc()),
-        ],
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    body: MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => SelectionBloc()..add(LoadArchivedItems()),
+        ),
+        BlocProvider(
+          create: (context) => LecturerDisplayCubit(
+            selectionBloc: context.read<SelectionBloc>(),
+          )..displayLecturer(),
+          lazy: false, // Penting: membuat cubit langsung diinisialisasi
+        ),
+      ],
+      child: BlocListener<SelectionBloc, SelectionState>(
+        listenWhen: (previous, current) => 
+            previous.archivedIds != current.archivedIds,
+        listener: (context, state) {
+          context.read<LecturerDisplayCubit>().displayLecturer();
+        },
         child: BlocBuilder<LecturerDisplayCubit, LecturerDisplayState>(
           builder: (context, state) {
             if (state is LecturerLoading) {
@@ -69,6 +83,7 @@ class _LecturerHomeContentState extends State<LecturerHomeContent>
             return Container();
           },
         ),
+      ),
       ),
     );
   }

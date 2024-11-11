@@ -124,34 +124,30 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
     Emitter<SelectionState> emit,
   ) async {
     try {
-      emit(state.copyWith(isLoading: true, error: null));
+      // Set isLocalOperation to true to prevent unnecessary loading states
+      emit(state.copyWith(isLocalOperation: true));
 
       final updatedArchivedIds = Set<int>.from(state.archivedIds)
         ..removeAll(event.ids);
       
-      await _saveArchivedIds(updatedArchivedIds);
-
-      // Emit state dua kali untuk memastikan perubahan terdeteksi
+      // Update state immediately for UI responsiveness
       emit(state.copyWith(
         archivedIds: updatedArchivedIds,
         selectedIds: {},
         isSelectionMode: false,
-        isLoading: false,
+        isLocalOperation: true,
       ));
 
-      // Emit state lagi dengan nilai yang sama untuk memaksa rebuild
-      emit(state.copyWith(
-        archivedIds: updatedArchivedIds,
-        isLoading: false,
-      ));
+      // Save to SharedPreferences in the background
+      await _saveArchivedIds(updatedArchivedIds);
 
-      print('Unarchived IDs: ${event.ids}');
-      print('Remaining archived IDs: $updatedArchivedIds');
+      // Final emit to confirm persistence
+      emit(state.copyWith(isLocalOperation: false));
     } catch (e) {
       print('Error in unarchive: $e');
       emit(state.copyWith(
-        isLoading: false,
         error: 'Failed to unarchive items: $e',
+        isLocalOperation: false,
       ));
     }
   }
@@ -173,7 +169,6 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
       final prefs = await SharedPreferences.getInstance();
       final List<String> archived = ids.map((id) => id.toString()).toList();
       await prefs.setStringList(_archiveKey, archived);
-      print('Saved archived IDs: $archived');
     } catch (e) {
       print('Error saving archived IDs: $e');
       rethrow;
