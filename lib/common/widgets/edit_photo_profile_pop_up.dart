@@ -2,11 +2,13 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sistem_magang/common/bloc/button/button_state.dart';
 import 'package:sistem_magang/common/bloc/button/button_state_cubit.dart';
 import 'package:sistem_magang/common/widgets/basic_app_button.dart';
 import 'package:sistem_magang/data/models/update_profile_req_params.dart';
 import 'package:sistem_magang/domain/usecases/update_photo_profile.dart';
+import 'package:sistem_magang/presenstation/lecturer/home/pages/lecturer_home.dart';
 import 'package:sistem_magang/presenstation/student/home/pages/home.dart';
 import 'package:sistem_magang/service_locator.dart';
 
@@ -39,20 +41,30 @@ class _EditPhotoProfilePopUpState extends State<EditPhotoProfilePopUp> {
 
   @override
   Widget build(BuildContext context) {
+
+
     return BlocProvider(
       create: (context) => ButtonStateCubit(),
       child: BlocListener<ButtonStateCubit, ButtonState>(
         listener: (context, state) async {
+          SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+          var role = sharedPreferences.getString('role');
+         
           if (state is ButtonSuccessState) {
             var snackBar =
                 SnackBar(content: Text('Berhasil Mengubah Foto Profil'));
             ScaffoldMessenger.of(context).showSnackBar(snackBar);
             Navigator.pushAndRemoveUntil(
               context,
+              role == null? 
               MaterialPageRoute(
                 builder: (context) => HomePage(
                   currentIndex: 3,
                 ),
+              ):MaterialPageRoute(
+                builder: (context) => LecturerHomePage(
+                  currentIndex: 1,
+                )
               ),
               (Route<dynamic> route) => false,
             );

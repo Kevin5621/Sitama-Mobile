@@ -3,10 +3,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:sistem_magang/common/widgets/edit_photo_profile_pop_up.dart';
 import 'package:sistem_magang/common/widgets/log_out_alert.dart';
 import 'package:sistem_magang/common/widgets/notification.dart';
 import 'package:sistem_magang/common/widgets/setting_button.dart';
 import 'package:sistem_magang/core/config/assets/app_images.dart';
+import 'package:sistem_magang/core/config/themes/app_color.dart';
 import 'package:sistem_magang/core/config/themes/theme_provider.dart';
 import 'package:sistem_magang/core/service/notification_service.dart';
 import 'package:sistem_magang/domain/entities/lecturer_profile_entity.dart';
@@ -40,7 +42,7 @@ class _LecturerProfilePageState extends State<LecturerProfilePage> {
               body: SingleChildScrollView(
                 child: Column(
                   children: [
-                    _header(state.lecturerProfileEntity, colorScheme as LecturerProfileEntity),
+                    _header(colorScheme, state.lecturerProfileEntity),
                     const SizedBox(height: 22),
                     _settingsList(context, isDarkMode),
                   ],
@@ -85,51 +87,41 @@ class _LecturerProfilePageState extends State<LecturerProfilePage> {
             ),
             const SizedBox(height: 45),
             Container(
-              height: 100,
-              width: 100,
+              height: 80,
+              width: 80,
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: colorScheme.background,
-                  width: 2,
+                  color: AppColors.lightBackground,
                 ),
-                borderRadius: BorderRadius.circular(40),
-                boxShadow: [
-                  BoxShadow(
-                    color: colorScheme.shadow,
-                    blurRadius: 8,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
+                borderRadius: BorderRadius.circular(32),
                 image: DecorationImage(
                   image: profile.photo_profile != null
                       ? NetworkImage(profile.photo_profile!)
-                      : const AssetImage(AppImages.defaultProfile) as ImageProvider,
+                      : const AssetImage(AppImages.defaultProfile)
+                          as ImageProvider<Object>,
                   fit: BoxFit.cover,
                 ),
               ),
               child: Align(
                 alignment: Alignment.bottomRight,
                 child: Container(
-                  width: 36,
-                  height: 36,
+                  width: 30,
+                  height: 30,
                   transform: Matrix4.translationValues(5, 5, 0),
-                  decoration: BoxDecoration(
-                    color: colorScheme.primary,
+                  decoration: const BoxDecoration(
+                    color: AppColors.lightPrimary,
                     shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: colorScheme.shadow,
-                        blurRadius: 4,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
                   ),
                   child: IconButton(
-                    onPressed: () {},
-                    icon: Icon(
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) => const EditPhotoProfilePopUp());
+                    },
+                    icon: const Icon(
                       Icons.edit,
-                      color: colorScheme.onPrimary,
-                      size: 18,
+                      color: AppColors.lightWhite,
+                      size: 16,
                     ),
                   ),
                 ),
