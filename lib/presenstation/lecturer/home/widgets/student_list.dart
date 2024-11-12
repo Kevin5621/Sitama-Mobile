@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sistem_magang/common/widgets/alert.dart';
 import 'package:sistem_magang/core/config/assets/app_images.dart';
 import 'package:sistem_magang/domain/entities/lecturer_home_entity.dart';
 import 'package:sistem_magang/presenstation/lecturer/detail_student/pages/detail_student.dart';
@@ -97,33 +98,22 @@ class StudentList extends StatelessWidget {
   Future<void> _showArchiveConfirmation(BuildContext context) async {
     final bloc = context.read<SelectionBloc>();
     final state = bloc.state;
+    final colorScheme = Theme.of(context).colorScheme;
     
-    return showDialog(
+    final result = await CustomAlertDialog.show(
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Confirm Archive'),
-          content: Text(
-              'Are you sure you want to archive ${state.selectedIds.length} item(s)?'),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Cancel'),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            TextButton(
-              child: const Text('Archive'),
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
-            ),
-          ],
-        );
-      },
-    ).then((confirmed) {
-      if (confirmed == true) {
-        bloc.add(ArchiveSelectedItems());
-      }
-    });
+      title: 'Konfirmasi Arsip',
+      message: 'Apakah Anda yakin ingin mengarsipkan ${state.selectedIds.length} item?',
+      cancelText: 'Batal',
+      confirmText: 'Arsipkan',
+      confirmColor: colorScheme.primary,
+      icon: Icons.archive_outlined, 
+      iconColor: colorScheme.primary,
+    );
+
+    if (result == true) {
+      bloc.add(ArchiveSelectedItems());
+    }
   }
 
   @override

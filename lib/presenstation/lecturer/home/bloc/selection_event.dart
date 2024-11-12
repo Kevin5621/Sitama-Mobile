@@ -50,3 +50,5 @@ class UnarchiveItems extends SelectionEvent {
 }
 
 class LoadArchivedItems extends SelectionEvent {}
+
+class ClearSelectionMode extends SelectionEvent {}

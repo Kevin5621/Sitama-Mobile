@@ -22,6 +22,7 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
     on<ArchiveSelectedItems>(_onArchiveSelectedItems);
     on<UnarchiveItems>(_onUnarchiveItems);
     on<LoadArchivedItems>(_onLoadArchivedItems);
+    on<ClearSelectionMode>(_onClearSelectionMode);
 
     // Load archived items when bloc is created
     add(LoadArchivedItems());
@@ -93,6 +94,16 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
     }
   }
 
+  Future<void> _onClearSelectionMode(
+  ClearSelectionMode event,
+  Emitter<SelectionState> emit,
+) async {
+  emit(state.copyWith(
+    isSelectionMode: false,
+    selectedIds: {},
+  ));
+}
+
   Future<void> _onArchiveSelectedItems(
     ArchiveSelectedItems event,
     Emitter<SelectionState> emit,
@@ -144,7 +155,6 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
       // Final emit to confirm persistence
       emit(state.copyWith(isLocalOperation: false));
     } catch (e) {
-      print('Error in unarchive: $e');
       emit(state.copyWith(
         error: 'Failed to unarchive items: $e',
         isLocalOperation: false,
@@ -159,7 +169,6 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
       if (archived == null || archived.isEmpty) return {};
       return archived.map((id) => int.parse(id)).toSet();
     } catch (e) {
-      print('Error getting archived IDs: $e');
       rethrow;
     }
   }
@@ -170,7 +179,6 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
       final List<String> archived = ids.map((id) => id.toString()).toList();
       await prefs.setStringList(_archiveKey, archived);
     } catch (e) {
-      print('Error saving archived IDs: $e');
       rethrow;
     }
   }

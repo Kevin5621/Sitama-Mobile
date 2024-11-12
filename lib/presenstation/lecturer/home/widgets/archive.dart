@@ -1,6 +1,8 @@
 // archive_page.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sistem_magang/common/widgets/alert.dart';
+import 'package:sistem_magang/common/widgets/search_field.dart';
 import 'package:sistem_magang/core/config/assets/app_images.dart';
 import 'package:sistem_magang/domain/entities/lecturer_home_entity.dart';
 import 'package:sistem_magang/presenstation/lecturer/detail_student/pages/detail_student.dart';
@@ -22,14 +24,12 @@ class ArchivePage extends StatefulWidget {
 }
 
 class _ArchivePageState extends State<ArchivePage> {
-  late TextEditingController _searchController;
   List<LecturerStudentsEntity> _filteredStudents = [];
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey();
 
   @override
   void initState() {
     super.initState();
-    _searchController = TextEditingController();
     _synchronizeArchivedStudents();
   }
 
@@ -51,12 +51,6 @@ class _ArchivePageState extends State<ArchivePage> {
     if (widget.archivedStudents != oldWidget.archivedStudents) {
       _synchronizeArchivedStudents();
     }
-  }
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
   }
 
   void _filterStudents(String query) {
@@ -89,28 +83,19 @@ class _ArchivePageState extends State<ArchivePage> {
     }
     return true;
   }
-
+  
   Future<void> _showUnarchiveConfirmation(
-      BuildContext context, Set<int> selectedIds) async {
-    final bool? result = await showDialog<bool>(
+    BuildContext context, Set<int> selectedIds) async {
+    final colorScheme = Theme.of(context).colorScheme;
+    final result = await CustomAlertDialog.show(
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Confirm Unarchive'),
-          content: Text(
-              'Are you sure you want to unarchive ${selectedIds.length} item(s)?'),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Cancel'),
-              onPressed: () => Navigator.of(context).pop(false),
-            ),
-            TextButton(
-              child: const Text('Unarchive'),
-              onPressed: () => Navigator.of(context).pop(true),
-            ),
-          ],
-        );
-      },
+      title: 'Konfirmasi Batal Arsip',
+      message: 'Apakah Anda yakin ingin membatalkan arsip ${selectedIds.length} item?',
+      cancelText: 'Batal',
+      confirmText: 'Batal Arsip',
+      confirmColor: colorScheme.primary,
+      icon: Icons.unarchive_outlined,
+      iconColor: colorScheme.primary,
     );
 
     if (result == true && mounted) {
@@ -125,16 +110,23 @@ class _ArchivePageState extends State<ArchivePage> {
       // Synchronize with current bloc state
       _synchronizeArchivedStudents();
       
-      // Exit selection mode
-      selectionBloc.add(ToggleSelectionMode());
+      // Clear selection mode
+      if (mounted) {
+        selectionBloc.add(ClearSelectionMode());
+      }
       
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('${selectedIds.length} items unarchived'),
+            content: Text('${selectedIds.length} item berhasil dibatalkan arsip'),
             duration: const Duration(seconds: 2),
           ),
         );
+
+        // Check if no items left, then pop the page
+        if (_filteredStudents.isEmpty) {
+          Navigator.of(context).pop();
+        }
       }
     }
   }
@@ -155,107 +147,88 @@ class _ArchivePageState extends State<ArchivePage> {
       child: BlocBuilder<SelectionBloc, SelectionState>(
         builder: (context, selectionState) {
           return WillPopScope(
-          onWillPop: _onWillPop,
-          child: Scaffold(
-        appBar: AppBar(
-          leading: BlocBuilder<SelectionBloc, SelectionState>(
-            builder: (context, state) {
-              return IconButton(
-                icon: Icon(
-                  state.isSelectionMode ? Icons.close : Icons.arrow_back,
-                ),
-                onPressed: () {
-                  if (state.isSelectionMode) {
-                    context.read<SelectionBloc>().add(ToggleSelectionMode());
-                  } else {
-                    Navigator.of(context).pop();
-                  }
-                },
-              );
-            },
-          ),
-          title: const Text('Archived Students'),
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(60),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                controller: _searchController,
-                onChanged: _filterStudents,
-                decoration: InputDecoration(
-                  hintText: 'Search archived students...',
-                  prefixIcon: const Icon(Icons.search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
+            onWillPop: _onWillPop,
+            child: Scaffold(
+              appBar: AppBar(
+                leading: IconButton(
+                  icon: Icon(
+                    selectionState.isSelectionMode ? Icons.close : Icons.arrow_back,
                   ),
-                  filled: true,
-                  fillColor: Colors.white,
-                ),
-              ),
-            ),
-          ),
-          actions: [
-            BlocBuilder<SelectionBloc, SelectionState>(
-              builder: (context, state) {
-                if (state.isSelectionMode && state.selectedIds.isNotEmpty) {
-                  return TextButton.icon(
-                    onPressed: () =>
-                        _showUnarchiveConfirmation(context, state.selectedIds),
-                    icon: const Icon(Icons.unarchive, color: Colors.white),
-                    label: const Text(
-                      'Unarchive',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  );
-                }
-                return const SizedBox.shrink();
-              },
-            ),
-          ],
-        ),
-        body: RefreshIndicator(
-          key: _refreshIndicatorKey,
-          onRefresh: _refreshArchiveList,
-          child: _filteredStudents.isEmpty
-              ? Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        Icons.archive_outlined,
-                        size: 64,
-                        color: Colors.grey,
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        _searchController.text.isEmpty
-                            ? 'No archived students'
-                            : 'No results found',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              : ListView.separated(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: _filteredStudents.length,
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(height: 14),
-                  itemBuilder: (context, index) {
-                    final student = _filteredStudents[index];
-                    return _buildStudentCard(student);
+                  onPressed: () {
+                    if (selectionState.isSelectionMode) {
+                      context.read<SelectionBloc>().add(ClearSelectionMode());
+                    } else {
+                      Navigator.of(context).pop();
+                    }
                   },
                 ),
+                title: const Text('Arsip Mahasiswa'),
+                bottom: PreferredSize(
+                  preferredSize: const Size.fromHeight(60),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SearchField(
+                      onChanged: _filterStudents,
+                      onFilterPressed: () {}, // Bisa diimplementasikan jika diperlukan
+                    ),
+                  ),
+                ),
+                actions: [
+                  if (selectionState.isSelectionMode && selectionState.selectedIds.isNotEmpty)
+                    TextButton.icon(
+                      onPressed: () =>
+                          _showUnarchiveConfirmation(context, selectionState.selectedIds),
+                      icon: const Icon(Icons.unarchive, color: Colors.white),
+                      label: const Text(
+                        'Batal Arsip',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                ],
+              ),
+              body: RefreshIndicator(
+                key: _refreshIndicatorKey,
+                onRefresh: _refreshArchiveList,
+                child: _filteredStudents.isEmpty
+                    ? Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Icon(
+                              Icons.archive_outlined,
+                              size: 64,
+                              color: Colors.grey,
+                            ),
+                            SizedBox(height: 16),
+                            Text(
+                              'Tidak ada mahasiswa yang diarsipkan',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    : ListView.separated(
+                        padding: const EdgeInsets.all(16),
+                        itemCount: _filteredStudents.length,
+                        separatorBuilder: (context, index) =>
+                            const SizedBox(height: 14),
+                        itemBuilder: (context, index) {
+                          final student = _filteredStudents[index];
+                          return _buildStudentCard(student);
+                        },
+                      ),
+              ),
             ),
-          ),
-    );
+          );
         },
       ),
     );
   }
+
+  // ... rest of the methods remain the same ...
 }
 
   Widget _buildStudentCard(LecturerStudentsEntity student) {
