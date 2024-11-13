@@ -9,7 +9,7 @@ import 'package:sistem_magang/common/widgets/basic_app_button.dart';
 import 'package:sistem_magang/core/config/assets/app_images.dart';
 import 'package:sistem_magang/core/config/themes/app_color.dart';
 import 'package:sistem_magang/data/models/signin_req_params.dart';
-import 'package:sistem_magang/domain/usecases/signin.dart';
+import 'package:sistem_magang/domain/usecases/general/signin.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/pages/lecturer_home.dart';
 import 'package:sistem_magang/presenstation/student/home/pages/home.dart';
 import 'package:sistem_magang/service_locator.dart';

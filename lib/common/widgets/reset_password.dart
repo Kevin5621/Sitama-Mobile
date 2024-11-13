@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sistem_magang/common/widgets/reset_password_field.dart';
 import 'package:sistem_magang/data/models/reset_password_req_params.dart';
-import 'package:sistem_magang/domain/usecases/reset_password.dart';
+import 'package:sistem_magang/domain/usecases/general/reset_password.dart';
 import 'package:sistem_magang/service_locator.dart';
 
 class ResetPasswordPage extends StatefulWidget {

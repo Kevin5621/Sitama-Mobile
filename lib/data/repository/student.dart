@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:sistem_magang/data/models/guidance.dart';
 import 'package:sistem_magang/data/models/log_book.dart';
+import 'package:sistem_magang/data/models/notification.dart';
 import 'package:sistem_magang/data/models/student_home.dart';
 import 'package:sistem_magang/data/source/student_api_service.dart';
 import 'package:sistem_magang/domain/repository/student.dart';
@@ -184,6 +185,33 @@ class StudentRepositoryImpl extends StudentRepository {
 
         try {
           var dataModel = StudentProfileModel.fromMap(response.data['data']);
+          var dataEntity = dataModel.toEntity();
+          return Right(dataEntity);
+        } catch (e) {
+          return Left("Parsing error: $e");
+        }
+      },
+    );
+  }
+  
+  @override
+  Future<Either> getNotifications() async {
+    Either result = await sl<StudentApiService>().getNotifications();
+    return result.fold(
+      (error) {
+        return Left(error);
+      },
+      (data) {
+        Response response = data;
+
+        // Check if 'data' is not null and is a Map
+        if (response.data['data'] == null ||
+            response.data['data'] is! Map<String, dynamic>) {
+          return Left("Invalid data format");
+        }
+
+        try {
+          var dataModel = NotificationDataModel.fromJson(response.data['data']);
           var dataEntity = dataModel.toEntity();
           return Right(dataEntity);
         } catch (e) {

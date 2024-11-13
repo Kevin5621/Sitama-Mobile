@@ -4,7 +4,7 @@ import 'package:sistem_magang/common/bloc/button/button_state.dart';
 import 'package:sistem_magang/common/bloc/button/button_state_cubit.dart';
 import 'package:sistem_magang/common/widgets/alert.dart';
 import 'package:sistem_magang/core/config/themes/app_color.dart';
-import 'package:sistem_magang/domain/usecases/delete_guidance_student.dart';
+import 'package:sistem_magang/domain/usecases/student/guidances/delete_guidance_student.dart';
 import 'package:sistem_magang/presenstation/student/home/pages/home.dart';
 import 'package:sistem_magang/service_locator.dart';
 

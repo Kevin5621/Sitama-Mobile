@@ -20,14 +20,11 @@ class _LogBookPageState extends State<LogBookPage> {
   String _search = '';
   SortMode _sortMode = SortMode.newest;
 
-  // Function to sort logbooks
   List<LogBookEntity> _getSortedAndFilteredLogBooks(List<LogBookEntity> logBooks) {
-    // Filter berdasarkan pencarian
     var filteredBooks = logBooks.where((logBook) {
       return logBook.title.toLowerCase().contains(_search.toLowerCase());
     }).toList();
 
-    // Urutkan berdasarkan tanggal
     filteredBooks.sort((a, b) {
       if (_sortMode == SortMode.newest) {
         return b.date.compareTo(a.date);
@@ -39,13 +36,11 @@ class _LogBookPageState extends State<LogBookPage> {
     return filteredBooks;
   }
 
-
-   @override
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     
     return Scaffold(
-      appBar: _appBar(theme),
       body: BlocProvider(
         create: (context) => LogBookStudentCubit()..displayLogBook(),
         child: BlocBuilder<LogBookStudentCubit, LogBookStudentState>(
@@ -57,39 +52,80 @@ class _LogBookPageState extends State<LogBookPage> {
               final sortedAndFilteredLogBooks = 
                 _getSortedAndFilteredLogBooks(state.logBookEntity.log_books);
               
-              return CustomScrollView(
-                slivers: [
-                  SliverToBoxAdapter(child: SizedBox(height: 12)),
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: SearchField(
-                              onChanged: (value) {
+              return NestedScrollView(
+                headerSliverBuilder: (context, innerBoxIsScrolled) {
+                  return [
+                    SliverAppBar(
+                      floating: false,
+                      pinned: true,
+                      toolbarHeight: 80.0,
+                      title: Text(
+                        'LogBook',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: theme.colorScheme.onBackground,
+                        ),
+                      ),
+                      centerTitle: true,
+                      automaticallyImplyLeading: false,
+                      actions: [
+                        IconButton(
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AddLogBook();
+                              },
+                            );
+                          },
+                          icon: Icon(
+                            Icons.add,
+                            color: theme.colorScheme.onBackground,
+                          ),
+                        )
+                      ],
+                      backgroundColor: theme.scaffoldBackgroundColor,
+                    ),
+                    SliverAppBar(
+                      pinned: true,
+                      floating: false,
+                      automaticallyImplyLeading: false,
+                      toolbarHeight: 80,
+                      backgroundColor: theme.scaffoldBackgroundColor,
+                      flexibleSpace: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: SearchField(
+                                onChanged: (value) {
+                                  setState(() {
+                                    _search = value;
+                                  });
+                                },
+                                onFilterPressed: () {},
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            SortFilterButton(
+                              onSortModeChanged: (SortMode newMode) {
                                 setState(() {
-                                  _search = value;
+                                  _sortMode = newMode;
                                 });
                               },
-                              onFilterPressed: () {},
                             ),
-                          ),
-                          const SizedBox(width: 10),
-                          SortFilterButton(
-                            onSortModeChanged: (SortMode newMode) {
-                              setState(() {
-                                _sortMode = newMode;
-                              });
-                            },
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  SliverToBoxAdapter(child: SizedBox(height: 20)),
-                  _listLogBook(sortedAndFilteredLogBooks),
-                ],
+                  ];
+                },
+                body: CustomScrollView(
+                  slivers: [
+                    _listLogBook(sortedAndFilteredLogBooks),
+                  ],
+                ),
               );
             }
             if (state is LoadLogBookFailure) {
@@ -98,42 +134,6 @@ class _LogBookPageState extends State<LogBookPage> {
             return Container();
           },
         ),
-      ),
-    );
-  }
-
-  AppBar _appBar(ThemeData theme) {
-    return AppBar(
-      toolbarHeight: 80.0,
-      title: Text(
-        'LogBook',
-        style: TextStyle(
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-          color: theme.colorScheme.onBackground, // Mengatur warna teks sesuai theme
-        ),
-      ),
-      centerTitle: true,
-      automaticallyImplyLeading: false,
-      actions: [
-        IconButton(
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (context) {
-                return AddLogBook();
-              },
-            );
-          },
-          icon: Icon(
-            Icons.add,
-            color: theme.colorScheme.onBackground, 
-          ),
-        )
-      ],
-      backgroundColor: Colors.transparent,
-      iconTheme: IconThemeData(
-        color: theme.colorScheme.onBackground, 
       ),
     );
   }

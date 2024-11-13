@@ -18,6 +18,8 @@ abstract class StudentApiService {
   Future<Either> addLogBook(AddLogBookReqParams request);
   Future<Either> editLogBook(EditLogBookReqParams request);
   Future<Either> deleteLogBook(int id);
+  
+  Future<Either> getNotifications();
 
   Future<Either> getStudentProfile();
 }
@@ -236,6 +238,23 @@ class StudentApiServiceImpl extends StudentApiService {
       var token = sharedPreferences.get('token');
 
       var response = await sl<DioClient>().get(ApiUrls.studentProfile,
+          options: Options(headers: {
+            'Authorization': 'Bearer $token',
+          }));
+      return Right(response);
+    } on DioException catch (e) {
+      return Left(e.response!.data['errors']['message']);
+    }
+  }
+  
+  @override
+  Future<Either> getNotifications() async {
+    try {
+      SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+      var token = sharedPreferences.get('token');
+
+      var response = await sl<DioClient>().get(ApiUrls.notification,
           options: Options(headers: {
             'Authorization': 'Bearer $token',
           }));
