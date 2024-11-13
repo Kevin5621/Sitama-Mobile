@@ -6,6 +6,7 @@ import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_event.d
 
 void showSendMessageBottomSheet(BuildContext context) {
   final TextEditingController messageController = TextEditingController();
+  final isDark = Theme.of(context).brightness == Brightness.dark;
 
   showModalBottomSheet(
     context: context,
@@ -18,9 +19,9 @@ void showSendMessageBottomSheet(BuildContext context) {
             padding: EdgeInsets.only(
               bottom: MediaQuery.of(context).viewInsets.bottom,
             ),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            decoration: BoxDecoration(
+              color: isDark ? AppColors.darkWhite : AppColors.lightWhite,
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
             ),
             child: Padding(
               padding: const EdgeInsets.all(20),
@@ -30,7 +31,7 @@ void showSendMessageBottomSheet(BuildContext context) {
                 children: [
                   _buildHeader(context),
                   const SizedBox(height: 20),
-                  _buildMessageField(messageController),
+                  _buildMessageField(messageController, context),
                   const SizedBox(height: 20),
                   _buildSendButton(context, messageController),
                 ],
@@ -44,53 +45,71 @@ void showSendMessageBottomSheet(BuildContext context) {
 }
 
 Widget _buildHeader(BuildContext context) {
+  final isDark = Theme.of(context).brightness == Brightness.dark;
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
-      const Text(
+      Text(
         'Send Message',
         style: TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.bold,
+          color: isDark ? AppColors.lightWhite : AppColors.lightBlack,
         ),
       ),
       IconButton(
-        icon: const Icon(Icons.close),
+        icon: Icon(
+          Icons.close,
+          color: isDark ? AppColors.lightWhite : AppColors.lightBlack,
+        ),
         onPressed: () => Navigator.pop(context),
       ),
     ],
   );
 }
 
-Widget _buildMessageField(TextEditingController controller) {
+Widget _buildMessageField(TextEditingController controller, BuildContext context) {
+  final isDark = Theme.of(context).brightness == Brightness.dark;
+
   return Container(
     decoration: BoxDecoration(
-      color: Colors.grey[50],
+      color: isDark ? AppColors.darkPrimaryDark : AppColors.lightWhite,
       borderRadius: BorderRadius.circular(12),
-      border: Border.all(color: Colors.grey[200]!),
+      border: Border.all(
+        color: isDark ? AppColors.darkGray : AppColors.lightGray500,
+      ),
     ),
     child: TextField(
       controller: controller,
       maxLines: 4,
+      style: TextStyle(
+        color: isDark ? AppColors.lightWhite : AppColors.darkPrimaryDark,
+      ),
       decoration: InputDecoration(
         hintText: "Type your message here...",
-        hintStyle: TextStyle(color: Colors.grey[400]),
+        hintStyle: TextStyle(
+          color: isDark ? AppColors.darkGray : AppColors.lightGray,
+        ),
         contentPadding: const EdgeInsets.all(16),
         border: InputBorder.none,
+        filled: true, // Tambahan untuk memastikan latar terisi
+        fillColor: isDark ? AppColors.darkGray500: AppColors.lightWhite,
       ),
     ),
   );
 }
 
 Widget _buildSendButton(BuildContext context, TextEditingController controller) {
+  final isDark = Theme.of(context).brightness == Brightness.dark;
+
   return Row(
     children: [
       Expanded(
         child: ElevatedButton(
           onPressed: () => _handleSendMessage(context, controller),
           style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.lightPrimary,
-            foregroundColor: Colors.white,
+            backgroundColor: isDark ? AppColors.darkPrimaryLight : AppColors.lightPrimary,
+            foregroundColor: AppColors.lightWhite,
             padding: const EdgeInsets.symmetric(vertical: 16),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
@@ -125,16 +144,18 @@ void _handleSendMessage(BuildContext context, TextEditingController controller) 
 }
 
 void _showSuccessSnackbar(BuildContext context) {
+  final isDark = Theme.of(context).brightness == Brightness.dark;
+
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
-      content: const Row(
+      content: Row(
         children: [
-          Icon(Icons.check_circle, color: Colors.white),
-          SizedBox(width: 8),
-          Text('Message sent successfully'),
+          Icon(Icons.check_circle, color: isDark ? AppColors.lightWhite : Colors.white),
+          const SizedBox(width: 8),
+          const Text('Message sent successfully'),
         ],
       ),
-      backgroundColor: Colors.green,
+      backgroundColor: isDark ? AppColors.darkPrimary500 : Colors.green,
       behavior: SnackBarBehavior.floating,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
