@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:sistem_magang/core/config/themes/app_color.dart';
 
@@ -40,42 +42,16 @@ class StudentCard extends StatelessWidget {
     }
   }
 
-  Color _getactivitiesColor(String activity, bool isDark) {
+  Color _getactivitiesColor(String activity) {
     switch (activity) {
       case 'in-progress':
-        return isDark 
-          ? AppColors.lightGray 
-          : const Color(0xFF757575); // Darker grey
+        return AppColors.lightGray;
       case 'updated':
-        return isDark 
-          ? AppColors.lightWarning 
-          : const Color(0xFFE65100); // Darker orange
+        return AppColors.lightWarning;
       case 'rejected':
-        return isDark 
-          ? AppColors.lightDanger 
-          : const Color(0xFFB71C1C); // Darker red
+        return AppColors.lightDanger;
       default:
-        return isDark 
-          ? AppColors.darkGray 
-          : const Color(0xFF424242); // Even darker grey
-    }
-  }
-
-  Color _getIconColor(String activity, bool isDark, Color backgroundColor) {
-    // Kontras dengan background untuk memastikan visibility
-    if (isSelected) {
-      return Colors.white; 
-    }
-    
-    switch (activity) {
-      case 'in-progress':
-        return isDark ? Colors.white : Colors.white;
-      case 'updated':
-        return Colors.white;
-      case 'rejected':
-        return Colors.white;
-      default:
-        return isDark ? Colors.white : Colors.white;
+        return AppColors.lightGray;
     }
   }
 
@@ -84,7 +60,7 @@ class StudentCard extends StatelessWidget {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final backgroundColor = isSelected 
-        ? Colors.blueAccent.withOpacity(0.3) 
+        ? AppColors.getPrimaryColor(isDark).withOpacity(0.3)
         : (isDark ? AppColors.darkGray500 : AppColors.lightWhite);
     
     final textColor = isDark ? AppColors.lightWhite : AppColors.lightBlack;
@@ -103,9 +79,10 @@ class StudentCard extends StatelessWidget {
               top: 8,
               right: 8,
               child: SizedBox(
-                width: activities.length * 20.0,
+                width: max(24.0, activities.length * 20.0), // Minimal width untuk 1 icon
                 height: 24,
                 child: Stack(
+                  alignment: Alignment.centerRight, // Memastikan alignment ke kanan
                   children: activities
                       .asMap()
                       .entries
@@ -116,17 +93,17 @@ class StudentCard extends StatelessWidget {
                             width: 24,
                             height: 24,
                             decoration: BoxDecoration(
-                              color: _getactivitiesColor(entry.value, isDark),
+                              color: _getactivitiesColor(entry.value),
                               shape: BoxShape.circle,
                               border: Border.all(
                                 color: isSelected 
-                                  ? Colors.white.withOpacity(0.8)
+                                  ? AppColors.lightWhite.withOpacity(0.8)
                                   : backgroundColor,
                                 width: 1.5,
                               ),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(0.2),
+                                  color: AppColors.lightBlack.withOpacity(0.2),
                                   spreadRadius: 1,
                                   blurRadius: 2,
                                   offset: const Offset(0, 1),
@@ -137,7 +114,7 @@ class StudentCard extends StatelessWidget {
                               child: Icon(
                                 _getactivitiesIcon(entry.value),
                                 size: 14,
-                                color: _getIconColor(entry.value, isDark, backgroundColor),
+                                color: AppColors.lightWhite,
                               ),
                             ),
                           ),
@@ -149,7 +126,7 @@ class StudentCard extends StatelessWidget {
                 ),
               ),
             ),
-            // Main Content remains the same
+            // Main Content
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Row(
@@ -159,11 +136,13 @@ class StudentCard extends StatelessWidget {
                     width: 40,
                     decoration: BoxDecoration(
                       color: isSelected 
-                          ? Colors.blue.withOpacity(0.5) 
+                          ? AppColors.getPrimaryColor(isDark).withOpacity(0.5)
                           : backgroundColor,
                       shape: BoxShape.circle,
                       border: Border.all(
-                        color: isSelected ? Colors.blue : (isDark ? AppColors.darkGray : AppColors.lightGray),
+                        color: isSelected 
+                            ? AppColors.getPrimaryColor(isDark)
+                            : (isDark ? AppColors.darkGray : AppColors.lightGray),
                         width: isSelected ? 2 : 1,
                       ),
                     ),
@@ -198,9 +177,7 @@ class StudentCard extends StatelessWidget {
                           nim,
                           style: TextStyle(
                             fontSize: 14,
-                            color: isSelected 
-                                  ? AppColors.lightBlack 
-                                  : secondaryTextColor
+                            color: secondaryTextColor
                           ),
                         ),
                         const SizedBox(height: 4),
@@ -211,9 +188,7 @@ class StudentCard extends StatelessWidget {
                               jurusan,
                               style: TextStyle(
                                 fontSize: 14,
-                                color: isSelected 
-                                  ? AppColors.lightBlack 
-                                  : secondaryTextColor
+                                color: secondaryTextColor
                               ),
                             ),
                             Text(

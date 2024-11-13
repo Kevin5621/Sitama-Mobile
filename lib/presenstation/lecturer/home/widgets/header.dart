@@ -1,7 +1,8 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sistem_magang/common/widgets/search_field.dart';
-import 'package:sistem_magang/core/config/themes/app_color.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_bloc.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_event.dart';
 
@@ -50,15 +51,11 @@ class Header extends StatelessWidget {
     height: 40,
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(8),
-      color: AppColors.lightWhite,
-      boxShadow: [
-        BoxShadow(
-          color: Colors.black.withOpacity(0.1),
-          spreadRadius: 1,
-          blurRadius: 2,
-          offset: const Offset(0, 1),
-        ),
-      ],
+      color: colorScheme.surface,
+      border: Border.all(
+        color: colorScheme.outline,
+        width: 1,
+      ),
     ),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
