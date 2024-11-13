@@ -37,40 +37,20 @@ class NotificationList {
 }
 }
 
-// Response wrapper untuk list notifikasi
-class NotificationModel {
-  final String code;
-  final String status;
-  final NotificationData data;
-
-  NotificationModel({
-    required this.code,
-    required this.status,
-    required this.data,
-  });
-
-  factory NotificationModel.fromJson(Map<String, dynamic> json) {
-  return NotificationModel(
-    code: json['code'] ?? '',
-    status: json['status'] ?? '',
-    data: NotificationData.fromJson(json['data'] ?? {'notifications': []}),
-  );
-}
-}
 
 // Data class untuk menampung list notifikasi
-class NotificationData {
+class NotificationDataModel {
   final List<NotificationList> notifications;
 
-  NotificationData({
+  NotificationDataModel({
     required this.notifications,
   });
 
-  factory NotificationData.fromJson(Map<String, dynamic> json) {
+  factory NotificationDataModel.fromJson(Map<String, dynamic> json) {
     var notificationsList = json['notifications'];
-    if (notificationsList == null) return NotificationData(notifications: []);
+    if (notificationsList == null) return NotificationDataModel(notifications: []);
     
-    return NotificationData(
+    return NotificationDataModel(
       notifications: (notificationsList as List)
           .map((notification) => NotificationList.fromJson(notification))
           .toList(),
@@ -78,26 +58,20 @@ class NotificationData {
   }
 }
 
-extension NotificationXModel on NotificationModel {
-  NotificationResponseEntity toEntity() {
-    return NotificationResponseEntity(
-      code: code,
-      status: status,
-      data: NotificationDataEntity(
-        notifications: data.notifications
-            .map((notification) => NotificationItemEntity(
-                  id: notification.id,
-                  userId: notification.userId,
-                  message: notification.message,
-                  date: notification.date,
-                  category: notification.category,
-                  isRead: notification.isRead,
-                  detailText: notification.detailText,
-                  createdAt: notification.createdAt,
-                  updatedAt: notification.updatedAt,
-                ))
-            .toList(),
-      ),
+extension NotificationXModel on NotificationDataModel {
+  NotificationDataEntity toEntity() {
+    return NotificationDataEntity (
+      notifications: notifications
+      .map<NotificationItemEntity>((data) => NotificationItemEntity(
+        id: data.id, 
+        userId: data.userId, 
+        message: data.message, 
+        date: data.date, 
+        category: data.category, 
+        isRead: data.isRead, 
+        createdAt: data.createdAt, 
+        updatedAt: data.updatedAt,
+      )).toList()
     );
   }
 }

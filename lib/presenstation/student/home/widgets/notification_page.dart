@@ -15,7 +15,7 @@ class NotificationPage extends StatefulWidget {
 class _NotificationPageState extends State<NotificationPage> {
   final RefreshController _refreshController = RefreshController();
   final _getNotificationsUseCase = sl<GetNotificationsUseCase>();
-  List<NotificationList> _notifications = [];
+  List<NotificationItemEntity> _notifications = [];
   bool _isLoading = true;
   String? _error;
 
@@ -59,19 +59,7 @@ class _NotificationPageState extends State<NotificationPage> {
         },
         (notificationEntity) {
           setState(() {
-            _notifications = notificationEntity.data.notifications
-                .map((notification) => NotificationList(
-                      id: notification.id,
-                      userId: notification.userId,
-                      message: notification.message,
-                      date: notification.date,
-                      category: notification.category,
-                      isRead: notification.isRead,
-                      detailText: notification.detailText,
-                      createdAt: notification.createdAt,
-                      updatedAt: notification.updatedAt,
-                    ))
-                .toList();
+            _notifications = notificationEntity.notifications;
             _isLoading = false;
           });
           _refreshController.refreshCompleted();

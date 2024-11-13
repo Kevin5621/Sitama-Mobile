@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sistem_magang/data/models/notification.dart';
 
 class NotificationCard extends StatefulWidget {
-  final NotificationList notification;
+  final NotificationItemEntity notification;
   final VoidCallback onTap;
 
   const NotificationCard({

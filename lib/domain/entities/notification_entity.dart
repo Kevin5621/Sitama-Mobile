@@ -1,6 +1,4 @@
 
-import 'package:sistem_magang/data/models/notification.dart';
-
 class NotificationItemEntity  {
   final int id;
   final int userId;
@@ -25,22 +23,10 @@ class NotificationItemEntity  {
   });
 }
 
-// Response wrapper untuk list notifikasi
-class NotificationStatusEntity {
-  final String code;
-  final String status;
-  final NotificationData data;
-
-  NotificationStatusEntity({
-    required this.code,
-    required this.status,
-    required this.data,
-  });
-}
 
 // Data class untuk menampung list notifikasi
 class NotificationDataEntity {
-  final List<NotificationItemEntity > notifications;
+  final List<NotificationItemEntity> notifications;
 
   NotificationDataEntity({
     required this.notifications,

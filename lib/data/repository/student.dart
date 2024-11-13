@@ -211,7 +211,7 @@ class StudentRepositoryImpl extends StudentRepository {
         }
 
         try {
-          var dataModel = NotificationModel.fromJson(response.data['data']);
+          var dataModel = NotificationDataModel.fromJson(response.data['data']);
           var dataEntity = dataModel.toEntity();
           return Right(dataEntity);
         } catch (e) {
