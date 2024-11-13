@@ -38,12 +38,12 @@ class _AddLogBookState extends State<AddLogBook> {
         listener: (context, state) async {
           if (state is ButtonSuccessState) {
             var snackBar =
-                SnackBar(content: Text('Berhasil Menambahkan Log Book'));
+                const SnackBar(content: Text('Berhasil Menambahkan Log Book'));
             ScaffoldMessenger.of(context).showSnackBar(snackBar);
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
-                builder: (context) => HomePage(
+                builder: (context) => const HomePage(
                   currentIndex: 2,
                 ),
               ),
@@ -57,9 +57,34 @@ class _AddLogBookState extends State<AddLogBook> {
           }
         },
         child: AlertDialog(
-          title: Text('Tambah Log Book'),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  Icons.book,
+                  color: Theme.of(context).primaryColor,
+                ),
+              ),
+              const SizedBox(width: 12),
+              const Text(
+                'Tambah Log Book',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
           content: Form(
-            child: Container(
+            child: SizedBox(
               width: MediaQuery.of(context).size.width * 0.8,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -68,12 +93,26 @@ class _AddLogBookState extends State<AddLogBook> {
                     controller: _title,
                     decoration: InputDecoration(
                       labelText: 'Judul',
+                      labelStyle:
+                          TextStyle(color: Theme.of(context).primaryColor),
+                      prefixIcon: Icon(Icons.title,
+                          color: Theme.of(context).primaryColor),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide:
+                            BorderSide(color: Theme.of(context).primaryColor),
                       ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(
+                            color: Theme.of(context).primaryColor, width: 2),
+                      ),
+                      filled: true,
+                      fillColor:
+                          Theme.of(context).primaryColor.withOpacity(0.05),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   InkWell(
                     onTap: () async {
                       final DateTime? picked = await showDatePicker(
@@ -81,6 +120,16 @@ class _AddLogBookState extends State<AddLogBook> {
                         initialDate: _date,
                         firstDate: DateTime(2000),
                         lastDate: DateTime.now(),
+                        builder: (context, child) {
+                          return Theme(
+                            data: Theme.of(context).copyWith(
+                              colorScheme: ColorScheme.light(
+                                primary: Theme.of(context).primaryColor,
+                              ),
+                            ),
+                            child: child!,
+                          );
+                        },
                       );
                       if (picked != null && picked != _date) {
                         setState(() {
@@ -89,23 +138,58 @@ class _AddLogBookState extends State<AddLogBook> {
                       }
                     },
                     child: InputDecorator(
-                      decoration: const InputDecoration(
-                        suffixIcon: Icon(Icons.calendar_month),
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.calendar_month,
+                            color: Theme.of(context).primaryColor),
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(12)),
+                          borderRadius: BorderRadius.circular(12),
                         ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(
+                              color: Theme.of(context).primaryColor, width: 2),
+                        ),
+                        filled: true,
+                        fillColor:
+                            Theme.of(context).primaryColor.withOpacity(0.05),
                       ),
-                      child: Text(DateFormat('dd/MM/yyyy').format(_date)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            DateFormat('dd/MM/yyyy').format(_date),
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                          Icon(Icons.arrow_drop_down,
+                              color: Theme.of(context).primaryColor),
+                        ],
+                      ),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   TextFormField(
                     controller: _activity,
+                    maxLines: 3,
                     decoration: InputDecoration(
                       labelText: 'Aktivitas',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                      labelStyle:
+                          TextStyle(color: Theme.of(context).primaryColor),
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.only(bottom: 45),
+                        child: Icon(Icons.assignment,
+                            color: Theme.of(context).primaryColor),
                       ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(
+                            color: Theme.of(context).primaryColor, width: 2),
+                      ),
+                      filled: true,
+                      fillColor:
+                          Theme.of(context).primaryColor.withOpacity(0.05),
                     ),
                   ),
                 ],
@@ -133,7 +217,7 @@ class _AddLogBookState extends State<AddLogBook> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
           ],
         ),
