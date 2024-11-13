@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
 abstract class SelectionEvent extends Equatable {
   const SelectionEvent();
@@ -53,7 +54,20 @@ class UnarchiveItems extends SelectionEvent {
 class LoadArchivedItems extends SelectionEvent {}
 
 //group
-class GroupSelectedItems extends SelectionEvent {}
+class GroupSelectedItems extends SelectionEvent {
+  final String title;
+  final IconData icon;
+  final Set<int> studentIds;
+
+  GroupSelectedItems({
+    required this.title,
+    required this.icon,
+    required this.studentIds,
+  });
+
+  @override
+  List<Object> get props => [title, icon, studentIds];
+}
 
 class UnGroupItems extends SelectionEvent {
   final Set<int> ids;

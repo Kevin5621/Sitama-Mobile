@@ -9,6 +9,7 @@ import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_event.d
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_state.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/widgets/archive_card.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/widgets/filter_section.dart';
+import 'package:sistem_magang/presenstation/lecturer/home/widgets/group_card.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/widgets/student_card.dart';
 
 class StudentList extends StatelessWidget {
@@ -16,6 +17,7 @@ class StudentList extends StatelessWidget {
   final Animation<double> searchAnimation;
   final AnimationController animationController;
   final SelectionState selectionState;
+  
 
   const StudentList({
     super.key,
@@ -116,7 +118,109 @@ class StudentList extends StatelessWidget {
     }
   }
 
-   @override
+  Future<void> _showGroupConfirmation(BuildContext context) async {
+  final bloc = context.read<SelectionBloc>();
+  final state = bloc.state;
+  final colorScheme = Theme.of(context).colorScheme;
+  final List<IconData> availableIcons = [
+    Icons.group,
+    Icons.school,
+    Icons.work,
+    Icons.star,
+    Icons.favorite,
+    Icons.rocket_launch,
+    Icons.psychology,
+    Icons.science,
+  ];
+
+  final result = await showDialog<Map<String, dynamic>>(
+    context: context,
+    builder: (context) {
+      final titleController = TextEditingController();
+      IconData selectedIcon = Icons.group;
+
+      return AlertDialog(
+        title: const Text('Create New Group'),
+        content: StatefulBuilder(
+          builder: (context, setState) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  controller: titleController,
+                  decoration: const InputDecoration(
+                    labelText: 'Group Name',
+                    hintText: 'Enter group name',
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a group name';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+                const Text('Select Icon'),
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    for (final icon in availableIcons)
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            selectedIcon = icon;
+                          });
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: selectedIcon == icon
+                                ? colorScheme.primary.withOpacity(0.1)
+                                : null,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Icon(icon),
+                        ),
+                      ),
+                  ],
+                ),
+              ],
+            );
+          },
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(null),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pop({
+                'title': titleController.text,
+                'icon': selectedIcon,
+              });
+            },
+            child: const Text('Create'),
+          ),
+        ],
+      );
+    },
+  );
+
+  if (result != null) {
+    bloc.add(
+      GroupSelectedItems(
+        title: result['title'],
+        icon: result['icon'],
+        studentIds: state.selectedIds,
+      ),
+    );
+  }
+}
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<SelectionBloc, SelectionState>(
       builder: (context, state) {
@@ -130,16 +234,20 @@ class StudentList extends StatelessWidget {
                   onArchiveTap: state.selectedIds.isNotEmpty
                       ? () => _showArchiveConfirmation(context)
                       : null,
+                  onGroupTap: state.selectedIds.isNotEmpty
+                      ? () => _showGroupConfirmation(context)
+                      : null,
                 );
               },
             ),
             const SizedBox(height: 16),
             Column(
               children: [
-                // GroupCard(
-                //   groups: state.groups,
-                //   students: students,
-                // ),
+                GroupCard(
+                  groupStudents: students
+                      .where((student) => state.archivedIds.contains(student.id))
+                      .toList(),
+                ),
                 ArchiveCard(
                   archivedStudents: students
                       .where((student) => state.archivedIds.contains(student.id))

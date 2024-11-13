@@ -1,19 +1,4 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
-
-class GroupCard extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final int memberCount;
-  final VoidCallback? onTap;
-
-  const GroupCard({
-    super.key,
-    required this.icon,
-    required this.title,
-    required this.memberCount,
-    this.onTap,
-=======
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sistem_magang/domain/entities/lecturer_home_entity.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/lecturer_display_cubit.dart';
@@ -27,49 +12,10 @@ class GroupCard extends StatelessWidget {
   const GroupCard({
     super.key,
     required this.groupStudents,
->>>>>>> 6a345e1 (test)
   });
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< HEAD
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            children: [
-              Icon(icon, size: 24),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                    Text(
-                      '$memberCount members',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                  ],
-                ),
-              ),
-              const Icon(Icons.chevron_right),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-=======
     if (groupStudents.isEmpty) {
       return const SizedBox.shrink();
     }
@@ -149,4 +95,3 @@ class GroupCard extends StatelessWidget {
     );
   }
 }
->>>>>>> 6a345e1 (test)
