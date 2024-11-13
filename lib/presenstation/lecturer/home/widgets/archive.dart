@@ -1,4 +1,6 @@
 // archive_page.dart
+// ignore_for_file: use_build_context_synchronously, deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sistem_magang/common/widgets/alert.dart';
@@ -169,7 +171,7 @@ class _ArchivePageState extends State<ArchivePage> {
                     padding: const EdgeInsets.all(8.0),
                     child: SearchField(
                       onChanged: _filterStudents,
-                      onFilterPressed: () {}, // Bisa diimplementasikan jika diperlukan
+                      onFilterPressed: () {},
                     ),
                   ),
                 ),
@@ -227,8 +229,6 @@ class _ArchivePageState extends State<ArchivePage> {
       ),
     );
   }
-
-  // ... rest of the methods remain the same ...
 }
 
   Widget _buildStudentCard(LecturerStudentsEntity student) {

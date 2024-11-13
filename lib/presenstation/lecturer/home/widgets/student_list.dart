@@ -9,6 +9,7 @@ import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_event.d
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_state.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/widgets/archive_card.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/widgets/filter_section.dart';
+import 'package:sistem_magang/presenstation/lecturer/home/widgets/group_card.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/widgets/student_card.dart';
 
 class StudentList extends StatelessWidget {
@@ -116,7 +117,7 @@ class StudentList extends StatelessWidget {
     }
   }
 
-  @override
+   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SelectionBloc, SelectionState>(
       builder: (context, state) {
@@ -136,6 +137,10 @@ class StudentList extends StatelessWidget {
             const SizedBox(height: 16),
             Column(
               children: [
+                // GroupCard(
+                //   groups: state.groups,
+                //   students: students,
+                // ),
                 ArchiveCard(
                   archivedStudents: students
                       .where((student) => state.archivedIds.contains(student.id))
