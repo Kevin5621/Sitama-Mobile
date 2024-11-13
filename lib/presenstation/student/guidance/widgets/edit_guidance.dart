@@ -73,7 +73,7 @@ class _EditGuidanceState extends State<EditGuidance> {
         listener: (context, state) async {
           if (state is ButtonSuccessState) {
             var snackBar =
-                SnackBar(content: Text('Berhasil Mengedit Bimbingan'));
+                const SnackBar(content: Text('Berhasil Mengedit Bimbingan'));
             ScaffoldMessenger.of(context).showSnackBar(snackBar);
             Navigator.pushAndRemoveUntil(
               context,
@@ -92,75 +92,198 @@ class _EditGuidanceState extends State<EditGuidance> {
           }
         },
         child: AlertDialog(
-          title: Text('Edit Bimbingan'),
-          content: Form(
-            child: Container(
-              width: MediaQuery.of(context).size.width * 0.8,
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    TextFormField(
-                      controller: _title,
-                      decoration: InputDecoration(
-                        labelText: 'Judul',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(12)),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    InkWell(
-                      onTap: () async {
-                        final DateTime? picked = await showDatePicker(
-                          context: context,
-                          initialDate: _date,
-                          firstDate: DateTime(2000),
-                          lastDate: DateTime.now(),
-                        );
-                        if (picked != null && picked != _date) {
-                          setState(() {
-                            _date = picked;
-                          });
-                        }
-                      },
-                      child: InputDecorator(
-                        decoration: const InputDecoration(
-                          suffixIcon: Icon(Icons.calendar_month),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(12)),
-                          ),
-                        ),
-                        child: Text(DateFormat('dd/MM/yyyy').format(_date)),
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    TextFormField(
-                      controller: _activity,
-                      decoration: InputDecoration(
-                        labelText: 'Aktivitas',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(12)),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    InkWell(
-                      onTap: _pickFile,
-                      child: InputDecorator(
-                        decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.file_upload),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(12)),
-                          ),
-                        ),
-                        child: Text(_selectedFile != null
-                            ? _selectedFile!.name
-                            : "Upload File (Opsional)"),
-                      ),
-                    ),
-                  ],
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
                 ),
+                child: Icon(
+                  Icons.edit_rounded,
+                  color: Theme.of(context).primaryColor,
+                ),
+              ),
+              const SizedBox(width: 12),
+              const Text(
+                'Edit Bimbingan',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          content: Form(
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width * 0.8,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextFormField(
+                    controller: _title,
+                    decoration: InputDecoration(
+                      labelText: 'Judul',
+                      labelStyle:
+                          TextStyle(color: Theme.of(context).primaryColor),
+                      prefixIcon: Icon(Icons.title,
+                          color: Theme.of(context).primaryColor),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide:
+                            BorderSide(color: Theme.of(context).primaryColor),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(
+                            color: Theme.of(context).primaryColor, width: 2),
+                      ),
+                      filled: true,
+                      fillColor:
+                          Theme.of(context).primaryColor.withOpacity(0.05),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  InkWell(
+                    onTap: () async {
+                      final DateTime? picked = await showDatePicker(
+                        context: context,
+                        initialDate: _date,
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime.now(),
+                        builder: (context, child) {
+                          return Theme(
+                            data: Theme.of(context).copyWith(
+                              colorScheme: ColorScheme.light(
+                                primary: Theme.of(context).primaryColor,
+                              ),
+                            ),
+                            child: child!,
+                          );
+                        },
+                      );
+                      if (picked != null && picked != _date) {
+                        setState(() {
+                          _date = picked;
+                        });
+                      }
+                    },
+                    child: InputDecorator(
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.calendar_month,
+                            color: Theme.of(context).primaryColor),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(
+                              color: Theme.of(context).primaryColor, width: 2),
+                        ),
+                        filled: true,
+                        fillColor:
+                            Theme.of(context).primaryColor.withOpacity(0.05),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            DateFormat('dd/MM/yyyy').format(_date),
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                          Icon(Icons.arrow_drop_down,
+                              color: Theme.of(context).primaryColor),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    controller: _activity,
+                    maxLines: 3,
+                    decoration: InputDecoration(
+                      labelText: 'Aktivitas',
+                      labelStyle:
+                          TextStyle(color: Theme.of(context).primaryColor),
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.only(bottom: 45),
+                        child: Icon(Icons.assignment,
+                            color: Theme.of(context).primaryColor),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(
+                            color: Theme.of(context).primaryColor, width: 2),
+                      ),
+                      filled: true,
+                      fillColor:
+                          Theme.of(context).primaryColor.withOpacity(0.05),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  InkWell(
+                    onTap: _pickFile,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: _selectedFile != null
+                              ? Theme.of(context).primaryColor
+                              : Colors.grey,
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                        color: _selectedFile != null
+                            ? Theme.of(context).primaryColor.withOpacity(0.05)
+                            : null,
+                      ),
+                      child: InputDecorator(
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.file_upload,
+                            color: _selectedFile != null
+                                ? Theme.of(context).primaryColor
+                                : Colors.grey,
+                          ),
+                          border: InputBorder.none,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                _selectedFile != null
+                                    ? _selectedFile!.name
+                                    : "Upload File (Opsional)",
+                                style: TextStyle(
+                                  color: _selectedFile != null
+                                      ? Theme.of(context).primaryColor
+                                      : Colors.grey,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            if (_selectedFile != null)
+                              IconButton(
+                                icon:
+                                    const Icon(Icons.clear, color: Colors.red),
+                                onPressed: () {
+                                  setState(() {
+                                    _selectedFile = null;
+                                  });
+                                },
+                              ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -187,7 +310,7 @@ class _EditGuidanceState extends State<EditGuidance> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
           ],
         ),
