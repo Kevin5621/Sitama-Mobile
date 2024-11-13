@@ -16,9 +16,12 @@ class LogBookPage extends StatefulWidget {
   State<LogBookPage> createState() => _LogBookPageState();
 }
 
-class _LogBookPageState extends State<LogBookPage> {
+class _LogBookPageState extends State<LogBookPage> with AutomaticKeepAliveClientMixin {
   String _search = '';
   SortMode _sortMode = SortMode.newest;
+
+  @override
+  bool get wantKeepAlive => true;  
 
   List<LogBookEntity> _getSortedAndFilteredLogBooks(List<LogBookEntity> logBooks) {
     var filteredBooks = logBooks.where((logBook) {
@@ -38,6 +41,7 @@ class _LogBookPageState extends State<LogBookPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final theme = Theme.of(context);
     
     return Scaffold(

@@ -17,31 +17,57 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin{
   /// Tracks the currently selected index in the bottom navigation bar
   late int _currentIndex;
+  late PageController _pageController;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
     super.initState();
     // Initialize the current index with the value passed to the widget
     _currentIndex = widget.currentIndex;
+    // Initialize PageController with initial page
+    _pageController = PageController(initialPage: _currentIndex);
+  }
+
+  @override
+  void dispose() {
+    // Dispose the PageController when the widget is disposed
+    _pageController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    // List of pages that can be displayed based on navigation
-    final List<Widget> _pages = [
+    super.build(context);
+    // List of all pages including HomeContent
+    final List<Widget> pages = [
+      _buildHomeContent(),
       const GuidancePage(),
       const LogBookPage(),
       const ProfilePage(),
     ];
 
     return Scaffold(
-      // Show HomeContent for index 0, otherwise show corresponding page from _pages
-      body: _currentIndex == 0 
-          ? _buildHomeContent() 
-          : _pages[_currentIndex - 1],
+      // Use PageView.builder for efficient page rendering
+      body: PageView.builder(
+        controller: _pageController,
+        itemCount: pages.length,
+        onPageChanged: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        // Add physics for better scrolling feel
+        physics: const BouncingScrollPhysics(),
+        itemBuilder: (context, index) {
+          return pages[index];
+        },
+      ),
       
       // Custom styled bottom navigation bar with elevation shadow
       bottomNavigationBar: Container(
@@ -66,9 +92,12 @@ class _HomePageState extends State<HomePage> {
             selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
             elevation: 0,
             onTap: (index) {
-              setState(() {
-                _currentIndex = index;
-              });
+              // Animate to the selected page when tapping bottom nav items
+              _pageController.animateToPage(
+                index,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+              );
             },
             items: [
               BottomNavigationBarItem(
@@ -99,15 +128,21 @@ class _HomePageState extends State<HomePage> {
     return HomeContent(
       // Callback to navigate to guidance section
       allGuidances: () {
-        setState(() {
-          _currentIndex = 1;
-        });
+        // Animate to guidance page
+        _pageController.animateToPage(
+          1,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
       },
       // Callback to navigate to logbook section
       allLogBooks: () {
-        setState(() {
-          _currentIndex = 2;
-        });
+        // Animate to logbook page
+        _pageController.animateToPage(
+          2,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
       },
     );
   }

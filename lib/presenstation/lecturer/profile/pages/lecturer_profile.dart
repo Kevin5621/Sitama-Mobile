@@ -22,9 +22,14 @@ class LecturerProfilePage extends StatefulWidget {
   State<LecturerProfilePage> createState() => _LecturerProfilePageState();
 }
 
-class _LecturerProfilePageState extends State<LecturerProfilePage> {
+class _LecturerProfilePageState extends State<LecturerProfilePage> with AutomaticKeepAliveClientMixin{
+    
+    @override
+    bool get wantKeepAlive => true;
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final themeProvider = Provider.of<ThemeProvider>(context);
     final isDarkMode = themeProvider.isDarkMode;
     final colorScheme = Theme.of(context).colorScheme;

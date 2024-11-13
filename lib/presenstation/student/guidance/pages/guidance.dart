@@ -17,9 +17,12 @@ class GuidancePage extends StatefulWidget {
   State<GuidancePage> createState() => _GuidancePageState();
 }
 
-class _GuidancePageState extends State<GuidancePage> {
+class _GuidancePageState extends State<GuidancePage> with AutomaticKeepAliveClientMixin {
   String _search = '';
   String _selectedFilter = 'All';
+
+  @override
+  bool get wantKeepAlive => true;  
 
   List<GuidanceEntity> _filterGuidances(List<GuidanceEntity> guidances) {
     return guidances.where((guidance) {
@@ -41,6 +44,7 @@ class _GuidancePageState extends State<GuidancePage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final theme = Theme.of(context);
     
     return Scaffold(

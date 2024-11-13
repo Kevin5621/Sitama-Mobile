@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sistem_magang/common/widgets/student_guidance_card.dart';
@@ -10,46 +12,98 @@ import 'package:sistem_magang/presenstation/student/home/widgets/load_notificati
 import 'package:sistem_magang/presenstation/student/home/widgets/notification_badge.dart';
 import 'package:sistem_magang/presenstation/student/home/widgets/notification_page.dart';
 
-/// HomeContent is the main content widget for the student's home screen.
-/// It displays recent guidance sessions, logbooks, and notifications in a scrollable layout.
-/// Uses BLoC pattern for state management to handle student data loading and display.
-class HomeContent extends StatelessWidget {
+class HomeContent extends StatefulWidget {
   final VoidCallback allGuidances;
   final VoidCallback allLogBooks;
 
   const HomeContent({
-    super.key, 
-    required this.allGuidances, 
-    required this.allLogBooks
+    super.key,
+    required this.allGuidances,
+    required this.allLogBooks,
   });
 
   @override
+  State<HomeContent> createState() => _HomeContentState();
+}
+
+class _HomeContentState extends State<HomeContent> with AutomaticKeepAliveClientMixin {
+  late final StudentDisplayCubit _studentCubit;
+
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
+    _studentCubit = StudentDisplayCubit()..displayStudent();
+  }
+
+  @override
+  void dispose() {
+    _studentCubit.close();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return BlocProvider(
-      create: (context) => StudentDisplayCubit()..displayStudent(),
+      create: (context) => _studentCubit,
       child: BlocBuilder<StudentDisplayCubit, StudentDisplayState>(
         builder: (context, state) {
-          if (state is StudentLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (state is StudentLoaded) {
-            return CustomScrollView(
-              slivers: [
-                _header(context, state.studentHomeEntity),
-                _buildSectionHeader(context, 'Bimbingan Terbaru', allGuidances),
-                _guidancesList(state.studentHomeEntity),
-                _buildSectionHeader(context, 'Log Book Terbaru', allLogBooks),
-                _logBooksList(state.studentHomeEntity),
-              ],
-            );
-          }
-          if (state is LoadStudentFailure) {
-            return Text(state.errorMessage);
-          }
-          return Container();
+          return AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            child: _buildContent(state),
+          );
         },
       ),
     );
+  }
+
+  Widget _buildContent(StudentDisplayState state) {
+    if (state is StudentLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    if (state is StudentLoaded) {
+      return RefreshIndicator(
+        onRefresh: () async {
+          _studentCubit.displayStudent();
+        },
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
+            _header(context, state.studentHomeEntity),
+            _buildSectionHeader(context, 'Bimbingan Terbaru', widget.allGuidances),
+            _guidancesList(state.studentHomeEntity),
+            _buildSectionHeader(context, 'Log Book Terbaru', widget.allLogBooks),
+            _logBooksList(state.studentHomeEntity),
+            // Add extra space at bottom
+            const SliverToBoxAdapter(child: SizedBox(height: 20)),
+          ],
+        ),
+      );
+    }
+    if (state is LoadStudentFailure) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              state.errorMessage,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () => _studentCubit.displayStudent(),
+              child: const Text('Retry'),
+            ),
+          ],
+        ),
+      );
+    }
+    return Container();
   }
 
   /// Builds a section header with title and forward arrow
@@ -70,7 +124,7 @@ class HomeContent extends StatelessWidget {
                 color: colorScheme.onBackground,
               ),
             ),
-            GestureDetector(
+            InkWell(
               onTap: onTap,
               child: Icon(
                 Icons.arrow_forward_ios, 
@@ -189,7 +243,6 @@ class HomeContent extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Container(
-            // ignore: deprecated_member_use
             color: colorScheme.background,
             child: LoadNotification(onClose: () {}),
           ),

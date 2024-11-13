@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sistem_magang/core/config/assets/app_images.dart';
@@ -20,10 +22,13 @@ class LecturerHomeContent extends StatefulWidget {
 }
 
 class _LecturerHomeContentState extends State<LecturerHomeContent>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   String _search = '';
   late AnimationController _animationController;
   late Animation<double> _searchAnimation;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -36,7 +41,7 @@ class _LecturerHomeContentState extends State<LecturerHomeContent>
       duration: const Duration(milliseconds: 300),
       vsync: this,
     );
-    _searchAnimation = Tween<double>(begin: 0, end: 1).animate(
+    _searchAnimation = Tween(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
     );
     _animationController.forward();
@@ -48,11 +53,12 @@ class _LecturerHomeContentState extends State<LecturerHomeContent>
     super.dispose();
   }
 
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    body: MultiBlocProvider(
-      providers: [
+  @override
+  Widget build(BuildContext context) {
+    super.build(context); // Required by AutomaticKeepAliveClientMixin
+    return Scaffold(
+      body: MultiBlocProvider(
+        providers: [
         BlocProvider(
           create: (context) => SelectionBloc()..add(LoadArchivedItems()),
         ),

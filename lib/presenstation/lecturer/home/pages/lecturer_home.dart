@@ -15,9 +15,13 @@ class LecturerHomePage extends StatefulWidget {
   State<LecturerHomePage> createState() => _LecturerHomePageState();
 }
 
-class _LecturerHomePageState extends State<LecturerHomePage> {
+class _LecturerHomePageState extends State<LecturerHomePage> with AutomaticKeepAliveClientMixin{
   /// Tracks the currently selected index in the bottom navigation bar
   late int _currentIndex;
+  late PageController _pageController;
+
+  @override
+  bool get wantKeepAlive => true;
 
   /// List of pages that can be displayed based on navigation
   final List<Widget> _pages = [
@@ -30,12 +34,37 @@ class _LecturerHomePageState extends State<LecturerHomePage> {
     super.initState();
     // Initialize the current index with the value passed to the widget
     _currentIndex = widget.currentIndex;
+  // Initialize PageController with initial page
+    _pageController = PageController(initialPage: _currentIndex);
+  }
+
+  @override
+  void dispose() {
+    // Dispose the PageController when the widget is disposed
+    _pageController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _pages[_currentIndex],
+    super.build(context);
+     return Scaffold(
+      // Use PageView.builder for efficient page rendering
+      body: PageView.builder(
+        controller: _pageController,
+        itemCount: _pages.length,
+        onPageChanged: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        // Add physics for better scrolling feel
+        physics: const BouncingScrollPhysics(),
+        itemBuilder: (context, index) {
+          return _pages[index];
+        },
+      ),
+
       // Custom styled bottom navigation bar with elevation shadow
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
@@ -59,9 +88,12 @@ class _LecturerHomePageState extends State<LecturerHomePage> {
             selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
             elevation: 0,
             onTap: (index) {
-              setState(() {
-                _currentIndex = index;
-              });
+              // Animate to the selected page when tapping bottom nav items
+              _pageController.animateToPage(
+                index,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+              );
             },
             items: [
               BottomNavigationBarItem(
