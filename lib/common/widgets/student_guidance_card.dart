@@ -1,13 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:sistem_magang/core/config/themes/app_color.dart';
-
-
-// import 'dart:html' as html;
-import 'package:sistem_magang/presenstation/general/pdf_viewer/pages/pdf_viewer.dart';
+import 'package:sistem_magang/presenstation/general/pdf_viewer/pdf_viewer.dart';
 import 'package:sistem_magang/presenstation/student/guidance/widgets/delete_guidance.dart';
 import 'package:sistem_magang/presenstation/student/guidance/widgets/edit_guidance.dart';
 
@@ -24,7 +19,7 @@ class GuidanceCard extends StatelessWidget {
   final int curentPage;
 
   const GuidanceCard({
-    Key? key,
+    super.key,
     required this.id,
     required this.title,
     required this.date,
@@ -33,7 +28,7 @@ class GuidanceCard extends StatelessWidget {
     required this.lecturerNote,
     required this.nameFile,
     required this.curentPage,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -117,8 +112,7 @@ class GuidanceCard extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  PDFViewerPage(pdfUrl: nameFile),
+                              builder: (context) => PDFViewerPage(pdfUrl: nameFile),
                             ),
                           );
                         }
@@ -133,8 +127,7 @@ class GuidanceCard extends StatelessWidget {
                                 : colorScheme.onSurface,
                           ),
                           border: OutlineInputBorder(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(12)),
+                            borderRadius: const BorderRadius.all(Radius.circular(12)),
                             borderSide: BorderSide(
                               color: status == GuidanceStatus.rejected
                                   ? colorScheme.onError.withOpacity(0.5)
@@ -143,12 +136,13 @@ class GuidanceCard extends StatelessWidget {
                           ),
                         ),
                         child: Text(
-                          "File Bimbingan",
+                          PDFViewerPage.extractFileName(nameFile), 
                           style: textTheme.bodyMedium?.copyWith(
                             color: status == GuidanceStatus.rejected
                                 ? colorScheme.onError
                                 : colorScheme.onSurface,
                           ),
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ),

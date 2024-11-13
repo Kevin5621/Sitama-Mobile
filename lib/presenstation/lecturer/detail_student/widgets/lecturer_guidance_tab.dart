@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sistem_magang/common/bloc/button/button_state.dart';
@@ -8,7 +10,7 @@ import 'package:sistem_magang/core/config/themes/app_color.dart';
 import 'package:sistem_magang/data/models/guidance.dart';
 import 'package:sistem_magang/domain/entities/guidance_entity.dart';
 import 'package:sistem_magang/domain/usecases/lecturer/update_status_guidance.dart';
-import 'package:sistem_magang/presenstation/general/pdf_viewer/pages/pdf_viewer.dart';
+import 'package:sistem_magang/presenstation/general/pdf_viewer/pdf_viewer.dart';
 import 'package:sistem_magang/presenstation/lecturer/detail_student/pages/detail_student.dart';
 import 'package:sistem_magang/service_locator.dart';
 
@@ -43,10 +45,10 @@ class LecturerGuidanceCard extends StatefulWidget {
   final int student_id;
 
   const LecturerGuidanceCard({
-    Key? key,
+    super.key,
     required this.guidance,
     required this.student_id,
-  }) : super(key: key);
+  });
 
   @override
   _LecturerGuidanceCardState createState() => _LecturerGuidanceCardState();
@@ -54,7 +56,7 @@ class LecturerGuidanceCard extends StatefulWidget {
 
 class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
   late LecturerGuidanceStatus currentStatus;
-  TextEditingController _lecturerNote = TextEditingController();
+  final TextEditingController _lecturerNote = TextEditingController();
 
   @override
   void initState() {
@@ -112,13 +114,11 @@ class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
           InkWell(
             onTap: () {
               if (kIsWeb) {
-                // html.window.open(widget.guidance.name_file, "_blank");
               } else {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        PDFViewerPage(pdfUrl: widget.guidance.name_file),
+                    builder: (context) => PDFViewerPage(pdfUrl: widget.guidance.name_file),
                   ),
                 );
               }
@@ -142,12 +142,13 @@ class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
                 ),
               ),
               child: Text(
-                "File Bimbingan",
+                PDFViewerPage.extractFileName(widget.guidance.name_file),
                 style: textTheme.bodyMedium?.copyWith(
                   color: currentStatus == LecturerGuidanceStatus.rejected
                       ? colorScheme.onError
                       : colorScheme.onSurface,
                 ),
+                overflow: TextOverflow.ellipsis,
               ),
             ),
           ),
