@@ -1,7 +1,5 @@
 // ignore_for_file: invalid_use_of_visible_for_testing_member
 
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -38,14 +36,14 @@ class GroupModel {
 
 class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
   static const String _archiveKey = 'archived_students';
-  static const String _groupsKey = 'student_groups';
+  static const String _groupKey = 'group_students';
 
   SelectionBloc()
       : super(const SelectionState(
           isSelectionMode: false,
           selectedIds: {},
           archivedIds: {},
-          groups: [],
+          groupIds: {},
         )) {
     on<ToggleSelectionMode>(_onToggleSelectionMode);
     on<ToggleItemSelection>(_onToggleItemSelection);
@@ -56,12 +54,13 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
     on<UnarchiveItems>(_onUnarchiveItems);
     on<LoadArchivedItems>(_onLoadArchivedItems);
     on<ClearSelectionMode>(_onClearSelectionMode);
-    on<CreateGroup>(_onCreateGroup);
-    on<RemoveFromGroup>(_onRemoveFromGroup);
+    on<GroupSelectedItems>(_onGroupSelectedItems);
+    on<UnGroupItems>(_onUnGroupItems);
+    on<LoadGroupItems>(_onLoadGroupItems);
 
     // Load archived items and groups when bloc is created
     add(LoadArchivedItems());
-    _loadGroups();
+    add(LoadGroupItems());
   }
 
   void _onToggleSelectionMode(
@@ -111,6 +110,8 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
     ));
   }
 
+
+//archive
   Future<void> _onLoadArchivedItems(
     LoadArchivedItems event,
     Emitter<SelectionState> emit,
@@ -219,109 +220,100 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
     }
   }
 
-
-//group
-   Future<void> _onCreateGroup(
-    CreateGroup event,
+  //group
+  Future<void> _onLoadGroupItems(
+    LoadGroupItems event,
     Emitter<SelectionState> emit,
   ) async {
     try {
       emit(state.copyWith(isLoading: true, error: null));
-
-      final newGroup = GroupModel(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
-        title: event.title,
-        icon: event.icon,
-        studentIds: event.studentIds,
-      );
-
-      final updatedGroups = [...state.groups, newGroup];
-      await _saveGroups(updatedGroups);
-
+      final groupIds = await _getGroupIds();
       emit(state.copyWith(
-        groups: updatedGroups,
-        isSelectionMode: false,
-        selectedIds: {},
+        groupIds: groupIds,
         isLoading: false,
       ));
     } catch (e) {
       emit(state.copyWith(
         isLoading: false,
-        error: 'Failed to create group: $e',
+        error: 'Failed to load Group items: $e',
       ));
     }
   }
 
-  Future<void> _onRemoveFromGroup(
-    RemoveFromGroup event,
+  Future<void> _onGroupSelectedItems(
+    GroupSelectedItems event,
     Emitter<SelectionState> emit,
   ) async {
+    if (state.selectedIds.isEmpty) return;
+
     try {
       emit(state.copyWith(isLoading: true, error: null));
-
-      final updatedGroups = state.groups.map((group) {
-        if (group.id == event.groupId) {
-          final updatedStudentIds = Set<int>.from(group.studentIds)
-            ..removeAll(event.studentIds);
-          return group.copyWith(studentIds: updatedStudentIds);
-        }
-        return group;
-      }).toList();
-
-      // Remove empty groups
-      updatedGroups.removeWhere((group) => group.studentIds.isEmpty);
-
-      await _saveGroups(updatedGroups);
-
-      emit(state.copyWith(
-        groups: updatedGroups,
-        isSelectionMode: false,
-        selectedIds: {},
-        isLoading: false,
-      ));
-    } catch (e) {
-      emit(state.copyWith(
-        isLoading: false,
-        error: 'Failed to remove from group: $e',
-      ));
-    }
-  }
-
-  Future<void> _loadGroups() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final String? groupsJson = prefs.getString(_groupsKey);
       
-      if (groupsJson != null) {
-        final List<dynamic> decodedGroups = jsonDecode(groupsJson);
-        final groups = decodedGroups.map((groupData) {
-          return GroupModel(
-            id: groupData['id'],
-            title: groupData['title'],
-            icon: IconData(groupData['icon'], fontFamily: 'MaterialIcons'),
-            studentIds: (groupData['studentIds'] as List<dynamic>)
-                .map((id) => id as int)
-                .toSet(),
-          );
-        }).toList();
+      final newgroupIds = {...state.groupIds, ...state.selectedIds};
+      await _saveGroupIds(newgroupIds);
 
-        emit(state.copyWith(groups: groups));
-      }
+      emit(state.copyWith(
+        isSelectionMode: false,
+        selectedIds: {},
+        groupIds: newgroupIds,
+        isLoading: false,
+      ));
     } catch (e) {
-      emit(state.copyWith(error: 'Failed to load groups: $e'));
+      emit(state.copyWith(
+        isLoading: false,
+        error: 'Failed to archive items: $e',
+      ));
     }
   }
 
-  Future<void> _saveGroups(List<GroupModel> groups) async {
+  Future<void> _onUnGroupItems(
+    UnGroupItems event,
+    Emitter<SelectionState> emit,
+  ) async {
+    try {
+      // Set isLocalOperation to true to prevent unnecessary loading states
+      emit(state.copyWith(isLocalOperation: true));
+
+      final updatedGroupIds = Set<int>.from(state.groupIds)
+        ..removeAll(event.ids);
+      
+      // Update state immediately for UI responsiveness
+      emit(state.copyWith(
+        groupIds: updatedGroupIds,
+        selectedIds: {},
+        isSelectionMode: false,
+        isLocalOperation: true,
+      ));
+
+      // Save to SharedPreferences in the background
+      await _saveGroupIds(updatedGroupIds);
+
+      // Final emit to confirm persistence
+      emit(state.copyWith(isLocalOperation: false));
+    } catch (e) {
+      emit(state.copyWith(
+        error: 'Failed to unarchive items: $e',
+        isLocalOperation: false,
+      ));
+    }
+  }
+
+  Future<Set<int>> _getGroupIds() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final groupsJson = jsonEncode(groups.map((group) => {
-            'id': group.id,
-            'title': group.title,
-            'icon': group.icon.codePoint,
-            'studentIds': group.studentIds.toList(),
-          }).toList());
-      await prefs.setString(_groupsKey, groupsJson);
+      final List<String>? Group = prefs.getStringList(_groupKey);
+      if (Group == null || Group.isEmpty) return {};
+      return Group.map((id) => int.parse(id)).toSet();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> _saveGroupIds(Set<int> ids) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final List<String> Group = ids.map((id) => id.toString()).toList();
+      await prefs.setStringList(_groupKey, Group);
     } catch (e) {
       rethrow;
     }

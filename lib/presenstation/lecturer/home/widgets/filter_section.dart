@@ -8,10 +8,12 @@ import 'package:sistem_magang/presenstation/lecturer/home/widgets/filter_tahun.d
 
 class FilterSection extends StatelessWidget {
   final VoidCallback? onArchiveTap;
+  final VoidCallback? onGroupTap;
 
   const FilterSection({
     super.key,
     this.onArchiveTap,
+    this.onGroupTap,
   });
 
   void _showCreateGroupDialog(BuildContext context, Set<int> selectedIds) {
@@ -179,21 +181,21 @@ class _CreateGroupDialogState extends State<CreateGroupDialog> {
           onPressed: () => Navigator.of(context).pop(),
           child: const Text('Cancel'),
         ),
-        ElevatedButton(
-          onPressed: () {
-            if (_formKey.currentState!.validate()) {
-              context.read<SelectionBloc>().add(
-                    CreateGroup(
-                      title: _titleController.text,
-                      icon: _selectedIcon,
-                      studentIds: widget.selectedIds,
-                    ),
-                  );
-              Navigator.of(context).pop();
-            }
-          },
-          child: const Text('Create'),
-        ),
+        // ElevatedButton(
+        //   onPressed: () {
+        //     if (_formKey.currentState!.validate()) {
+        //       context.read<SelectionBloc>().add(
+        //             CreateGroup(
+        //               title: _titleController.text,
+        //               icon: _selectedIcon,
+        //               studentIds: widget.selectedIds,
+        //             ),
+        //           );
+        //       Navigator.of(context).pop();
+        //     }
+        //   },
+        //   child: const Text('Create'),
+        // ),
       ],
     );
   }

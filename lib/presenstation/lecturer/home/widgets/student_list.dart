@@ -9,7 +9,6 @@ import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_event.d
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_state.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/widgets/archive_card.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/widgets/filter_section.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/group_card.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/widgets/student_card.dart';
 
 class StudentList extends StatelessWidget {

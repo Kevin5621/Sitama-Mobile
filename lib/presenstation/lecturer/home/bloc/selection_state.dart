@@ -1,11 +1,10 @@
 import 'package:equatable/equatable.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_bloc.dart';
 
 class SelectionState extends Equatable {
   final bool isSelectionMode;
   final Set<int> selectedIds;
   final Set<int> archivedIds;
-  final List<GroupModel> groups;
+  final Set<int> groupIds;
   final bool isLoading;
   final String? error;
   final bool isLocalOperation;
@@ -14,7 +13,7 @@ class SelectionState extends Equatable {
     required this.isSelectionMode,
     required this.selectedIds,
     required this.archivedIds,
-    this.groups = const [],
+    required this.groupIds,
     this.isLoading = false,
     this.error,
     this.isLocalOperation = false,
@@ -24,7 +23,7 @@ class SelectionState extends Equatable {
     bool? isSelectionMode,
     Set<int>? selectedIds,
     Set<int>? archivedIds,
-    List<GroupModel>? groups,
+    Set<int>? groupIds,
     bool? isLoading,
     String? error,
     bool? isLocalOperation,
@@ -33,7 +32,7 @@ class SelectionState extends Equatable {
       isSelectionMode: isSelectionMode ?? this.isSelectionMode,
       selectedIds: selectedIds ?? this.selectedIds,
       archivedIds: archivedIds ?? this.archivedIds,
-      groups: groups ?? this.groups,
+      groupIds: groupIds ?? this.groupIds,
       isLoading: isLoading ?? this.isLoading,
       error: error,
       isLocalOperation: isLocalOperation ?? this.isLocalOperation,
@@ -45,7 +44,7 @@ class SelectionState extends Equatable {
         isSelectionMode,
         selectedIds,
         archivedIds,
-        groups,
+        groupIds,
         isLoading,
         error,
         isLocalOperation,
