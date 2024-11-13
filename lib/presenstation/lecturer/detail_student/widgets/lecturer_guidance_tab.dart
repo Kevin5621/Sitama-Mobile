@@ -7,7 +7,7 @@ import 'package:sistem_magang/common/widgets/date_relative_time.dart';
 import 'package:sistem_magang/core/config/themes/app_color.dart';
 import 'package:sistem_magang/data/models/guidance.dart';
 import 'package:sistem_magang/domain/entities/guidance_entity.dart';
-import 'package:sistem_magang/domain/usecases/update_status_guidance.dart';
+import 'package:sistem_magang/domain/usecases/lecturer/update_status_guidance.dart';
 import 'package:sistem_magang/presenstation/general/pdf_viewer/pages/pdf_viewer.dart';
 import 'package:sistem_magang/presenstation/lecturer/detail_student/pages/detail_student.dart';
 import 'package:sistem_magang/service_locator.dart';

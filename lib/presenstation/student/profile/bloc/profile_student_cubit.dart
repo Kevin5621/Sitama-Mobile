@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sistem_magang/domain/usecases/get_profile_student.dart';
+import 'package:sistem_magang/domain/usecases/student/general/get_profile_student.dart';
 import 'package:sistem_magang/presenstation/student/profile/bloc/profile_student_state.dart';
 import 'package:sistem_magang/service_locator.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sistem_magang/domain/entities/lecturer_home_entity.dart';
-import 'package:sistem_magang/domain/usecases/get_home_lecturer.dart';
+import 'package:sistem_magang/domain/usecases/lecturer/get_home_lecturer.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/lecturer_display_state.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_bloc.dart';
 import 'package:sistem_magang/service_locator.dart';

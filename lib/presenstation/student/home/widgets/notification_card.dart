@@ -1,8 +1,9 @@
+
 import 'package:flutter/material.dart';
 import 'package:sistem_magang/data/models/notification.dart';
 
 class NotificationCard extends StatefulWidget {
-  final NotificationModel notification;
+  final NotificationList notification;
   final VoidCallback onTap;
 
   const NotificationCard({
@@ -19,7 +20,7 @@ class _NotificationCardState extends State<NotificationCard> {
   bool _isExpanded = false;
 
   IconData _getNotificationIcon() {
-    switch (widget.notification.type.toLowerCase()) {
+    switch (widget.notification.category.toLowerCase()) {
       case 'general':
         return Icons.campaign;
       case 'bimbingan':
@@ -35,7 +36,7 @@ class _NotificationCardState extends State<NotificationCard> {
 
   Color _getNotificationColor(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    switch (widget.notification.type.toLowerCase()) {
+    switch (widget.notification.category.toLowerCase()) {
       case 'generalannouncement':
         return Colors.blue;
       case 'bimbingan':
@@ -63,26 +64,25 @@ class _NotificationCardState extends State<NotificationCard> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final color = _getNotificationColor(context);
-
-    // Menentukan warna teks berdasarkan tema
-    final textColor =
-        theme.brightness == Brightness.dark ? Colors.white : Colors.black87;
+    final textColor = theme.brightness == Brightness.dark 
+        ? Colors.white 
+        : Colors.black87;
 
     return LayoutBuilder(builder: (context, constraints) {
       final textStyle = theme.textTheme.bodyMedium?.copyWith(
-        color: textColor, // Menggunakan textColor yang ditentukan
+        color: textColor,
         height: 1.3,
       );
       final hasOverflow = _hasTextOverflow(
-          widget.notification.message,
-          textStyle!,
-          constraints.maxWidth - 76 // Accounting for padding and icon
-          );
+        widget.notification.message,
+        textStyle!,
+        constraints.maxWidth - 76
+      );
 
       return Container(
         margin: const EdgeInsets.only(bottom: 8.0),
         decoration: BoxDecoration(
-          color: widget.notification.isRead
+          color: widget.notification.isRead == 1
               ? (theme.brightness == Brightness.dark
                   ? Colors.black54
                   : Colors.white)
@@ -97,7 +97,6 @@ class _NotificationCardState extends State<NotificationCard> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Icon container
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
@@ -111,16 +110,14 @@ class _NotificationCardState extends State<NotificationCard> {
                     ),
                   ),
                   const SizedBox(width: 12),
-                  // Content
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Title with notification type
                         Row(
                           children: [
                             Text(
-                              widget.notification.type,
+                              widget.notification.category,
                               style: theme.textTheme.bodySmall?.copyWith(
                                 color: color,
                                 fontWeight: FontWeight.w600,
@@ -136,7 +133,6 @@ class _NotificationCardState extends State<NotificationCard> {
                           ],
                         ),
                         const SizedBox(height: 4),
-                        // Message
                         Text(
                           widget.notification.message,
                           style: textStyle,
@@ -149,7 +145,6 @@ class _NotificationCardState extends State<NotificationCard> {
                 ],
               ),
             ),
-            // Show expand button only if text overflows
             if (hasOverflow)
               GestureDetector(
                 onTap: () {
@@ -174,9 +169,7 @@ class _NotificationCardState extends State<NotificationCard> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        _isExpanded
-                            ? 'Lihat lebih sedikit'
-                            : 'Lihat selengkapnya',
+                        _isExpanded ? 'Lihat lebih sedikit' : 'Lihat selengkapnya',
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: color,
                           fontWeight: FontWeight.w500,

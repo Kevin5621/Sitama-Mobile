@@ -14,5 +14,7 @@ abstract class StudentRepository {
   Future<Either> editLogBook(EditLogBookReqParams request);
   Future<Either> deleteLogBook(int id);
 
+  Future<Either> getNotifications();
+
   Future<Either> getStudentProfile();
 }

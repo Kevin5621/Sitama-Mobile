@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sistem_magang/common/bloc/auth/auth_state.dart';
-import 'package:sistem_magang/domain/usecases/is_logged_in.dart';
+import 'package:sistem_magang/domain/usecases/general/is_logged_in.dart';
 import 'package:sistem_magang/service_locator.dart';
 
 class AuthStateCubit extends Cubit<AuthState>{

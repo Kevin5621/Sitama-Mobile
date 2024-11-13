@@ -7,7 +7,7 @@ import 'package:sistem_magang/common/bloc/button/button_state.dart';
 import 'package:sistem_magang/common/bloc/button/button_state_cubit.dart';
 import 'package:sistem_magang/common/widgets/basic_app_button.dart';
 import 'package:sistem_magang/data/models/update_profile_req_params.dart';
-import 'package:sistem_magang/domain/usecases/update_photo_profile.dart';
+import 'package:sistem_magang/domain/usecases/general/update_photo_profile.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/pages/lecturer_home.dart';
 import 'package:sistem_magang/presenstation/student/home/pages/home.dart';
 import 'package:sistem_magang/service_locator.dart';

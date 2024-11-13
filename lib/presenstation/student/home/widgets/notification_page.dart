@@ -1,94 +1,160 @@
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sistem_magang/data/models/notification.dart';
+import 'package:sistem_magang/domain/usecases/student/notification/get_notification.dart';
+import 'package:sistem_magang/service_locator.dart';
 import 'package:sistem_magang/presenstation/student/home/widgets/notification_card.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({super.key});
 
   @override
-
   _NotificationPageState createState() => _NotificationPageState();
 }
 
 class _NotificationPageState extends State<NotificationPage> {
   final RefreshController _refreshController = RefreshController();
-  late List<NotificationModel> _notifications;
+  final _getNotificationsUseCase = sl<GetNotificationsUseCase>();
+  List<NotificationList> _notifications = [];
+  bool _isLoading = true;
+  String? _error;
 
-@override
+  @override
   void initState() {
     super.initState();
-    _notifications = [
-      NotificationModel(
-        id: '1',
-        message: 'Anda telah dijadwalkan bimbingan 1 yang dilaksanakan pada Kamis, 17 Oktober 2024.',
-        date: '20-12-2024',
-        type: 'bimbingan',
-        isRead: false,
-        detailText: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-      ),
-      NotificationModel(
-        id: '2',
-        message: 'Anda belum mengisi logbook minggu ini. Harap segera mengisi logbook untuk memantau progress kegiatan Anda.',
-        date: '19-12-2024',
-        type: 'logbook',
-        isRead: false,
-        detailText: 'Untuk mengisi logbook, silakan kunjungi halaman logbook dan isi sesuai dengan kegiatan yang telah Anda lakukan selama seminggu terakhir.',
-      ),
-      NotificationModel(
-        id: '3',
-        message: 'Anda belum mengisi logbook minggu ini. Harap segera mengisi logbook untuk memantau progress kegiatan Anda.',
-        date: '19-12-2024',
-        type: 'revisi',
-        isRead: false,
-        detailText: 'Untuk mengisi logbook, silakan kunjungi halaman logbook dan isi sesuai dengan kegiatan yang telah Anda lakukan selama seminggu terakhir. TestttttttttttttttttttttttttttttttttttttttttttttttttttttttTestttttttttttttttttttttttttttttttttttttttttttttttttttttttTestttttttttttttttttttttttttttttttttttttttttttttttttttttttTestttttttttttttttttttttttttttttttttttttttttttttttttttttttTesttttttttttttttttttttttttttttttttttttttttttttttttttttttt',
-      ),NotificationModel(
-        id: '4',
-        message: 'Anda belum mengisi logbook minggu ini. Harap segera mengisi logbook untuk memantau progress kegiatan Anda.',
-        date: '19-12-2024',
-        type: 'General',
-        isRead: false,
-        detailText: 'Untuk mengisi logbook, silakan kunjungi halaman logbook dan isi sesuai dengan kegiatan yang telah Anda lakukan selama seminggu terakhir.',
-      ),
-    ];
+    _fetchNotifications();
   }
 
+  @override
+  void dispose() {
+    // Auto mark all as read when leaving the page
+    _markAllNotificationsAsRead();
+    super.dispose();
+  }
+
+  Future<void> _markAllNotificationsAsRead() async {
+    // You can implement the API call to mark all notifications as read here
+    // For now, we'll just clear the list
+    setState(() {
+      _notifications = [];
+    });
+  }
+
+  Future<void> _fetchNotifications() async {
+    setState(() {
+      _isLoading = true;
+      _error = null;
+    });
+
+    try {
+      final result = await _getNotificationsUseCase.call();
+      
+      result.fold(
+        (error) {
+          setState(() {
+            _error = error.toString();
+            _isLoading = false;
+          });
+          _refreshController.refreshFailed();
+        },
+        (notificationEntity) {
+          setState(() {
+            _notifications = notificationEntity.data.notifications
+                .map((notification) => NotificationList(
+                      id: notification.id,
+                      userId: notification.userId,
+                      message: notification.message,
+                      date: notification.date,
+                      category: notification.category,
+                      isRead: notification.isRead,
+                      detailText: notification.detailText,
+                      createdAt: notification.createdAt,
+                      updatedAt: notification.updatedAt,
+                    ))
+                .toList();
+            _isLoading = false;
+          });
+          _refreshController.refreshCompleted();
+        },
+      );
+    } catch (e) {
+      setState(() {
+        _error = e.toString();
+        _isLoading = false;
+      });
+      _refreshController.refreshFailed();
+    }
+  }
 
   void _onRefresh() async {
-    // TODO refresh logic 
-    await Future.delayed(const Duration(seconds: 2));
-    _refreshController.refreshCompleted();
+    await _fetchNotifications();
   }
 
   void _onLoading() async {
-    // TODO pagination logic 
-    await Future.delayed(const Duration(seconds: 1));
     _refreshController.loadComplete();
   }
 
-  void _markAsRead(String id) {
-    setState(() {
-      final index = _notifications.indexWhere((notification) => notification.id == id);
-      if (index != -1) {
-        _notifications[index].isRead = true;
-      }
-    });
-  }
-
-  void _markAllAsRead() {
-    setState(() {
-      for (var notification in _notifications) {
-        notification.isRead = true;
-      }
-    });
-  }
-
-  int get _unreadCount => _notifications.where((notification) => !notification.isRead).length;
-
-   @override
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+
+    if (_isLoading) {
+      return Scaffold(
+        backgroundColor: colorScheme.background,
+        appBar: AppBar(
+          backgroundColor: colorScheme.surface,
+          elevation: 0.5,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: colorScheme.onSurface),
+            onPressed: () => Navigator.pop(context),
+          ),
+          title: Text(
+            'Notifikasi',
+            style: theme.textTheme.titleLarge?.copyWith(
+              color: colorScheme.onSurface,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+        body: const Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    if (_error != null) {
+      return Scaffold(
+        backgroundColor: colorScheme.background,
+        appBar: AppBar(
+          backgroundColor: colorScheme.surface,
+          elevation: 0.5,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: colorScheme.onSurface),
+            onPressed: () => Navigator.pop(context),
+          ),
+          title: Text(
+            'Notifikasi',
+            style: theme.textTheme.titleLarge?.copyWith(
+              color: colorScheme.onSurface,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(_error!),
+              ElevatedButton(
+                onPressed: _fetchNotifications,
+                child: const Text('Coba Lagi'),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
 
     return Scaffold(
       backgroundColor: colorScheme.background,
@@ -106,36 +172,33 @@ class _NotificationPageState extends State<NotificationPage> {
             fontWeight: FontWeight.w500,
           ),
         ),
-        actions: [
-          if (_unreadCount > 0)
-            IconButton(
-              icon: Icon(Icons.done_all, color: colorScheme.primary),
-              onPressed: _markAllAsRead,
-            ),
-        ],
       ),
       body: SmartRefresher(
         controller: _refreshController,
         onRefresh: _onRefresh,
         onLoading: _onLoading,
         enablePullDown: true,
-        enablePullUp: true,
+        enablePullUp: false,
         header: WaterDropHeader(
           waterDropColor: colorScheme.primary,
         ),
-        child: ListView.builder(
-          itemCount: _notifications.length,
-          padding: const EdgeInsets.all(16),
-          itemBuilder: (context, index) {
-            final notification = _notifications[index];
-            return NotificationCard(
-              notification: notification,
-              onTap: () {
-                _markAsRead(notification.id);
-              },
-            );
-          },
-        ),
+        child: _notifications.isEmpty
+            ? const Center(
+                child: Text('Tidak ada notifikasi'),
+              )
+            : ListView.builder(
+                itemCount: _notifications.length,
+                padding: const EdgeInsets.all(16),
+                itemBuilder: (context, index) {
+                  final notification = _notifications[index];
+                  return NotificationCard(
+                    notification: notification,
+                    onTap: () {
+                      // Handle notification tap if needed
+                    },
+                  );
+                },
+              ),
       ),
     );
   }
