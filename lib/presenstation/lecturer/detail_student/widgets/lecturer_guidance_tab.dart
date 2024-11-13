@@ -110,15 +110,17 @@ class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
         ),
-        if (widget.guidance.name_file != "tidak ada file") ...[
+                if (widget.guidance.name_file != "tidak ada file") ...[
           InkWell(
             onTap: () {
               if (kIsWeb) {
+                // html.window.open(widget.guidance.name_file, "_blank");
               } else {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => PDFViewerPage(pdfUrl: widget.guidance.name_file),
+                    builder: (context) =>
+                        PDFViewerPage(pdfUrl: widget.guidance.name_file),
                   ),
                 );
               }
@@ -142,13 +144,12 @@ class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
                 ),
               ),
               child: Text(
-                PDFViewerPage.extractFileName(widget.guidance.name_file),
+                widget.guidance.name_file.split('/').last, 
                 style: textTheme.bodyMedium?.copyWith(
                   color: currentStatus == LecturerGuidanceStatus.rejected
                       ? colorScheme.onError
                       : colorScheme.onSurface,
                 ),
-                overflow: TextOverflow.ellipsis,
               ),
             ),
           ),

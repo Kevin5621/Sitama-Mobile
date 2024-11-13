@@ -102,7 +102,7 @@ class GuidanceCard extends StatelessWidget {
                       ),
                     ),
                   ],
-                  if (nameFile != "tidak ada file") ...[
+if (nameFile != "tidak ada file") ...[
                     const SizedBox(height: 20),
                     InkWell(
                       onTap: () {
@@ -112,7 +112,8 @@ class GuidanceCard extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => PDFViewerPage(pdfUrl: nameFile),
+                              builder: (context) =>
+                                  PDFViewerPage(pdfUrl: nameFile),
                             ),
                           );
                         }
@@ -127,7 +128,8 @@ class GuidanceCard extends StatelessWidget {
                                 : colorScheme.onSurface,
                           ),
                           border: OutlineInputBorder(
-                            borderRadius: const BorderRadius.all(Radius.circular(12)),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(12)),
                             borderSide: BorderSide(
                               color: status == GuidanceStatus.rejected
                                   ? colorScheme.onError.withOpacity(0.5)
@@ -136,13 +138,12 @@ class GuidanceCard extends StatelessWidget {
                           ),
                         ),
                         child: Text(
-                          PDFViewerPage.extractFileName(nameFile), 
+                          nameFile.split('/').last, 
                           style: textTheme.bodyMedium?.copyWith(
                             color: status == GuidanceStatus.rejected
                                 ? colorScheme.onError
                                 : colorScheme.onSurface,
                           ),
-                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ),
