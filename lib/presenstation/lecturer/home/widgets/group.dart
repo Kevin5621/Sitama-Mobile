@@ -3,11 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sistem_magang/common/widgets/alert.dart';
 import 'package:sistem_magang/common/widgets/search_field.dart';
 import 'package:sistem_magang/core/config/assets/app_images.dart';
+import 'package:sistem_magang/core/config/themes/app_color.dart';
 import 'package:sistem_magang/domain/entities/lecturer_home_entity.dart';
 import 'package:sistem_magang/presenstation/lecturer/detail_student/pages/detail_student.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_bloc.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_event.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_state.dart';
+import 'package:sistem_magang/presenstation/lecturer/home/widgets/send_message_bottom.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/widgets/student_card.dart';
 
 class GroupPage extends StatefulWidget {
@@ -267,7 +269,7 @@ class _GroupPageState extends State<GroupPage> {
     }
   }
 
-   @override
+  @override
   Widget build(BuildContext context) {
     return BlocListener<SelectionBloc, SelectionState>(
       listenWhen: (previous, current) => 
@@ -399,6 +401,10 @@ class _GroupPageState extends State<GroupPage> {
                         },
                       ),
               ),
+              floatingActionButton: selectionState.isSelectionMode && 
+                                selectionState.selectedIds.isNotEmpty
+                ? _buildFloatingActionButton(context)
+                : null,
             ),
           );
         },
@@ -406,6 +412,28 @@ class _GroupPageState extends State<GroupPage> {
     );
   }
 
+  Widget _buildFloatingActionButton(BuildContext context) {
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0.0, end: 1.0),
+      duration: const Duration(milliseconds: 300),
+      builder: (context, value, child) {
+        return Transform.scale(
+          scale: value,
+          child: FloatingActionButton(
+            onPressed: () => showSendMessageBottomSheet(context),
+            backgroundColor: AppColors.lightPrimary,
+            elevation: 6,
+            shape: const CircleBorder(),
+            child: const Icon(
+              Icons.add,
+              color: AppColors.lightWhite,
+              size: 24,
+            ),
+          ),
+        );
+      },
+    );
+  }
   Widget _buildStudentCard(LecturerStudentsEntity student) {
     return BlocBuilder<SelectionBloc, SelectionState>(
       builder: (context, state) {

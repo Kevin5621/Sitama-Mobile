@@ -50,7 +50,7 @@ Widget _buildHeader(BuildContext context) {
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
       Text(
-        'Send Message',
+        'Krim Pengumuman',
         style: TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.bold,
@@ -121,7 +121,7 @@ Widget _buildSendButton(BuildContext context, TextEditingController controller) 
               Icon(Icons.send, size: 20),
               SizedBox(width: 8),
               Text(
-                'Send Message',
+                'Krim',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
