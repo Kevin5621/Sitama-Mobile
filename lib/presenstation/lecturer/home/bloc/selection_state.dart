@@ -1,10 +1,11 @@
 import 'package:equatable/equatable.dart';
+import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_bloc.dart';
 
 class SelectionState extends Equatable {
   final bool isSelectionMode;
   final Set<int> selectedIds;
   final Set<int> archivedIds;
-  final Set<int> groupIds;
+  final Map<String, GroupModel> groups; 
   final bool isLoading;
   final String? error;
   final bool isLocalOperation;
@@ -13,7 +14,7 @@ class SelectionState extends Equatable {
     required this.isSelectionMode,
     required this.selectedIds,
     required this.archivedIds,
-    required this.groupIds,
+    required this.groups,
     this.isLoading = false,
     this.error,
     this.isLocalOperation = false,
@@ -23,7 +24,7 @@ class SelectionState extends Equatable {
     bool? isSelectionMode,
     Set<int>? selectedIds,
     Set<int>? archivedIds,
-    Set<int>? groupIds,
+    Map<String, GroupModel>? groups,
     bool? isLoading,
     String? error,
     bool? isLocalOperation,
@@ -32,19 +33,26 @@ class SelectionState extends Equatable {
       isSelectionMode: isSelectionMode ?? this.isSelectionMode,
       selectedIds: selectedIds ?? this.selectedIds,
       archivedIds: archivedIds ?? this.archivedIds,
-      groupIds: groupIds ?? this.groupIds,
+      groups: groups ?? this.groups,
       isLoading: isLoading ?? this.isLoading,
       error: error,
       isLocalOperation: isLocalOperation ?? this.isLocalOperation,
     );
   }
 
-  @override
+  Set<int> get groupIds {
+    Set<int> allGroupIds = {};
+    for (var group in groups.values) {
+      allGroupIds.addAll(group.studentIds);
+    }
+    return allGroupIds;
+  }
+
   List<Object?> get props => [
         isSelectionMode,
         selectedIds,
         archivedIds,
-        groupIds,
+        groups,
         isLoading,
         error,
         isLocalOperation,

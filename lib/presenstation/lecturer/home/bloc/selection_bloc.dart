@@ -1,5 +1,5 @@
 // ignore_for_file: invalid_use_of_visible_for_testing_member
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -37,13 +37,14 @@ class GroupModel {
 class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
   static const String _archiveKey = 'archived_students';
   static const String _groupKey = 'group_students';
+  static const String _groupsKey = 'groups_data';
 
   SelectionBloc()
       : super(const SelectionState(
           isSelectionMode: false,
           selectedIds: {},
           archivedIds: {},
-          groupIds: {},
+          groups: {},
         )) {
     on<ToggleSelectionMode>(_onToggleSelectionMode);
     on<ToggleItemSelection>(_onToggleItemSelection);
@@ -57,6 +58,16 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
     on<GroupSelectedItems>(_onGroupSelectedItems);
     on<UnGroupItems>(_onUnGroupItems);
     on<LoadGroupItems>(_onLoadGroupItems);
+    on<DeleteGroup>(_onDeleteGroup);
+    on<UpdateGroup>((event, emit) {
+    final updatedGroups = Map<String, GroupModel>.from(state.groups);
+    updatedGroups[event.groupId] = updatedGroups[event.groupId]!.copyWith(
+      title: event.title,
+      icon: event.icon,
+    );
+    
+    emit(state.copyWith(groups: updatedGroups));
+  });
 
     // Load archived items and groups when bloc is created
     add(LoadArchivedItems());
@@ -227,15 +238,37 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
   ) async {
     try {
       emit(state.copyWith(isLoading: true, error: null));
-      final groupIds = await _getGroupIds();
-      emit(state.copyWith(
-        groupIds: groupIds,
-        isLoading: false,
-      ));
+      
+      // Load both legacy groupIds and new group data
+      final legacyGroupIds = await _getGroupIds();
+      final groupsData = await _loadGroups();
+      
+      // If we have legacy data but no new format data, convert it
+      if (legacyGroupIds.isNotEmpty && groupsData.isEmpty) {
+        final defaultGroup = GroupModel(
+          id: 'default',
+          title: 'Archived Students',
+          icon: Icons.group,
+          studentIds: legacyGroupIds,
+        );
+        
+        final initialGroups = {'default': defaultGroup};
+        await _saveGroups(initialGroups);
+        
+        emit(state.copyWith(
+          groups: initialGroups,
+          isLoading: false,
+        ));
+      } else {
+        emit(state.copyWith(
+          groups: groupsData,
+          isLoading: false,
+        ));
+      }
     } catch (e) {
       emit(state.copyWith(
         isLoading: false,
-        error: 'Failed to load Group items: $e',
+        error: 'Failed to load group items: $e',
       ));
     }
   }
@@ -244,24 +277,34 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
     GroupSelectedItems event,
     Emitter<SelectionState> emit,
   ) async {
-    if (state.selectedIds.isEmpty) return;
+    if (event.studentIds.isEmpty) return;
 
     try {
-      emit(state.copyWith(isLoading: true, error: null));
-      
-      final newgroupIds = {...state.groupIds, ...state.selectedIds};
-      await _saveGroupIds(newgroupIds);
+      emit(state.copyWith(isLoading: true));
+
+      final String groupId = DateTime.now().millisecondsSinceEpoch.toString();
+      final GroupModel newGroup = GroupModel(
+        id: groupId,
+        title: event.title,
+        icon: event.icon,
+        studentIds: event.studentIds,
+      );
+
+      final updatedGroups = Map<String, GroupModel>.from(state.groups)
+        ..[groupId] = newGroup;
+
+      await _saveGroups(updatedGroups);
 
       emit(state.copyWith(
         isSelectionMode: false,
         selectedIds: {},
-        groupIds: newgroupIds,
+        groups: updatedGroups,
         isLoading: false,
       ));
     } catch (e) {
       emit(state.copyWith(
         isLoading: false,
-        error: 'Failed to archive items: $e',
+        error: 'Failed to create group: $e',
       ));
     }
   }
@@ -271,39 +314,92 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
     Emitter<SelectionState> emit,
   ) async {
     try {
-      // Set isLocalOperation to true to prevent unnecessary loading states
       emit(state.copyWith(isLocalOperation: true));
 
-      final updatedGroupIds = Set<int>.from(state.groupIds)
-        ..removeAll(event.ids);
-      
+      // Create updated groups map by removing students from all groups
+      final updatedGroups = Map<String, GroupModel>.from(state.groups);
+      updatedGroups.forEach((groupId, group) {
+        final updatedStudentIds = Set<int>.from(group.studentIds)
+          ..removeAll(event.ids);
+        
+        if (updatedStudentIds.isEmpty) {
+          // If group becomes empty, remove it entirely
+          updatedGroups.remove(groupId);
+        } else {
+          // Otherwise update the group with remaining students
+          updatedGroups[groupId] = group.copyWith(studentIds: updatedStudentIds);
+        }
+      });
+
       // Update state immediately for UI responsiveness
       emit(state.copyWith(
-        groupIds: updatedGroupIds,
+        groups: updatedGroups,
         selectedIds: {},
         isSelectionMode: false,
         isLocalOperation: true,
       ));
 
-      // Save to SharedPreferences in the background
-      await _saveGroupIds(updatedGroupIds);
+      // Save both formats for backward compatibility
+      await _saveGroups(updatedGroups);
+      await _saveGroupIds(state.groupIds);
 
       // Final emit to confirm persistence
       emit(state.copyWith(isLocalOperation: false));
     } catch (e) {
       emit(state.copyWith(
-        error: 'Failed to unarchive items: $e',
+        error: 'Failed to remove items from groups: $e',
         isLocalOperation: false,
       ));
     }
   }
 
+  // Helper methods for persisting data
+  Future<Map<String, GroupModel>> _loadGroups() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final String? groupsString = prefs.getString(_groupsKey);
+      if (groupsString == null) return {};
+
+      final Map<String, dynamic> groupsJson = jsonDecode(groupsString);
+      return groupsJson.map((key, value) => MapEntry(
+            key,
+            GroupModel(
+              id: value['id'],
+              title: value['title'],
+              icon: IconData(value['icon'], fontFamily: 'MaterialIcons'),
+              studentIds: Set<int>.from(value['studentIds']),
+            ),
+          ));
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> _saveGroups(Map<String, GroupModel> groups) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final groupsJson = groups.map((key, value) => MapEntry(
+            key,
+            {
+              'id': value.id,
+              'title': value.title,
+              'icon': value.icon.codePoint,
+              'studentIds': value.studentIds.toList(),
+            },
+          ));
+      await prefs.setString(_groupsKey, jsonEncode(groupsJson));
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  // Legacy methods maintained for backward compatibility
   Future<Set<int>> _getGroupIds() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final List<String>? Group = prefs.getStringList(_groupKey);
-      if (Group == null || Group.isEmpty) return {};
-      return Group.map((id) => int.parse(id)).toSet();
+      final List<String>? groupIds = prefs.getStringList(_groupKey);
+      if (groupIds == null || groupIds.isEmpty) return {};
+      return groupIds.map((id) => int.parse(id)).toSet();
     } catch (e) {
       rethrow;
     }
@@ -312,10 +408,40 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
   Future<void> _saveGroupIds(Set<int> ids) async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final List<String> Group = ids.map((id) => id.toString()).toList();
-      await prefs.setStringList(_groupKey, Group);
+      final List<String> groupIds = ids.map((id) => id.toString()).toList();
+      await prefs.setStringList(_groupKey, groupIds);
     } catch (e) {
       rethrow;
+    }
+  }
+  
+  Future<void> _onDeleteGroup(
+    DeleteGroup event,
+    Emitter<SelectionState> emit,
+  ) async {
+    try {
+      emit(state.copyWith(isLoading: true, error: null));
+
+      // Get the group that will be deleted
+      final groupToDelete = state.groups[event.groupId];
+      if (groupToDelete == null) return;
+
+      // Create updated groups map by removing the group
+      final updatedGroups = Map<String, GroupModel>.from(state.groups)
+        ..remove(event.groupId);
+
+      // Save the updated groups
+      await _saveGroups(updatedGroups);
+
+      emit(state.copyWith(
+        groups: updatedGroups,
+        isLoading: false,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        isLoading: false,
+        error: 'Failed to delete group: $e',
+      ));
     }
   }
 }

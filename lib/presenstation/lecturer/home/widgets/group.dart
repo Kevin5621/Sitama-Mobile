@@ -12,10 +12,12 @@ import 'package:sistem_magang/presenstation/lecturer/home/widgets/student_card.d
 
 class GroupPage extends StatefulWidget {
   final List<LecturerStudentsEntity> groupStudents;
+  final String groupId;
 
   const GroupPage({
     super.key,
     required this.groupStudents,
+    required this.groupId,
   });
 
   @override
@@ -33,13 +35,19 @@ class _GroupPageState extends State<GroupPage> {
   }
 
   void _synchronizeGroupdStudents() {
-    // Get current group IDs from bloc
-    final groupIds = context.read<SelectionBloc>().state.groupIds;
+    final group = context.read<SelectionBloc>().state.groups[widget.groupId];
     
-    // Filter students based on current group IDs
+    if (group == null) {
+      setState(() {
+        _filteredStudents = [];
+      });
+      return;
+    }
+    
+    // Filter students berdasarkan studentIds yang ada di group
     setState(() {
       _filteredStudents = widget.groupStudents
-          .where((student) => groupIds.contains(student.id))
+          .where((student) => group.studentIds.contains(student.id))
           .toList();
     });
   }
@@ -83,15 +91,30 @@ class _GroupPageState extends State<GroupPage> {
     return true;
   }
   
-  Future<void> _showUngroupConfirmation(
-    BuildContext context, Set<int> selectedIds) async {
+  Future<void> _showUngroupConfirmation(BuildContext context, Set<int> selectedIds) async {
+    // Cek apakah setelah ungroup masih ada anggota tersisa
+    final remainingMembers = _filteredStudents.length - selectedIds.length;
+    
+    if (remainingMembers < 1) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Group harus memiliki minimal 1 anggota'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+      return;
+    }
+
+    // Lanjutkan dengan konfirmasi ungroup seperti sebelumnya
     final colorScheme = Theme.of(context).colorScheme;
     final result = await CustomAlertDialog.show(
       context: context,
-      title: 'Konfirmasi Batal Arsip',
-      message: 'Apakah Anda yakin ingin membatalkan arsip ${selectedIds.length} item?',
+      title: 'Konfirmasi Keluarkan Mahasiswa dari Group',
+      message: 'Apakah Anda Mengeluarkan Mahasiswa dari Group ${selectedIds.length} item?',
       cancelText: 'Batal',
-      confirmText: 'Batal Arsip',
+      confirmText: 'Ya',
       confirmColor: colorScheme.primary,
       icon: Icons.group_outlined,
       iconColor: colorScheme.primary,
@@ -117,15 +140,10 @@ class _GroupPageState extends State<GroupPage> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('${selectedIds.length} item berhasil dibatalkan arsip'),
+            content: Text('${selectedIds.length} item berhasil dikeluarkan dari Group'),
             duration: const Duration(seconds: 2),
           ),
         );
-
-        // Check if no items left, then pop the page
-        if (_filteredStudents.isEmpty) {
-          Navigator.of(context).pop();
-        }
       }
     }
   }
@@ -135,16 +153,141 @@ class _GroupPageState extends State<GroupPage> {
     _synchronizeGroupdStudents();
   }
 
-  @override
+  Future<void> _showEditDialog(BuildContext context, GroupModel group) async {
+    final TextEditingController titleController = TextEditingController(text: group.title);
+    IconData selectedIcon = group.icon;
+
+    final List<IconData> availableIcons = [
+    Icons.group,
+    Icons.school,
+    Icons.work,
+    Icons.star,
+    Icons.favorite,
+    Icons.rocket_launch,
+    Icons.psychology,
+    Icons.science,
+    ];
+
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Edit Group'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: titleController,
+              decoration: const InputDecoration(
+                labelText: 'Nama Group',
+              ),
+            ),
+            const SizedBox(height: 16),
+            const Text('Pilih Icon:'),
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: availableIcons.map((icon) {
+                return InkWell(
+                  onTap: () {
+                    selectedIcon = icon;
+                    Navigator.pop(context, {
+                      'title': titleController.text,
+                      'icon': icon,
+                    });
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: icon == selectedIcon 
+                            ? Theme.of(context).primaryColor 
+                            : Colors.grey,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Icon(icon),
+                  ),
+                );
+              }).toList(),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Batal'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context, {
+                'title': titleController.text,
+                'icon': selectedIcon,
+              });
+            },
+            child: const Text('Simpan'),
+          ),
+        ],
+      ),
+    ).then((value) {
+      if (value != null && mounted) {
+        context.read<SelectionBloc>().add(
+          UpdateGroup(
+            groupId: widget.groupId,
+            title: value['title'],
+            icon: value['icon'],
+          ),
+        );
+      }
+    });
+  }
+
+  Future<void> _showDeleteConfirmation(BuildContext context, GroupModel group) async {
+    final result = await CustomAlertDialog.show(
+      context: context,
+      title: 'Konfirmasi Hapus Grup',
+      message: group.studentIds.isEmpty 
+          ? 'Apakah Anda yakin ingin menghapus grup ini?'
+          : 'Grup masih memiliki ${group.studentIds.length} mahasiswa. Menghapus grup akan mengeluarkan semua mahasiswa. Lanjutkan?',
+      cancelText: 'Batal',
+      confirmText: 'Hapus',
+      confirmColor: Colors.red,
+      icon: Icons.delete_outline,
+      iconColor: Colors.red,
+    );
+
+    if (result == true && mounted) {
+      // Keluarkan semua mahasiswa dari group terlebih dahulu
+      if (group.studentIds.isNotEmpty) {
+        context.read<SelectionBloc>().add(UnGroupItems(Set.from(group.studentIds)));
+      }
+      // Kemudian hapus group
+      context.read<SelectionBloc>().add(DeleteGroup(widget.groupId));
+      Navigator.pop(context); // Kembali ke halaman sebelumnya
+    }
+  }
+
+   @override
   Widget build(BuildContext context) {
     return BlocListener<SelectionBloc, SelectionState>(
       listenWhen: (previous, current) => 
-          previous.groupIds.length != current.groupIds.length,
+          previous.groups[widget.groupId]?.studentIds != 
+          current.groups[widget.groupId]?.studentIds,
       listener: (context, state) {
         _synchronizeGroupdStudents();
       },
       child: BlocBuilder<SelectionBloc, SelectionState>(
         builder: (context, selectionState) {
+          final group = selectionState.groups[widget.groupId];
+          
+          if (group == null) {
+            return const Scaffold(
+              body: Center(
+                child: Text('Group not found'),
+              ),
+            );
+          }
+
           return WillPopScope(
             onWillPop: _onWillPop,
             child: Scaffold(
@@ -161,14 +304,14 @@ class _GroupPageState extends State<GroupPage> {
                     }
                   },
                 ),
-                title: const Text('Arsip Mahasiswa'),
+                title: Text(group.title),
                 bottom: PreferredSize(
                   preferredSize: const Size.fromHeight(60),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: SearchField(
                       onChanged: _filterStudents,
-                      onFilterPressed: () {}, // Bisa diimplementasikan jika diperlukan
+                      onFilterPressed: () {},
                     ),
                   ),
                 ),
@@ -179,9 +322,45 @@ class _GroupPageState extends State<GroupPage> {
                           _showUngroupConfirmation(context, selectionState.selectedIds),
                       icon: const Icon(Icons.group, color: Colors.white),
                       label: const Text(
-                        'Batal Arsip',
+                        'Keluarkan',
                         style: TextStyle(color: Colors.white),
                       ),
+                    )
+                  else
+                    PopupMenuButton<String>(
+                      icon: const Icon(Icons.more_vert),
+                      onSelected: (value) {
+                        switch (value) {
+                          case 'edit':
+                            _showEditDialog(context, group);
+                            break;
+                          case 'delete':
+                            _showDeleteConfirmation(context, group);
+                            break;
+                        }
+                      },
+                      itemBuilder: (context) => [
+                        const PopupMenuItem(
+                          value: 'edit',
+                          child: Row(
+                            children: [
+                              Icon(Icons.edit),
+                              SizedBox(width: 8),
+                              Text('Edit'),
+                            ],
+                          ),
+                        ),
+                        const PopupMenuItem(
+                          value: 'delete',
+                          child: Row(
+                            children: [
+                              Icon(Icons.delete_outline, color: Colors.red),
+                              SizedBox(width: 8),
+                              Text('Hapus', style: TextStyle(color: Colors.red)),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                 ],
               ),
@@ -226,9 +405,6 @@ class _GroupPageState extends State<GroupPage> {
       ),
     );
   }
-
-  // ... rest of the methods remain the same ...
-}
 
   Widget _buildStudentCard(LecturerStudentsEntity student) {
     return BlocBuilder<SelectionBloc, SelectionState>(
@@ -282,3 +458,4 @@ class _GroupPageState extends State<GroupPage> {
       context.read<SelectionBloc>().add(ToggleItemSelection(student.id));
     }
   }
+}

@@ -59,7 +59,7 @@ class GroupSelectedItems extends SelectionEvent {
   final IconData icon;
   final Set<int> studentIds;
 
-  GroupSelectedItems({
+  const GroupSelectedItems({
     required this.title,
     required this.icon,
     required this.studentIds,
@@ -81,3 +81,21 @@ class UnGroupItems extends SelectionEvent {
 class LoadGroupItems extends SelectionEvent {}
 
 class ClearSelectionMode extends SelectionEvent {}
+
+class DeleteGroup extends SelectionEvent {
+  final String groupId;
+  
+  const DeleteGroup(this.groupId);
+}
+
+class UpdateGroup extends SelectionEvent {
+  final String groupId;
+  final String title;
+  final IconData icon;
+
+  UpdateGroup({
+    required this.groupId,
+    required this.title,
+    required this.icon,
+  });
+}
