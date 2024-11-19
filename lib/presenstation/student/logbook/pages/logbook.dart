@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sistem_magang/common/widgets/search_field.dart';
@@ -43,62 +42,54 @@ class _LogBookPageState extends State<LogBookPage> with AutomaticKeepAliveClient
   Widget build(BuildContext context) {
     super.build(context);
     final theme = Theme.of(context);
-    
+
     return Scaffold(
       body: BlocProvider(
         create: (context) => LogBookStudentCubit()..displayLogBook(),
         child: BlocBuilder<LogBookStudentCubit, LogBookStudentState>(
           builder: (context, state) {
             if (state is LogBookLoading) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             }
             if (state is LogBookLoaded) {
               final sortedAndFilteredLogBooks = 
                 _getSortedAndFilteredLogBooks(state.logBookEntity.log_books);
-              
-              return NestedScrollView(
-                headerSliverBuilder: (context, innerBoxIsScrolled) {
-                  return [
-                    SliverAppBar(
-                      floating: false,
-                      pinned: true,
-                      toolbarHeight: 80.0,
-                      title: Text(
-                        'LogBook',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: theme.colorScheme.onBackground,
-                        ),
+
+              return CustomScrollView(
+                slivers: [
+                  SliverAppBar(
+                    floating: false,
+                    snap: false,
+                    pinned: true,
+                    elevation: 0,
+                    backgroundColor: theme.colorScheme.background,
+                    title: Text(
+                      'LogBook',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: theme.colorScheme.onBackground, 
                       ),
-                      centerTitle: true,
-                      automaticallyImplyLeading: false,
-                      actions: [
-                        IconButton(
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AddLogBook();
-                              },
-                            );
-                          },
-                          icon: Icon(
-                            Icons.add,
-                            color: theme.colorScheme.onBackground,
-                          ),
-                        )
-                      ],
-                      backgroundColor: theme.scaffoldBackgroundColor,
                     ),
-                    SliverAppBar(
-                      pinned: true,
-                      floating: false,
-                      automaticallyImplyLeading: false,
-                      toolbarHeight: 80,
-                      backgroundColor: theme.scaffoldBackgroundColor,
-                      flexibleSpace: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+                    centerTitle: true,
+                    actions: [
+                      IconButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => const AddLogBook(),
+                          );
+                        },
+                        icon: Icon(
+                          Icons.add,
+                          color: theme.colorScheme.onBackground, 
+                        ),
+                      )
+                    ],
+                    bottom: PreferredSize(
+                      preferredSize: const Size.fromHeight(80),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                         child: Row(
                           children: [
                             Expanded(
@@ -118,18 +109,27 @@ class _LogBookPageState extends State<LogBookPage> with AutomaticKeepAliveClient
                                   _sortMode = newMode;
                                 });
                               },
-                            ),
+                            )
                           ],
                         ),
                       ),
                     ),
-                  ];
-                },
-                body: CustomScrollView(
-                  slivers: [
-                    _listLogBook(sortedAndFilteredLogBooks),
-                  ],
-                ),
+                  ),
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) => LogBookCard(
+                        item: LogBookItem(
+                          id: sortedAndFilteredLogBooks[index].id,
+                          title: sortedAndFilteredLogBooks[index].title,
+                          date: sortedAndFilteredLogBooks[index].date,
+                          description: sortedAndFilteredLogBooks[index].activity,
+                          curentPage: 2,
+                        ),
+                      ),
+                      childCount: sortedAndFilteredLogBooks.length,
+                    ),
+                  ),
+                ],
               );
             }
             if (state is LoadLogBookFailure) {
@@ -138,23 +138,6 @@ class _LogBookPageState extends State<LogBookPage> with AutomaticKeepAliveClient
             return Container();
           },
         ),
-      ),
-    );
-  }
-
-  SliverList _listLogBook(List<LogBookEntity> logBooks) {
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (context, index) => LogBookCard(
-          item: LogBookItem(
-            id: logBooks[index].id,
-            title: logBooks[index].title,
-            date: logBooks[index].date,
-            description: logBooks[index].activity,
-            curentPage: 2,
-          ),
-        ),
-        childCount: logBooks.length,
       ),
     );
   }

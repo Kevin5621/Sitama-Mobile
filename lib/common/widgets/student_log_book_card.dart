@@ -24,9 +24,9 @@ class LogBookCard extends StatelessWidget {
   final LogBookItem item;
 
   const LogBookCard({
-    Key? key,
+    super.key,
     required this.item,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -36,19 +36,16 @@ class LogBookCard extends StatelessWidget {
     return Card(
       elevation: 2,
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      // Menggunakan surface color dari color scheme
       color: colorScheme.surface,
       child: Theme(
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
-          // Menggunakan warna primary untuk title
           title: Text(
             item.title,
             style: theme.textTheme.titleMedium?.copyWith(
               color: colorScheme.onSurface,
             ),
           ),
-          // Menggunakan warna secondary untuk subtitle
           subtitle: Text(
             DateFormat('dd/MM/yyyy').format(item.date),
             style: theme.textTheme.bodySmall?.copyWith(
@@ -69,8 +66,13 @@ class LogBookCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      GestureDetector(
+                      _buildActionButton(
+                        context: context,
+                        icon: Icons.edit,
+                        label: 'Edit',
+                        color: colorScheme.primary,
                         onTap: () {
                           showDialog(
                             context: context,
@@ -85,27 +87,13 @@ class LogBookCard extends StatelessWidget {
                             },
                           );
                         },
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.edit,
-                              color: colorScheme.primary,
-                              size: 18,
-                            ),
-                            const SizedBox(width: 2),
-                            Text(
-                              'Edit',
-                              style: TextStyle(
-                                color: colorScheme.primary,
-                              ),
-                            )
-                          ],
-                        ),
                       ),
                       const SizedBox(width: 10),
-                      GestureDetector(
+                      _buildActionButton(
+                        context: context,
+                        icon: Icons.delete,
+                        label: 'Delete',
+                        color: AppColors.lightDanger,
                         onTap: () {
                           showDialog(
                             context: context,
@@ -118,24 +106,6 @@ class LogBookCard extends StatelessWidget {
                             },
                           );
                         },
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.delete,
-                              color: colorScheme.error,
-                              size: 18,
-                            ),
-                            const SizedBox(width: 2),
-                            const Text(
-                              'Delete',
-                              style: TextStyle(
-                                color: AppColors.lightDanger,
-                              ),
-                            )
-                          ],
-                        ),
                       ),
                     ],
                   ),
@@ -144,6 +114,36 @@ class LogBookCard extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildActionButton({
+    required BuildContext context,
+    required IconData icon,
+    required String label,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            icon,
+            color: color,
+            size: 18,
+          ),
+          const SizedBox(width: 2),
+          Text(
+            label,
+            style: TextStyle(
+              color: color,
+            ),
+          )
+        ],
       ),
     );
   }

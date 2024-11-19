@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sistem_magang/common/widgets/student_guidance_card.dart';
 import 'package:sistem_magang/common/widgets/search_field.dart';
@@ -26,12 +24,10 @@ class _GuidancePageState extends State<GuidancePage> with AutomaticKeepAliveClie
 
   List<GuidanceEntity> _filterGuidances(List<GuidanceEntity> guidances) {
     return guidances.where((guidance) {
-      // First apply search filter
       bool matchesSearch = guidance.title
           .toLowerCase()
           .contains(_search.toLowerCase());
 
-      // Then apply status filter
       bool matchesStatus = _selectedFilter == 'All' ||
           (_selectedFilter == 'Approved' && guidance.status == 'approved') ||
           (_selectedFilter == 'InProgress' && guidance.status == 'in-progress') ||
@@ -48,7 +44,6 @@ class _GuidancePageState extends State<GuidancePage> with AutomaticKeepAliveClie
     final theme = Theme.of(context);
     
     return Scaffold(
-      appBar: _appBar(theme),
       body: BlocProvider(
         create: (context) => GuidanceStudentCubit()..displayGuidance(),
         child: BlocBuilder<GuidanceStudentCubit, GuidanceStudentState>(
@@ -62,35 +57,64 @@ class _GuidancePageState extends State<GuidancePage> with AutomaticKeepAliveClie
 
               return CustomScrollView(
                 slivers: [
-                  const SliverToBoxAdapter(child: SizedBox(height: 12)),
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: SearchField(
-                              onChanged: (value) {
+                  SliverAppBar(
+                    floating: false,
+                    snap: false,
+                    pinned: true,
+                    backgroundColor: theme.colorScheme.background,
+                    elevation: 0,
+                    title: Text(
+                      'Bimbingan',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: theme.colorScheme.onBackground, 
+                      ),
+                    ),
+                    centerTitle: true,
+                    actions: [
+                      IconButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => const AddGuidance(),
+                          );
+                        },
+                        icon: Icon(
+                          Icons.add,
+                          color: theme.colorScheme.onBackground, 
+                        ),
+                      )
+                    ],
+                    bottom: PreferredSize(
+                      preferredSize: const Size.fromHeight(80),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: SearchField(
+                                onChanged: (value) {
+                                  setState(() {
+                                    _search = value;
+                                  });
+                                },
+                                onFilterPressed: () {},
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            FilterDropdown(
+                              onFilterChanged: (String selectedFilter) {
                                 setState(() {
-                                  _search = value;
+                                  _selectedFilter = selectedFilter;
                                 });
                               },
-                              onFilterPressed: () {},
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          FilterDropdown(
-                            onFilterChanged: (String selectedFilter) {
-                              setState(() {
-                                _selectedFilter = selectedFilter;
-                              });
-                            },
-                          )
-                        ],
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                  const SliverToBoxAdapter(child: SizedBox(height: 20)),
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) => GuidanceCard(
@@ -121,42 +145,6 @@ class _GuidancePageState extends State<GuidancePage> with AutomaticKeepAliveClie
             return Container();
           },
         ),
-      ),
-    );
-  }
-
-  AppBar _appBar(ThemeData theme) {
-    return AppBar(
-      toolbarHeight: 80.0,
-      title: Text(
-        'Bimbingan',
-        style: TextStyle(
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-          color: theme.colorScheme.onBackground, // Mengatur warna teks sesuai theme
-        ),
-      ),
-      centerTitle: true,
-      automaticallyImplyLeading: false,
-      actions: [
-        IconButton(
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (context) {
-                return const AddGuidance();
-              },
-            );
-          },
-          icon: Icon(
-            Icons.add,
-            color: theme.colorScheme.onBackground, 
-          ),
-        )
-      ],
-      backgroundColor: Colors.transparent,
-      iconTheme: IconThemeData(
-        color: theme.colorScheme.onBackground, 
       ),
     );
   }
