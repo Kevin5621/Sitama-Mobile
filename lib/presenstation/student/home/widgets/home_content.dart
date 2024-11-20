@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sistem_magang/common/widgets/student_guidance_card.dart';
 import 'package:sistem_magang/common/widgets/student_log_book_card.dart';
 import 'package:sistem_magang/core/config/assets/app_images.dart';
+import 'package:sistem_magang/data/models/notification.dart';
 import 'package:sistem_magang/domain/entities/student_home_entity.dart';
 import 'package:sistem_magang/presenstation/student/home/bloc/student_display_cubit.dart';
 import 'package:sistem_magang/presenstation/student/home/bloc/student_display_state.dart';
@@ -54,14 +55,14 @@ class _HomeContentState extends State<HomeContent> with AutomaticKeepAliveClient
         builder: (context, state) {
           return AnimatedSwitcher(
             duration: const Duration(milliseconds: 300),
-            child: _buildContent(state),
+            child: _buildContent(context, state),
           );
         },
       ),
     );
   }
 
-  Widget _buildContent(StudentDisplayState state) {
+  Widget _buildContent(BuildContext context, StudentDisplayState state) {
     if (state is StudentLoading) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -73,12 +74,11 @@ class _HomeContentState extends State<HomeContent> with AutomaticKeepAliveClient
         child: CustomScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           slivers: [
-            _header(context, state.studentHomeEntity),
+            _header(context, state), 
             _buildSectionHeader(context, 'Bimbingan Terbaru', widget.allGuidances),
             _guidancesList(state.studentHomeEntity),
             _buildSectionHeader(context, 'Log Book Terbaru', widget.allLogBooks),
             _logBooksList(state.studentHomeEntity),
-            // Add extra space at bottom
             const SliverToBoxAdapter(child: SizedBox(height: 20)),
           ],
         ),
@@ -180,76 +180,85 @@ class _HomeContentState extends State<HomeContent> with AutomaticKeepAliveClient
   /// - Notification button with badge
   /// - Background pattern
   /// - Notification loading widget
-   SliverToBoxAdapter _header(BuildContext context, StudentHomeEntity student) {
-    final colorScheme = Theme.of(context).colorScheme;
-    
-    return SliverToBoxAdapter(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: double.infinity,
-            height: 160,
-            padding: const EdgeInsets.symmetric(horizontal: 32),
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(AppImages.homePattern),
-                fit: BoxFit.cover,
-              ),
+    SliverToBoxAdapter _header(BuildContext context, StudentDisplayState state) {
+  final colorScheme = Theme.of(context).colorScheme;
+  
+  NotificationItemEntity? latestNotification;
+  if (state is StudentLoaded) {
+    latestNotification = state.notifications?.getLatestGeneralNotification();
+  }
+  
+  return SliverToBoxAdapter(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: double.infinity,
+          height: 160,
+          padding: const EdgeInsets.symmetric(horizontal: 32),
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(AppImages.homePattern),
+              fit: BoxFit.cover,
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      'HELLO,',
-                      style: TextStyle(
-                        fontSize: 12, 
-                        fontWeight: FontWeight.w600,
-                      ),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'HELLO,',
+                    style: TextStyle(
+                      fontSize: 12, 
+                      fontWeight: FontWeight.w600,
                     ),
+                  ),
+                  if (state is StudentLoaded)
                     Text(
-                      student.name,
+                      state.studentHomeEntity.name,
                       style: const TextStyle(
                         fontSize: 20, 
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ],
+                ],
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  color: colorScheme.primary,
+                  shape: BoxShape.circle,
                 ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: colorScheme.primary,
-                    shape: BoxShape.circle,
-                  ),
-                  child: NotificationBadge(
-                    count: 3,
-                    child: Builder(
-                      builder: (BuildContext ctx) => IconButton(
-                        icon: Icon(
-                          Icons.notifications,
-                          color: colorScheme.onPrimary,
-                        ),
-                        onPressed: () => _navigateToNotifications(ctx),
+                child: NotificationBadge(
+                  count: 3,
+                  child: Builder(
+                    builder: (BuildContext ctx) => IconButton(
+                      icon: Icon(
+                        Icons.notifications,
+                        color: colorScheme.onPrimary,
                       ),
+                      onPressed: () => _navigateToNotifications(ctx),
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-          const SizedBox(height: 16),
-          Container(
-            color: colorScheme.background,
-            child: LoadNotification(onClose: () {}),
+        ),
+        const SizedBox(height: 16),
+        Container(
+          color: colorScheme.background,
+          child: LoadNotification(
+            onClose: () {},
+            notification: latestNotification,
           ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
+}
 
   /// Navigation helper for notifications page
   void _navigateToNotifications(BuildContext context) {

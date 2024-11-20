@@ -21,24 +21,21 @@ class NotificationList {
     required this.updatedAt,
   });
 
-  // Factory constructor untuk mengkonversi JSON ke objek Notification
   factory NotificationList.fromJson(Map<String, dynamic> json) {
-  return NotificationList(
-    id: json['id'] ?? 0,
-    userId: json['user_id'] ?? 0,
-    message: json['message'] ?? '',
-    date: json['date'] ?? '',
-    category: json['category'] ?? '',
-    isRead: json['is_read'] ?? 0,
-    detailText: json['detail_text'], 
-    createdAt: json['created_at'] ?? '',
-    updatedAt: json['updated_at'] ?? '',
-  );
-}
+    return NotificationList(
+      id: json['id'] ?? 0,
+      userId: json['user_id'] ?? 0,
+      message: json['message'] ?? '',
+      date: json['date'] ?? '',
+      category: json['category'] ?? '',
+      isRead: json['is_read'] ?? 0,
+      detailText: json['detail_text'],
+      createdAt: json['created_at'] ?? '',
+      updatedAt: json['updated_at'] ?? '',
+    );
+  }
 }
 
-
-// Data class untuk menampung list notifikasi
 class NotificationDataModel {
   final List<NotificationList> notifications;
 
@@ -49,7 +46,7 @@ class NotificationDataModel {
   factory NotificationDataModel.fromJson(Map<String, dynamic> json) {
     var notificationsList = json['notifications'];
     if (notificationsList == null) return NotificationDataModel(notifications: []);
-    
+
     return NotificationDataModel(
       notifications: (notificationsList as List)
           .map((notification) => NotificationList.fromJson(notification))
@@ -60,29 +57,45 @@ class NotificationDataModel {
 
 extension NotificationXModel on NotificationDataModel {
   NotificationDataEntity toEntity() {
-    return NotificationDataEntity (
+    return NotificationDataEntity(
       notifications: notifications
-      .map<NotificationItemEntity>((data) => NotificationItemEntity(
-        id: data.id, 
-        userId: data.userId, 
-        message: data.message, 
-        date: data.date, 
-        category: data.category, 
-        isRead: data.isRead, 
-        createdAt: data.createdAt, 
-        updatedAt: data.updatedAt,
-      )).toList()
+          .map((data) => NotificationItemEntity(
+                id: data.id,
+                userId: data.userId,
+                message: data.message,
+                date: data.date,
+                category: data.category,
+                isRead: data.isRead,
+                detailText: data.detailText,
+                createdAt: data.createdAt,
+                updatedAt: data.updatedAt,
+              ))
+          .toList(),
     );
   }
 }
 
-// Entity classes to maintain consistency with the pattern
-class NotificationResponseEntity  {
+extension NotificationDataEntityX on NotificationDataEntity {
+  NotificationItemEntity? getLatestGeneralNotification() {
+    final filteredList = notifications
+        .where((notification) =>
+            notification.category.toLowerCase() == 'general' ||
+            notification.category.toLowerCase() == 'generalannouncement')
+        .toList();
+    
+    if (filteredList.isEmpty) return null;
+    
+    filteredList.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+    return filteredList.first;
+  }
+}
+
+class NotificationResponseEntity {
   final String code;
   final String status;
   final NotificationDataEntity data;
 
-  NotificationResponseEntity ({
+  NotificationResponseEntity({
     required this.code,
     required this.status,
     required this.data,
