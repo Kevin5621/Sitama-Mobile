@@ -88,6 +88,10 @@ extension NotificationDataEntityX on NotificationDataEntity {
     filteredList.sort((a, b) => b.createdAt.compareTo(a.createdAt));
     return filteredList.first;
   }
+
+    int getUnreadCount() {
+    return notifications.where((notification) => notification.isRead == 0).length;
+  }
 }
 
 class NotificationResponseEntity {
@@ -121,7 +125,7 @@ class NotificationItemEntity {
   final String createdAt;
   final String updatedAt;
 
-  NotificationItemEntity({
+  const NotificationItemEntity({
     required this.id,
     required this.userId,
     required this.message,
@@ -132,4 +136,46 @@ class NotificationItemEntity {
     required this.createdAt,
     required this.updatedAt,
   });
+
+  NotificationItemEntity copyWith({
+    int? id,
+    int? userId,
+    String? message,
+    String? date,
+    String? category,
+    int? isRead,
+    String? detailText,
+    String? createdAt,
+    String? updatedAt,
+  }) {
+    return NotificationItemEntity(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      message: message ?? this.message,
+      date: date ?? this.date,
+      category: category ?? this.category,
+      isRead: isRead ?? this.isRead,
+      detailText: detailText ?? this.detailText,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
+}
+
+class MarkAllNotificationsAsReadReqParams {
+  final int? userId; 
+  final String? timestamp; 
+
+  const MarkAllNotificationsAsReadReqParams({
+    this.userId,
+    this.timestamp,
+  });
+
+  // Convert to map for API request
+  Map<String, dynamic> toMap() {
+    return {
+      if (userId != null) 'user_id': userId,
+      if (timestamp != null) 'timestamp': timestamp,
+    };
+  }
 }

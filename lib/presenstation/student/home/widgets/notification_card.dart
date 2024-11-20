@@ -12,10 +12,10 @@ class NotificationCard extends StatefulWidget {
   final VoidCallback onTap;
 
   const NotificationCard({
-    Key? key,
+    super.key,
     required this.notification,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   State<NotificationCard> createState() => _NotificationCardState();
@@ -86,19 +86,26 @@ class _NotificationCardState extends State<NotificationCard> {
         final hasOverflow = _hasTextOverflow(
           widget.notification.message,
           textStyle!,
-          constraints.maxWidth - 76, // Adjust for padding and icon width.
+          constraints.maxWidth - 76,
+        );
+
+        final backgroundColor = widget.notification.isRead == 1
+            ? (theme.brightness == Brightness.dark
+                ? Colors.black54
+                : Colors.white)
+            : color.withOpacity(0.1); 
+
+        final containerDecoration = BoxDecoration(
+          color: backgroundColor,
+          borderRadius: BorderRadius.circular(12),
+          border: widget.notification.isRead == 0
+              ? Border.all(color: color.withOpacity(0.3))
+              : null,
         );
 
         return Container(
           margin: const EdgeInsets.only(bottom: 8.0),
-          decoration: BoxDecoration(
-            color: widget.notification.isRead == 1
-                ? (theme.brightness == Brightness.dark
-                    ? Colors.black54
-                    : Colors.white)
-                : color.withOpacity(0.05),
-            borderRadius: BorderRadius.circular(12),
-          ),
+          decoration: containerDecoration,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

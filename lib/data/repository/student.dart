@@ -220,4 +220,14 @@ class StudentRepositoryImpl extends StudentRepository {
       },
     );
   }
+
+  @override
+  Future<Either> markAllNotificationsAsRead() async {
+    final request = MarkAllNotificationsAsReadReqParams(); // Create empty request
+    Either result = await sl<StudentApiService>().markAllNotificationsAsRead(request);
+    return result.fold(
+      (error) => Left(error),
+      (data) => Right(true), 
+    );
+  }
 }

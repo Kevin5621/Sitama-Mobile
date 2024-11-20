@@ -231,19 +231,29 @@ class _HomeContentState extends State<HomeContent> with AutomaticKeepAliveClient
                   color: colorScheme.primary,
                   shape: BoxShape.circle,
                 ),
-                child: NotificationBadge(
-                  count: 3,
-                  child: Builder(
-                    builder: (BuildContext ctx) => IconButton(
-                      icon: Icon(
-                        Icons.notifications,
-                        color: colorScheme.onPrimary,
+                child: BlocBuilder<StudentDisplayCubit, StudentDisplayState>(
+                  builder: (context, state) {
+                    int unreadCount = 0;
+                    
+                    if (state is StudentLoaded && state.notifications != null) {
+                      unreadCount = state.notifications!.getUnreadCount();
+                    }
+
+                    return NotificationBadge(
+                      count: unreadCount,  
+                      child: Builder(
+                        builder: (BuildContext context) => IconButton(
+                          icon: Icon(
+                            Icons.notifications,
+                            color: colorScheme.onPrimary,
+                          ),
+                          onPressed: () => _navigateToNotifications(context),
+                        ),
                       ),
-                      onPressed: () => _navigateToNotifications(ctx),
-                    ),
-                  ),
+                    );
+                  },
                 ),
-              ),
+              )
             ],
           ),
         ),
