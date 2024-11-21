@@ -5,7 +5,6 @@ import 'package:sistem_magang/core/constansts/api_urls.dart';
 import 'package:sistem_magang/core/network/dio_client.dart';
 import 'package:sistem_magang/data/models/guidance.dart';
 import 'package:sistem_magang/data/models/log_book.dart';
-import 'package:sistem_magang/data/models/notification.dart';
 import 'package:sistem_magang/service_locator.dart';
 
 abstract class StudentApiService {
@@ -21,7 +20,7 @@ abstract class StudentApiService {
   Future<Either> deleteLogBook(int id);
   
   Future<Either> getNotifications();
-  Future<Either> markAllNotificationsAsRead(MarkAllNotificationsAsReadReqParams request);
+  Future<Either> markAllNotificationsAsRead(int id);
 
   Future<Either> getStudentProfile();
 }
@@ -265,22 +264,28 @@ class StudentApiServiceImpl extends StudentApiService {
       return Left(e.response!.data['errors']['message']);
     }
   }
-  
+
   @override
-  Future<Either> markAllNotificationsAsRead(MarkAllNotificationsAsReadReqParams request) async {
+  Future<Either> markAllNotificationsAsRead(int id) async {
     try {
-      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
       var token = sharedPreferences.get('token');
 
-      var response = await sl<DioClient>().post(
-        ApiUrls.notification, 
+      var response = await sl<DioClient>().delete(
+        "${ApiUrls.studentLogBook}/$id",
         options: Options(headers: {
           'Authorization': 'Bearer $token',
         }),
       );
+
       return Right(response);
     } on DioException catch (e) {
-      return Left(e.response!.data['errors']['message']);
+      if (e.response != null) {
+        return Left(e.response!.data['errors'].toString());
+      } else {
+        return Left(e.message);
+      }
     }
   }
 }

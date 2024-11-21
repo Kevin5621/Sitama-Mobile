@@ -161,21 +161,3 @@ class NotificationItemEntity {
     );
   }
 }
-
-class MarkAllNotificationsAsReadReqParams {
-  final int? userId; 
-  final String? timestamp; 
-
-  const MarkAllNotificationsAsReadReqParams({
-    this.userId,
-    this.timestamp,
-  });
-
-  // Convert to map for API request
-  Map<String, dynamic> toMap() {
-    return {
-      if (userId != null) 'user_id': userId,
-      if (timestamp != null) 'timestamp': timestamp,
-    };
-  }
-}

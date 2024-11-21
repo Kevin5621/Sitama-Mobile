@@ -15,7 +15,7 @@ abstract class StudentRepository {
   Future<Either> deleteLogBook(int id);
 
   Future<Either> getNotifications();
-  Future<Either> markAllNotificationsAsRead();
+  Future<Either> markAllNotificationsAsRead(int id);
 
   Future<Either> getStudentProfile();
 }

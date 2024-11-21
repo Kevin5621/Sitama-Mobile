@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sistem_magang/data/models/notification.dart';
 import 'package:sistem_magang/domain/usecases/student/notification/get_notification.dart';
-import 'package:sistem_magang/domain/usecases/student/notification/mark_all_notifications_read.dart';
+import 'package:sistem_magang/domain/usecases/student/notification/mark_allnotifications.dart';
 import 'package:sistem_magang/service_locator.dart';
 import 'package:sistem_magang/presenstation/student/home/widgets/notification_card.dart';
 
@@ -15,8 +15,8 @@ class NotificationPage extends StatefulWidget {
 
 class _NotificationPageState extends State<NotificationPage> {
   final RefreshController _refreshController = RefreshController();
+  final markAllNotificationsReadUseCase = sl<MarkAllNotificationsReadUseCase>();
   final _getNotificationsUseCase = sl<GetNotificationsUseCase>();
-  final _markAllReadUseCase = sl<MarkAllNotificationsAsReadUseCase>();
   List<NotificationItemEntity> _notifications = [];
   bool _isLoading = true;
   String? _error;
@@ -24,42 +24,8 @@ class _NotificationPageState extends State<NotificationPage> {
   @override
   void initState() {
     super.initState();
-    _fetchNotifications().then((_) {
-      // Mark all as read when notifications are loaded
-      _markAllNotificationsAsRead();
-    });
+    _fetchNotifications();
   }
-
-  @override
-  void dispose() {
-    // Auto mark all as read when leaving the page
-    _markAllNotificationsAsRead();
-    super.dispose();
-  }
-
-  Future<void> _markAllNotificationsAsRead() async {
-  try {
-    final result = await _markAllReadUseCase.call();
-    result.fold(
-      (error) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to mark notifications: $error')),
-        );
-      },
-      (success) {
-        if (success) {
-          setState(() {
-            _notifications = _notifications.map((notification) => 
-              notification.copyWith(isRead: 1)
-            ).toList();
-          });
-        }
-      },
-    );
-  } catch (e) {
-    debugPrint('Unexpected error marking notifications: $e');
-  }
-}
 
   Future<void> _fetchNotifications() async {
     setState(() {
@@ -116,7 +82,10 @@ class _NotificationPageState extends State<NotificationPage> {
           elevation: 0.5,
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: colorScheme.onSurface),
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              _markAllNotificationsAsRead();
+              Navigator.pop(context);
+            },
           ),
           title: Text(
             'Notifikasi',
@@ -154,7 +123,7 @@ class _NotificationPageState extends State<NotificationPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(_error!),
+              Text('$_error'),
               ElevatedButton(
                 onPressed: _fetchNotifications,
                 child: const Text('Coba Lagi'),
@@ -172,7 +141,10 @@ class _NotificationPageState extends State<NotificationPage> {
         elevation: 0.5,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: colorScheme.onSurface),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            _markAllNotificationsAsRead();
+            Navigator.pop(context);
+          },
         ),
         title: Text(
           'Notifikasi',
@@ -181,6 +153,16 @@ class _NotificationPageState extends State<NotificationPage> {
             fontWeight: FontWeight.w500,
           ),
         ),
+        actions: [
+          if (_notifications.any((n) => n.isRead == 0))
+            TextButton(
+              onPressed: _markAllNotificationsAsRead,
+              child: Text(
+                'Tandai Semua Dibaca',
+                style: TextStyle(color: colorScheme.onSurface),
+              ),
+            ),
+        ],
       ),
       body: SmartRefresher(
         controller: _refreshController,
@@ -203,12 +185,25 @@ class _NotificationPageState extends State<NotificationPage> {
                   return NotificationCard(
                     notification: notification,
                     onTap: () {
-                      // Handle notification tap if needed
+                      (notification);
                     },
                   );
                 },
               ),
       ),
     );
+  }
+
+  Future<void> _markAllNotificationsAsRead() async {
+    try {
+      // Implementasi API untuk menandai semua notifikasi
+      setState(() {
+        _notifications = _notifications.map((n) => n.copyWith(isRead: 1)).toList();
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Gagal menandai semua notifikasi')),
+      );
+    }
   }
 }
