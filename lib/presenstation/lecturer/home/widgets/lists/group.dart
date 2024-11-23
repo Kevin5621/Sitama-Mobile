@@ -9,8 +9,8 @@ import 'package:sistem_magang/presenstation/lecturer/detail_student/pages/detail
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_bloc.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_event.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_state.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/send_message_bottom.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/student_card.dart';
+import 'package:sistem_magang/presenstation/lecturer/home/widgets/dialogs/send_message_bottom.dart';
+import 'package:sistem_magang/presenstation/lecturer/home/widgets/cards/student_card.dart';
 
 class GroupPage extends StatefulWidget {
   final List<LecturerStudentsEntity> groupStudents;

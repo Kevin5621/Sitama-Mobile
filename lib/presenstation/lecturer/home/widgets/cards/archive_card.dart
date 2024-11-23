@@ -4,7 +4,7 @@ import 'package:sistem_magang/domain/entities/lecturer_home_entity.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/lecturer_display_cubit.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_bloc.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_state.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/archive.dart';
+import 'package:sistem_magang/presenstation/lecturer/home/widgets/lists/archive.dart';
 
 class ArchiveCard extends StatelessWidget {
   final List<LecturerStudentsEntity> archivedStudents;

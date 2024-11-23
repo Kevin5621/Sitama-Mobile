@@ -7,10 +7,10 @@ import 'package:sistem_magang/presenstation/lecturer/detail_student/pages/detail
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_bloc.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_event.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_state.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/archive_card.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/filter_section.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/group_card.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/student_card.dart';
+import 'package:sistem_magang/presenstation/lecturer/home/widgets/cards/archive_card.dart';
+import 'package:sistem_magang/presenstation/lecturer/home/widgets/filters/filter_section.dart';
+import 'package:sistem_magang/presenstation/lecturer/home/widgets/cards/group_card.dart';
+import 'package:sistem_magang/presenstation/lecturer/home/widgets/cards/student_card.dart';
 
 class StudentList extends StatelessWidget {
   const StudentList({
@@ -25,7 +25,6 @@ class StudentList extends StatelessWidget {
   final Animation<double> searchAnimation;
   final AnimationController animationController;
   final SelectionState selectionState;
-
 
   // Animation helpers
   SlideTransition _buildSlideTransition({required Widget child}) {
@@ -172,11 +171,23 @@ class StudentList extends StatelessWidget {
             const SizedBox(height: 16),
             Column(
               children: [
+                // 1. Filter Section always at top
                 _buildFilterSection(context, state),
                 const SizedBox(height: 16),
+                
+                // 2. Active students list
+                if (activeStudents.isNotEmpty) ...[
+                  _buildStudentsList(activeStudents, state),
+                  const SizedBox(height: 16),
+                ],
+                
+                // 3. Groups in the middle
                 ..._buildGroupCards(state),
-                _buildArchiveCard(state),
-                _buildStudentsList(activeStudents, state),
+                if (state.groups.isNotEmpty)
+                  const SizedBox(height: 16),
+                
+                // 4. Archive card always at bottom
+                _buildArchiveSection(state),
               ],
             ),
           ]),
@@ -216,6 +227,36 @@ class StudentList extends StatelessWidget {
           .toList(),
     );
   }
+
+  Widget _buildArchiveSection(SelectionState state) {
+    final archivedStudents = students
+        .where((student) => state.archivedIds.contains(student.id))
+        .toList();
+    
+    if (archivedStudents.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildFadeTransition(
+          child: const Padding(
+            padding: EdgeInsets.only(bottom: 8),
+            child: Text(
+              'Arsip',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+        ArchiveCard(archivedStudents: archivedStudents),
+      ],
+    );
+  }
+
 
   Widget _buildStudentsList(List<LecturerStudentsEntity> activeStudents, SelectionState state) {
     if (activeStudents.isEmpty) {
@@ -284,18 +325,18 @@ class _GroupCreationDialogState extends State<_GroupCreationDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: Text('Cancel'),
           style: TextButton.styleFrom(
             padding: EdgeInsets.symmetric(horizontal: 16),
           ),
+          child: Text('Cancel'),
         ),
         ElevatedButton(
           onPressed: _handleCreateGroup,
-          child: Text('Create'),
           style: ElevatedButton.styleFrom(
             padding: EdgeInsets.symmetric(horizontal: 24),
             elevation: 0, 
           ),
+          child: Text('Create'),
         ),
       ],
     );

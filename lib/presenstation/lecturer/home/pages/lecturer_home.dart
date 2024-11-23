@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/content.dart';
+import 'package:sistem_magang/presenstation/lecturer/home/widgets/common/content.dart';
 import 'package:sistem_magang/presenstation/lecturer/profile/pages/lecturer_profile.dart';
 
 /// A stateful widget that serves as the main navigation hub for the lecturer interface.

@@ -7,7 +7,7 @@ import 'package:sistem_magang/presenstation/lecturer/home/bloc/lecturer_display_
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_bloc.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_event.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_state.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/group.dart';
+import 'package:sistem_magang/presenstation/lecturer/home/widgets/lists/group.dart';
 
 class GroupCard extends StatelessWidget {
   final String groupId;

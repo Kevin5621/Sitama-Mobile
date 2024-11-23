@@ -10,9 +10,9 @@ import 'package:sistem_magang/presenstation/lecturer/home/bloc/lecturer_display_
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_bloc.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_event.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_state.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/header.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/send_message_bottom.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/student_list.dart';
+import 'package:sistem_magang/presenstation/lecturer/home/widgets/common/header.dart';
+import 'package:sistem_magang/presenstation/lecturer/home/widgets/dialogs/send_message_bottom.dart';
+import 'package:sistem_magang/presenstation/lecturer/home/widgets/lists/student_list.dart';
 
 class LecturerHomeContent extends StatefulWidget {
   const LecturerHomeContent({super.key});
