@@ -59,22 +59,17 @@ class StudentList extends StatelessWidget {
     );
   }
 
-  Widget _buildStudentItem(BuildContext context, LecturerStudentsEntity student) {
-    final activitiesList = _getStudentActivities(student);
+  Widget _buildStudentItem(LecturerStudentsEntity student) {
+    return BlocBuilder<SelectionBloc, SelectionState>(
+      builder: (context, state) {
 
-    return _buildFadeTransition(
-      child: StudentCard(
-        id: student.id,
-        imageUrl: student.photo_profile ?? AppImages.defaultProfile,
-        name: student.name,
-        jurusan: student.major,
-        kelas: student.the_class,
-        nim: student.username,
-        isSelected: selectionState.selectedIds.contains(student.id),
-        activities: activitiesList,
-        onTap: () => _handleStudentTap(context, student),
-        onLongPress: () => _handleStudentLongPress(context, student),
-      ),
+        return StudentCard(
+          student: student,
+          isSelected: state.selectedIds.contains(student.id),
+          onTap: () => _handleStudentTap(context, student),
+          onLongPress: () => _handleStudentLongPress(context, student),
+        );
+      },
     );
   }
 
@@ -165,7 +160,7 @@ class StudentList extends StatelessWidget {
                 
                 // 2. Active students list
                 if (categorizedStudents['active']!.isNotEmpty) ...[
-                  _buildStudentsList(categorizedStudents['active']!, state),
+                  _buildStudentsList(categorizedStudents['active']!),
                   const SizedBox(height: 16),
                 ],
                 
@@ -275,19 +270,19 @@ class StudentList extends StatelessWidget {
   }
 
 
-  Widget _buildStudentsList(List<LecturerStudentsEntity> activeStudents, SelectionState state) {
-    if (activeStudents.isEmpty) {
-      return const SizedBox.shrink();
-    }
-
-    return ListView.separated(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: activeStudents.length,
-      separatorBuilder: (_, __) => const SizedBox(height: 14),
-      itemBuilder: (context, index) => _buildStudentItem(context, activeStudents[index]),
-    );
+  Widget _buildStudentsList(List<LecturerStudentsEntity> activeStudents) {
+  if (activeStudents.isEmpty) {
+    return const SizedBox.shrink();
   }
+
+  return ListView.separated(
+    shrinkWrap: true,
+    physics: const NeverScrollableScrollPhysics(),
+    itemCount: activeStudents.length,
+    separatorBuilder: (_, __) => const SizedBox(height: 14),
+    itemBuilder: (context, index) => _buildStudentItem(activeStudents[index]),
+  );
+}
 }
 
 // Extracted Dialog Widget

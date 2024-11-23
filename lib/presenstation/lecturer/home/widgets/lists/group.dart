@@ -348,7 +348,7 @@ class _GroupPageState extends State<GroupPage> {
                           value: 'edit',
                           child: Row(
                             children: [
-                              Icon(Icons.edit),
+                              Icon(Icons.edit, color: AppColors.lightPrimary,),
                               SizedBox(width: 8),
                               Text('Edit'),
                             ],
@@ -358,9 +358,9 @@ class _GroupPageState extends State<GroupPage> {
                           value: 'delete',
                           child: Row(
                             children: [
-                              Icon(Icons.delete_outline, color: Colors.red),
+                              Icon(Icons.delete_outline, color: AppColors.lightDanger,),
                               SizedBox(width: 8),
-                              Text('Hapus', style: TextStyle(color: Colors.red)),
+                              Text('Hapus', style: TextStyle(color: AppColors.lightDanger)),
                             ],
                           ),
                         ),
@@ -436,29 +436,14 @@ class _GroupPageState extends State<GroupPage> {
       },
     );
   }
+  
   Widget _buildStudentCard(LecturerStudentsEntity student) {
     return BlocBuilder<SelectionBloc, SelectionState>(
       builder: (context, state) {
-        List<String> activitiesList = [];
-        if (student.activities['is_in_progress'] == true) {
-          activitiesList.add('in-progress');
-        }
-        if (student.activities['is_updated'] == true) {
-          activitiesList.add('updated');
-        }
-        if (student.activities['is_rejected'] == true) {
-          activitiesList.add('rejected');
-        }
 
         return StudentCard(
-          id: student.id,
-          imageUrl: student.photo_profile ?? AppImages.defaultProfile,
-          name: student.name,
-          jurusan: student.major,
-          kelas: student.the_class,
-          nim: student.username,
+          student: student,
           isSelected: state.selectedIds.contains(student.id),
-          activities: activitiesList,
           onTap: () => _handleStudentTap(context, student),
           onLongPress: () => _handleStudentLongPress(context, student),
         );

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sistem_magang/common/widgets/alert.dart';
 import 'package:sistem_magang/common/widgets/search_field.dart';
-import 'package:sistem_magang/core/config/assets/app_images.dart';
 import 'package:sistem_magang/core/config/themes/app_color.dart';
 import 'package:sistem_magang/domain/entities/lecturer_home_entity.dart';
 import 'package:sistem_magang/presenstation/lecturer/detail_student/pages/detail_student.dart';
@@ -240,26 +239,10 @@ class _ArchivePageState extends State<ArchivePage> {
   Widget _buildStudentCard(LecturerStudentsEntity student) {
     return BlocBuilder<SelectionBloc, SelectionState>(
       builder: (context, state) {
-        List<String> activitiesList = [];
-        if (student.activities['is_in_progress'] == true) {
-          activitiesList.add('in-progress');
-        }
-        if (student.activities['is_updated'] == true) {
-          activitiesList.add('updated');
-        }
-        if (student.activities['is_rejected'] == true) {
-          activitiesList.add('rejected');
-        }
 
         return StudentCard(
-          id: student.id,
-          imageUrl: student.photo_profile ?? AppImages.defaultProfile,
-          name: student.name,
-          jurusan: student.major,
-          kelas: student.the_class,
-          nim: student.username,
+          student: student,
           isSelected: state.selectedIds.contains(student.id),
-          activities: activitiesList,
           onTap: () => _handleStudentTap(context, student),
           onLongPress: () => _handleStudentLongPress(context, student),
         );

@@ -1,60 +1,69 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:sistem_magang/core/config/assets/app_images.dart';
 import 'package:sistem_magang/core/config/themes/app_color.dart';
+import 'package:sistem_magang/domain/entities/lecturer_home_entity.dart';
 
 class StudentCard extends StatelessWidget {
-  final int id;
-  final String imageUrl;
-  final String name;
-  final String jurusan;
-  final String kelas;
-  final String nim;
+  final LecturerStudentsEntity student;
   final bool isSelected;
-  final List<String> activities;
   final VoidCallback onTap;
   final VoidCallback onLongPress;
 
   const StudentCard({
     super.key,
-    required this.id,
-    required this.imageUrl,
-    required this.name,
-    required this.jurusan,
-    required this.kelas,
-    required this.nim,
+    required this.student,
     required this.isSelected,
-    this.activities = const [],
     required this.onTap,
     required this.onLongPress,
   });
 
-  IconData _getactivitiesIcon(String activity) {
+  IconData _getActivityIcon(String activity) {
+    // Mengubah pencocokan string untuk sesuai dengan key dari Map
     switch (activity) {
-      case 'in-progress':
+      case 'is_in_progress':
         return Icons.visibility_off;
-      case 'updated':
+      case 'is_updated':
         return Icons.help;
-      case 'rejected':
+      case 'is_rejected':
         return Icons.edit_document;
       default:
         return Icons.circle;
     }
   }
 
-  Color _getactivitiesColor(String activity) {
+  Color _getActivityColor(String activity) {
+    // Mengubah pencocokan string untuk sesuai dengan key dari Map
     switch (activity) {
-      case 'in-progress':
+      case 'is_in_progress':
         return AppColors.lightGray;
-      case 'updated':
+      case 'is_updated':
         return AppColors.lightWarning;
-      case 'rejected':
+      case 'is_rejected':
         return AppColors.lightDanger;
       default:
         return AppColors.lightGray;
     }
   }
 
-   @override
+  List<String> _getActiveActivities() {
+    // Konversi Map activities ke List sesuai dengan format yang diharapkan
+    List<String> activeActivities = [];
+    
+    student.activities.forEach((key, value) {
+      if (value == true) {
+        activeActivities.add(key);
+      }
+    });
+    
+    return activeActivities;
+  }
+
+  String get _getProfileImage {
+    return student.photo_profile ?? AppImages.defaultProfile;
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
@@ -64,7 +73,10 @@ class StudentCard extends StatelessWidget {
         : colorScheme.surface;
     
     final textColor = colorScheme.onSurface;
-    final secondaryTextColor = theme.textTheme.bodySmall?.color ?? colorScheme.onSurface.withOpacity(0.6);
+    final normal = theme.textTheme.bodySmall?.color ?? colorScheme.onSurface.withOpacity(0.6);
+    final selected = theme.brightness == Brightness.dark ? Colors.white : Colors.black;
+    
+    final activeActivities = _getActiveActivities();
 
     return Card(
       elevation: theme.cardTheme.elevation ?? 1,
@@ -78,57 +90,59 @@ class StudentCard extends StatelessWidget {
         child: Stack(
           children: [
             // Activity Icons Stack
-            Positioned(
-              top: 8,
-              right: 8,
-              child: SizedBox(
-                width: max(24.0, activities.length * 20.0),
-                height: 24,
-                child: Stack(
-                  alignment: Alignment.centerRight,
-                  children: activities
-                      .asMap()
-                      .entries
-                      .map((entry) {
-                        return Positioned(
-                          right: entry.key * 15.0,
-                          child: Container(
-                            width: 24,
-                            height: 24,
-                            decoration: BoxDecoration(
-                              color: _getactivitiesColor(entry.value),
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: isSelected 
-                                  ? colorScheme.onPrimary.withOpacity(0.8)
-                                  : backgroundColor,
-                                width: 1.5,
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: colorScheme.onSurface.withOpacity(0.2),
-                                  spreadRadius: 1,
-                                  blurRadius: 2,
-                                  offset: const Offset(0, 1),
+            if (activeActivities.isNotEmpty)
+              Positioned(
+                top: 8,
+                right: 8,
+                child: SizedBox(
+                  width: max(24.0, activeActivities.length * 20.0),
+                  height: 24,
+                  child: Stack(
+                    alignment: Alignment.centerRight,
+                    children: activeActivities
+                        .asMap()
+                        .entries
+                        .map((entry) {
+                          final activity = entry.value; // ini adalah key dari Map activities
+                          return Positioned(
+                            right: entry.key * 15.0,
+                            child: Container(
+                              width: 24,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                color: _getActivityColor(activity),
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: isSelected 
+                                    ? colorScheme.onPrimary.withOpacity(0.8)
+                                    : backgroundColor,
+                                  width: 1.5,
                                 ),
-                              ],
-                            ),
-                            child: Center(
-                              child: Icon(
-                                _getactivitiesIcon(entry.value),
-                                size: 14,
-                                color: colorScheme.onPrimary,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: colorScheme.onSurface.withOpacity(0.2),
+                                    spreadRadius: 1,
+                                    blurRadius: 2,
+                                    offset: const Offset(0, 1),
+                                  ),
+                                ],
+                              ),
+                              child: Center(
+                                child: Icon(
+                                  _getActivityIcon(activity),
+                                  size: 14,
+                                  color: colorScheme.onPrimary,
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      })
-                      .toList()
-                      .reversed
-                      .toList(),
+                          );
+                        })
+                        .toList()
+                        .reversed
+                        .toList(),
+                  ),
                 ),
               ),
-            ),
             // Main Content
             Padding(
               padding: const EdgeInsets.all(16.0),
@@ -145,13 +159,13 @@ class StudentCard extends StatelessWidget {
                       border: Border.all(
                         color: isSelected 
                             ? colorScheme.primary
-                            : secondaryTextColor,
+                            : normal,
                         width: isSelected ? 2 : 1,
                       ),
                     ),
                     child: ClipOval(
                       child: Image.network(
-                        imageUrl,
+                        _getProfileImage,
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) {
                           return Icon(
@@ -168,7 +182,7 @@ class StudentCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          name,
+                          student.name,
                           style: theme.textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
                             color: textColor,
@@ -176,11 +190,11 @@ class StudentCard extends StatelessWidget {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          nim,
+                          student.username,
                           style: theme.textTheme.bodyMedium?.copyWith(
                             color: isSelected 
-                              ? Colors.black
-                              : secondaryTextColor,
+                              ? selected
+                              : normal,
                           ),
                         ),
                         const SizedBox(height: 4),
@@ -188,19 +202,19 @@ class StudentCard extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              jurusan,
+                              student.major,
                               style: theme.textTheme.bodyMedium?.copyWith(
                                 color: isSelected 
-                              ? Colors.black
-                              : secondaryTextColor,
+                                  ? selected
+                                  : normal,
                               ),
                             ),
                             Text(
-                              kelas,
+                              student.the_class,
                               style: theme.textTheme.bodyMedium?.copyWith(
                                 color: isSelected 
-                              ? Colors.black
-                              : secondaryTextColor,
+                                  ? selected
+                                  : normal,
                               ),
                             ),
                           ],
