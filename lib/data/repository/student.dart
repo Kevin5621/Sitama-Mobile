@@ -222,8 +222,8 @@ class StudentRepositoryImpl extends StudentRepository {
   }
 
   @override
-  Future<Either> markAllNotificationsAsRead(int id) async {
-    Either result = await sl<StudentApiService>().markAllNotificationsAsRead(id);
+  Future<Either> markAllNotificationsAsRead(MarkAllReqParams request) async {
+    Either result = await sl<StudentApiService>().markAllNotificationsAsRead(request);
     return result.fold(
       (error) {
         return Left(error);

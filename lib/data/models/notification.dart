@@ -1,3 +1,4 @@
+// Models
 class NotificationList {
   final int id;
   final int userId;
@@ -9,7 +10,7 @@ class NotificationList {
   final String createdAt;
   final String updatedAt;
 
-  NotificationList({
+  const NotificationList({
     required this.id,
     required this.userId,
     required this.message,
@@ -34,48 +35,62 @@ class NotificationList {
       updatedAt: json['updated_at'] ?? '',
     );
   }
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'user_id': userId,
+    'message': message,
+    'date': date,
+    'category': category,
+    'is_read': isRead,
+    'detail_text': detailText,
+    'created_at': createdAt,
+    'updated_at': updatedAt,
+  };
 }
 
 class NotificationDataModel {
   final List<NotificationList> notifications;
 
-  NotificationDataModel({
+  const NotificationDataModel({
     required this.notifications,
   });
 
   factory NotificationDataModel.fromJson(Map<String, dynamic> json) {
-    var notificationsList = json['notifications'];
-    if (notificationsList == null) return NotificationDataModel(notifications: []);
-
+    final notificationsList = json['notifications'] as List?;
     return NotificationDataModel(
-      notifications: (notificationsList as List)
-          .map((notification) => NotificationList.fromJson(notification))
-          .toList(),
+      notifications: notificationsList
+          ?.map((notification) => NotificationList.fromJson(notification))
+          .toList() ?? [],
     );
   }
+
+  Map<String, dynamic> toJson() => {
+    'notifications': notifications.map((notification) => notification.toJson()).toList(),
+  };
 }
 
-extension NotificationXModel on NotificationDataModel {
-  NotificationDataEntity toEntity() {
-    return NotificationDataEntity(
-      notifications: notifications
-          .map((data) => NotificationItemEntity(
-                id: data.id,
-                userId: data.userId,
-                message: data.message,
-                date: data.date,
-                category: data.category,
-                isRead: data.isRead,
-                detailText: data.detailText,
-                createdAt: data.createdAt,
-                updatedAt: data.updatedAt,
-              ))
-          .toList(),
-    );
-  }
+// Entities
+class NotificationResponseEntity {
+  final String code;
+  final String status;
+  final NotificationDataEntity data;
+
+  const NotificationResponseEntity({
+    required this.code,
+    required this.status,
+    required this.data,
+  });
 }
 
-extension NotificationDataEntityX on NotificationDataEntity {
+class NotificationDataEntity {
+  final List<NotificationItemEntity> notifications;
+
+  const NotificationDataEntity({
+    required this.notifications,
+  });
+
+  // Helper methods
   NotificationItemEntity? getLatestGeneralNotification() {
     final filteredList = notifications
         .where((notification) =>
@@ -89,29 +104,9 @@ extension NotificationDataEntityX on NotificationDataEntity {
     return filteredList.first;
   }
 
-    int getUnreadCount() {
+  int getUnreadCount() {
     return notifications.where((notification) => notification.isRead == 0).length;
   }
-}
-
-class NotificationResponseEntity {
-  final String code;
-  final String status;
-  final NotificationDataEntity data;
-
-  NotificationResponseEntity({
-    required this.code,
-    required this.status,
-    required this.data,
-  });
-}
-
-class NotificationDataEntity {
-  final List<NotificationItemEntity> notifications;
-
-  NotificationDataEntity({
-    required this.notifications,
-  });
 }
 
 class NotificationItemEntity {
@@ -160,4 +155,41 @@ class NotificationItemEntity {
       updatedAt: updatedAt ?? this.updatedAt,
     );
   }
+}
+
+// Extensions
+extension NotificationXModel on NotificationDataModel {
+  NotificationDataEntity toEntity() {
+    return NotificationDataEntity(
+      notifications: notifications
+          .map((data) => NotificationItemEntity(
+                id: data.id,
+                userId: data.userId,
+                message: data.message,
+                date: data.date,
+                category: data.category,
+                isRead: data.isRead,
+                detailText: data.detailText,
+                createdAt: data.createdAt,
+                updatedAt: data.updatedAt,
+              ))
+          .toList(),
+    );
+  }
+}
+
+// Request Parameters
+class MarkAllReqParams {
+  final List<int> notificationIds;
+  final int isRead;
+
+  const MarkAllReqParams({
+    required this.notificationIds,
+    required this.isRead,
+  });
+
+  Map<String, dynamic> toJson() => {
+    'notification_ids': notificationIds,
+    'is_read': isRead,
+  };
 }

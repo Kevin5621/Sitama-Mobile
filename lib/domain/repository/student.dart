@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:sistem_magang/data/models/guidance.dart';
 import 'package:sistem_magang/data/models/log_book.dart';
+import 'package:sistem_magang/data/models/notification.dart';
 abstract class StudentRepository {
   Future<Either> getStudentHome();
 
@@ -15,7 +16,7 @@ abstract class StudentRepository {
   Future<Either> deleteLogBook(int id);
 
   Future<Either> getNotifications();
-  Future<Either> markAllNotificationsAsRead(int id);
+  Future<Either> markAllNotificationsAsRead(MarkAllReqParams request);
 
   Future<Either> getStudentProfile();
 }

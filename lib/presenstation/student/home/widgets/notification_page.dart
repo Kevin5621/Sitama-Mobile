@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sistem_magang/data/models/notification.dart';
 import 'package:sistem_magang/domain/usecases/student/notification/get_notification.dart';
-import 'package:sistem_magang/domain/usecases/student/notification/mark_allnotifications.dart';
+import 'package:sistem_magang/domain/usecases/student/notification/mark_all_notifications.dart';
 import 'package:sistem_magang/service_locator.dart';
 import 'package:sistem_magang/presenstation/student/home/widgets/notification_card.dart';
 

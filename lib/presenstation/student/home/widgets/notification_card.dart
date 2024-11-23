@@ -45,9 +45,9 @@ class _NotificationCardState extends State<NotificationCard> {
   Color _getNotificationColor(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     switch (widget.notification.category.toLowerCase()) {
-      case 'generalannouncement':
+      case 'general':
         return Colors.blue;
-      case 'bimbingan':
+      case 'guidance':
         return Colors.green;
       case 'logbook':
         return Colors.orange;

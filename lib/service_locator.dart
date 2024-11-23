@@ -33,7 +33,7 @@ import 'package:sistem_magang/domain/usecases/general/update_photo_profile.dart'
 import 'package:sistem_magang/domain/usecases/lecturer/update_status_guidance.dart';
 import 'package:sistem_magang/domain/usecases/student/notification/get_notification.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_bloc.dart';
-import 'package:sistem_magang/domain/usecases/student/notification/mark_allnotifications.dart';
+import 'package:sistem_magang/domain/usecases/student/notification/mark_all_notifications.dart';
 
 
 final sl = GetIt.instance;
