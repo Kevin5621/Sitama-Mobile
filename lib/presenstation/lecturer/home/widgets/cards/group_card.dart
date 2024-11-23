@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sistem_magang/common/widgets/alert.dart';
@@ -64,74 +66,61 @@ class GroupCard extends StatelessWidget {
           return const SizedBox.shrink();
         }
 
-        return TweenAnimationBuilder<double>(
-          duration: const Duration(milliseconds: 300),
-          tween: Tween<double>(begin: 0, end: 1),
-          builder: (context, value, child) {
-            return Transform.scale(
-              scale: value,
-              child: Opacity(
-                opacity: value,
-                child: child,
-              ),
-            );
-          },
-          child: Card(
-            margin: const EdgeInsets.symmetric(vertical: 8),
-            child: InkWell(
-              onTap: () {
-                final selectionBloc = context.read<SelectionBloc>();
-                final lecturerCubit = context.read<LecturerDisplayCubit>();
-                
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MultiBlocProvider(
-                      providers: [
-                        BlocProvider.value(value: selectionBloc),
-                        BlocProvider.value(value: lecturerCubit),
-                      ],
-                      child: GroupPage(
-                        groupId: groupId,
-                        groupStudents: groupStudentsList,
-                      ),
+        return Card(
+          margin: const EdgeInsets.symmetric(vertical: 8),
+          child: InkWell(
+            onTap: () {
+              final selectionBloc = context.read<SelectionBloc>();
+              final lecturerCubit = context.read<LecturerDisplayCubit>();
+              
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MultiBlocProvider(
+                    providers: [
+                      BlocProvider.value(value: selectionBloc),
+                      BlocProvider.value(value: lecturerCubit),
+                    ],
+                    child: GroupPage(
+                      groupId: groupId,
+                      groupStudents: groupStudentsList,
                     ),
                   ),
-                ).then((_) {
-                  lecturerCubit.displayLecturer();
-                });
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  children: [
-                    Icon(group.icon),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            group.title,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
-                          ),
-                          Text(
-                            '${groupStudentsList.length} students',
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                        ],
-                      ),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.delete_outline),
-                      onPressed: () => _showDeleteConfirmation(context, group),
-                    ),
-                    const Icon(Icons.chevron_right),
-                  ],
                 ),
+              ).then((_) {
+                lecturerCubit.displayLecturer();
+              });
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  Icon(group.icon),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          group.title,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                        Text(
+                          '${groupStudentsList.length} students',
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ],
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.delete_outline),
+                    onPressed: () => _showDeleteConfirmation(context, group),
+                  ),
+                  const Icon(Icons.chevron_right),
+                ],
               ),
             ),
           ),

@@ -25,7 +25,7 @@ class FilterSection extends StatelessWidget {
             label: const Text('Create Group'),
             style: ElevatedButton.styleFrom(
               backgroundColor: Theme.of(context).colorScheme.secondary,
-              foregroundColor: Colors.white,
+              foregroundColor: Theme.of(context).colorScheme.onSecondary,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),

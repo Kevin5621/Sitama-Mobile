@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sistem_magang/common/widgets/alert.dart';
@@ -148,23 +150,9 @@ class StudentList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<SelectionBloc, SelectionState>(
       builder: (context, state) {
-        // Filter out students that are in groups or archived
-        final activeStudents = students.where((student) {
-          // Check if student is archived
-          if (state.archivedIds.contains(student.id)) {
-            return false;
-          }
-          
-          // Check if student is in any group
-          for (var group in state.groups.values) {
-            if (group.studentIds.contains(student.id)) {
-              return false;
-            }
-          }
-          
-          return true;
-        }).toList();
-
+        // 1. Split students into categories
+        final Map<String, List<LecturerStudentsEntity>> categorizedStudents = _categorizeStudents(students, state);
+        
         return SliverList(
           delegate: SliverChildListDelegate([
             _buildTitle(),
@@ -176,24 +164,61 @@ class StudentList extends StatelessWidget {
                 const SizedBox(height: 16),
                 
                 // 2. Active students list
-                if (activeStudents.isNotEmpty) ...[
-                  _buildStudentsList(activeStudents, state),
+                if (categorizedStudents['active']!.isNotEmpty) ...[
+                  _buildStudentsList(categorizedStudents['active']!, state),
                   const SizedBox(height: 16),
                 ],
                 
-                // 3. Groups in the middle
-                ..._buildGroupCards(state),
-                if (state.groups.isNotEmpty)
+                // 3. Groups in the middle (only show if there are matching students in the group)
+                ..._buildGroupCards(state, categorizedStudents['grouped']!),
+                if (state.groups.isNotEmpty && 
+                    categorizedStudents['grouped']!.isNotEmpty)
                   const SizedBox(height: 16),
                 
-                // 4. Archive card always at bottom
-                _buildArchiveSection(state),
+                // 4. Archive card always at bottom (only show if there are matching archived students)
+                if (categorizedStudents['archived']!.isNotEmpty)
+                  _buildArchiveSection(state, categorizedStudents['archived']!),
               ],
             ),
           ]),
         );
       },
     );
+  }
+
+  Map<String, List<LecturerStudentsEntity>> _categorizeStudents(
+    List<LecturerStudentsEntity> students,
+    SelectionState state,
+  ) {
+    final active = <LecturerStudentsEntity>[];
+    final grouped = <LecturerStudentsEntity>[];
+    final archived = <LecturerStudentsEntity>[];
+
+    for (final student in students) {
+      if (state.archivedIds.contains(student.id)) {
+        archived.add(student);
+        continue;
+      }
+
+      bool isInGroup = false;
+      for (var group in state.groups.values) {
+        if (group.studentIds.contains(student.id)) {
+          grouped.add(student);
+          isInGroup = true;
+          break;
+        }
+      }
+
+      if (!isInGroup) {
+        active.add(student);
+      }
+    }
+
+    return {
+      'active': active,
+      'grouped': grouped,
+      'archived': archived,
+    };
   }
 
   // Build Helper Methods
@@ -208,35 +233,27 @@ class StudentList extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildGroupCards(SelectionState state) {
+  List<Widget> _buildGroupCards(SelectionState state, List<LecturerStudentsEntity> groupedStudents) {
+    if (groupedStudents.isEmpty) return [];
+
     return state.groups.entries.map((entry) {
-      final groupStudents = students
+      final groupStudents = groupedStudents
           .where((student) => entry.value.studentIds.contains(student.id))
           .toList();
+      
+      // Only show group if it has matching students
+      if (groupStudents.isEmpty) {
+        return const SizedBox.shrink();
+      }
+
       return GroupCard(
         groupId: entry.key,
         groupStudents: groupStudents,
       );
-    }).toList();
+    }).where((widget) => widget is! SizedBox).toList();
   }
 
-  Widget _buildArchiveCard(SelectionState state) {
-    return ArchiveCard(
-      archivedStudents: students
-          .where((student) => state.archivedIds.contains(student.id))
-          .toList(),
-    );
-  }
-
-  Widget _buildArchiveSection(SelectionState state) {
-    final archivedStudents = students
-        .where((student) => state.archivedIds.contains(student.id))
-        .toList();
-    
-    if (archivedStudents.isEmpty) {
-      return const SizedBox.shrink();
-    }
-
+  Widget _buildArchiveSection(SelectionState state, List<LecturerStudentsEntity> archivedStudents) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
