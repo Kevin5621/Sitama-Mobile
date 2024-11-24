@@ -18,7 +18,6 @@ class GroupCard extends StatelessWidget {
     required this.groupStudents,
   });
 
-
   List<String> _getGroupActivities(List<LecturerStudentsEntity> students) {
     return ActivityHelper.getGroupActivities(students);
   }
@@ -40,77 +39,91 @@ class GroupCard extends StatelessWidget {
             selectionBloc.add(DeleteGroup(groupId));
           });
           return const SizedBox.shrink();
-        } 
+        }
 
         final groupActivities = _getGroupActivities(groupStudentsList);
 
-        return Card(
-          margin: const EdgeInsets.symmetric(vertical: 8),
-          child: InkWell(
-            onTap: () {
-              final selectionBloc = context.read<SelectionBloc>();
-              final lecturerCubit = context.read<LecturerDisplayCubit>();
+        return DragTarget<LecturerStudentsEntity>(
+          onWillAcceptWithDetails: (data) => data != true && !group.studentIds.contains(data.data.id),
+          onAcceptWithDetails: (data) {
+            context.read<SelectionBloc>().add(
+              AddStudentToGroup(
+                groupId: groupId,
+                studentId: data.data.id,
+              ),
+            );
+          },
+          builder: (context, candidateData, rejectedData) {
+            final isDragging = candidateData.isNotEmpty;
+            return Card(
+              margin: const EdgeInsets.symmetric(vertical: 8),
+              color: isDragging
+                  ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
+                  : null,
+              child: InkWell(
+                onTap: () {
+                  final selectionBloc = context.read<SelectionBloc>();
+                  final lecturerCubit = context.read<LecturerDisplayCubit>();
 
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => MultiBlocProvider(
-                    providers: [
-                      BlocProvider.value(value: selectionBloc),
-                      BlocProvider.value(value: lecturerCubit),
-                    ],
-                    child: GroupPage(
-                      groupId: groupId,
-                      groupStudents: groupStudentsList,
-                    ),
-                  ),
-                ),
-              ).then((_) {
-                lecturerCubit.displayLecturer();
-              });
-            },
-            child: Stack(
-              children: [
-                // Main content of the card
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    children: [
-                      Icon(group.icon, size: 40),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              group.title,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              '${groupStudentsList.length} students',
-                              style: Theme.of(context).textTheme.bodySmall,
-                            ),
-                          ],
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MultiBlocProvider(
+                        providers: [
+                          BlocProvider.value(value: selectionBloc),
+                          BlocProvider.value(value: lecturerCubit),
+                        ],
+                        child: GroupPage(
+                          groupId: groupId,
+                          groupStudents: groupStudentsList,
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ).then((_) {
+                    lecturerCubit.displayLecturer();
+                  });
+                },
+                child: Stack(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Row(
+                        children: [
+                          Icon(group.icon, size: 40),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  group.title,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  '${groupStudentsList.length} students',
+                                  style: Theme.of(context).textTheme.bodySmall,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    if (groupActivities.isNotEmpty)
+                      ActivityHelper.buildActivityIconsStack(
+                        activities: groupActivities,
+                        context: context,
+                        borderColor: Theme.of(context).colorScheme.surface,
+                      ),
+                  ],
                 ),
-
-                // Activity Icons Stack
-                if (groupActivities.isNotEmpty)
-                  ActivityHelper.buildActivityIconsStack(
-                    activities: groupActivities,
-                    context: context,
-                    borderColor: Theme.of(context).colorScheme.surface,
-                  ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         );
       },
     );

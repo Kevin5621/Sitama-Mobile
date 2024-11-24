@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sistem_magang/domain/entities/lecturer_home_entity.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_bloc.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_event.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_state.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/widgets/lists/group/group_app_bar.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/widgets/lists/group/group_body.dart';
@@ -79,15 +78,6 @@ class _GroupPageState extends State<GroupPage> {
     });
   }
 
-  Future<bool> _onWillPop() async {
-    final selectionState = context.read<SelectionBloc>().state;
-    if (selectionState.isSelectionMode) {
-      context.read<SelectionBloc>().add(ToggleSelectionMode());
-      return false;
-    }
-    return true;
-  }
-
   Future<void> _refreshGroupList() async {
     if (!mounted) return;
     _synchronizeGroupdStudents();
@@ -114,8 +104,7 @@ class _GroupPageState extends State<GroupPage> {
             );
           }
 
-          return WillPopScope(
-            onWillPop: _onWillPop,
+          return PopScope(
             child: Scaffold(
               appBar: GroupAppBar(
                 group: group,

@@ -93,9 +93,38 @@ class UpdateGroup extends SelectionEvent {
   final String title;
   final IconData icon;
 
-  UpdateGroup({
+  const UpdateGroup({
     required this.groupId,
     required this.title,
     required this.icon,
   });
+  
+  @override
+  List<Object> get props => [groupId, title, icon];
+}
+
+class AddStudentToGroup extends SelectionEvent {
+  final String groupId;
+  final int studentId;
+
+  const AddStudentToGroup({
+    required this.groupId,
+    required this.studentId,
+  });
+
+  @override
+  List<Object> get props => [groupId, studentId];
+}
+
+class RemoveStudentFromGroup extends SelectionEvent {
+  final String groupId;
+  final int studentId;
+
+  const RemoveStudentFromGroup({
+    required this.groupId,
+    required this.studentId,
+  });
+
+  @override
+  List<Object> get props => [groupId, studentId];
 }

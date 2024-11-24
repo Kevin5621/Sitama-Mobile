@@ -262,18 +262,18 @@ class StudentList extends StatelessWidget {
 
 
   Widget _buildStudentsList(List<LecturerStudentsEntity> activeStudents) {
-  if (activeStudents.isEmpty) {
-    return const SizedBox.shrink();
-  }
+    if (activeStudents.isEmpty) {
+      return const SizedBox.shrink();
+    }
 
-  return ListView.separated(
-    shrinkWrap: true,
-    physics: const NeverScrollableScrollPhysics(),
-    itemCount: activeStudents.length,
-    separatorBuilder: (_, __) => const SizedBox(height: 14),
-    itemBuilder: (context, index) => _buildStudentItem(activeStudents[index]),
-  );
-}
+    return ListView.separated(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: activeStudents.length,
+      separatorBuilder: (_, __) => const SizedBox(height: 14),
+      itemBuilder: (context, index) => _buildStudentItem(activeStudents[index]),
+    );
+  }
 }
 
 // Extracted Dialog Widget

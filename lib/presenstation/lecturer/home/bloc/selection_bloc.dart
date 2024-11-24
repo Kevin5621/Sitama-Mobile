@@ -59,6 +59,8 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
     on<UnGroupItems>(_onUnGroupItems);
     on<LoadGroupItems>(_onLoadGroupItems);
     on<DeleteGroup>(_onDeleteGroup);
+    on<AddStudentToGroup>(_onAddStudentToGroup);
+    on<RemoveStudentFromGroup>(_onRemoveStudentFromGroup);
     on<UpdateGroup>((event, emit) {
     final updatedGroups = Map<String, GroupModel>.from(state.groups);
     updatedGroups[event.groupId] = updatedGroups[event.groupId]!.copyWith(
@@ -441,6 +443,74 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
       emit(state.copyWith(
         isLoading: false,
         error: 'Failed to delete group: $e',
+      ));
+    }
+  }
+
+  Future<void> _onAddStudentToGroup(
+    AddStudentToGroup event, 
+    Emitter<SelectionState> emit,
+  ) async {
+    try {
+      emit(state.copyWith(isLoading: true, error: null));
+
+      final updatedGroups = Map<String, GroupModel>.from(state.groups);
+      final group = updatedGroups[event.groupId];
+      
+      if (group != null) {
+        final updatedStudentIds = Set<int>.from(group.studentIds)
+          ..add(event.studentId);
+        
+        updatedGroups[event.groupId] = group.copyWith(
+          studentIds: updatedStudentIds,
+        );
+        
+        // Simpan perubahan ke persistent storage
+        await _saveGroups(updatedGroups);
+        
+        emit(state.copyWith(
+          groups: updatedGroups,
+          isLoading: false,
+        ));
+      }
+    } catch (e) {
+      emit(state.copyWith(
+        isLoading: false,
+        error: 'Failed to add student to group: $e',
+      ));
+    }
+  }
+
+  Future<void> _onRemoveStudentFromGroup(
+    RemoveStudentFromGroup event, 
+    Emitter<SelectionState> emit,
+  ) async {
+    try {
+      emit(state.copyWith(isLoading: true, error: null));
+
+      final updatedGroups = Map<String, GroupModel>.from(state.groups);
+      final group = updatedGroups[event.groupId];
+      
+      if (group != null) {
+        final updatedStudentIds = Set<int>.from(group.studentIds)
+          ..remove(event.studentId);
+        
+        updatedGroups[event.groupId] = group.copyWith(
+          studentIds: updatedStudentIds,
+        );
+        
+        // Simpan perubahan ke persistent storage
+        await _saveGroups(updatedGroups);
+        
+        emit(state.copyWith(
+          groups: updatedGroups,
+          isLoading: false,
+        ));
+      }
+    } catch (e) {
+      emit(state.copyWith(
+        isLoading: false,
+        error: 'Failed to remove student from group: $e',
       ));
     }
   }

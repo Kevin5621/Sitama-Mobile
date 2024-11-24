@@ -1,5 +1,4 @@
-// archive_page.dart
-// ignore_for_file: use_build_context_synchronously, deprecated_member_use
+// ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -77,15 +76,6 @@ class _ArchivePageState extends State<ArchivePage> {
           .toList();
     });
   }
-
-  Future<bool> _onWillPop() async {
-    final selectionState = context.read<SelectionBloc>().state;
-    if (selectionState.isSelectionMode) {
-      context.read<SelectionBloc>().add(ToggleSelectionMode());
-      return false;
-    }
-    return true;
-  }
   
   Future<void> _showUnarchiveConfirmation(
     BuildContext context, Set<int> selectedIds) async {
@@ -149,8 +139,7 @@ class _ArchivePageState extends State<ArchivePage> {
       },
       child: BlocBuilder<SelectionBloc, SelectionState>(
         builder: (context, selectionState) {
-          return WillPopScope(
-            onWillPop: _onWillPop,
+          return PopScope(
             child: Scaffold(
               appBar: AppBar(
                 leading: IconButton(
