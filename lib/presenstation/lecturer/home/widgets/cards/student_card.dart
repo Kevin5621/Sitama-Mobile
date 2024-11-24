@@ -1,8 +1,7 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:sistem_magang/core/config/assets/app_images.dart';
-import 'package:sistem_magang/core/config/themes/app_color.dart';
 import 'package:sistem_magang/domain/entities/lecturer_home_entity.dart';
+import 'package:sistem_magang/presenstation/lecturer/home/widgets/helper/activity_helper.dart';
 
 class StudentCard extends StatelessWidget {
   final LecturerStudentsEntity student;
@@ -18,45 +17,8 @@ class StudentCard extends StatelessWidget {
     required this.onLongPress,
   });
 
-  IconData _getActivityIcon(String activity) {
-    // Mengubah pencocokan string untuk sesuai dengan key dari Map
-    switch (activity) {
-      case 'is_in_progress':
-        return Icons.visibility_off;
-      case 'is_updated':
-        return Icons.help;
-      case 'is_rejected':
-        return Icons.edit_document;
-      default:
-        return Icons.circle;
-    }
-  }
-
-  Color _getActivityColor(String activity) {
-    // Mengubah pencocokan string untuk sesuai dengan key dari Map
-    switch (activity) {
-      case 'is_in_progress':
-        return AppColors.lightGray;
-      case 'is_updated':
-        return AppColors.lightWarning;
-      case 'is_rejected':
-        return AppColors.lightDanger;
-      default:
-        return AppColors.lightGray;
-    }
-  }
-
   List<String> _getActiveActivities() {
-    // Konversi Map activities ke List sesuai dengan format yang diharapkan
-    List<String> activeActivities = [];
-    
-    student.activities.forEach((key, value) {
-      if (value == true) {
-        activeActivities.add(key);
-      }
-    });
-    
-    return activeActivities;
+    return ActivityHelper.getActiveActivities(student.activities);
   }
 
   String get _getProfileImage {
@@ -91,57 +53,13 @@ class StudentCard extends StatelessWidget {
           children: [
             // Activity Icons Stack
             if (activeActivities.isNotEmpty)
-              Positioned(
-                top: 8,
-                right: 8,
-                child: SizedBox(
-                  width: max(24.0, activeActivities.length * 20.0),
-                  height: 24,
-                  child: Stack(
-                    alignment: Alignment.centerRight,
-                    children: activeActivities
-                        .asMap()
-                        .entries
-                        .map((entry) {
-                          final activity = entry.value; // ini adalah key dari Map activities
-                          return Positioned(
-                            right: entry.key * 15.0,
-                            child: Container(
-                              width: 24,
-                              height: 24,
-                              decoration: BoxDecoration(
-                                color: _getActivityColor(activity),
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: isSelected 
-                                    ? colorScheme.onPrimary.withOpacity(0.8)
-                                    : backgroundColor,
-                                  width: 1.5,
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: colorScheme.onSurface.withOpacity(0.2),
-                                    spreadRadius: 1,
-                                    blurRadius: 2,
-                                    offset: const Offset(0, 1),
-                                  ),
-                                ],
-                              ),
-                              child: Center(
-                                child: Icon(
-                                  _getActivityIcon(activity),
-                                  size: 14,
-                                  color: colorScheme.onPrimary,
-                                ),
-                              ),
-                            ),
-                          );
-                        })
-                        .toList()
-                        .reversed
-                        .toList(),
-                  ),
-                ),
+              ActivityHelper.buildActivityIconsStack(
+                activities: activeActivities,
+                context: context,
+                isSelected: isSelected,
+                borderColor: isSelected 
+                  ? colorScheme.onPrimary.withOpacity(0.8)
+                  : backgroundColor,
               ),
             // Main Content
             Padding(
