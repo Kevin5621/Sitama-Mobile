@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:sistem_magang/core/config/themes/app_color.dart';
+import 'package:sistem_magang/domain/entities/assessment_entity.dart';
+import 'package:sistem_magang/presenstation/lecturer/input_score/bloc/assessment_cubit.dart';
+import 'package:sistem_magang/presenstation/lecturer/input_score/bloc/assessment_state.dart';
 import 'package:sistem_magang/presenstation/lecturer/input_score/widgets/add_industry_button.dart';
 import 'package:sistem_magang/presenstation/lecturer/input_score/widgets/expandable_section.dart';
 
 class InputScorePage extends StatefulWidget {
-  const InputScorePage({super.key});
+  final int id;
+
+  const InputScorePage({super.key, required this.id});
 
   @override
   _InputScorePageState createState() => _InputScorePageState();
@@ -39,54 +45,77 @@ class _InputScorePageState extends State<InputScorePage> {
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const ExpandableSection(
-                title: 'Proposal',
-                fields: [
-                  'Tujuan Sasaran',
-                  'Kelengkapan Proposal',
-                  'Rata - rata'
-                ],
-              ),
-              const SizedBox(height: 16),
-              const ExpandableSection(
-                title: 'Laporan',
-                fields: ['Sistematika Penulisan', 'Bahasa', 'Isi'],
-              ),
-              const SizedBox(height: 16),
-              ..._industryScores.map((score) => IndustryScoreCard(
-                    score: score,
-                    onRemove: () => _removeIndustryScore(score),
-                  )),
-              const SizedBox(height: 16),
-              AddIndustryButton(onTap: _addIndustryScore),
-              const SizedBox(height: 32.0),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.lightPrimary,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  onPressed: () {
-                    // _onSubmitNilai
-                  },
-                  child: const Text(
-                    'Update',
-                    style: TextStyle(color: Colors.white),
+      body: BlocProvider(
+        create: (context) => AssessmentCubit()..fetchAssessments(widget.id),
+        child: BlocBuilder<AssessmentCubit, AssessmentState>(
+          builder: (context, state) {
+            if (state is AssessmentLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is LoadAssessmentFailure) {
+              return Center(
+                child: Text(
+                  'Error: ${state.errorMessage}',
+                  style: const TextStyle(color: Colors.red),
+                ),
+              );
+            } else if (state is AssessmentLoaded) {
+              return _mainContent(state.assessments);
+            } else {
+              return const Center(child: Text('Tidak ada data.'));
+            }
+          },
+        ),
+      ),
+    );
+  }
+
+  SingleChildScrollView _mainContent(List<AssessmentEntity> assessments) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ListView.separated(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: assessments.length,
+              itemBuilder: (context, index) {
+                return ExpandableSection(
+                  title: assessments[index].componentName,
+                  scores: assessments[index].scores,
+                );
+              },
+              separatorBuilder: (context, index) => SizedBox(height: 10),
+            ),
+            const SizedBox(height: 16),
+            ..._industryScores.map((score) => IndustryScoreCard(
+                  score: score,
+                  onRemove: () => _removeIndustryScore(score),
+                )),
+            const SizedBox(height: 16),
+            AddIndustryButton(onTap: _addIndustryScore),
+            const SizedBox(height: 32.0),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.lightPrimary,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
                   ),
                 ),
+                onPressed: () {
+                  // _onSubmitNilai
+                },
+                child: const Text(
+                  'Update',
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

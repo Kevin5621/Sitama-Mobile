@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:sistem_magang/data/models/assessment.dart';
 import 'package:sistem_magang/data/models/guidance.dart';
 import 'package:sistem_magang/data/models/lecturer_detail_student.dart';
 import 'package:sistem_magang/data/models/lecturer_home.dart';
@@ -94,6 +95,28 @@ class LecturerRepositoryImpl extends LecturerRepository{
           var dataModel = LecturerProfileModel.fromMap(response.data['data']);
           var dataEntity = dataModel.toEntity();
           return Right(dataEntity);
+        } catch (e) {
+          return Left("Parsing error: $e");
+        }
+      },
+    );
+  }
+  
+  @override
+  Future<Either> fetchAssessments(int id) async {
+    Either result = await sl<LecturerApiService>().fetchAssessments(id);
+    return result.fold(
+      (error) {
+        return Left(error);
+      },
+      (data) {
+        Response response = data;
+
+        try {
+          final data = (response.data['data'] as List)
+              .map((item) => AssessmentModel.fromMap(item).toEntity())
+              .toList();
+          return Right(data);
         } catch (e) {
           return Left("Parsing error: $e");
         }
