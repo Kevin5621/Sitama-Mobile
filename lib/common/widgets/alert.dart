@@ -14,7 +14,7 @@ class CustomAlertDialog extends StatelessWidget {
   final Color? iconColor;
 
   const CustomAlertDialog({
-    Key? key,
+    super.key,
     required this.title,
     required this.message,
     this.cancelText = 'Batal',
@@ -24,7 +24,7 @@ class CustomAlertDialog extends StatelessWidget {
     this.onConfirm,
     this.icon,
     this.iconColor,
-  }) : super(key: key);
+  });
 
   static Future<bool?> show({
     required BuildContext context,

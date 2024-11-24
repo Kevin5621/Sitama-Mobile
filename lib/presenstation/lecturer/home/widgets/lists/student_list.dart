@@ -3,13 +3,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sistem_magang/common/widgets/alert.dart';
-import 'package:sistem_magang/core/config/assets/app_images.dart';
 import 'package:sistem_magang/domain/entities/lecturer_home_entity.dart';
 import 'package:sistem_magang/presenstation/lecturer/detail_student/pages/detail_student.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_bloc.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_event.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_state.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/widgets/cards/archive_card.dart';
+import 'package:sistem_magang/presenstation/lecturer/home/widgets/dialogs/group_dialog.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/widgets/filters/filter_section.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/widgets/cards/group_card.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/widgets/cards/student_card.dart';
@@ -71,15 +71,6 @@ class StudentList extends StatelessWidget {
         );
       },
     );
-  }
-
-  // Helper Methods
-  List<String> _getStudentActivities(LecturerStudentsEntity student) {
-    final activities = <String>[];
-    if (student.activities['is_in_progress'] == true) activities.add('in-progress');
-    if (student.activities['is_updated'] == true) activities.add('updated');
-    if (student.activities['is_rejected'] == true) activities.add('rejected');
-    return activities;
   }
 
   // Event Handlers
@@ -286,128 +277,17 @@ class StudentList extends StatelessWidget {
 }
 
 // Extracted Dialog Widget
-class _GroupCreationDialog extends StatefulWidget {
-  @override
-  _GroupCreationDialogState createState() => _GroupCreationDialogState();
-}
-
-class _GroupCreationDialogState extends State<_GroupCreationDialog> {
-  final titleController = TextEditingController();
-  IconData selectedIcon = Icons.group;
-
-  static const List<IconData> availableIcons = [
-    Icons.group,
-    Icons.school,
-    Icons.work,
-    Icons.star,
-    Icons.favorite,
-    Icons.rocket_launch,
-    Icons.psychology,
-    Icons.science,
-  ];
-
+class _GroupCreationDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return AlertDialog(
-      title: const Text('Create New Group'),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextFormField(
-            controller: titleController,
-            decoration: const InputDecoration(
-              labelText: 'Group Name',
-              hintText: 'Enter group name',
-            ),
-            validator: (value) {
-              if (value?.isEmpty ?? true) {
-                return 'Please enter a group name';
-              }
-              return null;
-            },
-          ),
-          const SizedBox(height: 16),
-          const Text('Select Icon'),
-          const SizedBox(height: 8),
-          _buildIconSelector(colorScheme),
-        ],
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          style: TextButton.styleFrom(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-          ),
-          child: Text('Cancel'),
-        ),
-        ElevatedButton(
-          onPressed: _handleCreateGroup,
-          style: ElevatedButton.styleFrom(
-            padding: EdgeInsets.symmetric(horizontal: 24),
-            elevation: 0, 
-          ),
-          child: Text('Create'),
-        ),
-      ],
+    return GroupDialogForm(
+      title: 'Create New Group',
+      onSubmit: (title, icon) {
+        Navigator.of(context).pop({
+          'title': title,
+          'icon': icon,
+        });
+      },
     );
-  }
-
-  Widget _buildIconSelector(ColorScheme colorScheme) {
-  return Container(
-    padding: EdgeInsets.all(8),
-    decoration: BoxDecoration(
-      border: Border.all(color: colorScheme.outline.withOpacity(0.2)),
-      borderRadius: BorderRadius.circular(12),
-    ),
-    child: Wrap(
-      spacing: 12, 
-      runSpacing: 12,
-      children: [
-        for (final icon in availableIcons)
-          Material(
-            borderRadius: BorderRadius.circular(8),
-            child: InkWell(
-              borderRadius: BorderRadius.circular(8),
-              onTap: () => setState(() => selectedIcon = icon),
-              child: Container(
-                padding: EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: selectedIcon == icon
-                      ? colorScheme.primary.withOpacity(0.15)
-                      : Colors.transparent,
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
-                    color: selectedIcon == icon 
-                      ? colorScheme.primary 
-                      : Colors.transparent,
-                  ),
-                ),
-                child: Icon(
-                  icon,
-                  color: selectedIcon == icon 
-                    ? colorScheme.primary 
-                    : colorScheme.onSurface,
-                ),
-              ),
-            ),
-          ),
-      ],
-    ),
-  );
-}
-
-  void _handleCreateGroup() {
-    Navigator.of(context).pop({
-      'title': titleController.text,
-      'icon': selectedIcon,
-    });
-  }
-
-  @override
-  void dispose() {
-    titleController.dispose();
-    super.dispose();
   }
 }

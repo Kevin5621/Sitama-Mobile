@@ -6,7 +6,7 @@ import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_bloc.da
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_event.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_state.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/widgets/helper/activity_helper.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/lists/group.dart';
+import 'package:sistem_magang/presenstation/lecturer/home/widgets/lists/group/group.dart';
 
 class GroupCard extends StatelessWidget {
   final String groupId;
@@ -35,11 +35,12 @@ class GroupCard extends StatelessWidget {
             .toList();
 
         if (groupStudentsList.isEmpty) {
+          final selectionBloc = context.read<SelectionBloc>();
           Future.microtask(() {
-            context.read<SelectionBloc>().add(DeleteGroup(groupId));
+            selectionBloc.add(DeleteGroup(groupId));
           });
           return const SizedBox.shrink();
-        }
+        } 
 
         final groupActivities = _getGroupActivities(groupStudentsList);
 
