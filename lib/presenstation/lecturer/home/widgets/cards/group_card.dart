@@ -22,6 +22,29 @@ class GroupCard extends StatelessWidget {
     return ActivityHelper.getGroupActivities(students);
   }
 
+  Future<void> _handleMultiDrop(BuildContext context, Set<int> studentIds) async {
+    final selectionBloc = context.read<SelectionBloc>();
+    
+    // Create a list to store all Future operations
+    final List<Future<void>> operations = [];
+    
+    // Add all operations to the list
+    for (final studentId in studentIds) {
+      operations.add(
+        Future(() => selectionBloc.add(AddStudentToGroup(
+          groupId: groupId,
+          studentId: studentId,
+        )))
+      );
+    }
+
+    // Wait for all operations to complete
+    await Future.wait(operations);
+    
+    // Clear selection mode after all operations are complete
+    selectionBloc.add(ClearSelectionMode());
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SelectionBloc, SelectionState>(
@@ -43,15 +66,14 @@ class GroupCard extends StatelessWidget {
 
         final groupActivities = _getGroupActivities(groupStudentsList);
 
-        return DragTarget<LecturerStudentsEntity>(
-          onWillAcceptWithDetails: (data) => data != true && !group.studentIds.contains(data.data.id),
-          onAcceptWithDetails: (data) {
-            context.read<SelectionBloc>().add(
-              AddStudentToGroup(
-                groupId: groupId,
-                studentId: data.data.id,
-              ),
-            );
+        return DragTarget<Set<int>>(
+          onWillAcceptWithDetails: (details) {
+            final data = details.data;
+            return data.isNotEmpty;
+          },
+          onAcceptWithDetails: (details) {
+            final studentIds = details.data;
+            _handleMultiDrop(context, studentIds);
           },
           builder: (context, candidateData, rejectedData) {
             final isDragging = candidateData.isNotEmpty;

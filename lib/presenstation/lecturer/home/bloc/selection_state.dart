@@ -48,6 +48,7 @@ class SelectionState extends Equatable {
     return allGroupIds;
   }
 
+  @override
   List<Object?> get props => [
         isSelectionMode,
         selectedIds,
