@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:sistem_magang/common/bloc/button/button_state.dart';
 import 'package:sistem_magang/common/bloc/button/button_state_cubit.dart';
 import 'package:sistem_magang/common/widgets/basic_app_button.dart';
+import 'package:sistem_magang/common/widgets/custom_snackbar.dart';
 import 'package:sistem_magang/data/models/guidance.dart';
 import 'package:sistem_magang/domain/usecases/student/guidances/edit_guidance_student.dart';
 import 'package:sistem_magang/presenstation/student/home/pages/home.dart';
@@ -72,9 +73,13 @@ class _EditGuidanceState extends State<EditGuidance> {
       child: BlocListener<ButtonStateCubit, ButtonState>(
         listener: (context, state) async {
           if (state is ButtonSuccessState) {
-            var snackBar =
-                const SnackBar(content: Text('Berhasil Mengedit Bimbingan'));
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            ScaffoldMessenger.of(context).showSnackBar(
+              CustomSnackBar(
+                message: 'Berhasil Mengedit Bimbingan ✍️',
+                icon: Icons.check_circle_outline,  
+                backgroundColor: Colors.green.shade800,  
+              ),
+            );
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
@@ -87,8 +92,13 @@ class _EditGuidanceState extends State<EditGuidance> {
           }
 
           if (state is ButtonFailurState) {
-            var snackBar = SnackBar(content: Text(state.errorMessage));
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            ScaffoldMessenger.of(context).showSnackBar(
+              CustomSnackBar(
+                message: state.errorMessage,
+                icon: Icons.error_outline,  
+                backgroundColor: Colors.red.shade800,  
+              ),
+            );
           }
         },
         child: AlertDialog(

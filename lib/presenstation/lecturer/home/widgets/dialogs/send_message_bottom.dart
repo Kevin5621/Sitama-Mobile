@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sistem_magang/common/widgets/custom_snackbar.dart';
 import 'package:sistem_magang/core/config/themes/app_color.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_bloc.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_event.dart';
@@ -139,28 +140,12 @@ void _handleSendMessage(BuildContext context, TextEditingController controller) 
   if (controller.text.isNotEmpty) {
     context.read<SelectionBloc>().add(SendMessage(controller.text));
     Navigator.pop(context);
-    _showSuccessSnackbar(context);
+    ScaffoldMessenger.of(context).showSnackBar(
+      CustomSnackBar(
+        message: 'Pesan Berhasil Terkirim 📩',
+        icon: Icons.check_circle_outline,  
+        backgroundColor: Colors.green.shade800,  
+      ),
+    );
   }
-}
-
-void _showSuccessSnackbar(BuildContext context) {
-  final isDark = Theme.of(context).brightness == Brightness.dark;
-
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Row(
-        children: [
-          Icon(Icons.check_circle, color: isDark ? AppColors.lightWhite : Colors.white),
-          const SizedBox(width: 8),
-          const Text('Message sent successfully'),
-        ],
-      ),
-      backgroundColor: isDark ? AppColors.darkPrimary500 : Colors.green,
-      behavior: SnackBarBehavior.floating,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      margin: const EdgeInsets.all(10),
-    ),
-  );
 }

@@ -39,7 +39,10 @@ dependencies:
 
   # File Management
     file_picker: any             # Memungkinkan pemilihan file dari perangkat
-
+    path_provider: any
+    permission_handler: any
+    open_file: any
+    
   # UI Components
     syncfusion_flutter_pdfviewer: any # PDF viewer untuk menampilkan file PDF dalam aplikasi
     pull_to_refresh: any          # Menambahkan fitur pull-to-refresh pada halaman list

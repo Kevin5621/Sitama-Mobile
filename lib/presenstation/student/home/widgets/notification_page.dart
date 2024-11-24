@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:sistem_magang/common/widgets/custom_snackbar.dart';
 import 'package:sistem_magang/data/models/notification.dart';
 import 'package:sistem_magang/domain/usecases/student/notification/get_notification.dart';
 import 'package:sistem_magang/domain/usecases/student/notification/mark_all_notifications.dart';
@@ -202,7 +203,11 @@ class _NotificationPageState extends State<NotificationPage> {
       });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Gagal menandai semua notifikasi')),
+        CustomSnackBar(
+          message: 'Gagal menandai semua notifikasi :(',
+          icon: Icons.error_outline,  
+          backgroundColor: Colors.red.shade800,  
+        ),
       );
     }
   }

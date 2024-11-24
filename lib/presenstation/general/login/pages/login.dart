@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sistem_magang/common/bloc/button/button_state.dart';
 import 'package:sistem_magang/common/bloc/button/button_state_cubit.dart';
 import 'package:sistem_magang/common/widgets/basic_app_button.dart';
+import 'package:sistem_magang/common/widgets/custom_snackbar.dart';
 import 'package:sistem_magang/core/config/assets/app_images.dart';
 import 'package:sistem_magang/core/config/themes/app_color.dart';
 import 'package:sistem_magang/data/models/signin_req_params.dart';
@@ -62,8 +63,13 @@ class _LoginPageState extends State<LoginPage> {
               }
             }
             if (state is ButtonFailurState) {
-              var snackBar = SnackBar(content: Text(state.errorMessage));
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              ScaffoldMessenger.of(context).showSnackBar(
+                CustomSnackBar(
+                  message: state.errorMessage,
+                  icon: Icons.error_outline,
+                  backgroundColor: Colors.red.shade800,
+                ),
+              );
             }
           },
           child: SingleChildScrollView(

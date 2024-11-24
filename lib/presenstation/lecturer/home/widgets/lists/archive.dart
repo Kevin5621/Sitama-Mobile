@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sistem_magang/common/widgets/alert.dart';
+import 'package:sistem_magang/common/widgets/custom_snackbar.dart';
 import 'package:sistem_magang/common/widgets/search_field.dart';
 import 'package:sistem_magang/core/config/themes/app_color.dart';
 import 'package:sistem_magang/domain/entities/lecturer_home_entity.dart';
@@ -110,9 +111,10 @@ class _ArchivePageState extends State<ArchivePage> {
       
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('${selectedIds.length} item berhasil dibatalkan arsip'),
-            duration: const Duration(seconds: 2),
+          CustomSnackBar(
+            message: ('${selectedIds.length} item berhasil dibatalkan arsip'),
+            icon: Icons.check_circle_outline,  
+            backgroundColor: Colors.green.shade800,  
           ),
         );
 

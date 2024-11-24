@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sistem_magang/common/widgets/custom_snackbar.dart';
 import 'package:sistem_magang/common/widgets/reset_password_field.dart';
 import 'package:sistem_magang/data/models/reset_password_req_params.dart';
 import 'package:sistem_magang/domain/usecases/general/reset_password.dart';
@@ -160,17 +161,19 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       result.fold(
         (error) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(error.toString()),
-              backgroundColor: Colors.red,
+            CustomSnackBar(
+              message: (error.toString()),
+              icon: Icons.error_outline,  
+              backgroundColor: Colors.red.shade800, 
             ),
           );
         },
         (success) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Password berhasil diubah. Silakan login kembali.'),
-              backgroundColor: Colors.green,
+            CustomSnackBar(
+              message: 'Password Berhasil Dirubah! 🤗',
+              icon: Icons.check_circle_outline,  
+              backgroundColor: Colors.green.shade800,  
             ),
           );
           // Clear sensitive data

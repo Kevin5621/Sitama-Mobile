@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, use_build_context_synchronously
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -110,17 +110,16 @@ class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
         ),
-                if (widget.guidance.name_file != "tidak ada file") ...[
+        if (widget.guidance.name_file != "tidak ada file") ...[
           InkWell(
             onTap: () {
               if (kIsWeb) {
-                // html.window.open(widget.guidance.name_file, "_blank");
+                // Handle web viewing
               } else {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        PDFViewerPage(pdfUrl: widget.guidance.name_file),
+                    builder: (context) => PDFViewerPage(pdfUrl: widget.guidance.name_file),
                   ),
                 );
               }
@@ -134,6 +133,16 @@ class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
                       ? colorScheme.onError
                       : colorScheme.onSurface,
                 ),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    Icons.download,
+                    size: 16,
+                    color: currentStatus == LecturerGuidanceStatus.rejected
+                        ? colorScheme.onError
+                        : colorScheme.onSurface,
+                  ),
+                  onPressed: () => PDFViewerPage.downloadPDF(context, widget.guidance.name_file),
+                ),
                 border: OutlineInputBorder(
                   borderRadius: const BorderRadius.all(Radius.circular(12)),
                   borderSide: BorderSide(
@@ -144,12 +153,13 @@ class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
                 ),
               ),
               child: Text(
-                widget.guidance.name_file.split('/').last, 
+                "File Bimbingan",
                 style: textTheme.bodyMedium?.copyWith(
                   color: currentStatus == LecturerGuidanceStatus.rejected
                       ? colorScheme.onError
                       : colorScheme.onSurface,
                 ),
+                overflow: TextOverflow.ellipsis,
               ),
             ),
           ),
