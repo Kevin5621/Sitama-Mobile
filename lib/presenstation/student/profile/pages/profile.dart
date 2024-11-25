@@ -10,6 +10,7 @@ import 'package:sistem_magang/common/widgets/log_out_alert.dart';
 import 'package:sistem_magang/core/config/themes/theme_provider.dart';
 import 'package:sistem_magang/core/service/notification_service.dart';
 import 'package:sistem_magang/domain/entities/student_home_entity.dart';
+import 'package:sistem_magang/presenstation/student/faq/pages/faq.dart';
 import 'package:sistem_magang/presenstation/student/profile/bloc/profile_student_cubit.dart';
 import 'package:sistem_magang/presenstation/student/profile/bloc/profile_student_state.dart';
 import 'package:sistem_magang/presenstation/student/profile/widgets/box_industry.dart';
@@ -96,7 +97,11 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
             icon: Icons.help_outline,
             title: 'Help & Support',
             onTap: () {
-              // TODO
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => FAQPage()),
+              );
             },
           ),
           SettingButton(
