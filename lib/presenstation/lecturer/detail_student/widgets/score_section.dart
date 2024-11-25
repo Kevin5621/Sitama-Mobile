@@ -3,7 +3,9 @@ import 'package:sistem_magang/presenstation/lecturer/input_score/pages/input_sco
 
 /// A widget that displays a score box with score items and a button to navigate to the input score page.
 class ScoreBox extends StatelessWidget {
-  const ScoreBox({Key? key}) : super(key: key);
+  final int id;
+
+  const ScoreBox({Key? key, required this.id}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +56,7 @@ class ScoreBox extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const InputScorePage(),
+                      builder: (context) => InputScorePage(id: id,),
                     ),
                   );
                 },

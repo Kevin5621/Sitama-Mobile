@@ -12,6 +12,7 @@ import 'package:sistem_magang/data/source/student_api_service.dart';
 import 'package:sistem_magang/domain/repository/auth.dart';
 import 'package:sistem_magang/domain/repository/lecturer.dart';
 import 'package:sistem_magang/domain/repository/student.dart';
+import 'package:sistem_magang/domain/usecases/lecturer/get_assessmet.dart';
 import 'package:sistem_magang/domain/usecases/student/guidances/add_guidance_student.dart';
 import 'package:sistem_magang/domain/usecases/student/logbook/add_log_book_student.dart';
 import 'package:sistem_magang/domain/usecases/student/guidances/delete_guidance_student.dart';
@@ -75,6 +76,7 @@ void setupServiceLocator() {
   sl.registerSingleton<GetHomeLecturerUseCase>(GetHomeLecturerUseCase());
   sl.registerSingleton<GetDetailStudentUseCase>(GetDetailStudentUseCase());
   sl.registerSingleton<UpdateStatusGuidanceUseCase>(UpdateStatusGuidanceUseCase());
+  sl.registerSingleton<GetAssessments>(GetAssessments());
 
   sl.registerSingleton<GetNotificationsUseCase>(GetNotificationsUseCase());
   sl.registerSingleton<MarkAllNotificationsReadUseCase>(MarkAllNotificationsReadUseCase());

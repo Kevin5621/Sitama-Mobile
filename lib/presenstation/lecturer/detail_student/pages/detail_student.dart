@@ -49,7 +49,8 @@ class _DetailStudentPageState extends State<DetailStudentPage> {
 
   void _scrollToTabSection() {
     _scrollController.animateTo(
-      _scrollController.position.maxScrollExtent, // Adjust this offset as needed.
+      _scrollController
+          .position.maxScrollExtent, // Adjust this offset as needed.
       duration: const Duration(milliseconds: 500),
       curve: Curves.easeInOut,
     );
@@ -59,7 +60,8 @@ class _DetailStudentPageState extends State<DetailStudentPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocProvider(
-        create: (context) => DetailStudentDisplayCubit()..displayStudent(widget.id),
+        create: (context) =>
+            DetailStudentDisplayCubit()..displayStudent(widget.id),
         child:
             BlocBuilder<DetailStudentDisplayCubit, DetailStudentDisplayState>(
           builder: (context, state) {
@@ -76,7 +78,8 @@ class _DetailStudentPageState extends State<DetailStudentPage> {
                   SliverAppBar(
                     expandedHeight: 250,
                     pinned: true,
-                    backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+                    backgroundColor:
+                        Theme.of(context).colorScheme.inversePrimary,
                     flexibleSpace: FlexibleSpaceBar(
                       background: ProfileHeader(detailStudent: detailStudent),
                     ),
@@ -99,6 +102,7 @@ class _DetailStudentPageState extends State<DetailStudentPage> {
                           InfoBoxes(
                             internships: detailStudent.internships,
                             students: detailStudent,
+                            id: widget.id,
                           ),
                           TabSection(
                             guidances: detailStudent.guidances,
@@ -116,7 +120,9 @@ class _DetailStudentPageState extends State<DetailStudentPage> {
               return ErrorView(
                 errorMessage: state.errorMessage,
                 onRetry: () {
-                  context.read<DetailStudentDisplayCubit>().displayStudent(widget.id);
+                  context
+                      .read<DetailStudentDisplayCubit>()
+                      .displayStudent(widget.id);
                 },
               );
             }

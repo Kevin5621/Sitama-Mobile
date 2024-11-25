@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:sistem_magang/domain/entities/score_entity.dart';
 import 'package:sistem_magang/presenstation/lecturer/input_score/widgets/input_field.dart';
 
 class ExpandableSection extends StatelessWidget {
   final String title;
-  final List<String> fields;
+  final List<ScoreEntity> scores;
 
-  const ExpandableSection({Key? key, required this.title, required this.fields})
+  const ExpandableSection({Key? key, required this.title, required this.scores})
       : super(key: key);
 
   @override
@@ -27,7 +28,7 @@ class ExpandableSection extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children:
-                  fields.map((field) => InputField(label: field)).toList(),
+                  scores.map((score) => InputField(score: score)).toList(),
             ),
           ),
         ],

@@ -11,6 +11,7 @@ abstract class LecturerApiService {
   Future<Either> getDetailStudent(int id);
   Future<Either> updateStatusGuidance(UpdateStatusGuidanceReqParams request);
   Future<Either> getLecturerProfile();
+  Future<Either> fetchAssessments(int id);
 }
 
 class LecturerApiServiceImpl extends LecturerApiService {
@@ -47,9 +48,10 @@ class LecturerApiServiceImpl extends LecturerApiService {
       return Left(e.response!.data['errors']['message']);
     }
   }
-  
+
   @override
-  Future<Either> updateStatusGuidance(UpdateStatusGuidanceReqParams request) async {
+  Future<Either> updateStatusGuidance(
+      UpdateStatusGuidanceReqParams request) async {
     try {
       SharedPreferences sharedPreferences =
           await SharedPreferences.getInstance();
@@ -72,10 +74,12 @@ class LecturerApiServiceImpl extends LecturerApiService {
       }
     }
   }
+
   @override
   Future<Either> getLecturerProfile() async {
     try {
-      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
       var token = sharedPreferences.get('token');
 
       var response = await sl<DioClient>().get(
@@ -86,6 +90,28 @@ class LecturerApiServiceImpl extends LecturerApiService {
       );
       return Right(response);
     } on DioException catch (e) {
+      return Left(e.response!.data['errors']['message']);
+    }
+  }
+
+  @override
+  Future<Either> fetchAssessments(int id) async {
+    try {
+      SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+      var token = sharedPreferences.get('token');
+
+      final response = await sl<DioClient>().get(
+        '${ApiUrls.getAssessments}/$id',
+        options: Options(headers: {
+          'Authorization': 'Bearer $token',
+        }),
+      );
+
+      return Right(response);
+
+      
+    } on DioException  catch (e) {
       return Left(e.response!.data['errors']['message']);
     }
   }

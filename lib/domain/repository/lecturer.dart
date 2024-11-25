@@ -10,6 +10,7 @@ abstract class LecturerRepository {
   Future<Either> getLecturerHome();
   Future<Either> getDetailStudent(int id);
   Future<Either> updateStatusGuidance(UpdateStatusGuidanceReqParams request);
+  Future<Either> fetchAssessments(int id);
   
   Future<Either> getLecturerProfile();
 }
