@@ -1,48 +1,72 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:sistem_magang/domain/entities/lecturer_home_entity.dart';
 
+// A customizable dropdown widget for filtering students by academic year
+// Provides search functionality and supports theming
 class FilterTahun extends StatefulWidget {
-  final Function(String?)? onYearSelected;
+  // Required parameters for core functionality
+  final List<LecturerStudentsEntity> students;
+  final Function(List<LecturerStudentsEntity>) onFilterChanged;
+  
+  // Optional parameters for visual customization
   final String? initialValue;
-  final int startYear;
-  final int endYear;
   final Color? primaryColor;
   final Color? backgroundColor;
   final TextStyle? hintStyle;
   final TextStyle? itemStyle;
   
   const FilterTahun({
-    Key? key,
-    this.onYearSelected,
+    super.key,
+    required this.students,
+    required this.onFilterChanged,
     this.initialValue,
-    this.startYear = 2020,
-    this.endYear = 2024,
     this.primaryColor,
     this.backgroundColor,
     this.hintStyle,
     this.itemStyle,
-  }) : super(key: key);
+  });
 
   @override
   State<FilterTahun> createState() => _FilterTahunState();
 }
 
 class _FilterTahunState extends State<FilterTahun> {
-  late List<String> items;
+  late List<String> uniqueYears;
   String? selectedValue;
   final TextEditingController textEditingController = TextEditingController();
   
+  // Initialize state and prepare the sorted list of unique years
   @override
   void initState() {
     super.initState();
-    // Generate years list dynamically
-    items = List.generate(
-      widget.endYear - widget.startYear + 1,
-      (index) => (widget.endYear - index).toString(),
-    );
+    // Extract unique years and sort them in descending order (newest first)
+    // Add "Semua Tahun" as the first option
+    uniqueYears = ['Semua Tahun', ...widget.students
+          .map((student) => student.academic_year)
+          .toSet()
+          .toList()
+        ..sort((a, b) => b.compareTo(a))]
+      ; // Sort in descending order
+    
     selectedValue = widget.initialValue;
   }
 
+  // Filter students based on selected academic year
+  void _filterStudents(String? selectedYear) {
+    if (selectedYear == null || selectedYear == 'Semua Tahun') {
+      // If no year is selected or "Semua Tahun" is selected, return all students
+      widget.onFilterChanged(widget.students);
+    } else {
+      // Filter students by selected academic year
+      final filteredStudents = widget.students
+          .where((student) => student.academic_year == selectedYear)
+          .toList();
+      widget.onFilterChanged(filteredStudents);
+    }
+  }
+
+  // Clean up resources when widget is disposed
   @override
   void dispose() {
     textEditingController.dispose();
@@ -54,6 +78,7 @@ class _FilterTahunState extends State<FilterTahun> {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
+    // Main container with border and background
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
@@ -63,6 +88,7 @@ class _FilterTahunState extends State<FilterTahun> {
       child: DropdownButtonHideUnderline(
         child: DropdownButton2<String>(
           isExpanded: true,
+          // Dropdown hint displaying calendar icon and default text
           hint: Row(
             children: [
               Icon(
@@ -80,43 +106,44 @@ class _FilterTahunState extends State<FilterTahun> {
               ),
             ],
           ),
-        items: items.map((item) => DropdownMenuItem(
-          value: item,
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              if (constraints.maxWidth < 150) {
-                return Center(
-                  child: Text(
-                    item.length > 12 ? '${item.substring(0, 12)}...' : item,
-                    style: widget.itemStyle ?? TextStyle(
-                      fontSize: 14,
-                      color: colorScheme.onSurface,
+          // Generate dropdown items with responsive text truncation
+          items: uniqueYears.map((year) => DropdownMenuItem(
+            value: year,
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                // Truncate text if width is constrained
+                if (constraints.maxWidth < 150) {
+                  return Center(
+                    child: Text(
+                      year.length > 12 ? '${year.substring(0, 12)}...' : year,
+                      style: widget.itemStyle ?? TextStyle(
+                        fontSize: 14,
+                        color: colorScheme.onSurface,
+                      ),
                     ),
-                  ),
-                );
-              } else {
-                return Center(
-                  child: Text(
-                    item,
-                    style: widget.itemStyle ?? TextStyle(
-                      fontSize: 14,
-                      color: colorScheme.onSurface,
+                  );
+                } else {
+                  return Center(
+                    child: Text(
+                      year,
+                      style: widget.itemStyle ?? TextStyle(
+                        fontSize: 14,
+                        color: colorScheme.onSurface,
+                      ),
                     ),
-                  ),
-                );
-              }
-            },
-          ),
-        )).toList(),
+                  );
+                }
+              },
+            ),
+          )).toList(),
           value: selectedValue,
           onChanged: (value) {
             setState(() {
               selectedValue = value;
             });
-            if (widget.onYearSelected != null) {
-              widget.onYearSelected!(value);
-            }
+            _filterStudents(value);
           },
+          // Customize button appearance
           buttonStyleData: ButtonStyleData(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             height: 40,
@@ -126,6 +153,7 @@ class _FilterTahunState extends State<FilterTahun> {
               color: widget.backgroundColor ?? colorScheme.surface,
             ),
           ),
+          // Customize dropdown appearance
           dropdownStyleData: DropdownStyleData(
             maxHeight: 300,
             decoration: BoxDecoration(
@@ -135,14 +163,16 @@ class _FilterTahunState extends State<FilterTahun> {
             offset: const Offset(0, -4),
             scrollbarTheme: ScrollbarThemeData(
               radius: const Radius.circular(40),
-              thickness: WidgetStateProperty.all(6),
-              thumbVisibility: WidgetStateProperty.all(true),
+              thickness: WidgetStateProperty.all(6), 
+              thumbVisibility: WidgetStateProperty.all(true), 
             ),
           ),
-          menuItemStyleData: MenuItemStyleData(
+          // Customize menu item appearance
+          menuItemStyleData: const MenuItemStyleData(
             height: 40,
-            padding: const EdgeInsets.symmetric(horizontal: 8),
+            padding: EdgeInsets.symmetric(horizontal: 8),
           ),
+          // Configure search functionality
           dropdownSearchData: DropdownSearchData(
             searchController: textEditingController,
             searchInnerWidgetHeight: 60,
@@ -180,11 +210,13 @@ class _FilterTahunState extends State<FilterTahun> {
                 ),
               ),
             ),
+            // Configure search matching logic
             searchMatchFn: (item, searchValue) {
               return item.value.toString().toLowerCase()
                   .contains(searchValue.toLowerCase());
             },
           ),
+          // Clear search when dropdown is closed
           onMenuStateChange: (isOpen) {
             if (!isOpen) {
               textEditingController.clear();

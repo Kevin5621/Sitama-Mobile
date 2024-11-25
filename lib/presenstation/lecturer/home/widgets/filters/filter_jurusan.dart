@@ -1,49 +1,70 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:sistem_magang/domain/entities/lecturer_home_entity.dart';
 
+// A customizable dropdown widget for filtering students by their majors
+// Includes search functionality and supports theming
 class FilterJurusan extends StatefulWidget {
-  final Function(String?)? onProdiSelected;
+  // Required parameters for basic functionality
+  final List<LecturerStudentsEntity> students;
+  final Function(List<LecturerStudentsEntity>) onFilterChanged;
+  
+  // Optional parameters for customization
   final String? initialValue;
-  final List<String>? customProdiList;
   final Color? primaryColor;
   final Color? backgroundColor;
   final TextStyle? hintStyle;
   final TextStyle? itemStyle;
   
   const FilterJurusan({
-    Key? key,
-    this.onProdiSelected,
+    super.key,
+    required this.students,
+    required this.onFilterChanged,
     this.initialValue,
-    this.customProdiList,
     this.primaryColor,
     this.backgroundColor,
     this.hintStyle,
     this.itemStyle,
-  }) : super(key: key);
+  });
 
   @override
   State<FilterJurusan> createState() => _FilterJurusanState();
 }
 
 class _FilterJurusanState extends State<FilterJurusan> {
-  final List<String> defaultItems = [
-    'D3 - Informatika',
-    'D3 - Elektronika',
-    'D3 - Telekomunikasi',
-    'D3 - Listrik',
-    'D4 - Telekomunikasi',
-  ];
-  
   String? selectedValue;
   final TextEditingController textEditingController = TextEditingController();
+  late List<String> uniqueMajors;
   
+  // Initialize state and prepare the list of unique majors
   @override
   void initState() {
     super.initState();
     selectedValue = widget.initialValue;
+    // Extract and sort unique majors, adding "Semua Jurusan" as the first option
+    uniqueMajors = ['Semua Jurusan']
+      ..addAll(widget.students
+          .map((student) => student.major)
+          .toSet()
+          .toList()
+        ..sort());
   }
 
+  // Filter students based on selected major
+  void _filterStudents(String? selectedMajor) {
+    if (selectedMajor == null || selectedMajor == 'Semua Jurusan') {
+      // If no major is selected or "Semua Jurusan" is selected, return all students
+      widget.onFilterChanged(widget.students);
+    } else {
+      // Filter students by selected major
+      final filteredStudents = widget.students
+          .where((student) => student.major == selectedMajor)
+          .toList();
+      widget.onFilterChanged(filteredStudents);
+    }
+  }
+
+  // Clean up resources when widget is disposed
   @override
   void dispose() {
     textEditingController.dispose();
@@ -54,8 +75,8 @@ class _FilterJurusanState extends State<FilterJurusan> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final items = widget.customProdiList ?? defaultItems;
     
+    // Main container with border and background
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
@@ -65,6 +86,7 @@ class _FilterJurusanState extends State<FilterJurusan> {
       child: DropdownButtonHideUnderline(
         child: DropdownButton2<String>(
           isExpanded: true,
+          // Dropdown hint displaying default text and icon
           hint: Row(
             children: [
               Icon(
@@ -74,7 +96,7 @@ class _FilterJurusanState extends State<FilterJurusan> {
               ),
               const SizedBox(width: 8),
               Text(
-                'Prodi',
+                'Jurusan',
                 style: widget.hintStyle ?? TextStyle(
                   fontSize: 14,
                   color: (widget.primaryColor ?? colorScheme.primary).withOpacity(0.7),
@@ -82,13 +104,15 @@ class _FilterJurusanState extends State<FilterJurusan> {
               ),
             ],
           ),
-          items: items.map((item) => DropdownMenuItem(
-            value: item,
+          // Generate dropdown items with responsive text truncation
+          items: uniqueMajors.map((major) => DropdownMenuItem(
+            value: major,
             child: LayoutBuilder(
               builder: (context, constraints) {
+                // Truncate text if width is constrained
                 if (constraints.maxWidth < 150) {
                   return Text(
-                    item.length > 12 ? '${item.substring(0, 12)}...' : item,
+                    major.length > 12 ? '${major.substring(0, 12)}...' : major,
                     style: widget.itemStyle ?? TextStyle(
                       fontSize: 14,
                       color: colorScheme.onSurface,
@@ -96,7 +120,7 @@ class _FilterJurusanState extends State<FilterJurusan> {
                   );
                 } else {
                   return Text(
-                    item,
+                    major,
                     style: widget.itemStyle ?? TextStyle(
                       fontSize: 14,
                       color: colorScheme.onSurface,
@@ -111,10 +135,9 @@ class _FilterJurusanState extends State<FilterJurusan> {
             setState(() {
               selectedValue = value;
             });
-            if (widget.onProdiSelected != null) {
-              widget.onProdiSelected!(value);
-            }
+            _filterStudents(value);
           },
+          // Customize button appearance
           buttonStyleData: ButtonStyleData(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             height: 40,
@@ -124,6 +147,7 @@ class _FilterJurusanState extends State<FilterJurusan> {
               color: widget.backgroundColor ?? colorScheme.surface,
             ),
           ),
+          // Customize dropdown appearance
           dropdownStyleData: DropdownStyleData(
             maxHeight: 300,
             decoration: BoxDecoration(
@@ -133,14 +157,16 @@ class _FilterJurusanState extends State<FilterJurusan> {
             offset: const Offset(0, -4),
             scrollbarTheme: ScrollbarThemeData(
               radius: const Radius.circular(40),
-              thickness: WidgetStateProperty.all(6),
-              thumbVisibility: WidgetStateProperty.all(true),
+              thickness: MaterialStateProperty.all(6),
+              thumbVisibility: MaterialStateProperty.all(true),
             ),
           ),
+          // Customize menu item appearance
           menuItemStyleData: const MenuItemStyleData(
             height: 40,
             padding: EdgeInsets.symmetric(horizontal: 8),
           ),
+          // Configure search functionality
           dropdownSearchData: DropdownSearchData(
             searchController: textEditingController,
             searchInnerWidgetHeight: 60,
@@ -157,7 +183,7 @@ class _FilterJurusanState extends State<FilterJurusan> {
                     horizontal: 12,
                     vertical: 10,
                   ),
-                  hintText: 'Cari program studi...',
+                  hintText: 'Cari jurusan...',
                   hintStyle: const TextStyle(fontSize: 12),
                   prefixIcon: Icon(
                     Icons.search,
@@ -178,11 +204,13 @@ class _FilterJurusanState extends State<FilterJurusan> {
                 ),
               ),
             ),
+            // Configure search matching logic
             searchMatchFn: (item, searchValue) {
               return item.value.toString().toLowerCase()
                   .contains(searchValue.toLowerCase());
             },
           ),
+          // Clear search when dropdown is closed
           onMenuStateChange: (isOpen) {
             if (!isOpen) {
               textEditingController.clear();
