@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:sistem_magang/common/widgets/about_app.dart';
 import 'package:sistem_magang/common/widgets/edit_photo_profile_pop_up.dart';
 import 'package:sistem_magang/common/widgets/reset_password.dart';
 import 'package:sistem_magang/common/widgets/setting_button.dart';
@@ -108,7 +109,12 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
             icon: Icons.info_outline,
             title: 'About App',
             onTap: () {
-              //TODO
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const AboutAppPage(),
+                ),
+              );
             },
           ),
           SettingButton(
