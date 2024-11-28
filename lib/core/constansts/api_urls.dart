@@ -14,6 +14,7 @@ class ApiUrls {
   static const updateStatusGuidance = '${baseUrl}lecturer/guidance';
   static const updateStatusProfile = '${baseUrl}lecturer/profile';
   static const getAssessments = '${baseUrl}lecturer/assessments';
+  static const submitScores = '${baseUrl}lecturer/addAssessment';
 
   static const updatePhotoProfile = '${baseUrl}updateProfile';
   static const resetPassword = '${baseUrl}resetPassword';

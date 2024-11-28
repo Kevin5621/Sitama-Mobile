@@ -12,7 +12,8 @@ class InfoBoxes extends StatelessWidget {
   const InfoBoxes({
     Key? key,
     required this.internships,
-    required this.students, required this.id,
+    required this.students,
+    required this.id,
   }) : super(key: key);
 
   @override
@@ -49,7 +50,11 @@ class InfoBoxes extends StatelessWidget {
             },
           ),
           const SizedBox(height: 16),
-          ScoreBox(id: id),
+          ScoreBox(
+            id: id,
+            assessments: students.assessments,
+            average_all_assessments: students.average_all_assessments,
+          ),
         ],
       ),
     );

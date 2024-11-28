@@ -137,4 +137,21 @@ class LecturerRepositoryImpl extends LecturerRepository{
       },
     );
   }
+  
+  @override
+  Future<Either<String, Response>> submitScores(
+      int id, List<Map<String, dynamic>> scores) async {
+    
+    Either result =
+        await sl<LecturerApiService>().submitScores(id, scores);
+    return result.fold(
+      (error) {
+        return Left(error);
+      },
+      (data) {
+        return Right(data);
+      },
+    );
+
+  }
 }

@@ -5,9 +5,14 @@ import 'package:sistem_magang/presenstation/lecturer/input_score/widgets/input_f
 class ExpandableSection extends StatelessWidget {
   final String title;
   final List<ScoreEntity> scores;
+  final Map<int, TextEditingController> controllers;
 
-  const ExpandableSection({Key? key, required this.title, required this.scores})
-      : super(key: key);
+  ExpandableSection({
+    Key? key,
+    required this.title,
+    required this.scores,
+    required this.controllers,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +32,16 @@ class ExpandableSection extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children:
-                  scores.map((score) => InputField(score: score)).toList(),
+              children: scores.map((score) {
+                final controller = controllers[score.id] ??
+                    TextEditingController(text: score.score?.toString() ?? '');
+                controllers[score.id] = controller;
+
+                return InputField(
+                  score: score,
+                  controller: controller,
+                );
+              }).toList(),
             ),
           ),
         ],

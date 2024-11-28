@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:sistem_magang/domain/entities/lecturer_detail_student.dart';
 import 'package:sistem_magang/presenstation/lecturer/input_score/pages/input_score.dart';
 
 /// A widget that displays a score box with score items and a button to navigate to the input score page.
 class ScoreBox extends StatelessWidget {
   final int id;
+  final List<ShowAssessmentEntity> assessments;
+  final String average_all_assessments;
 
-  const ScoreBox({Key? key, required this.id}) : super(key: key);
+  const ScoreBox(
+      {Key? key,
+      required this.id,
+      required this.assessments,
+      required this.average_all_assessments})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +64,9 @@ class ScoreBox extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => InputScorePage(id: id,),
+                      builder: (context) => InputScorePage(
+                        id: id,
+                      ),
                     ),
                   );
                 },
@@ -64,15 +74,24 @@ class ScoreBox extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          
+
           // Score items for various components.
-          _buildScoreItem(context, 'Proposal', '-'),
-          _buildScoreItem(context, 'Laporan', '-'),
-          _buildScoreItem(context, 'Nilai Industri', '-'),
+          ListView.builder(
+              shrinkWrap: true,
+              itemCount: assessments.length,
+              itemBuilder: (context, index) => _buildScoreItem(
+                  context,
+                  assessments[index].component_name,
+                  assessments[index].average_score.toString())),
+          // _buildScoreItem(context, 'Proposal', '-'),
+          // _buildScoreItem(context, 'Laporan', '-'),
+          // _buildScoreItem(context, 'Nilai Industri', '-'),
           const Divider(height: 24),
-          
+
           // The total score with distinct styling.
-          _buildScoreItem(context, 'Rata - rata', '-', isTotal: true),
+          _buildScoreItem(
+              context, 'Rata - rata', average_all_assessments,
+              isTotal: true),
         ],
       ),
     );
@@ -80,7 +99,8 @@ class ScoreBox extends StatelessWidget {
 
   /// Builds each score item row with label and score.
   /// [isTotal] applies specific styling if true, used for the final row.
-  Widget _buildScoreItem(BuildContext context, String label, String score, {bool isTotal = false}) {
+  Widget _buildScoreItem(BuildContext context, String label, String score,
+      {bool isTotal = false}) {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Padding(
@@ -93,7 +113,9 @@ class ScoreBox extends StatelessWidget {
             style: TextStyle(
               fontSize: isTotal ? 16 : 14,
               fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
-              color: isTotal ? colorScheme.primary : colorScheme.onSurface.withOpacity(0.7),
+              color: isTotal
+                  ? colorScheme.primary
+                  : colorScheme.onSurface.withOpacity(0.7),
             ),
           ),
           Container(
@@ -109,7 +131,9 @@ class ScoreBox extends StatelessWidget {
               style: TextStyle(
                 fontSize: isTotal ? 16 : 14,
                 fontWeight: isTotal ? FontWeight.bold : FontWeight.w500,
-                color: isTotal ? colorScheme.primary : colorScheme.onSurface.withOpacity(0.7),
+                color: isTotal
+                    ? colorScheme.primary
+                    : colorScheme.onSurface.withOpacity(0.7),
               ),
             ),
           ),
