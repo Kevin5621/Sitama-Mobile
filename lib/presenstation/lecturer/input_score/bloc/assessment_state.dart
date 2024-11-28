@@ -15,3 +15,12 @@ class LoadAssessmentFailure extends AssessmentState {
 
   LoadAssessmentFailure({required this.errorMessage});
 }
+
+class AssessmentSubmitting extends AssessmentState {}
+
+class AssessmentSubmissionFailed extends AssessmentState {
+  final String errorMessage;
+  AssessmentSubmissionFailed({required this.errorMessage});
+}
+
+class AssessmentSubmittedSuccess extends AssessmentState {}

@@ -12,7 +12,7 @@ class InputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    controller?.text = score.score.toString() ?? '';
+    controller?.text = score.score != null ? score.score.toString() : '';
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
       child: Row(

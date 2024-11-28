@@ -11,12 +11,17 @@ class DetailStudentModel {
   final List<InternshipStudentModel> internships;
   final List<GuidanceModel> guidances;
   final List<LogBookModel> log_book;
+  final List<ShowAssessmentModel> assessments;
+  final double average_all_assessments;
 
   DetailStudentModel({
     required this.student,
     required this.internships,
     required this.guidances,
-    required this.log_book});
+    required this.log_book,
+    required this.assessments,
+    required this.average_all_assessments,
+  });
 
   factory DetailStudentModel.fromMap(Map<String, dynamic> map) {
     return DetailStudentModel(
@@ -36,6 +41,12 @@ class DetailStudentModel {
           (x) => LogBookModel.fromMap(x as Map<String, dynamic>),
         ),
       ),
+      assessments: List<ShowAssessmentModel>.from(
+        (map['assessments'] as List<dynamic>).map<ShowAssessmentModel>(
+          (x) => ShowAssessmentModel.fromMap(x as Map<String, dynamic>),
+        ),
+      ),
+      average_all_assessments: map['average_all_assessments'] as double,
     );
   }
 }
@@ -47,35 +58,42 @@ extension DetailStudentXModel on DetailStudentModel {
         name: student.name,
         email: student.email,
         username: student.username,
-        photo_profile: student.photo_profile, 
+        photo_profile: student.photo_profile,
       ),
       username: student.username,
       the_class: student.the_class,
       major: student.major,
-      internships: internships.map((data) => InternshipStudentEntity(
-          name: data.name, 
-          start_date: data.start_date, 
-          end_date: data.end_date
-          )).
-          toList(),
-      guidances: guidances.map((guidance) => GuidanceEntity(
-          id: guidance.id, 
-          title: guidance.title, 
-          activity: guidance.activity,
-          date: guidance.date, 
-          lecturer_note: guidance.lecturer_note, 
-          name_file: guidance.name_file,
-          status: guidance.status
-          )).
-          toList(),
-      log_book: log_book.map((data) => LogBookEntity(
-          id: data.id, 
-          title: data.title, 
-          activity: data.activity, 
-          date: data.date,
-          lecturer_note: ''
-          )).
-          toList(),
+      internships: internships
+          .map((data) => InternshipStudentEntity(
+              name: data.name,
+              start_date: data.start_date,
+              end_date: data.end_date))
+          .toList(),
+      guidances: guidances
+          .map((guidance) => GuidanceEntity(
+              id: guidance.id,
+              title: guidance.title,
+              activity: guidance.activity,
+              date: guidance.date,
+              lecturer_note: guidance.lecturer_note,
+              name_file: guidance.name_file,
+              status: guidance.status))
+          .toList(),
+      log_book: log_book
+          .map((data) => LogBookEntity(
+              id: data.id,
+              title: data.title,
+              activity: data.activity,
+              date: data.date,
+              lecturer_note: ''))
+          .toList(),
+      assessments: assessments
+          .map((assessment) => ShowAssessmentEntity(
+                component_name: assessment.component_name,
+                average_score: assessment.average_score,
+              ))
+          .toList(),
+      average_all_assessments:  average_all_assessments.toString(),
     );
   }
 }
@@ -89,13 +107,13 @@ class InfoStudentModel {
   final String? photo_profile;
 
   InfoStudentModel({
-      required this.name, 
-      required this.username, 
-      required this.email,
-      required this.the_class,
-      required this.major,
-      this.photo_profile,
-      });
+    required this.name,
+    required this.username,
+    required this.email,
+    required this.the_class,
+    required this.major,
+    this.photo_profile,
+  });
 
   factory InfoStudentModel.fromMap(Map<String, dynamic> map) {
     return InfoStudentModel(
@@ -112,7 +130,7 @@ class InfoStudentModel {
 class InternshipStudentModel {
   final String name;
   final DateTime start_date;
-  final DateTime ? end_date;
+  final DateTime? end_date;
 
   InternshipStudentModel(
       {required this.name, required this.start_date, required this.end_date});
@@ -121,7 +139,27 @@ class InternshipStudentModel {
     return InternshipStudentModel(
       name: map['name'] as String,
       start_date: DateFormat('yyyy-MM-dd').parse(map['start_date'] as String),
-      end_date: map['end_date'] != null ? DateFormat('yyyy-MM-dd').parse(map['end_date'] as String) : null ,
+      end_date: map['end_date'] != null
+          ? DateFormat('yyyy-MM-dd').parse(map['end_date'] as String)
+          : null,
+    );
+  }
+}
+
+class ShowAssessmentModel {
+  final String component_name;
+  final double average_score;
+
+  ShowAssessmentModel({
+    required this.component_name,
+    required this.average_score,
+  });
+
+  factory ShowAssessmentModel.fromMap(Map<String, dynamic> map) {
+    return ShowAssessmentModel(
+      component_name: map['component_name'] as String,
+      average_score:
+          (map['average_score'] as num).toDouble(), // Convert to double
     );
   }
 }

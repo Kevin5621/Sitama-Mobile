@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sistem_magang/core/constansts/api_urls.dart';
 import 'package:sistem_magang/core/network/dio_client.dart';
 import 'package:sistem_magang/data/models/guidance.dart';
+import 'package:sistem_magang/data/models/score_request.dart';
 import 'package:sistem_magang/service_locator.dart';
 
 abstract class LecturerApiService {
@@ -12,6 +13,8 @@ abstract class LecturerApiService {
   Future<Either> updateStatusGuidance(UpdateStatusGuidanceReqParams request);
   Future<Either> getLecturerProfile();
   Future<Either> fetchAssessments(int id);
+  Future<Either<String, Response>> submitScores(
+      int id, List<Map<String, dynamic>> scores);
 }
 
 class LecturerApiServiceImpl extends LecturerApiService {
@@ -109,10 +112,40 @@ class LecturerApiServiceImpl extends LecturerApiService {
       );
 
       return Right(response);
-
-      
-    } on DioException  catch (e) {
+    } on DioException catch (e) {
       return Left(e.response!.data['errors']['message']);
+    }
+  }
+
+  @override
+  Future<Either<String, Response>> submitScores(
+      int id, List<Map<String, dynamic>> scores) async {
+    try {
+      SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+      var token = sharedPreferences.getString('token');
+      print(scores);
+
+      var response = await Dio().post(
+        "${ApiUrls.submitScores}/$id",
+        options: Options(headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        }),
+        data: {
+          "scores": scores,
+        },
+      );
+      print(response);
+      return Right(response);
+
+    } on DioException catch (e) {
+      print(e.response!.data['errors']?.toString());
+      if (e.response != null) {
+        return Left(e.response!.data['errors']?.toString() ?? 'Unknown error');
+      } else {
+        return Left(e.message ?? 'Connection error');
+      }
     }
   }
 }
