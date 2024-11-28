@@ -197,14 +197,42 @@ class _NotificationPageState extends State<NotificationPage> {
 
   Future<void> _markAllNotificationsAsRead() async {
     try {
-      // Implementasi API untuk menandai semua notifikasi
-      setState(() {
-        _notifications = _notifications.map((n) => n.copyWith(isRead: 1)).toList();
-      });
+      // Ambil ID dari semua notifikasi yang belum dibaca
+      final unreadNotificationIds = _notifications
+          .where((n) => n.isRead == 0)
+          .map((n) => n.id)
+          .toList();
+
+      // Panggil use case untuk menandai notifikasi sebagai dibaca di server
+      final result = await markAllNotificationsReadUseCase.call(
+        param: MarkAllReqParams(
+          notificationIds: unreadNotificationIds, 
+          isRead: 1        
+        )
+      );
+
+      result.fold(
+        (error) {
+          // Tangani kesalahan jika gagal memperbarui di server
+          ScaffoldMessenger.of(context).showSnackBar(
+            CustomSnackBar(
+              message: 'Gagal menandai semua notifikasi :(',
+              icon: Icons.error_outline,  
+              backgroundColor: Colors.red.shade800,  
+            ),
+          );
+        },
+        (_) {
+          // Perbarui status lokal setelah berhasil di server
+          setState(() {
+            _notifications = _notifications.map((n) => n.copyWith(isRead: 1)).toList();
+          });
+        }
+      );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         CustomSnackBar(
-          message: 'Gagal menandai semua notifikasi :(',
+          message: 'Terjadi kesalahan',
           icon: Icons.error_outline,  
           backgroundColor: Colors.red.shade800,  
         ),

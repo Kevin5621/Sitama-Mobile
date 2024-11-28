@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sistem_magang/common/widgets/custom_snackbar.dart';
 import 'package:sistem_magang/common/widgets/reset_password_field.dart';
+import 'package:sistem_magang/core/config/themes/app_color.dart';
 import 'package:sistem_magang/data/models/reset_password_req_params.dart';
 import 'package:sistem_magang/domain/usecases/general/reset_password.dart';
 import 'package:sistem_magang/service_locator.dart';
@@ -30,7 +31,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   // Track password strength
   double _passwordStrength = 0.0;
   String _passwordStrengthText = '';
-  Color _passwordStrengthColor = Colors.red;
+  Color _passwordStrengthColor = AppColors.lightDanger;
 
   // Password validation patterns
   final RegExp _hasUpperCase = RegExp(r'[A-Z]');
@@ -164,7 +165,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
             CustomSnackBar(
               message: (error.toString()),
               icon: Icons.error_outline,  
-              backgroundColor: Colors.red.shade800, 
+              backgroundColor: AppColors.lightDanger, 
             ),
           );
         },
@@ -173,7 +174,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
             CustomSnackBar(
               message: 'Password Berhasil Dirubah! 🤗',
               icon: Icons.check_circle_outline,  
-              backgroundColor: Colors.green.shade800,  
+              backgroundColor: Colors.green,  
             ),
           );
           // Clear sensitive data

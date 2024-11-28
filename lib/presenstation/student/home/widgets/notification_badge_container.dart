@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sistem_magang/data/models/notification.dart';
 import 'package:sistem_magang/presenstation/student/home/bloc/student_display_cubit.dart';
 import 'package:sistem_magang/presenstation/student/home/bloc/student_display_state.dart';
 import 'package:sistem_magang/presenstation/student/home/widgets/notification_badge.dart';

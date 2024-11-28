@@ -5,10 +5,10 @@ class NotificationBadge extends StatelessWidget {
   final Widget child;
 
   const NotificationBadge({
-    Key? key,
+    super.key,
     required this.count,
     required this.child,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -15,10 +15,10 @@ class LoadNotification extends StatefulWidget {
   final NotificationItemEntity? notification;
 
   const LoadNotification({
-    Key? key,
+    super.key,
     required this.onClose,
     this.notification,
-  }) : super(key: key);
+  });
 
   @override
   State<LoadNotification> createState() => _LoadNotificationState();

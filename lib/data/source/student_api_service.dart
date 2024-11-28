@@ -279,7 +279,10 @@ class StudentApiServiceImpl extends StudentApiService {
             'Authorization': 'Bearer $token',
           },
         ),
-        data: request.toJson(), 
+        data: {
+          'notification_ids': request.notificationIds,
+          'is_read': request.isRead
+        }, 
       );
 
       return Right(response);

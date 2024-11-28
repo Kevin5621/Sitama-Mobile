@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:sistem_magang/data/models/notification.dart';
 
-/// A stateful widget to display a notification card.
-/// This widget includes an expandable feature for messages with overflow
-/// and dynamically adjusts based on the notification's category and read status.
+// This widget includes an expandable feature for messages with overflow
+// and dynamically adjusts based on the notification's category and read status.
 class NotificationCard extends StatefulWidget {
-  /// The notification data to be displayed.
+  // The notification data to be displayed.
   final NotificationItemEntity notification;
 
-  /// A callback function triggered when the card is tapped.
+  // A callback function triggered when the card is tapped.
   final VoidCallback onTap;
 
   const NotificationCard({
@@ -22,10 +21,10 @@ class NotificationCard extends StatefulWidget {
 }
 
 class _NotificationCardState extends State<NotificationCard> {
-  /// Tracks whether the notification's message is expanded or collapsed.
+  // Tracks whether the notification's message is expanded or collapsed.
   bool _isExpanded = false;
 
-  /// Determines the icon to display based on the notification category.
+  // Determines the icon to display based on the notification category.
   IconData _getNotificationIcon() {
     switch (widget.notification.category.toLowerCase()) {
       case 'general':
@@ -41,7 +40,7 @@ class _NotificationCardState extends State<NotificationCard> {
     }
   }
 
-  /// Determines the color to use based on the notification category.
+  // Determines the color to use based on the notification category.
   Color _getNotificationColor(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     switch (widget.notification.category.toLowerCase()) {
@@ -58,7 +57,7 @@ class _NotificationCardState extends State<NotificationCard> {
     }
   }
 
-  /// Checks if the notification's message overflows within the provided constraints.
+  // Checks if the notification's message overflows within the provided constraints.
   bool _hasTextOverflow(String text, TextStyle style, double maxWidth) {
     final TextPainter textPainter = TextPainter(
       text: TextSpan(text: text, style: style),
