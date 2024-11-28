@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sistem_magang/core/config/themes/app_color.dart';
 import 'package:sistem_magang/domain/entities/guidance_entity.dart';
@@ -13,11 +12,11 @@ class TabSection extends StatefulWidget {
   final int studentId;
 
   const TabSection({
-    Key? key,
+    super.key,
     required this.guidances,
     required this.logBooks,
     required this.studentId,
-  }) : super(key: key);
+  });
 
   @override
   State<TabSection> createState() => _TabSectionState();
@@ -136,6 +135,7 @@ class _TabSectionState extends State<TabSection> with SingleTickerProviderStateM
                 ),
                 LecturerLogBookTab(
                   logBooks: widget.logBooks,
+                  student_id: widget.studentId,
                 ),
               ],
             ),

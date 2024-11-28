@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names, use_build_context_synchronously
+// ignore_for_file: non_constant_identifier_names, use_build_context_synchronously, library_private_types_in_public_api
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -258,58 +258,79 @@ class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
   }
 
   void _showConfirmationDialog(LecturerGuidanceStatus newStatus) {
-  CustomAlertDialog.showConfirmation(
-    context: context,
-    title: 'Konfirmasi',
-    message: 'Apakah Anda yakin ingin ${newStatus == LecturerGuidanceStatus.approved ? 'menyetujui' : 'merevisi'} bimbingan ini?',
-    cancelText: 'Batal',
-    confirmText: 'Konfirmasi',
-  ).then((confirmed) {
-    if (confirmed == true) {
-      // Wrap dengan BlocProvider untuk menggunakan ButtonStateCubit
-      final buttonCubit = ButtonStateCubit();
-      
-      // Execute the update status
-      buttonCubit.excute(
-        usecase: sl<UpdateStatusGuidanceUseCase>(),
-        params: UpdateStatusGuidanceReqParams(
-          id: widget.guidance.id,
-          status: newStatus == LecturerGuidanceStatus.approved 
-            ? "approved" 
-            : "rejected",
-          lecturer_note: _lecturerNote.text
+    final colorScheme = Theme.of(context).colorScheme;
+    
+    IconData dialogIcon;
+    Color dialogIconColor;
+
+    switch (newStatus) {
+      case LecturerGuidanceStatus.approved:
+        dialogIcon = Icons.check_circle;
+        dialogIconColor = AppColors.lightSuccess;
+        break;
+      case LecturerGuidanceStatus.rejected:
+        dialogIcon = Icons.error;
+        dialogIconColor = AppColors.lightDanger;
+        break;
+      default:
+        dialogIcon = Icons.help_outline;
+        dialogIconColor = colorScheme.primary;
+    }
+
+    CustomAlertDialog.showConfirmation(
+      context: context,
+      title: 'Konfirmasi',
+      message: 'Apakah Anda yakin ingin ${newStatus == LecturerGuidanceStatus.approved ? 'menyetujui' : 'merevisi'} bimbingan ini?',
+      icon: dialogIcon,
+      iconColor: dialogIconColor,
+    ).then((confirmed) {
+      if (confirmed == true) {
+        final buttonCubit = ButtonStateCubit();
+        
+        buttonCubit.excute(
+          usecase: sl<UpdateStatusGuidanceUseCase>(),
+          params: UpdateStatusGuidanceReqParams(
+            id: widget.guidance.id,
+            status: newStatus == LecturerGuidanceStatus.approved 
+              ? "approved" 
+              : "rejected",
+            lecturer_note: _lecturerNote.text
+          ),
+        );
+
+        buttonCubit.stream.listen((state) {
+          if (state is ButtonSuccessState) {
+            _showSuccessAndNavigate();
+          }
+          
+          if (state is ButtonFailurState) {
+            _showErrorDialog(state.errorMessage);
+          }
+        });
+      }
+    });
+  }
+
+  void _showSuccessAndNavigate() {
+    CustomAlertDialog.showSuccess(
+      context: context,
+      title: 'Berhasil',
+      message: 'Berhasil mengupdate status bimbingan',
+    ).then((_) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => DetailStudentPage(id: widget.student_id),
         ),
       );
+    });
+  }
 
-      // Listen to state changes
-      buttonCubit.stream.listen((state) {
-        if (state is ButtonSuccessState) {
-          // Show success message
-          CustomAlertDialog.showSuccess(
-            context: context,
-            title: 'Berhasil',
-            message: 'Berhasil mengupdate status bimbingan',
-          ).then((_) {
-            // Navigate after showing success message
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => DetailStudentPage(id: widget.student_id),
-              ),
-            );
-          });
-        }
-        
-        if (state is ButtonFailurState) {
-          // Show error message
-          CustomAlertDialog.showError(
-            context: context,
-            title: 'Gagal',
-            message: state.errorMessage,
-          );
-        }
-      });
-    }
-  });
-}
+  void _showErrorDialog(String errorMessage) {
+    CustomAlertDialog.showError(
+      context: context,
+      title: 'Gagal',
+      message: errorMessage,
+    );
+  }
 }

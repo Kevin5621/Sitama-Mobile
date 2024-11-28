@@ -13,7 +13,7 @@ import 'package:sistem_magang/core/config/themes/app_color.dart';
 import 'package:sistem_magang/core/config/themes/theme_provider.dart';
 import 'package:sistem_magang/core/service/notification_service.dart';
 import 'package:sistem_magang/domain/entities/lecturer_profile_entity.dart';
-import 'package:sistem_magang/presenstation/lecturer/faq/pages/faq.dart';
+import 'package:sistem_magang/presenstation/lecturer/profile/pages/faq.dart';
 import 'package:sistem_magang/presenstation/lecturer/profile/bloc/profile_lecturer_cubit.dart';
 import 'package:sistem_magang/presenstation/lecturer/profile/bloc/profile_lecturer_state.dart';
 

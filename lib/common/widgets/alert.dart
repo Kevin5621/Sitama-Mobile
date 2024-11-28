@@ -1,6 +1,7 @@
 // custom_alert_dialog.dart
 
 import 'package:flutter/material.dart';
+import 'package:sistem_magang/core/config/themes/app_color.dart';
 
 class CustomAlertDialog extends StatelessWidget {
   final String title;
@@ -77,15 +78,14 @@ class CustomAlertDialog extends StatelessWidget {
     required String message,
     String confirmText = 'OK',
   }) {
-    final colorScheme = Theme.of(context).colorScheme;
     return show(
       context: context,
       title: title,
       message: message,
       confirmText: confirmText,
-      confirmColor: colorScheme.error,
+      confirmColor: AppColors.lightDanger,
       icon: Icons.error_outline,
-      iconColor: colorScheme.error,
+      iconColor: AppColors.lightDanger,
     );
   }
 
@@ -114,6 +114,8 @@ class CustomAlertDialog extends StatelessWidget {
     required String message,
     String cancelText = 'Batal',
     String confirmText = 'Setuju',
+    IconData? icon, 
+    Color? iconColor, 
   }) {
     final colorScheme = Theme.of(context).colorScheme;
     return show(
@@ -123,8 +125,8 @@ class CustomAlertDialog extends StatelessWidget {
       cancelText: cancelText,
       confirmText: confirmText,
       confirmColor: colorScheme.primary,
-      icon: Icons.help_outline,
-      iconColor: colorScheme.primary,
+      icon: icon ?? Icons.help_outline, 
+      iconColor: iconColor ?? colorScheme.primary, 
     );
   }
 
