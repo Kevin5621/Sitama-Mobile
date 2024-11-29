@@ -290,6 +290,7 @@ class _HomeContentState extends State<HomeContent> with AutomaticKeepAliveClient
             title: student.latest_log_books[index].title,
             date: student.latest_log_books[index].date,
             description: student.latest_log_books[index].activity,
+            lecturerNote: student.latest_log_books[index].lecturer_note,
             curentPage: 0,
           ),
         ),

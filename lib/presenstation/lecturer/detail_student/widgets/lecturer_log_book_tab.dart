@@ -1,11 +1,24 @@
+// ignore_for_file: non_constant_identifier_names, library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
+import 'package:sistem_magang/common/bloc/button/button_state.dart';
+import 'package:sistem_magang/common/bloc/button/button_state_cubit.dart';
+import 'package:sistem_magang/common/widgets/alert.dart';
 import 'package:sistem_magang/common/widgets/date_relative_time.dart';
+import 'package:sistem_magang/data/models/log_book.dart';
 import 'package:sistem_magang/domain/entities/log_book_entity.dart';
+import 'package:sistem_magang/domain/usecases/lecturer/update_status_logbook.dart';
+import 'package:sistem_magang/service_locator.dart';
 
 class LecturerLogBookTab extends StatelessWidget {
   final List<LogBookEntity> logBooks;
+  final int student_id;
+
   
-  const LecturerLogBookTab({super.key, required this.logBooks});
+  const LecturerLogBookTab({
+    super.key, 
+    required this.logBooks, 
+    required this.student_id});
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +28,7 @@ class LecturerLogBookTab extends StatelessWidget {
       itemBuilder: (context, index) {
         return LogBookCard(
           logBook: logBooks[index],
+          student_id: student_id,
         );
       },
     );
@@ -23,33 +37,68 @@ class LecturerLogBookTab extends StatelessWidget {
 
 class LogBookCard extends StatefulWidget {
   final LogBookEntity logBook;
+  final int student_id;
 
   const LogBookCard({
     super.key,
     required this.logBook,
+    required this.student_id,
   });
 
   @override
-  State<LogBookCard> createState() => _LogBookCardState();
+  _LogBookCardState createState() => _LogBookCardState();
 }
 
 class _LogBookCardState extends State<LogBookCard> {
-  final TextEditingController _noteController = TextEditingController();
-
-  @override
-  void dispose() {
-    _noteController.dispose();
-    super.dispose();
-  }
+  final TextEditingController _lecturerNote = TextEditingController();
 
   void _submitNote() {
-    if (_noteController.text.trim().isEmpty) return;
+    final buttonCubit = ButtonStateCubit();
     
-    // TODO: Implement API call to save the note
-    print('Saving note: ${_noteController.text}');
-    
-    // Clear the input field after submission
-    _noteController.clear();
+    // Tampilkan konfirmasi dialog
+    CustomAlertDialog.showConfirmation(
+      context: context,
+      title: 'Konfirmasi',
+      message: 'Apakah Anda yakin ingin mengirim catatan ini?',
+      icon: Icons.note_add,
+      iconColor: Colors.blue,
+    ).then((confirmed) {
+      if (confirmed == true) {
+        buttonCubit.excute(
+          usecase: sl<UpdateLogBookNoteUseCase>(),   
+          params: UpdateLogBookReqParams(
+            id: widget.logBook.id,
+            lecturer_note: _lecturerNote.text
+          ),
+        );
+
+        buttonCubit.stream.listen((state) {
+          if (state is ButtonSuccessState) {
+            _showSuccessDialog();
+          }
+          
+          if (state is ButtonFailurState) {
+            _showErrorDialog(state.errorMessage);
+          }
+        });
+      }
+    });
+  }
+
+  void _showSuccessDialog() {
+    CustomAlertDialog.showSuccess(
+      context: context,
+      title: 'Berhasil',
+      message: 'Berhasil menambahkan catatan log book',
+    );
+  }
+
+  void _showErrorDialog(String errorMessage) {
+    CustomAlertDialog.showError(
+      context: context,
+      title: 'Gagal',
+      message: errorMessage,
+    );
   }
 
   @override
@@ -125,7 +174,7 @@ class _LogBookCardState extends State<LogBookCard> {
           ),
           const SizedBox(height: 8),
           TextField(
-            controller: _noteController,
+            controller: _lecturerNote,
             decoration: InputDecoration(
               hintText: 'Masukkan catatan...',
               border: OutlineInputBorder(

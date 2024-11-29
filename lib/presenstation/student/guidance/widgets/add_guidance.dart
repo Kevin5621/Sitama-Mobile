@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:sistem_magang/common/bloc/button/button_state.dart';
 import 'package:sistem_magang/common/bloc/button/button_state_cubit.dart';
 import 'package:sistem_magang/common/widgets/basic_app_button.dart';
+import 'package:sistem_magang/common/widgets/custom_snackbar.dart';
 import 'package:sistem_magang/data/models/guidance.dart';
 import 'package:sistem_magang/domain/usecases/student/guidances/add_guidance_student.dart';
 import 'package:sistem_magang/presenstation/student/home/pages/home.dart';
@@ -52,19 +53,10 @@ class _AddGuidanceState extends State<AddGuidance> {
         listener: (context, state) async {
           if (state is ButtonSuccessState) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: const Row(
-                  children: [
-                    Icon(Icons.check_circle, color: Colors.white),
-                    SizedBox(width: 8),
-                    Text('Berhasil Menambahkan Bimbingan'),
-                  ],
-                ),
-                backgroundColor: Colors.green,
-                behavior: SnackBarBehavior.floating,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
+              CustomSnackBar(
+                message: 'Berhasil Menambahkan Bimbingan 🥸',
+                icon: Icons.check_circle_outline,  
+                backgroundColor: Colors.green.shade800,  
               ),
             );
             Navigator.pushAndRemoveUntil(
@@ -77,9 +69,13 @@ class _AddGuidanceState extends State<AddGuidance> {
           }
 
           if (state is ButtonFailurState) {
-            var snackBar = SnackBar(content: Text(state.errorMessage));
-            print(state.errorMessage);
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            ScaffoldMessenger.of(context).showSnackBar(
+              CustomSnackBar(
+                message: state.errorMessage,
+                icon: Icons.error_outline,  
+                backgroundColor: Colors.red.shade800,  
+              ),
+            );
           }
         },
         child: AlertDialog(

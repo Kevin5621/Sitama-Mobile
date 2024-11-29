@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:sistem_magang/common/widgets/about_app.dart';
 import 'package:sistem_magang/common/widgets/edit_photo_profile_pop_up.dart';
 import 'package:sistem_magang/common/widgets/log_out_alert.dart';
 import 'package:sistem_magang/common/widgets/notification.dart';
@@ -12,7 +13,7 @@ import 'package:sistem_magang/core/config/themes/app_color.dart';
 import 'package:sistem_magang/core/config/themes/theme_provider.dart';
 import 'package:sistem_magang/core/service/notification_service.dart';
 import 'package:sistem_magang/domain/entities/lecturer_profile_entity.dart';
-import 'package:sistem_magang/presenstation/lecturer/faq/pages/faq.dart';
+import 'package:sistem_magang/presenstation/lecturer/profile/pages/faq.dart';
 import 'package:sistem_magang/presenstation/lecturer/profile/bloc/profile_lecturer_cubit.dart';
 import 'package:sistem_magang/presenstation/lecturer/profile/bloc/profile_lecturer_state.dart';
 
@@ -199,7 +200,12 @@ class _LecturerProfilePageState extends State<LecturerProfilePage>
             icon: Icons.info_outline,
             title: 'About App',
             onTap: () {
-              // TODO
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const AboutAppPage(),
+                ),
+              );
             },
           ),
           SettingButton(

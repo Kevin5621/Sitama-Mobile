@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sistem_magang/common/widgets/alert.dart';
+import 'package:sistem_magang/common/widgets/custom_snackbar.dart';
+import 'package:sistem_magang/data/models/group.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_bloc.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_event.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/widgets/dialogs/group_dialog.dart';
@@ -15,11 +17,12 @@ class GroupActions {
     
     if (remainingMembers < 1) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Group harus memiliki minimal 1 anggota'),
-          duration: Duration(seconds: 2),
-        ),
-      );
+          CustomSnackBar(
+            message: ('Group harus memiliki minimal 1 anggota'),
+            icon: Icons.warning_outlined,  
+            backgroundColor: Colors.orange.shade800,  
+          ),
+        );
       return;
     }
 
@@ -48,9 +51,10 @@ class GroupActions {
       selectionBloc.add(ClearSelectionMode());
       
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('${selectedIds.length} item berhasil dikeluarkan dari Group'),
-          duration: const Duration(seconds: 2),
+        CustomSnackBar(
+          message: '${selectedIds.length} item berhasil dikeluarkan dari Group',
+          icon: Icons.check_circle_outline,  
+          backgroundColor: Colors.green.shade800,  
         ),
       );
     }

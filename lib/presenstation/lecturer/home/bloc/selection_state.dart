@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_bloc.dart';
+import 'package:sistem_magang/data/models/group.dart';
 
 class SelectionState extends Equatable {
   final bool isSelectionMode;
@@ -11,10 +11,10 @@ class SelectionState extends Equatable {
   final bool isLocalOperation;
 
   const SelectionState({
-    required this.isSelectionMode,
-    required this.selectedIds,
-    required this.archivedIds,
-    required this.groups,
+    this.isSelectionMode = false,
+    this.selectedIds = const {},
+    this.archivedIds = const {},
+    this.groups = const {},
     this.isLoading = false,
     this.error,
     this.isLocalOperation = false,

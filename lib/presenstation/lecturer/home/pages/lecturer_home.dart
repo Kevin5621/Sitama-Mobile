@@ -9,7 +9,7 @@ class LecturerHomePage extends StatefulWidget {
   /// Defaults to 0 (Home page).
   final int currentIndex;
 
-  const LecturerHomePage({Key? key, this.currentIndex = 0}) : super(key: key);
+  const LecturerHomePage({super.key, this.currentIndex = 0});
 
   @override
   State<LecturerHomePage> createState() => _LecturerHomePageState();

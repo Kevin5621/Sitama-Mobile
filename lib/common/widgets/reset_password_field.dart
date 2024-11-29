@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sistem_magang/core/config/themes/app_color.dart';
 
 class PasswordFormField extends StatelessWidget {
   final TextEditingController controller;
@@ -11,7 +12,7 @@ class PasswordFormField extends StatelessWidget {
   final int fieldIndex;
 
   const PasswordFormField({
-    Key? key,
+    super.key,
     required this.controller,
     required this.labelText,
     required this.hintText,
@@ -20,12 +21,12 @@ class PasswordFormField extends StatelessWidget {
     required this.fieldIndex,
     this.onChanged,
     this.errorText,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final errorColor = theme.colorScheme.error;
+    final errorColor = AppColors.lightDanger;
     final primaryColor = theme.primaryColor;
     final onSurfaceColor = theme.colorScheme.onSurface;
     final fillColor = theme.inputDecorationTheme.fillColor ?? Colors.grey[50];
@@ -134,11 +135,11 @@ class PasswordStrengthIndicator extends StatelessWidget {
   final Color strengthColor;
 
   const PasswordStrengthIndicator({
-    Key? key,
+    super.key,
     required this.strength,
     required this.strengthText,
     required this.strengthColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -185,9 +186,9 @@ class PasswordRequirements extends StatelessWidget {
   final String password;
   
   const PasswordRequirements({
-    Key? key,
+    super.key,
     required this.password,
-  }) : super(key: key);
+  });
 
   bool _checkRequirement(String pattern) {
     return RegExp(pattern).hasMatch(password);
@@ -252,7 +253,7 @@ class PasswordRequirements extends StatelessWidget {
               ),
             ],
           ),
-        )).toList(),
+        )),
       ],
     );
   }

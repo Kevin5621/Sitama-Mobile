@@ -14,7 +14,9 @@ import 'package:sistem_magang/presenstation/lecturer/home/widgets/filters/filter
 import 'package:sistem_magang/presenstation/lecturer/home/widgets/cards/group_card.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/widgets/cards/student_card.dart';
 
-class StudentList extends StatelessWidget {
+// Widget that displays a list of students with grouping, archiving, and selection capabilities
+// Used in the lecturer's dashboard to manage their supervised students
+class StudentList extends StatefulWidget {
   const StudentList({
     super.key,
     required this.students,
@@ -23,30 +25,59 @@ class StudentList extends StatelessWidget {
     required this.selectionState,
   });
 
+  // Complete list of students under the lecturer's supervision
   final List<LecturerStudentsEntity> students;
+  // Controls fade animation for search results
   final Animation<double> searchAnimation;
+  // Controls slide animation for list items
   final AnimationController animationController;
+  // Current selection state (selected students, groups, archived items)
   final SelectionState selectionState;
 
-  // Animation helpers
+  @override
+  State<StudentList> createState() => _StudentListState();
+}
+
+class _StudentListState extends State<StudentList> {
+  // Stores filtered students based on search/filter criteria
+  List<LecturerStudentsEntity> _filteredStudents = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _filteredStudents = widget.students;
+  }
+
+  // Updates filtered students when the main student list changes
+  @override
+  void didUpdateWidget(StudentList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.students != oldWidget.students) {
+      setState(() {
+        _filteredStudents = widget.students;
+      });
+    }
+  }
+
+  // Animation helpers for smooth UI transitions
   SlideTransition _buildSlideTransition({required Widget child}) {
     return SlideTransition(
       position: Tween<Offset>(
         begin: const Offset(0, 0.1),
         end: Offset.zero,
-      ).animate(animationController),
+      ).animate(widget.animationController),
       child: child,
     );
   }
 
   FadeTransition _buildFadeTransition({required Widget child}) {
     return FadeTransition(
-      opacity: searchAnimation,
+      opacity: widget.searchAnimation,
       child: _buildSlideTransition(child: child),
     );
   }
 
-  // UI Components
+  // UI Components for different sections of the list
   Widget _buildTitle() {
     return _buildFadeTransition(
       child: const Text(
@@ -59,10 +90,10 @@ class StudentList extends StatelessWidget {
     );
   }
 
+  // Builds individual student card with selection capability
   Widget _buildStudentItem(LecturerStudentsEntity student) {
     return BlocBuilder<SelectionBloc, SelectionState>(
       builder: (context, state) {
-
         return StudentCard(
           student: student,
           isSelected: state.selectedIds.contains(student.id),
@@ -73,9 +104,10 @@ class StudentList extends StatelessWidget {
     );
   }
 
-  // Event Handlers
+  // Event Handlers for student interactions
+  // Handles tap: Opens detail view in normal mode, toggles selection in selection mode
   void _handleStudentTap(BuildContext context, LecturerStudentsEntity student) {
-    if (selectionState.isSelectionMode) {
+    if (widget.selectionState.isSelectionMode) {
       context.read<SelectionBloc>().add(ToggleItemSelection(student.id));
     } else {
       Navigator.push(
@@ -87,15 +119,17 @@ class StudentList extends StatelessWidget {
     }
   }
 
+  // Initiates selection mode on long press and selects the pressed item
   void _handleStudentLongPress(BuildContext context, LecturerStudentsEntity student) {
-    if (!selectionState.isSelectionMode) {
+    if (!widget.selectionState.isSelectionMode) {
       final bloc = context.read<SelectionBloc>();
       bloc.add(ToggleSelectionMode());
       bloc.add(ToggleItemSelection(student.id));
     }
   }
 
-  // Dialog Methods
+  // Dialog Methods for user confirmations
+  // Shows confirmation dialog before archiving selected students
   Future<void> _showArchiveConfirmation(BuildContext context) async {
     final bloc = context.read<SelectionBloc>();
     final colorScheme = Theme.of(context).colorScheme;
@@ -116,6 +150,7 @@ class StudentList extends StatelessWidget {
     }
   }
 
+  // Shows dialog for creating a new group from selected students
   Future<void> _showGroupConfirmation(BuildContext context) async {
     final result = await showDialog<Map<String, dynamic>>(
       context: context,
@@ -132,46 +167,8 @@ class StudentList extends StatelessWidget {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<SelectionBloc, SelectionState>(
-      builder: (context, state) {
-        // 1. Split students into categories
-        final Map<String, List<LecturerStudentsEntity>> categorizedStudents = _categorizeStudents(students, state);
-        
-        return SliverList(
-          delegate: SliverChildListDelegate([
-            _buildTitle(),
-            const SizedBox(height: 16),
-            Column(
-              children: [
-                // 1. Filter Section always at top
-                _buildFilterSection(context, state),
-                const SizedBox(height: 16),
-                
-                // 2. Active students list
-                if (categorizedStudents['active']!.isNotEmpty) ...[
-                  _buildStudentsList(categorizedStudents['active']!),
-                  const SizedBox(height: 16),
-                ],
-                
-                // 3. Groups in the middle (only show if there are matching students in the group)
-                ..._buildGroupCards(state, categorizedStudents['grouped']!),
-                if (state.groups.isNotEmpty && 
-                    categorizedStudents['grouped']!.isNotEmpty)
-                  const SizedBox(height: 16),
-                
-                // 4. Archive card always at bottom (only show if there are matching archived students)
-                if (categorizedStudents['archived']!.isNotEmpty)
-                  _buildArchiveSection(state, categorizedStudents['archived']!),
-              ],
-            ),
-          ]),
-        );
-      },
-    );
-  }
-
+  // Categorizes students into active, grouped, and archived lists
+  // This helps organize the UI into distinct sections
   Map<String, List<LecturerStudentsEntity>> _categorizeStudents(
     List<LecturerStudentsEntity> students,
     SelectionState state,
@@ -207,9 +204,16 @@ class StudentList extends StatelessWidget {
     };
   }
 
-  // Build Helper Methods
+  // Build Helper Methods for different sections of the UI
+  // Builds filter section with search and action buttons
   Widget _buildFilterSection(BuildContext context, SelectionState state) {
     return FilterSection(
+      students: widget.students,
+      onStudentsFiltered: (filteredStudents) {
+        setState(() {
+          _filteredStudents = filteredStudents;
+        });
+      },
       onArchiveTap: state.selectedIds.isNotEmpty
           ? () => _showArchiveConfirmation(context)
           : null,
@@ -219,6 +223,7 @@ class StudentList extends StatelessWidget {
     );
   }
 
+  // Creates cards for each student group
   List<Widget> _buildGroupCards(SelectionState state, List<LecturerStudentsEntity> groupedStudents) {
     if (groupedStudents.isEmpty) return [];
 
@@ -227,7 +232,6 @@ class StudentList extends StatelessWidget {
           .where((student) => entry.value.studentIds.contains(student.id))
           .toList();
       
-      // Only show group if it has matching students
       if (groupStudents.isEmpty) {
         return const SizedBox.shrink();
       }
@@ -239,6 +243,7 @@ class StudentList extends StatelessWidget {
     }).where((widget) => widget is! SizedBox).toList();
   }
 
+  // Builds the archived students section with title and list
   Widget _buildArchiveSection(SelectionState state, List<LecturerStudentsEntity> archivedStudents) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -260,7 +265,7 @@ class StudentList extends StatelessWidget {
     );
   }
 
-
+  // Builds the list of active (non-grouped, non-archived) students
   Widget _buildStudentsList(List<LecturerStudentsEntity> activeStudents) {
     if (activeStudents.isEmpty) {
       return const SizedBox.shrink();
@@ -274,9 +279,49 @@ class StudentList extends StatelessWidget {
       itemBuilder: (context, index) => _buildStudentItem(activeStudents[index]),
     );
   }
+
+  // Main build method that assembles all sections into final UI
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SelectionBloc, SelectionState>(
+      builder: (context, state) {
+        // Organize students into categories for display
+        final categorizedStudents = _categorizeStudents(_filteredStudents, state);
+        
+        return SliverList(
+          delegate: SliverChildListDelegate([
+            _buildTitle(),
+            const SizedBox(height: 16),
+            Column(
+              children: [
+                _buildFilterSection(context, state),
+                const SizedBox(height: 16),
+                
+                // Active students section
+                if (categorizedStudents['active']!.isNotEmpty) ...[
+                  _buildStudentsList(categorizedStudents['active']!),
+                  const SizedBox(height: 16),
+                ],
+                
+                // Grouped students section
+                ..._buildGroupCards(state, categorizedStudents['grouped']!),
+                if (state.groups.isNotEmpty && 
+                    categorizedStudents['grouped']!.isNotEmpty)
+                  const SizedBox(height: 16),
+                
+                // Archived students section
+                if (categorizedStudents['archived']!.isNotEmpty)
+                  _buildArchiveSection(state, categorizedStudents['archived']!),
+              ],
+            ),
+          ]),
+        );
+      },
+    );
+  }
 }
 
-// Extracted Dialog Widget
+// Dialog for creating new student groups
 class _GroupCreationDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
