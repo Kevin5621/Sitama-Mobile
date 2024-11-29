@@ -1,43 +1,15 @@
 // ignore_for_file: invalid_use_of_visible_for_testing_member
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sistem_magang/data/models/group.dart';
 import 'selection_event.dart';
 import 'selection_state.dart';
-
-class GroupModel {
-  final String id;
-  final String title;
-  final IconData icon;
-  final Set<int> studentIds;
-
-  GroupModel({
-    required this.id,
-    required this.title,
-    required this.icon,
-    required this.studentIds,
-  });
-
-  GroupModel copyWith({
-    String? id,
-    String? title,
-    IconData? icon,
-    Set<int>? studentIds,
-  }) {
-    return GroupModel(
-      id: id ?? this.id,
-      title: title ?? this.title,
-      icon: icon ?? this.icon,
-      studentIds: studentIds ?? this.studentIds,
-    );
-  }
-}
 
 class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
   static const String _archiveKey = 'archived_students';
   static const String _groupKey = 'group_students';
-  static const String _groupsKey = 'groups_data';
+  final GroupRepository _groupRepository = GroupRepository();
 
   SelectionBloc()
       : super(const SelectionState(
@@ -240,25 +212,27 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
     try {
       emit(state.copyWith(isLoading: true, error: null));
       
-      // Load both legacy groupIds and new group data
+      // Load both legacy and new group data
       final legacyGroupIds = await _getGroupIds();
       final groupsData = await _loadGroups();
       
-      // If we have legacy data but no new format data, convert it
+      // Intelligent data migration
       if (legacyGroupIds.isNotEmpty && groupsData.isEmpty) {
+        // Convert legacy group IDs to a default group
         final defaultGroup = GroupModel(
-          id: 'default',
-          title: 'Archived Students',
+          id: 'default_migrated_group',
+          title: 'Migrated Students',
           icon: Icons.group,
           studentIds: legacyGroupIds,
         );
         
-        final initialGroups = {'default': defaultGroup};
+        final initialGroups = {'default_migrated_group': defaultGroup};
         await _saveGroups(initialGroups);
         
         emit(state.copyWith(
           groups: initialGroups,
           isLoading: false,
+          error: 'Migrated legacy group data',
         ));
       } else {
         emit(state.copyWith(
@@ -269,7 +243,8 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
     } catch (e) {
       emit(state.copyWith(
         isLoading: false,
-        error: 'Failed to load group items: $e',
+        error: 'Group load failed: ${e.toString()}',
+        groups: {}, 
       ));
     }
   }
@@ -281,14 +256,16 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
     if (event.studentIds.isEmpty) return;
 
     try {
-      emit(state.copyWith(isLoading: true));
+      emit(state.copyWith(isLoading: true, error: null));
 
-      final String groupId = DateTime.now().millisecondsSinceEpoch.toString();
+      // Generate a more unique group ID
+      final String groupId = 'group_${DateTime.now().millisecondsSinceEpoch}_${event.title.hashCode}';
+      
       final GroupModel newGroup = GroupModel(
         id: groupId,
-        title: event.title,
+        title: event.title.trim(), 
         icon: event.icon,
-        studentIds: event.studentIds,
+        studentIds: Set<int>.from(event.studentIds),
       );
 
       final updatedGroups = Map<String, GroupModel>.from(state.groups)
@@ -305,7 +282,7 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
     } catch (e) {
       emit(state.copyWith(
         isLoading: false,
-        error: 'Failed to create group: $e',
+        error: 'Group creation failed: ${e.toString()}',
       ));
     }
   }
@@ -356,42 +333,11 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
 
   // Helper methods for persisting data
   Future<Map<String, GroupModel>> _loadGroups() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final String? groupsString = prefs.getString(_groupsKey);
-      if (groupsString == null) return {};
-
-      final Map<String, dynamic> groupsJson = jsonDecode(groupsString);
-      return groupsJson.map((key, value) => MapEntry(
-            key,
-            GroupModel(
-              id: value['id'],
-              title: value['title'],
-              icon: IconData(value['icon'], fontFamily: 'MaterialIcons'),
-              studentIds: Set<int>.from(value['studentIds']),
-            ),
-          ));
-    } catch (e) {
-      rethrow;
-    }
+    return await _groupRepository.loadGroups();
   }
 
   Future<void> _saveGroups(Map<String, GroupModel> groups) async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final groupsJson = groups.map((key, value) => MapEntry(
-            key,
-            {
-              'id': value.id,
-              'title': value.title,
-              'icon': value.icon.codePoint,
-              'studentIds': value.studentIds.toList(),
-            },
-          ));
-      await prefs.setString(_groupsKey, jsonEncode(groupsJson));
-    } catch (e) {
-      rethrow;
-    }
+    await _groupRepository.saveGroups(groups);
   }
 
   // Legacy methods maintained for backward compatibility
