@@ -188,8 +188,10 @@ class MarkAllReqParams {
     required this.isRead,
   });
 
-  Map<String, dynamic> toJson() => {
-    'notification_ids': notificationIds,
-    'is_read': isRead,
-  };
+  Map<String, dynamic> toMap() {
+    return {
+      'notification_ids': notificationIds,
+      'is_read': isRead == 1 
+    };
+  }
 }
