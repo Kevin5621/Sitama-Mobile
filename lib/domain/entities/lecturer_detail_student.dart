@@ -32,12 +32,14 @@ class InfoStudentEntity {
   final String username;
   final String email;
   final String? photo_profile;
+  final bool isFinished;
 
   InfoStudentEntity({
     required this.name, 
     required this.username, 
     required this.email,
     this.photo_profile,
+    required this.isFinished,
   });
 }
 

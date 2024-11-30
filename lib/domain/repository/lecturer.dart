@@ -17,4 +17,5 @@ abstract class LecturerRepository {
   Future<Either> fetchAssessments(int id);
   Future<Either<String, Response>> submitScores (int id, List<Map<String, dynamic>> scores);
   Future<Either> getLecturerProfile();
+  Future<Either> updateFinishedStudent({required bool status,required int id});
 }

@@ -17,6 +17,7 @@ abstract class LecturerApiService {
   Future<Either> fetchAssessments(int id);
   Future<Either<String, Response>> submitScores(
       int id, List<Map<String, dynamic>> scores);
+  Future<Either> updateFinishedStudent(bool status, int id);
 }
 
 class LecturerApiServiceImpl extends LecturerApiService {
@@ -80,9 +81,8 @@ class LecturerApiServiceImpl extends LecturerApiService {
     }
   }
 
-    @override
-  Future<Either> updateLogBookNote(
-      UpdateLogBookReqParams request) async {
+  @override
+  Future<Either> updateLogBookNote(UpdateLogBookReqParams request) async {
     try {
       SharedPreferences sharedPreferences =
           await SharedPreferences.getInstance();
@@ -166,13 +166,37 @@ class LecturerApiServiceImpl extends LecturerApiService {
       );
       print(response);
       return Right(response);
-
     } on DioException catch (e) {
       print(e.response!.data['errors']?.toString());
       if (e.response != null) {
         return Left(e.response!.data['errors']?.toString() ?? 'Unknown error');
       } else {
         return Left(e.message ?? 'Connection error');
+      }
+    }
+  }
+
+  @override
+  Future<Either> updateFinishedStudent(bool status, int id) async {
+    try {
+      SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+      var token = sharedPreferences.get('token');
+
+      var response = await sl<DioClient>().put(
+        "${ApiUrls.finishedStudent}/$id",
+        options: Options(headers: {
+          'Authorization': 'Bearer $token',
+        }),
+        data: {"is_finished": status},
+      );
+
+      return Right(response);
+    } on DioException catch (e) {
+      if (e.response != null) {
+        return Left(e.response!.data['errors'].toString());
+      } else {
+        return Left(e.message);
       }
     }
   }

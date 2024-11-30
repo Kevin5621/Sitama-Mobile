@@ -58,6 +58,7 @@ extension DetailStudentXModel on DetailStudentModel {
         name: student.name,
         email: student.email,
         username: student.username,
+        isFinished: student.isFinished,
         photo_profile: student.photo_profile,
       ),
       username: student.username,
@@ -104,6 +105,7 @@ class InfoStudentModel {
   final String email;
   final String the_class;
   final String major;
+  final bool isFinished;
   final String? photo_profile;
 
   InfoStudentModel({
@@ -112,6 +114,7 @@ class InfoStudentModel {
     required this.email,
     required this.the_class,
     required this.major,
+    required this.isFinished,
     this.photo_profile,
   });
 
@@ -122,6 +125,7 @@ class InfoStudentModel {
       email: map['email'] as String,
       the_class: map['class'] as String,
       major: map['major'] as String,
+      isFinished: map['is_finished'] as bool,
       photo_profile: map['photo_profile'] as String?,
     );
   }

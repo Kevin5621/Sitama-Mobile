@@ -155,4 +155,19 @@ class LecturerRepositoryImpl extends LecturerRepository{
     );
 
   }
+  
+  @override
+  Future<Either> updateFinishedStudent({required bool status,required int id}) async {
+    Either result =
+        await sl<LecturerApiService>().updateFinishedStudent(status, id);
+    print(result);
+    return result.fold(
+      (error) {
+        return Left(error);
+      },
+      (data) {
+        return Right(data);
+      },
+    );
+  }
 }

@@ -10,12 +10,14 @@ class InternshipStatusBox extends StatelessWidget {
   final int index;
   final String status;
   final VoidCallback? onApprove;
+  final bool isFinished;
 
   const InternshipStatusBox({
     super.key,
     required this.students,
     required this.index,
     required this.status,
+    required this.isFinished,
     this.onApprove,
   });
 
@@ -70,7 +72,7 @@ class InternshipStatusBox extends StatelessWidget {
             ),
           ],
         ),
-        _buildApproveButton(context, false),
+        _buildApproveButton(context, isFinished),
       ],
     );
   }

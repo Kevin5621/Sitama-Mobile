@@ -1,8 +1,13 @@
+import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sistem_magang/domain/entities/lecturer_detail_student.dart';
+import 'package:sistem_magang/domain/repository/lecturer.dart';
+import 'package:sistem_magang/presenstation/lecturer/detail_student/pages/detail_student.dart';
 import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/internship_section.dart';
 import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/internship_status.dart';
 import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/score_section.dart';
+import 'package:sistem_magang/service_locator.dart';
 
 class InfoBoxes extends StatelessWidget {
   final List<InternshipStudentEntity> internships;
@@ -36,9 +41,21 @@ class InfoBoxes extends StatelessWidget {
                       students: [students],
                       index: index,
                       status: internship.status,
-                      onApprove: () {
+                      onApprove: () async {
                         // Additional actions if needed after approval
+                        Either result = await sl<LecturerRepository>()
+                            .updateFinishedStudent(
+                                id: id, status: !students.student.isFinished);
+
+                        result.fold((e) {}, (_) {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      DetailStudentPage(id: id)));
+                        });
                       },
+                      isFinished: students.student.isFinished,
                     ),
                   const SizedBox(height: 8),
                   InternshipBox(
@@ -54,6 +71,7 @@ class InfoBoxes extends StatelessWidget {
             id: id,
             assessments: students.assessments,
             average_all_assessments: students.average_all_assessments,
+            isFinished: students.student.isFinished,
           ),
         ],
       ),
