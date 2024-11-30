@@ -273,7 +273,7 @@ class StudentApiServiceImpl extends StudentApiService {
       var token = sharedPreferences.get('token');
 
       var response = await sl<DioClient>().post(
-        "${ApiUrls.notification}/mark-all", 
+        "${ApiUrls.notification}/markAsRead", 
         options: Options(
           headers: {
             'Authorization': 'Bearer $token',

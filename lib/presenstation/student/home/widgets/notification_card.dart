@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:sistem_magang/core/config/themes/app_color.dart';
 import 'package:sistem_magang/data/models/notification.dart';
 
-// This widget includes an expandable feature for messages with overflow
-// and dynamically adjusts based on the notification's category and read status.
+// NotificationCard with dynamic theming support
 class NotificationCard extends StatefulWidget {
-  // The notification data to be displayed.
   final NotificationItemEntity notification;
-
-  // A callback function triggered when the card is tapped.
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   const NotificationCard({
     super.key,
     required this.notification,
-    required this.onTap,
+    this.onTap,
   });
 
   @override
@@ -21,196 +18,166 @@ class NotificationCard extends StatefulWidget {
 }
 
 class _NotificationCardState extends State<NotificationCard> {
-  // Tracks whether the notification's message is expanded or collapsed.
+  // Tracks the expanded state of the notification card
   bool _isExpanded = false;
 
-  // Determines the icon to display based on the notification category.
-  IconData _getNotificationIcon() {
-    switch (widget.notification.category.toLowerCase()) {
-      case 'general':
-        return Icons.campaign;
-      case 'bimbingan':
-        return Icons.school;
-      case 'logbook':
-        return Icons.book;
-      case 'revisi':
-        return Icons.edit_document;
-      default:
-        return Icons.notifications;
-    }
-  }
-
-  // Determines the color to use based on the notification category.
-  Color _getNotificationColor(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    switch (widget.notification.category.toLowerCase()) {
-      case 'general':
-        return Colors.blue;
-      case 'guidance':
-        return Colors.green;
-      case 'logbook':
-        return Colors.orange;
-      case 'revisi':
-        return Colors.red;
-      default:
-        return colorScheme.primary;
-    }
-  }
-
-  // Checks if the notification's message overflows within the provided constraints.
-  bool _hasTextOverflow(String text, TextStyle style, double maxWidth) {
-    final TextPainter textPainter = TextPainter(
-      text: TextSpan(text: text, style: style),
-      maxLines: 3,
-      textDirection: TextDirection.ltr,
-    )..layout(maxWidth: maxWidth);
-
-    return textPainter.didExceedMaxLines;
+  // Toggles the expanded state and triggers optional callback
+  void _toggleExpand() {
+    setState(() {
+      _isExpanded = !_isExpanded;
+      widget.onTap?.call();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final color = _getNotificationColor(context);
-    final textColor = theme.brightness == Brightness.dark
-        ? Colors.white
-        : Colors.black87;
+    final colorScheme = theme.colorScheme;
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final textStyle = theme.textTheme.bodyMedium?.copyWith(
-          color: textColor,
-          height: 1.3,
-        );
-        final hasOverflow = _hasTextOverflow(
-          widget.notification.message,
-          textStyle!,
-          constraints.maxWidth - 76,
-        );
+    // Map notification categories to specific icons
+    // Use theme-based colors for consistency
+    IconData icon;
+    Color color;
+    switch (widget.notification.category.toLowerCase()) {
+      case 'general':
+        icon = Icons.campaign;
+        color = colorScheme.primary;
+        break;
+      case 'guidance':
+        icon = Icons.check;
+        color = AppColors.lightSuccess;
+        break;
+      case 'logbook':
+        icon = Icons.book;
+        color = colorScheme.tertiary;
+        break;
+      case 'revisi':
+        icon = Icons.edit_document;
+        color = AppColors.lightDanger;
+        break;
+      default:
+        icon = Icons.notifications;
+        color = colorScheme.primary;
+    }
 
-        final backgroundColor = widget.notification.isRead == 1
-            ? (theme.brightness == Brightness.dark
-                ? Colors.black54
-                : Colors.white)
-            : color.withOpacity(0.1); 
-
-        final containerDecoration = BoxDecoration(
-          color: backgroundColor,
-          borderRadius: BorderRadius.circular(12),
-          border: widget.notification.isRead == 0
-              ? Border.all(color: color.withOpacity(0.3))
-              : null,
-        );
-
-        return Container(
-          margin: const EdgeInsets.only(bottom: 8.0),
-          decoration: containerDecoration,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Icon container
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: color.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Icon(
-                        _getNotificationIcon(),
-                        size: 20,
-                        color: color,
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    // Notification content
-                    Expanded(
-                      child: Column(
+    // Main notification card container with theme-aware design
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Card(
+        elevation: 2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(16),
+          child: AnimatedContainer(
+            // Smooth transition for visual state changes
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+            // Background color varies based on read status and theme
+            decoration: BoxDecoration(
+              color: widget.notification.isRead == 1 
+                ? colorScheme.surface
+                : color.withOpacity(0.1),
+            ),
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                // Enable tap interaction to expand/collapse
+                onTap: _toggleExpand,
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Top row with icon, category, and date
+                      Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Category and date
-                          Row(
-                            children: [
-                              Text(
-                                widget.notification.category,
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  color: color,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              const Spacer(),
-                              Text(
-                                widget.notification.date,
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  color: Colors.grey[600],
-                                ),
-                              ),
-                            ],
+                          // Circular icon container with theme-based color
+                          Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: color.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Icon(icon, color: color, size: 24),
                           ),
-                          const SizedBox(height: 4),
-                          // Notification message
-                          Text(
-                            widget.notification.message,
-                            style: textStyle,
-                            maxLines: _isExpanded ? null : 3,
-                            overflow: _isExpanded ? null : TextOverflow.ellipsis,
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Category and date header
+                                Row(
+                                  children: [
+                                    Text(
+                                      widget.notification.category,
+                                      style: theme.textTheme.bodySmall?.copyWith(
+                                        color: color,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                    Text(
+                                      widget.notification.date,
+                                      style: theme.textTheme.bodySmall?.copyWith(
+                                        color: colorScheme.onSurfaceVariant,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 4),
+                                // Notification message with read status styling
+                                Text(
+                                  widget.notification.message,
+                                  style: theme.textTheme.bodyMedium?.copyWith(
+                                    // Emphasize unread notifications
+                                    fontWeight: widget.notification.isRead == 1 
+                                      ? FontWeight.normal 
+                                      : FontWeight.w600,
+                                  ),
+                                  // Limit lines and handle overflow
+                                  maxLines: _isExpanded ? null : 2,
+                                  overflow: _isExpanded 
+                                    ? TextOverflow.visible 
+                                    : TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              // "View more" toggle for overflowing text
-              if (hasOverflow)
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _isExpanded = !_isExpanded;
-                    });
-                  },
-                  child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 8,
-                      horizontal: 16,
-                    ),
-                    decoration: BoxDecoration(
-                      color: color.withOpacity(0.05),
-                      borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(12),
-                        bottomRight: Radius.circular(12),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          _isExpanded ? 'Lihat lebih sedikit' : 'Lihat selengkapnya',
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: color,
-                            fontWeight: FontWeight.w500,
+                      
+                      // Expandable detailed text section
+                      // Only shown when card is expanded and detail exists
+                      if (widget.notification.detailText != null && _isExpanded)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 16),
+                          child: Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              // Subtle background for additional details using theme colors
+                              color: colorScheme.surfaceVariant.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Text(
+                              widget.notification.detailText!,
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                color: colorScheme.onSurfaceVariant,
+                              ),
+                            ),
                           ),
                         ),
-                        Icon(
-                          _isExpanded
-                              ? Icons.keyboard_arrow_up
-                              : Icons.keyboard_arrow_down,
-                          color: color,
-                          size: 16,
-                        ),
-                      ],
-                    ),
+                    ],
                   ),
                 ),
-            ],
+              ),
+            ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }
