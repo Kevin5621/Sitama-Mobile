@@ -44,19 +44,19 @@ class IndustryScoreCard extends StatelessWidget {
               ],
             ),
             Divider(thickness: 1, height: 1),
-            const SizedBox(height: 16),
-            InputField(
-              label: 'Tanggal Mulai',
-              controller: TextEditingController(text: score.startDate),
-            ),
-            InputField(
-              label: 'Tanggal Selesai',
-              controller: TextEditingController(text: score.endDate),
-            ),
-            InputField(
-              label: 'Nilai',
-              controller: TextEditingController(text: score.score),
-            ),
+            // const SizedBox(height: 16),
+            // InputField(
+            //   label: 'Tanggal Mulai',
+            //   controller: TextEditingController(text: score.startDate),
+            // ),
+            // InputField(
+            //   label: 'Tanggal Selesai',
+            //   controller: TextEditingController(text: score.endDate),
+            // ),
+            // InputField(
+            //   label: 'Nilai',
+            //   controller: TextEditingController(text: score.score),
+            // ),
           ],
         ),
       ),

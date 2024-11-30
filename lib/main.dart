@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:sistem_magang/core/config/themes/app_theme.dart';
 import 'package:sistem_magang/core/config/themes/theme_provider.dart';
 import 'package:sistem_magang/presenstation/general/splash/pages/splash.dart';
+import 'package:sistem_magang/presenstation/lecturer/input_score/bloc/assessment_cubit.dart';
 import 'package:sistem_magang/service_locator.dart';
 
 void main() async {
@@ -13,6 +15,7 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        BlocProvider(create: (context) => AssessmentCubit()),
       ],
       child: const MyApp(),
     ),

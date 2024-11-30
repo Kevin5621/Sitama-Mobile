@@ -1,9 +1,12 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:sistem_magang/data/models/assessment.dart';
 import 'package:sistem_magang/data/models/guidance.dart';
 import 'package:sistem_magang/data/models/lecturer_detail_student.dart';
 import 'package:sistem_magang/data/models/lecturer_home.dart';
 import 'package:sistem_magang/data/models/lecturer_profile.dart';
+import 'package:sistem_magang/data/models/score_request.dart';
+import 'package:sistem_magang/data/models/log_book.dart';
 import 'package:sistem_magang/data/source/lecturer_api_service.dart';
 import 'package:sistem_magang/domain/repository/lecturer.dart';
 import 'package:sistem_magang/service_locator.dart';
@@ -73,6 +76,19 @@ class LecturerRepositoryImpl extends LecturerRepository{
       },
     );
   }
+
+  @override
+  Future<Either> updateLogBookNote(UpdateLogBookReqParams request) async {
+    Either result = await sl<LecturerApiService>().updateLogBookNote(request);
+    return result.fold(
+      (error) {
+        return Left(error);
+      },
+      (data) {
+        return Right(data);
+      },
+    );
+  }
   
   @override
   Future<Either> getLecturerProfile() async {
@@ -99,5 +115,44 @@ class LecturerRepositoryImpl extends LecturerRepository{
         }
       },
     );
+  }
+  
+  @override
+  Future<Either> fetchAssessments(int id) async {
+    Either result = await sl<LecturerApiService>().fetchAssessments(id);
+    return result.fold(
+      (error) {
+        return Left(error);
+      },
+      (data) {
+        Response response = data;
+
+        try {
+          final data = (response.data['data'] as List)
+              .map((item) => AssessmentModel.fromMap(item).toEntity())
+              .toList();
+          return Right(data);
+        } catch (e) {
+          return Left("Parsing error: $e");
+        }
+      },
+    );
+  }
+  
+  @override
+  Future<Either<String, Response>> submitScores(
+      int id, List<Map<String, dynamic>> scores) async {
+    
+    Either result =
+        await sl<LecturerApiService>().submitScores(id, scores);
+    return result.fold(
+      (error) {
+        return Left(error);
+      },
+      (data) {
+        return Right(data);
+      },
+    );
+
   }
 }

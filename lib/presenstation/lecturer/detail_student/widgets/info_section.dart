@@ -7,11 +7,13 @@ import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/scor
 class InfoBoxes extends StatelessWidget {
   final List<InternshipStudentEntity> internships;
   final DetailStudentEntity students;
+  final int id;
 
   const InfoBoxes({
     Key? key,
     required this.internships,
     required this.students,
+    required this.id,
   }) : super(key: key);
 
   @override
@@ -48,7 +50,11 @@ class InfoBoxes extends StatelessWidget {
             },
           ),
           const SizedBox(height: 16),
-          const ScoreBox(),
+          ScoreBox(
+            id: id,
+            assessments: students.assessments,
+            average_all_assessments: students.average_all_assessments,
+          ),
         ],
       ),
     );

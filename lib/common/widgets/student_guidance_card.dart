@@ -102,7 +102,7 @@ class GuidanceCard extends StatelessWidget {
                       ),
                     ),
                   ],
-if (nameFile != "tidak ada file") ...[
+                  if (nameFile != "tidak ada file") ...[
                     const SizedBox(height: 20),
                     InkWell(
                       onTap: () {
@@ -112,8 +112,7 @@ if (nameFile != "tidak ada file") ...[
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  PDFViewerPage(pdfUrl: nameFile),
+                              builder: (context) => PDFViewerPage(pdfUrl: nameFile),
                             ),
                           );
                         }
@@ -138,12 +137,13 @@ if (nameFile != "tidak ada file") ...[
                           ),
                         ),
                         child: Text(
-                          nameFile.split('/').last, 
+                          "File Bimbingan",
                           style: textTheme.bodyMedium?.copyWith(
                             color: status == GuidanceStatus.rejected
                                 ? colorScheme.onError
                                 : colorScheme.onSurface,
                           ),
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ),

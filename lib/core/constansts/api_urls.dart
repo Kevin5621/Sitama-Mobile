@@ -11,8 +11,11 @@ class ApiUrls {
 
   static const lecturerHome = '${baseUrl}lecturer/home';
   static const detailStudent = '${baseUrl}lecturer/detailStudent';
+  static const updateLogBookNote = '${baseUrl}lecturer/logBook';
   static const updateStatusGuidance = '${baseUrl}lecturer/guidance';
   static const updateStatusProfile = '${baseUrl}lecturer/profile';
+  static const getAssessments = '${baseUrl}lecturer/assessments';
+  static const submitScores = '${baseUrl}lecturer/addAssessment';
 
   static const updatePhotoProfile = '${baseUrl}updateProfile';
   static const resetPassword = '${baseUrl}resetPassword';

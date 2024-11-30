@@ -122,6 +122,7 @@ class _LogBookPageState extends State<LogBookPage> with AutomaticKeepAliveClient
                           id: sortedAndFilteredLogBooks[index].id,
                           title: sortedAndFilteredLogBooks[index].title,
                           date: sortedAndFilteredLogBooks[index].date,
+                          lecturerNote: sortedAndFilteredLogBooks[index].lecturer_note,
                           description: sortedAndFilteredLogBooks[index].activity,
                           curentPage: 2,
                         ),

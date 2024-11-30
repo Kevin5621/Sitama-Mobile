@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 class ListLogBookEntity {
   final List<LogBookEntity> log_books;
 
@@ -12,10 +14,10 @@ class LogBookEntity {
   final String lecturer_note;
 
   LogBookEntity({
-  required this.id, 
-  required this.title, 
-  required this.activity, 
-  required this.date,
-  required this.lecturer_note,
+    required this.id,
+    required this.title,
+    required this.activity,
+    required this.date,
+    required this.lecturer_note,
   });
 }

@@ -11,6 +11,8 @@ class DetailStudentEntity {
   final List<InternshipStudentEntity> internships;
   final List<GuidanceEntity> guidances;
   final List<LogBookEntity> log_book;
+  final List<ShowAssessmentEntity> assessments;
+  final String average_all_assessments;
 
   DetailStudentEntity({
     required this.student,
@@ -20,6 +22,8 @@ class DetailStudentEntity {
     required this.internships,
     required this.guidances,
     required this.log_book,
+    required this.assessments,
+    required this.average_all_assessments,
   });
 }
 
@@ -50,5 +54,15 @@ class InternshipStudentEntity {
     required this.end_date,
     this.status = 'Magang', 
     this.isApproved = false, 
+  });
+}
+
+class ShowAssessmentEntity {
+  final String component_name;
+  final double average_score;
+
+  ShowAssessmentEntity({
+    required this.component_name,
+    required this.average_score,
   });
 }

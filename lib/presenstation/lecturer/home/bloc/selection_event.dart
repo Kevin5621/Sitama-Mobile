@@ -54,6 +54,8 @@ class UnarchiveItems extends SelectionEvent {
 class LoadArchivedItems extends SelectionEvent {}
 
 //group
+class LoadGroupItems extends SelectionEvent {}
+
 class GroupSelectedItems extends SelectionEvent {
   final String title;
   final IconData icon;
@@ -78,14 +80,15 @@ class UnGroupItems extends SelectionEvent {
   List<Object> get props => [ids];
 }
 
-class LoadGroupItems extends SelectionEvent {}
-
 class ClearSelectionMode extends SelectionEvent {}
 
 class DeleteGroup extends SelectionEvent {
   final String groupId;
   
   const DeleteGroup(this.groupId);
+
+  @override
+  List<Object> get props => [groupId];
 }
 
 class UpdateGroup extends SelectionEvent {

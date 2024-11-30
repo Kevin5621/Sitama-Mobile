@@ -12,12 +12,12 @@ class InternshipStatusBox extends StatelessWidget {
   final VoidCallback? onApprove;
 
   const InternshipStatusBox({
-    Key? key,
+    super.key,
     required this.students,
     required this.index,
     required this.status,
     this.onApprove,
-  }) : super(key: key);
+  });
 
   Future<bool?> _showConfirmationDialog(
       BuildContext context, bool currentStatus) async {

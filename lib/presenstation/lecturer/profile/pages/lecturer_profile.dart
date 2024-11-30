@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:sistem_magang/common/widgets/about_app.dart';
 import 'package:sistem_magang/common/widgets/edit_photo_profile_pop_up.dart';
 import 'package:sistem_magang/common/widgets/log_out_alert.dart';
 import 'package:sistem_magang/common/widgets/notification.dart';
@@ -12,6 +13,7 @@ import 'package:sistem_magang/core/config/themes/app_color.dart';
 import 'package:sistem_magang/core/config/themes/theme_provider.dart';
 import 'package:sistem_magang/core/service/notification_service.dart';
 import 'package:sistem_magang/domain/entities/lecturer_profile_entity.dart';
+import 'package:sistem_magang/presenstation/lecturer/profile/pages/faq.dart';
 import 'package:sistem_magang/presenstation/lecturer/profile/bloc/profile_lecturer_cubit.dart';
 import 'package:sistem_magang/presenstation/lecturer/profile/bloc/profile_lecturer_state.dart';
 
@@ -22,10 +24,10 @@ class LecturerProfilePage extends StatefulWidget {
   State<LecturerProfilePage> createState() => _LecturerProfilePageState();
 }
 
-class _LecturerProfilePageState extends State<LecturerProfilePage> with AutomaticKeepAliveClientMixin{
-    
-    @override
-    bool get wantKeepAlive => true;
+class _LecturerProfilePageState extends State<LecturerProfilePage>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +44,6 @@ class _LecturerProfilePageState extends State<LecturerProfilePage> with Automati
             return const Center(child: CircularProgressIndicator());
           }
           if (state is LecturerLoaded) {
-
             return Scaffold(
               body: SingleChildScrollView(
                 child: Column(
@@ -187,14 +188,24 @@ class _LecturerProfilePageState extends State<LecturerProfilePage> with Automati
             icon: Icons.help_outline,
             title: 'Help & Support',
             onTap: () {
-              // TODO
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => LecturerFAQPage(),
+                ),
+              );
             },
           ),
           SettingButton(
             icon: Icons.info_outline,
             title: 'About App',
             onTap: () {
-              // TODO
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const AboutAppPage(),
+                ),
+              );
             },
           ),
           SettingButton(

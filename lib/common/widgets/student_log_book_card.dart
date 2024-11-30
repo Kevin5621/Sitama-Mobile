@@ -9,6 +9,7 @@ class LogBookItem {
   final String title;
   final DateTime date;
   final String description;
+  final String lecturerNote; 
   final int curentPage;
 
   LogBookItem({
@@ -16,9 +17,11 @@ class LogBookItem {
     required this.title,
     required this.date,
     required this.description,
+    required this.lecturerNote, 
     required this.curentPage,
   });
 }
+
 
 class LogBookCard extends StatelessWidget {
   final LogBookItem item;
@@ -64,6 +67,25 @@ class LogBookCard extends StatelessWidget {
                       color: colorScheme.onSurface,
                     ),
                   ),
+                  if (item.lecturerNote != "tidak ada catatan") ...[
+                    const SizedBox(height: 16),
+                    Text(
+                      'Catatan Dosen :',
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        color: colorScheme.onSurface,
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        item.lecturerNote,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: colorScheme.onSurface,
+                        ),
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                  ],
                   const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,

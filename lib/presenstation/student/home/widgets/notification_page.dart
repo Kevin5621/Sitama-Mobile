@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:sistem_magang/common/widgets/custom_snackbar.dart';
 import 'package:sistem_magang/data/models/notification.dart';
 import 'package:sistem_magang/domain/usecases/student/notification/get_notification.dart';
 import 'package:sistem_magang/domain/usecases/student/notification/mark_all_notifications.dart';
@@ -196,16 +197,46 @@ class _NotificationPageState extends State<NotificationPage> {
 
   Future<void> _markAllNotificationsAsRead() async {
     try {
-      // Implementasi API untuk menandai semua notifikasi
-      setState(() {
-        _notifications =
-            _notifications.map((n) => n.copyWith(isRead: 1)).toList();
-      });
-      await markAllNotificationsReadUseCase.call();
+      // Ambil ID dari semua notifikasi yang belum dibaca
+      final unreadNotificationIds = _notifications
+          .where((n) => n.isRead == 0)
+          .map((n) => n.id)
+          .toList();
+
+      // Panggil use case untuk menandai notifikasi sebagai dibaca di server
+      final result = await markAllNotificationsReadUseCase.call(
+        param: MarkAllReqParams(
+          notificationIds: unreadNotificationIds, 
+          isRead: 1        
+        )
+      );
+
+      result.fold(
+        (error) {
+          // Tangani kesalahan jika gagal memperbarui di server
+          ScaffoldMessenger.of(context).showSnackBar(
+            CustomSnackBar(
+              message: 'Gagal menandai semua notifikasi :(',
+              icon: Icons.error_outline,  
+              backgroundColor: Colors.red.shade800,  
+            ),
+          );
+        },
+        (_) {
+          // Perbarui status lokal setelah berhasil di server
+          setState(() {
+            _notifications = _notifications.map((n) => n.copyWith(isRead: 1)).toList();
+          });
+        }
+      );
     } catch (e) {
       print(e);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Gagal menandai semua notifikasi')),
+        CustomSnackBar(
+          message: 'Terjadi kesalahan',
+          icon: Icons.error_outline,  
+          backgroundColor: Colors.red.shade800,  
+        ),
       );
     }
   }
