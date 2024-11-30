@@ -16,6 +16,7 @@ abstract class LecturerApiService {
   Future<Either> fetchAssessments(int id);
   Future<Either<String, Response>> submitScores(
       int id, List<Map<String, dynamic>> scores);
+  Future<Either> updateFinishedStudent(UpdateFinishedStudentReqParams request);
 }
 
 class LecturerApiServiceImpl extends LecturerApiService {
@@ -79,7 +80,7 @@ class LecturerApiServiceImpl extends LecturerApiService {
     }
   }
 
-    @override
+  @override
   Future<Either> updateLogBookNote(
       UpdateLogBookReqParams request) async {
     try {
@@ -172,6 +173,32 @@ class LecturerApiServiceImpl extends LecturerApiService {
         return Left(e.response!.data['errors']?.toString() ?? 'Unknown error');
       } else {
         return Left(e.message ?? 'Connection error');
+      }
+    }
+  }
+  
+  @override
+  Future<Either> updateFinishedStudent(
+      UpdateFinishedStudentReqParams request) async {
+    try {
+      SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+      var token = sharedPreferences.get('token');
+
+      var response = await sl<DioClient>().put(
+        "${ApiUrls.updateFinishedStudent}/${request.id}",
+        options: Options(headers: {
+          'Authorization': 'Bearer $token',
+        }),
+        data: request.toMap(),
+      );
+
+      return Right(response);
+    } on DioException catch (e) {
+      if (e.response != null) {
+        return Left(e.response!.data['errors'].toString());
+      } else {
+        return Left(e.message);
       }
     }
   }

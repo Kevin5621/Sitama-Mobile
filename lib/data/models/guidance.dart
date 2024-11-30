@@ -183,3 +183,20 @@ class UpdateStatusGuidanceReqParams {
     };
   }
 }
+
+class UpdateFinishedStudentReqParams {
+  final int id;
+  final bool isFinished;
+
+  UpdateFinishedStudentReqParams({
+    required this.id,
+    required this.isFinished,
+  });
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'is_finished': isFinished,
+    };
+  }
+}

@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:sistem_magang/domain/entities/lecturer_detail_student.dart';
 import 'package:sistem_magang/presenstation/lecturer/input_score/pages/input_score.dart';
@@ -9,11 +11,10 @@ class ScoreBox extends StatelessWidget {
   final String average_all_assessments;
 
   const ScoreBox(
-      {Key? key,
+      {super.key,
       required this.id,
       required this.assessments,
-      required this.average_all_assessments})
-      : super(key: key);
+      required this.average_all_assessments});
 
   @override
   Widget build(BuildContext context) {
