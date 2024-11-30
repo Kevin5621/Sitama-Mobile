@@ -35,7 +35,7 @@ class _NotificationPageState extends State<NotificationPage> {
 
     try {
       final result = await _getNotificationsUseCase.call();
-      
+
       result.fold(
         (error) {
           setState(() {
@@ -198,9 +198,12 @@ class _NotificationPageState extends State<NotificationPage> {
     try {
       // Implementasi API untuk menandai semua notifikasi
       setState(() {
-        _notifications = _notifications.map((n) => n.copyWith(isRead: 1)).toList();
+        _notifications =
+            _notifications.map((n) => n.copyWith(isRead: 1)).toList();
       });
+      await markAllNotificationsReadUseCase.call();
     } catch (e) {
+      print(e);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Gagal menandai semua notifikasi')),
       );

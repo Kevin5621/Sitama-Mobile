@@ -7,6 +7,6 @@ import 'package:sistem_magang/service_locator.dart';
 class MarkAllNotificationsReadUseCase implements UseCase<Either, MarkAllReqParams> {
   @override
   Future<Either> call({MarkAllReqParams? param}) async {
-    return sl<StudentRepository>().markAllNotificationsAsRead(param!);
+    return sl<StudentRepository>().markAllNotificationsAsRead();
   }
 }
