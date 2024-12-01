@@ -2,21 +2,22 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-// Group model to represent group data
 class GroupModel {
   final String id;
   final String title;
   final String iconName; 
+  final Color iconColor;
   final Set<int> studentIds;
 
   const GroupModel({
     required this.id,
     required this.title,
     required this.iconName,
+    this.iconColor = Colors.blue,
     required this.studentIds,
   });
 
-  // Peta statis yang dapat dengan mudah diperluas
+  // Static map that can be easily extended
   static final Map<String, IconData> iconMap = {
     'group': Icons.group,
     'school': Icons.school,
@@ -26,11 +27,23 @@ class GroupModel {
     'rocket_launch': Icons.rocket_launch,
     'psychology': Icons.psychology,
     'science': Icons.science,
-};
+  };
+
+  // Predefined color palette
+  static final List<Color> colorPalette = [
+    Colors.blue,
+    Colors.green,
+    Colors.red,
+    Colors.purple,
+    Colors.orange,
+    Colors.teal,
+    Colors.pink,
+    Colors.indigo,
+  ];
 
   // Getter to retrieve the icon associated with the group model
   IconData get icon {
-    return iconMap[iconName] ?? Icons.group; // Default icon is set to Icons.group if the provided iconName is not found
+    return iconMap[iconName] ?? Icons.group;
   }
 
   // Additional method to retrieve all available icons
@@ -41,6 +54,7 @@ class GroupModel {
         'id': id,
         'title': title,
         'iconName': iconName,
+        'iconColor': iconColor.value, // Store color as integer
         'studentIds': studentIds.toList(),
       };
 
@@ -50,6 +64,7 @@ class GroupModel {
         id: json['id'] as String,
         title: json['title'] as String,
         iconName: json['iconName'] as String,
+        iconColor: Color(json['iconColor'] ?? Colors.blue.value), // Provide default if not found
         studentIds: Set<int>.from(json['studentIds']),
       );
     } catch (e) {
@@ -63,12 +78,14 @@ class GroupModel {
     String? id,
     String? title,
     String? iconName,
+    Color? iconColor,
     Set<int>? studentIds,
   }) =>
       GroupModel(
         id: id ?? this.id,
         title: title ?? this.title,
         iconName: iconName ?? this.iconName,
+        iconColor: iconColor ?? this.iconColor,
         studentIds: studentIds ?? this.studentIds,
       );
 }

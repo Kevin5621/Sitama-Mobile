@@ -363,7 +363,7 @@ class _GroupCreationDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return GroupDialogForm(
       title: 'Buat Group Baru',
-      onSubmit: (title, icon) {
+      onSubmit: (title, icon, color) {
         Navigator.of(context).pop({
           'title': title,
           'icon': icon,

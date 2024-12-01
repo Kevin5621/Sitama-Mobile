@@ -121,12 +121,16 @@ class GroupCard extends StatelessWidget {
                 },
                 child: Stack(
                   children: [
-                    // Display group icon and title with student count
                     Padding(
                       padding: const EdgeInsets.all(16),
                       child: Row(
                         children: [
-                          Icon(group.icon, size: 40),
+                          // Use the color from the group model
+                          Icon(
+                            group.icon, 
+                            size: 40, 
+                            color: group.iconColor
+                          ),
                           const SizedBox(width: 16),
                           Expanded(
                             child: Column(
@@ -150,7 +154,6 @@ class GroupCard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    // Display activity icons for the group, if available
                     if (groupActivities.isNotEmpty)
                       ActivityHelper.buildActivityIconsStack(
                         activities: groupActivities,

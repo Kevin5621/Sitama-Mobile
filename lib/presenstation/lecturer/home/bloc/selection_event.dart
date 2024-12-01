@@ -95,11 +95,13 @@ class UpdateGroup extends SelectionEvent {
   final String groupId;
   final String title;
   final IconData icon;
+  final Color color;
 
   const UpdateGroup({
     required this.groupId,
     required this.title,
     required this.icon,
+    required this.color,
   });
   
   @override

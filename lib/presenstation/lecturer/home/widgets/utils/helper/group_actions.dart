@@ -78,6 +78,7 @@ class GroupActions {
           groupId: groupId,
           title: result['title'],
           icon: result['icon'],
+          color: result['color'],
         ),
       );
     }

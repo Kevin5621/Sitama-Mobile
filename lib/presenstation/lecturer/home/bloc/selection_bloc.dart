@@ -37,6 +37,7 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
       updatedGroups[event.groupId] = updatedGroups[event.groupId]!.copyWith(
         title: event.title,
         iconName: _mapIconToName(event.icon),
+        iconColor: event.color,
       );
       
       emit(state.copyWith(groups: updatedGroups));
