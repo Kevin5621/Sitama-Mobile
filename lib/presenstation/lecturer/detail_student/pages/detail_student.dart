@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sistem_magang/presenstation/lecturer/detail_student/bloc/detail_student_display_cubit.dart';
 import 'package:sistem_magang/presenstation/lecturer/detail_student/bloc/detail_student_display_state.dart';
-import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/content.dart';
-import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/header.dart';
-import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/info_section.dart';
-import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/statistics.dart';
+import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/common/content.dart';
+import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/common/header.dart';
+import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/section/info_section.dart';
+import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/utils/statistics.dart';
 
 class DetailStudentPage extends StatefulWidget {
   final int id;

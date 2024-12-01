@@ -7,10 +7,10 @@ class InternshipBox extends StatelessWidget {
   final InternshipStudentEntity internship;
 
   const InternshipBox({
-    Key? key,
+    super.key,
     required this.index,
     required this.internship,
-  }) : super(key: key);
+  });
 
   Widget _buildInternshipInfo(BuildContext context, IconData icon, String label, String value) {
     final colorScheme = Theme.of(context).colorScheme;

@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:sistem_magang/domain/entities/lecturer_detail_student.dart';
 import 'package:sistem_magang/domain/repository/lecturer.dart';
 import 'package:sistem_magang/presenstation/lecturer/detail_student/pages/detail_student.dart';
-import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/internship_section.dart';
-import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/internship_status.dart';
-import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/score_section.dart';
+import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/section/internship/internship_section.dart';
+import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/section/internship/internship_status.dart';
+import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/utils/score_section.dart';
 import 'package:sistem_magang/service_locator.dart';
 
 class InfoBoxes extends StatelessWidget {

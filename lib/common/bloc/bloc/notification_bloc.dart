@@ -4,7 +4,6 @@ import 'package:sistem_magang/common/bloc/bloc/notification_state.dart';
 import 'package:sistem_magang/data/models/notification.dart';
 import 'package:sistem_magang/domain/usecases/student/notification/add_notification.dart';
 
-// Bloc
 class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   final AddNotificationsUseCase addNotificationsUseCase;
 
@@ -13,13 +12,14 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   }
 
   Future<void> _onSendNotification(
-    SendNotification event, 
-    Emitter<NotificationState> emit
+    SendNotification event,
+    Emitter<NotificationState> emit,
   ) async {
     emit(NotificationLoading());
 
     try {
       for (final userId in event.userIds) {
+        // Construct request parameters with default values for date and category if not provided
         final request = AddNotificationReqParams(
           userId: userId,
           message: event.notificationData['message'],
@@ -36,6 +36,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
         );
       }
     } catch (e) {
+      // Catch unexpected errors and emit a failure state
       emit(NotificationError('An unexpected error occurred: ${e.toString()}'));
     }
   }

@@ -7,11 +7,13 @@ import 'package:flutter/foundation.dart';
 
 import 'package:sistem_magang/domain/entities/guidance_entity.dart';
 
+// Model for a list of guidances
 class ListGuidanceModel {
   final List<GuidanceModel> guidances;
 
   ListGuidanceModel({required this.guidances});
 
+  // Factory method to convert a map into a ListGuidanceModel
   factory ListGuidanceModel.fromMap(Map<String, dynamic> map) {
     return ListGuidanceModel(
       guidances: List<GuidanceModel>.from(
@@ -23,23 +25,26 @@ class ListGuidanceModel {
   }
 }
 
+// Extension to convert ListGuidanceModel into ListGuidanceEntity
 extension ListGuidanceXModel on ListGuidanceModel {
   ListGuidanceEntity toEntity() {
     return ListGuidanceEntity(
-        guidances: guidances
-            .map<GuidanceEntity>((data) => GuidanceEntity(
-                  id: data.id,
-                  title: data.title,
-                  activity: data.activity,
-                  date: data.date,
-                  lecturer_note: data.lecturer_note,
-                  name_file: data.name_file,
-                  status: data.status,
-                ))
-            .toList());
+      guidances: guidances.map<GuidanceEntity>(
+        (data) => GuidanceEntity(
+          id: data.id,
+          title: data.title,
+          activity: data.activity,
+          date: data.date,
+          lecturer_note: data.lecturer_note,
+          name_file: data.name_file,
+          status: data.status,
+        ),
+      ).toList(),
+    );
   }
 }
 
+// Model for individual guidance
 class GuidanceModel {
   final int id;
   final String title;
@@ -59,23 +64,21 @@ class GuidanceModel {
     required this.status,
   });
 
+  // Factory method to convert a map into a GuidanceModel
   factory GuidanceModel.fromMap(Map<String, dynamic> map) {
     return GuidanceModel(
       id: map['id'] as int,
       title: map['title'] as String,
       activity: map['activity'] as String,
       date: DateFormat('yyyy-MM-dd').parse(map['date'] as String),
-      lecturer_note: map['lecturer_note'] != null
-          ? map['lecturer_note'] as String
-          : 'tidak ada catatan',
-      name_file: map['name_file'] != null
-          ? map['name_file'] as String
-          : 'tidak ada file',
+      lecturer_note: map['lecturer_note'] ?? 'tidak ada catatan',
+      name_file: map['name_file'] ?? 'tidak ada file',
       status: map['status'] as String,
     );
   }
 }
 
+// Request parameters for adding a new guidance
 class AddGuidanceReqParams {
   final String title;
   final String activity;
@@ -89,6 +92,7 @@ class AddGuidanceReqParams {
     this.file,
   });
 
+  // Converts request parameters to FormData for API submission
   Future<FormData> toFormData() async {
     final formData = FormData();
 
@@ -99,26 +103,17 @@ class AddGuidanceReqParams {
     ]);
 
     if (file != null) {
-      if (kIsWeb) {
-        formData.files.add(
-          MapEntry(
-            'name_file',
-            MultipartFile.fromBytes(file!.bytes!, filename: file!.name),
-          ),
-        );
-      } else {
-        formData.files.add(
-          MapEntry(
-            'name_file',
-            await MultipartFile.fromFile(file!.path!, filename: file!.name),
-          ),
-        );
-      }
+      final fileEntry = kIsWeb
+          ? MultipartFile.fromBytes(file!.bytes!, filename: file!.name)
+          : await MultipartFile.fromFile(file!.path!, filename: file!.name);
+      formData.files.add(MapEntry('name_file', fileEntry));
     }
+
     return formData;
   }
 }
 
+// Request parameters for editing an existing guidance
 class EditGuidanceReqParams {
   final int id;
   final String title;
@@ -134,6 +129,7 @@ class EditGuidanceReqParams {
     this.file,
   });
 
+  // Converts request parameters to FormData for API submission
   Future<FormData> toFormData() async {
     final formData = FormData();
 
@@ -144,27 +140,17 @@ class EditGuidanceReqParams {
     ]);
 
     if (file != null) {
-      if (kIsWeb) {
-        formData.files.add(
-          MapEntry(
-            'name_file',
-            MultipartFile.fromBytes(file!.bytes!, filename: file!.name),
-          ),
-        );
-      } else {
-        formData.files.add(
-          MapEntry(
-            'name_file',
-            await MultipartFile.fromFile(file!.path!, filename: file!.name),
-          ),
-        );
-      }
+      final fileEntry = kIsWeb
+          ? MultipartFile.fromBytes(file!.bytes!, filename: file!.name)
+          : await MultipartFile.fromFile(file!.path!, filename: file!.name);
+      formData.files.add(MapEntry('name_file', fileEntry));
     }
 
     return formData;
   }
 }
 
+// Request parameters for updating guidance status
 class UpdateStatusGuidanceReqParams {
   final int id;
   final String status;
@@ -176,14 +162,16 @@ class UpdateStatusGuidanceReqParams {
     this.lecturer_note,
   });
 
+  // Converts parameters to a map for API submission
   Map<String, dynamic> toMap() {
-    return <String, dynamic>{
+    return {
       'status': status,
       'lecturer_note': lecturer_note,
     };
   }
 }
 
+// Request parameters for marking a student as finished
 class UpdateFinishedStudentReqParams {
   final int id;
   final bool isFinished;
@@ -193,6 +181,7 @@ class UpdateFinishedStudentReqParams {
     required this.isFinished,
   });
 
+  // Converts parameters to a map for API submission
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,

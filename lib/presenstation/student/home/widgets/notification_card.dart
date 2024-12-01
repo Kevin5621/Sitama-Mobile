@@ -47,7 +47,7 @@ class _NotificationCardState extends State<NotificationCard> {
         icon = Icons.check;
         color = AppColors.lightSuccess;
         break;
-      case 'logbook':
+      case 'log_book':
         icon = Icons.book;
         color = colorScheme.tertiary;
         break;

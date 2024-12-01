@@ -17,32 +17,15 @@ import 'package:sistem_magang/presenstation/general/pdf_viewer/pdf_viewer.dart';
 import 'package:sistem_magang/presenstation/lecturer/detail_student/pages/detail_student.dart';
 import 'package:sistem_magang/service_locator.dart';
 
-class LecturerGuidanceTab extends StatelessWidget {
-  final List<GuidanceEntity> guidances;
-  final int student_id;
-
-  const LecturerGuidanceTab({
-    super.key, 
-    required this.guidances, 
-    required this.student_id});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: guidances.length,
-      itemBuilder: (context, index) {
-        return LecturerGuidanceCard(
-          guidance: guidances[index],
-          student_id: student_id,
-        );
-      },
-    );
-  }
+// Enum to represent different guidance statuses
+enum LecturerGuidanceStatus { 
+  approved, 
+  rejected, 
+  inProgress, 
+  updated 
 }
 
-enum LecturerGuidanceStatus { approved, rejected, inProgress, updated }
-
+// Card widget to display individual guidance entry details
 class LecturerGuidanceCard extends StatefulWidget {
   final GuidanceEntity guidance;
   final int student_id;
@@ -58,19 +41,31 @@ class LecturerGuidanceCard extends StatefulWidget {
 }
 
 class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
+  // Current status of the guidance entry
   late LecturerGuidanceStatus currentStatus;
+  
+  // Controller for lecturer's notes
   final TextEditingController _lecturerNote = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    currentStatus = widget.guidance.status == 'approved'
-        ? LecturerGuidanceStatus.approved
-        : widget.guidance.status == 'in-progress'
-            ? LecturerGuidanceStatus.inProgress
-            : widget.guidance.status == 'rejected'
-                ? LecturerGuidanceStatus.rejected
-                : LecturerGuidanceStatus.updated;
+    // Map string status to enum status
+    currentStatus = _mapStringToStatus(widget.guidance.status);
+  }
+
+  // Helper method to convert string status to enum
+  LecturerGuidanceStatus _mapStringToStatus(String status) {
+    switch (status) {
+      case 'approved':
+        return LecturerGuidanceStatus.approved;
+      case 'in-progress':
+        return LecturerGuidanceStatus.inProgress;
+      case 'rejected':
+        return LecturerGuidanceStatus.rejected;
+      default:
+        return LecturerGuidanceStatus.updated;
+    }
   }
 
   @override
@@ -104,109 +99,111 @@ class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
     );
   }
 
+  // Builds the main content of the card including file attachment and notes
   Widget _buildCardContent(ColorScheme colorScheme, TextTheme textTheme) {
-  return Padding(
-    padding: const EdgeInsets.all(16),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        ),
-        if (widget.guidance.name_file != "tidak ada file") ...[
-          InkWell(
-            onTap: () {
-              if (kIsWeb) {
-                // Handle web viewing
-              } else {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => PDFViewerPage(pdfUrl: widget.guidance.name_file),
-                  ),
-                );
-              }
-            },
-            child: InputDecorator(
-              decoration: InputDecoration(
-                prefixIcon: Icon(
-                  Icons.picture_as_pdf_rounded,
-                  size: 16,
-                  color: currentStatus == LecturerGuidanceStatus.rejected
-                      ? colorScheme.onError
-                      : colorScheme.onSurface,
-                ),
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    Icons.download,
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          ),
+          if (widget.guidance.name_file != "tidak ada file") ...[
+            InkWell(
+              onTap: () {
+                if (kIsWeb) {
+                  // Handle web viewing
+                } else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PDFViewerPage(pdfUrl: widget.guidance.name_file),
+                    ),
+                  );
+                }
+              },
+              child: InputDecorator(
+                decoration: InputDecoration(
+                  prefixIcon: Icon(
+                    Icons.picture_as_pdf_rounded,
                     size: 16,
                     color: currentStatus == LecturerGuidanceStatus.rejected
                         ? colorScheme.onError
                         : colorScheme.onSurface,
                   ),
-                  onPressed: () => PDFViewerPage.downloadPDF(context, widget.guidance.name_file),
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: const BorderRadius.all(Radius.circular(12)),
-                  borderSide: BorderSide(
-                    color: currentStatus == LecturerGuidanceStatus.rejected
-                        ? colorScheme.onError.withOpacity(0.5)
-                        : colorScheme.outline,
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      Icons.download,
+                      size: 16,
+                      color: currentStatus == LecturerGuidanceStatus.rejected
+                          ? colorScheme.onError
+                          : colorScheme.onSurface,
+                    ),
+                    onPressed: () => PDFViewerPage.downloadPDF(context, widget.guidance.name_file),
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: const BorderRadius.all(Radius.circular(12)),
+                    borderSide: BorderSide(
+                      color: currentStatus == LecturerGuidanceStatus.rejected
+                          ? colorScheme.onError.withOpacity(0.5)
+                          : colorScheme.outline,
+                    ),
                   ),
                 ),
-              ),
-              child: Text(
-                "File Bimbingan",
-                style: textTheme.bodyMedium?.copyWith(
-                  color: currentStatus == LecturerGuidanceStatus.rejected
-                      ? colorScheme.onError
-                      : colorScheme.onSurface,
+                child: Text(
+                  "File Bimbingan",
+                  style: textTheme.bodyMedium?.copyWith(
+                    color: currentStatus == LecturerGuidanceStatus.rejected
+                        ? colorScheme.onError
+                        : colorScheme.onSurface,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
-                overflow: TextOverflow.ellipsis,
               ),
             ),
-          ),
-          const SizedBox(height: 16),
-        ],
-        Text(
-          'Catatan Mahasiswa:',
-          style: textTheme.bodyMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          widget.guidance.activity,
-          style: textTheme.bodyMedium,
-          textAlign: TextAlign.start,
-        ),
-        const SizedBox(height: 16),
-        if (currentStatus != LecturerGuidanceStatus.inProgress) ...[
+            const SizedBox(height: 16),
+          ],
           Text(
-            'Catatan Anda:',
+            'Catatan Mahasiswa:',
             style: textTheme.bodyMedium?.copyWith(
               fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(height: 8),
           Text(
-            widget.guidance.lecturer_note,
+            widget.guidance.activity,
             style: textTheme.bodyMedium,
             textAlign: TextAlign.start,
           ),
-        ],
-        if (currentStatus != LecturerGuidanceStatus.approved &&
-            currentStatus != LecturerGuidanceStatus.rejected) ...[
           const SizedBox(height: 16),
-          _buildRevisionField(),
-          const SizedBox(height: 16),
-          _buildActionButtons(colorScheme),
+          if (currentStatus != LecturerGuidanceStatus.inProgress) ...[
+            Text(
+              'Catatan Anda:',
+              style: textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              widget.guidance.lecturer_note,
+              style: textTheme.bodyMedium,
+              textAlign: TextAlign.start,
+            ),
+          ],
+          if (currentStatus != LecturerGuidanceStatus.approved &&
+              currentStatus != LecturerGuidanceStatus.rejected) ...[
+            const SizedBox(height: 16),
+            _buildRevisionField(),
+            const SizedBox(height: 16),
+            _buildActionButtons(colorScheme),
+          ],
         ],
-      ],
-    ),
-  );
-}
+      ),
+    );
+  }
 
+  // Builds the status icon based on current status
   Widget _buildLeadingIcon(ColorScheme colorScheme) {
     switch (currentStatus) {
       case LecturerGuidanceStatus.approved:
@@ -222,6 +219,7 @@ class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
     }
   }
 
+  // Builds the text field for lecturer's revision notes
   Widget _buildRevisionField() {
     return TextField(
       controller: _lecturerNote,
@@ -237,6 +235,7 @@ class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
     );
   }
 
+  // Builds approve/reject action buttons
   Widget _buildActionButtons(ColorScheme colorScheme) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -260,6 +259,7 @@ class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
     );
   }
 
+  // Shows confirmation dialog before updating status
   void _showConfirmationDialog(LecturerGuidanceStatus newStatus) {
     final colorScheme = Theme.of(context).colorScheme;
     
@@ -292,12 +292,12 @@ class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
         
         // Prepare notification data
         final notificationData = {
-          'title': widget.guidance.title,
-          'message': _lecturerNote.text.isNotEmpty 
+          'title': _lecturerNote.text.isNotEmpty 
             ? _lecturerNote.text 
             : (newStatus == LecturerGuidanceStatus.approved 
               ? 'Bimbingan Anda Disetujui' 
-              : 'Bimbingan Anda Perlu Direvisi'),
+              : 'Bimbingan Anda Perlu Direvisi'), 
+          'message': widget.guidance.title,
           'category': newStatus == LecturerGuidanceStatus.approved 
             ? 'guidance' 
             : 'revision',
@@ -336,6 +336,7 @@ class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
     });
   }
 
+  // Shows success message and navigates back
   void _showSuccessAndNavigate() {
     CustomAlertDialog.showSuccess(
       context: context,
@@ -351,6 +352,7 @@ class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
     });
   }
 
+  // Shows error dialog with message
   void _showErrorDialog(String errorMessage) {
     CustomAlertDialog.showError(
       context: context,
