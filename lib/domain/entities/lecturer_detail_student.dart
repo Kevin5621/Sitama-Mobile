@@ -61,6 +61,7 @@ class InfoStudentEntity {
   final String email;
   final String is_finished;
   final String? photo_profile;
+  final bool isFinished;
 
   InfoStudentEntity({
     required this.name,
@@ -68,6 +69,7 @@ class InfoStudentEntity {
     required this.email,
     required this.is_finished,
     this.photo_profile,
+    required this.isFinished,
   });
 }
 
@@ -80,6 +82,16 @@ class InternshipStudentEntity {
     required this.name,
     required this.start_date,
     this.end_date,
+  });
+}
+
+class ShowAssessmentEntity {
+  final String component_name;
+  final double average_score;
+
+  ShowAssessmentEntity({
+    required this.component_name,
+    required this.average_score,
   });
 }
 

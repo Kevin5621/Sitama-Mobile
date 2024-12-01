@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sistem_magang/core/constansts/api_urls.dart';
 import 'package:sistem_magang/core/network/dio_client.dart';
 import 'package:sistem_magang/data/models/guidance.dart';
+import 'package:sistem_magang/data/models/score_request.dart';
 import 'package:sistem_magang/data/models/log_book.dart';
 import 'package:sistem_magang/data/models/notification.dart';
 import 'package:sistem_magang/service_locator.dart';
@@ -17,7 +18,7 @@ abstract class LecturerApiService {
   Future<Either> fetchAssessments(int id);
   Future<Either<String, Response>> submitScores(
       int id, List<Map<String, dynamic>> scores);
-  Future<Either> updateFinishedStudent(UpdateFinishedStudentReqParams request);
+  Future<Either> updateFinishedStudent(bool status, int id);
   Future<Either> addNotification(AddNotificationReqParams request);
 }
 
@@ -83,8 +84,8 @@ class LecturerApiServiceImpl extends LecturerApiService {
   }
 
   @override
-  Future<Either> updateLogBookNote(
-      UpdateLogBookReqParams request) async {
+  Future<Either> updateLogBookNote(UpdateLogBookReqParams request) async {
+
     try {
       SharedPreferences sharedPreferences =
           await SharedPreferences.getInstance();
@@ -178,22 +179,22 @@ class LecturerApiServiceImpl extends LecturerApiService {
       }
     }
   }
-  
+
   @override
-  Future<Either> updateFinishedStudent(
-    UpdateFinishedStudentReqParams request) async {
+  Future<Either> updateFinishedStudent(bool status, int id) async {
+
     try {
       SharedPreferences sharedPreferences =
           await SharedPreferences.getInstance();
       var token = sharedPreferences.get('token');
 
       var response = await sl<DioClient>().put(
-        "${ApiUrls.updateFinishedStudent}/${request.id}",
+        "${ApiUrls.finishedStudent}/$id",
         options: Options(headers: {
           'Authorization': 'Bearer $token',
         }),
-        data: request.toMap(),
-      );
+        data: {"is_finished": status},
+
 
       return Right(response);
     } on DioException catch (e) {

@@ -5,6 +5,7 @@ import 'package:sistem_magang/data/models/guidance.dart';
 import 'package:sistem_magang/data/models/lecturer_detail_student.dart';
 import 'package:sistem_magang/data/models/lecturer_home.dart';
 import 'package:sistem_magang/data/models/lecturer_profile.dart';
+import 'package:sistem_magang/data/models/score_request.dart';
 import 'package:sistem_magang/data/models/log_book.dart';
 import 'package:sistem_magang/data/models/notification.dart';
 import 'package:sistem_magang/data/source/lecturer_api_service.dart';
@@ -155,10 +156,12 @@ class LecturerRepositoryImpl extends LecturerRepository{
     );
 
   }
-
+  
   @override
-  Future<Either> updateFinishedStudent(UpdateFinishedStudentReqParams request) async {
-    Either result = await sl<LecturerApiService>().updateFinishedStudent(request);
+  Future<Either> updateFinishedStudent({required bool status,required int id}) async {
+    Either result =
+        await sl<LecturerApiService>().updateFinishedStudent(status, id);
+    print(result);
     return result.fold(
       (error) {
         return Left(error);
@@ -168,6 +171,7 @@ class LecturerRepositoryImpl extends LecturerRepository{
       },
     );
   }
+
 
   @override
   Future<Either> addNotification(AddNotificationReqParams request) async {

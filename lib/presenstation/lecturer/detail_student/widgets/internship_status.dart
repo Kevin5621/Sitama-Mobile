@@ -8,11 +8,17 @@ import 'package:sistem_magang/presenstation/lecturer/detail_student/bloc/detail_
 class InternshipStatusBox extends StatelessWidget {
   final List<DetailStudentEntity> students;
   final int index;
+  final String status;
+  final VoidCallback? onApprove;
+  final bool isFinished;
 
   const InternshipStatusBox({
     super.key,
     required this.students,
     required this.index,
+    required this.status,
+    required this.isFinished,
+    this.onApprove,
   });
 
   Future<bool?> _showConfirmationDialog(
@@ -52,7 +58,7 @@ class InternshipStatusBox extends StatelessWidget {
             ),
           ],
         ),
-        _buildCompletionButton(context),
+        _buildApproveButton(context, isFinished),
       ],
     );
   }

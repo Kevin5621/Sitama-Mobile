@@ -33,18 +33,28 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
     on<DeleteGroup>(_onDeleteGroup);
     on<AddStudentToGroup>(_onAddStudentToGroup);
     on<UpdateGroup>((event, emit) {
-    final updatedGroups = Map<String, GroupModel>.from(state.groups);
-    updatedGroups[event.groupId] = updatedGroups[event.groupId]!.copyWith(
-      title: event.title,
-      icon: event.icon,
-    );
-    
-    emit(state.copyWith(groups: updatedGroups));
-  });
+      final updatedGroups = Map<String, GroupModel>.from(state.groups);
+      updatedGroups[event.groupId] = updatedGroups[event.groupId]!.copyWith(
+        title: event.title,
+        iconName: _mapIconToName(event.icon),
+      );
+      
+      emit(state.copyWith(groups: updatedGroups));
+    });
 
     // Load archived items and groups when bloc is created
     add(LoadArchivedItems());
     add(LoadGroupItems());
+  }
+
+  // Helper method to convert IconData to iconName
+  String _mapIconToName(IconData icon) {
+    final iconMap = {
+      Icons.group: 'group',
+      Icons.person: 'person',
+      Icons.school: 'school',
+    };
+    return iconMap[icon] ?? 'group';
   }
 
   void _onToggleSelectionMode(
@@ -222,7 +232,7 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
         final defaultGroup = GroupModel(
           id: 'default_migrated_group',
           title: 'Migrated Students',
-          icon: Icons.group,
+          iconName: 'group', // Use iconName instead of icon
           studentIds: legacyGroupIds,
         );
         
@@ -264,7 +274,7 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
       final GroupModel newGroup = GroupModel(
         id: groupId,
         title: event.title.trim(), 
-        icon: event.icon,
+        iconName: _mapIconToName(event.icon), // Convert icon to iconName
         studentIds: Set<int>.from(event.studentIds),
       );
 
@@ -410,7 +420,7 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
           studentIds: updatedStudentIds,
         );
         
-        // Simpan perubahan ke persistent storage
+        // Save changes to persistent storage
         await _saveGroups(updatedGroups);
         
         emit(state.copyWith(

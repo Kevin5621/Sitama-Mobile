@@ -21,7 +21,7 @@ abstract class StudentApiService {
   Future<Either> deleteLogBook(int id);
   
   Future<Either> getNotifications();
-  Future<Either> markAllNotificationsAsRead(MarkAllReqParams request);
+  Future<Either> markAllNotificationsAsRead();
 
   Future<Either> getStudentProfile();
 }
@@ -267,26 +267,23 @@ class StudentApiServiceImpl extends StudentApiService {
   }
 
   @override
-  Future<Either> markAllNotificationsAsRead(MarkAllReqParams request) async {
+  Future<Either> markAllNotificationsAsRead() async {
     try {
       SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
       var token = sharedPreferences.get('token');
 
-      var response = await sl<DioClient>().post(
-        "${ApiUrls.notification}/markAsRead", 
+      var response = await sl<DioClient>().put(
+        ApiUrls.notificationMarkAsRead, 
         options: Options(
           headers: {
             'Authorization': 'Bearer $token',
           },
-        ),
-        data: {
-          'notification_ids': request.notificationIds,
-          'is_read': request.isRead
-        }, 
+        )
       );
-
+      print(response);
       return Right(response);
     } on DioException catch (e) {
+      print(e);
       if (e.response != null) {
         return Left(e.response!.data['errors'].toString());
       } else {

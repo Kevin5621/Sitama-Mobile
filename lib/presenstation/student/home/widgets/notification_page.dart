@@ -27,6 +27,13 @@ class _NotificationPageState extends State<NotificationPage> {
     _fetchNotifications();
   }
 
+  @override
+  void dispose() {
+    // Cancel any ongoing operation if necessary
+    _refreshController.dispose();
+    super.dispose();
+  }
+
   Future<void> _fetchNotifications() async {
     setState(() {
       _isLoading = true;
@@ -34,7 +41,7 @@ class _NotificationPageState extends State<NotificationPage> {
 
     try {
       final result = await _getNotificationsUseCase.call();
-      
+
       result.fold(
         (error) {
           setState(() {
@@ -105,9 +112,23 @@ class _NotificationPageState extends State<NotificationPage> {
         elevation: 0.5,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: colorScheme.onSurface),
-          onPressed: () {
-            _markAllNotificationsAsRead();
-            Navigator.pop(context);
+          onPressed: () async {
+            final result = await markAllNotificationsReadUseCase.call();
+
+            result.fold((error) {
+              // Tangani kesalahan jika gagal memperbarui di server
+              ScaffoldMessenger.of(context).showSnackBar(
+                CustomSnackBar(
+                  message: 'Gagal menandai semua notifikasi :(',
+                  icon: Icons.error_outline,
+                  backgroundColor: Colors.red.shade800,
+                ),
+              );
+            }, (_) {
+              // Perbarui status lokal setelah berhasil di server
+              Navigator.pop(context);
+            });
+            
           },
         ),
         title: Text(
@@ -200,44 +221,32 @@ class _NotificationPageState extends State<NotificationPage> {
 
   Future<void> _markAllNotificationsAsRead() async {
     try {
-      // Ambil ID dari semua notifikasi yang belum dibaca
-      final unreadNotificationIds = _notifications
-          .where((n) => n.isRead == 0)
-          .map((n) => n.id)
-          .toList();
-
       // Panggil use case untuk menandai notifikasi sebagai dibaca di server
-      final result = await markAllNotificationsReadUseCase.call(
-        param: MarkAllReqParams(
-          notificationIds: unreadNotificationIds, 
-          isRead: 1        
-        )
-      );
+      final result = await markAllNotificationsReadUseCase.call();
 
-      result.fold(
-        (error) {
-          // Tangani kesalahan jika gagal memperbarui di server
-          ScaffoldMessenger.of(context).showSnackBar(
-            CustomSnackBar(
-              message: 'Gagal menandai semua notifikasi :(',
-              icon: Icons.error_outline,  
-              backgroundColor: Colors.red.shade800,  
-            ),
-          );
-        },
-        (_) {
-          // Perbarui status lokal setelah berhasil di server
-          setState(() {
-            _notifications = _notifications.map((n) => n.copyWith(isRead: 1)).toList();
-          });
-        }
-      );
+      result.fold((error) {
+        // Tangani kesalahan jika gagal memperbarui di server
+        ScaffoldMessenger.of(context).showSnackBar(
+          CustomSnackBar(
+            message: 'Gagal menandai semua notifikasi :(',
+            icon: Icons.error_outline,
+            backgroundColor: Colors.red.shade800,
+          ),
+        );
+      }, (_) {
+        // Perbarui status lokal setelah berhasil di server
+        setState(() {
+          _notifications =
+              _notifications.map((n) => n.copyWith(isRead: 1)).toList();
+        });
+      });
     } catch (e) {
+      print(e);
       ScaffoldMessenger.of(context).showSnackBar(
         CustomSnackBar(
           message: 'Terjadi kesalahan',
-          icon: Icons.error_outline,  
-          backgroundColor: Colors.red.shade800,  
+          icon: Icons.error_outline,
+          backgroundColor: Colors.red.shade800,
         ),
       );
     }

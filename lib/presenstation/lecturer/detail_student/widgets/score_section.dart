@@ -9,12 +9,16 @@ class ScoreBox extends StatelessWidget {
   final int id;
   final List<ShowAssessmentEntity> assessments;
   final String average_all_assessments;
+  final bool isFinished;
 
   const ScoreBox(
-      {super.key,
+      {Key? key,
       required this.id,
       required this.assessments,
-      required this.average_all_assessments});
+      required this.isFinished,
+      required this.average_all_assessments})
+      : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +28,8 @@ class ScoreBox extends StatelessWidget {
   /// Builds the container that holds the entire score box UI.
   Widget _buildScoreBox(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-
+    bool _isButtonDisabled = !isFinished; 
+    
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
@@ -58,19 +63,23 @@ class ScoreBox extends StatelessWidget {
               IconButton(
                 icon: Icon(
                   Icons.add_circle,
-                  color: colorScheme.primary,
+                  color: _isButtonDisabled
+                      ? Colors.grey
+                      : colorScheme.primary, // Ubah warna jika disable.
                 ),
-                onPressed: () {
-                  // Navigate to the InputScorePage on add button press.
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => InputScorePage(
-                        id: id,
-                      ),
-                    ),
-                  );
-                },
+                onPressed: _isButtonDisabled
+                    ? null // Tombol akan disable jika `null`.
+                    : () {
+                        // Navigasi ke InputScorePage jika tombol aktif.
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => InputScorePage(
+                              id: id,
+                            ),
+                          ),
+                        );
+                      },
               ),
             ],
           ),

@@ -133,8 +133,8 @@ class _DetailStudentPageState extends State<DetailStudentPage> {
       floatingActionButton: _isButtonVisible
           ? FloatingActionButton(
               onPressed: _scrollToTabSection,
-              child: const Icon(Icons.arrow_downward),
               tooltip: 'Scroll to Tab Section',
+              child: const Icon(Icons.arrow_downward),
             )
           : null,
     );

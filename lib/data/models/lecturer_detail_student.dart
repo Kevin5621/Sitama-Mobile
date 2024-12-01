@@ -13,7 +13,6 @@ class DetailStudentModel {
   final List<LogBookModel> log_book;
   final List<ShowAssessmentModel> assessments;
   final double average_all_assessments;
-  final bool is_finished;
 
   DetailStudentModel({
     required this.student,
@@ -22,7 +21,6 @@ class DetailStudentModel {
     required this.log_book,
     required this.assessments,
     required this.average_all_assessments,
-    required this.is_finished,
   });
 
   factory DetailStudentModel.fromMap(Map<String, dynamic> map) {
@@ -49,7 +47,6 @@ class DetailStudentModel {
         ),
       ),
       average_all_assessments: map['average_all_assessments'] as double,
-      is_finished: _convertToBool(map['student']['is_finished']),
     );
   }
   static bool _convertToBool(dynamic value) {
@@ -67,8 +64,8 @@ extension DetailStudentXModel on DetailStudentModel {
         name: student.name,
         email: student.email,
         username: student.username,
-        photo_profile: student.photo_profile, 
-        is_finished: '',
+        isFinished: student.isFinished,
+        photo_profile: student.photo_profile,
       ),
       username: student.username,
       the_class: student.the_class,
@@ -104,7 +101,6 @@ extension DetailStudentXModel on DetailStudentModel {
               ))
           .toList(),
       average_all_assessments:  average_all_assessments.toString(),
-      is_finished: is_finished,
     );
   }
 }
@@ -115,7 +111,7 @@ class InfoStudentModel {
   final String email;
   final String the_class;
   final String major;
-  final bool is_finished;
+  final bool isFinished;
   final String? photo_profile;
 
   InfoStudentModel({
@@ -124,7 +120,7 @@ class InfoStudentModel {
     required this.email,
     required this.the_class,
     required this.major,
-    required this.is_finished,
+    required this.isFinished,
     this.photo_profile,
   });
 
@@ -135,7 +131,7 @@ class InfoStudentModel {
       email: map['email'] as String,
       the_class: map['class'] as String,
       major: map['major'] as String,
-      is_finished: map['is_finished'] as bool,
+      isFinished: map['is_finished'] as bool,
       photo_profile: map['photo_profile'] as String?,
     );
   }

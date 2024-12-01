@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:sistem_magang/data/models/guidance.dart';
+import 'package:sistem_magang/data/models/score_request.dart';
 import 'package:sistem_magang/data/models/log_book.dart';
 import 'package:sistem_magang/data/models/notification.dart';
 import 'package:sistem_magang/domain/entities/industry_score.dart';
@@ -19,8 +20,6 @@ abstract class LecturerRepository {
 
   Future<Either> fetchAssessments(int id);
   Future<Either<String, Response>> submitScores (int id, List<Map<String, dynamic>> scores);
-
   Future<Either> getLecturerProfile();
-
-  Future<Either> updateFinishedStudent(UpdateFinishedStudentReqParams request);
+  Future<Either> updateFinishedStudent({required bool status,required int id});
 }
