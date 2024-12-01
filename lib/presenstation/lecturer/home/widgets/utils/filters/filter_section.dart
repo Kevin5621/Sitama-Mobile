@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sistem_magang/domain/entities/lecturer_home_entity.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_bloc.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_state.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/filters/filter_jurusan.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/filters/filter_tahun.dart';
+import 'package:sistem_magang/presenstation/lecturer/home/widgets/utils/filters/filter_jurusan.dart';
+import 'package:sistem_magang/presenstation/lecturer/home/widgets/utils/filters/filter_tahun.dart';
 
 class FilterSection extends StatefulWidget {
   final VoidCallback? onArchiveTap;

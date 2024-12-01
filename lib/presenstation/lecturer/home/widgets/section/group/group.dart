@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sistem_magang/domain/entities/lecturer_home_entity.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_bloc.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_state.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/lists/group/group_app_bar.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/lists/group/group_body.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/lists/group/group_fab.dart';
+import 'package:sistem_magang/presenstation/lecturer/home/widgets/section/group/group_app_bar.dart';
+import 'package:sistem_magang/presenstation/lecturer/home/widgets/section/group/group_body.dart';
+import 'package:sistem_magang/presenstation/lecturer/home/widgets/section/group/group_fab.dart';
 
 class GroupPage extends StatefulWidget {
   final List<LecturerStudentsEntity> groupStudents;

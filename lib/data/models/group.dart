@@ -16,16 +16,25 @@ class GroupModel {
     required this.studentIds,
   });
 
-  IconData get icon {
-    // Map iconName to IconData (default to Icons.group if not found)
-    final iconMap = {
-      'group': Icons.group,
-      'person': Icons.person,
-      'school': Icons.school,
-    };
+  // Peta statis yang dapat dengan mudah diperluas
+  static final Map<String, IconData> iconMap = {
+    'group': Icons.group,
+    'school': Icons.school,
+    'work': Icons.work,
+    'star': Icons.star,
+    'favorite': Icons.favorite,
+    'rocket_launch': Icons.rocket_launch,
+    'psychology': Icons.psychology,
+    'science': Icons.science,
+};
 
-    return iconMap[iconName] ?? Icons.group;
+  // Getter to retrieve the icon associated with the group model
+  IconData get icon {
+    return iconMap[iconName] ?? Icons.group; // Default icon is set to Icons.group if the provided iconName is not found
   }
+
+  // Additional method to retrieve all available icons
+  static Map<String, IconData> get availableIcons => Map.unmodifiable(iconMap);
 
   // Serialization methods for SharedPreferences
   Map<String, dynamic> toJson() => {

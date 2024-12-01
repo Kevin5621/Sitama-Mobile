@@ -5,7 +5,7 @@ import 'package:sistem_magang/common/widgets/custom_snackbar.dart';
 import 'package:sistem_magang/data/models/group.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_bloc.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_event.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/dialogs/group_dialog.dart';
+import 'package:sistem_magang/presenstation/lecturer/home/widgets/utils/dialogs/group_dialog.dart';
 
 class GroupActions {
   static Future<void> showUngroupConfirmation(

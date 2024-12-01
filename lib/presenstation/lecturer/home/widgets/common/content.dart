@@ -11,8 +11,8 @@ import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_bloc.da
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_event.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_state.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/widgets/common/header.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/dialogs/send_message_bottom.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/lists/student_list.dart';
+import 'package:sistem_magang/presenstation/lecturer/home/widgets/utils/dialogs/send_message_bottom.dart';
+import 'package:sistem_magang/presenstation/lecturer/home/widgets/section/student_list.dart';
 
 class LecturerHomeContent extends StatefulWidget {
   const LecturerHomeContent({super.key});

@@ -5,7 +5,7 @@ import 'package:sistem_magang/presenstation/lecturer/detail_student/pages/detail
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_bloc.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_event.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_state.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/cards/student_card.dart';
+import 'package:sistem_magang/presenstation/lecturer/home/widgets/section/cards/student_card.dart';
 
 class GroupBody extends StatefulWidget {
   final GlobalKey<RefreshIndicatorState> refreshIndicatorKey; 

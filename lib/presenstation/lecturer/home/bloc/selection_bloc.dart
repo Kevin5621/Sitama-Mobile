@@ -49,12 +49,8 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
 
   // Helper method to convert IconData to iconName
   String _mapIconToName(IconData icon) {
-    final iconMap = {
-      Icons.group: 'group',
-      Icons.person: 'person',
-      Icons.school: 'school',
-    };
-    return iconMap[icon] ?? 'group';
+    final reverseIconMap = GroupModel.iconMap.map((key, value) => MapEntry(value, key));
+    return reverseIconMap[icon] ?? 'group';
   }
 
   void _onToggleSelectionMode(

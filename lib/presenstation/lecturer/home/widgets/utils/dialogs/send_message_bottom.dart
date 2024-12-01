@@ -5,7 +5,7 @@ import 'package:sistem_magang/common/bloc/bloc/notification_state.dart';
 import 'package:sistem_magang/common/widgets/custom_snackbar.dart';
 import 'package:sistem_magang/core/config/themes/app_color.dart';
 
-import '../../../../../common/bloc/bloc/notification_event.dart';
+import '../../../../../../common/bloc/bloc/notification_event.dart';
 
 void showSendMessageBottomSheet(BuildContext context, Set<int> selectedIds) {
   final TextEditingController titleController = TextEditingController();

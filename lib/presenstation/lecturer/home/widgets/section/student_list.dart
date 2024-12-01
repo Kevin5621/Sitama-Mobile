@@ -8,11 +8,11 @@ import 'package:sistem_magang/presenstation/lecturer/detail_student/pages/detail
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_bloc.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_event.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_state.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/cards/archive_card.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/dialogs/group_dialog.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/filters/filter_section.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/cards/group_card.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/cards/student_card.dart';
+import 'package:sistem_magang/presenstation/lecturer/home/widgets/section/cards/archive_card.dart';
+import 'package:sistem_magang/presenstation/lecturer/home/widgets/utils/dialogs/group_dialog.dart';
+import 'package:sistem_magang/presenstation/lecturer/home/widgets/utils/filters/filter_section.dart';
+import 'package:sistem_magang/presenstation/lecturer/home/widgets/section/cards/group_card.dart';
+import 'package:sistem_magang/presenstation/lecturer/home/widgets/section/cards/student_card.dart';
 
 // Widget that displays a list of students with grouping, archiving, and selection capabilities
 // Used in the lecturer's dashboard to manage their supervised students
@@ -326,7 +326,7 @@ class _GroupCreationDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GroupDialogForm(
-      title: 'Create New Group',
+      title: 'Buat Group Baru',
       onSubmit: (title, icon) {
         Navigator.of(context).pop({
           'title': title,
