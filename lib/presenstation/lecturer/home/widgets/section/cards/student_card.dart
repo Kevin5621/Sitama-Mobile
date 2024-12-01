@@ -5,6 +5,7 @@ import 'package:sistem_magang/domain/entities/lecturer_home_entity.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_bloc.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_state.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/widgets/utils/helper/activity_helper.dart';
+
 class StudentCard extends StatelessWidget {
   final LecturerStudentsEntity student;
   final bool isSelected;
@@ -41,54 +42,55 @@ class StudentCard extends StatelessWidget {
         final isMultiSelect = state.isSelectionMode && state.selectedIds.length > 1;
         final selectedStudents = isMultiSelect ? state.selectedIds : {student.id};
 
-        return Draggable<Set<int>>(
-          data: isMultiSelect ? state.selectedIds : {student.id},
-          dragAnchorStrategy: pointerDragAnchorStrategy,
-          
-          // Feedback widget shown while dragging
-          feedback: Material(
-            elevation: 4.0,
-            borderRadius: BorderRadius.circular(8),
-            child: Container(
-              width: 200,
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: theme.cardColor,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        height: 32,
-                        width: 32,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: colorScheme.primary,
-                            width: 1,
+        // Wrap with Draggable only when in multi-select mode
+        if (isMultiSelect) {
+          return Draggable<Set<int>>(
+            data: state.selectedIds,
+            dragAnchorStrategy: pointerDragAnchorStrategy,
+            
+            // Feedback widget shown while dragging
+            feedback: Material(
+              elevation: 4.0,
+              borderRadius: BorderRadius.circular(8),
+              child: Container(
+                width: 200,
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: theme.cardColor,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          height: 32,
+                          width: 32,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: colorScheme.primary,
+                              width: 1,
+                            ),
                           ),
-                        ),
-                        child: ClipOval(
-                          child: Image.network(
-                            _getProfileImage,
-                            fit: BoxFit.cover,
-                            errorBuilder: (_, __, ___) => Icon(
-                              Icons.person,
-                              color: theme.iconTheme.color,
-                              size: 20,
+                          child: ClipOval(
+                            child: Image.network(
+                              _getProfileImage,
+                              fit: BoxFit.cover,
+                              errorBuilder: (_, __, ___) => Icon(
+                                Icons.person,
+                                color: theme.iconTheme.color,
+                                size: 20,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 8),
-                      if (!isMultiSelect)
+                        const SizedBox(width: 8),
                         Flexible(
                           child: Text(
-                            student.name,
+                            '${selectedStudents.length} students selected',
                             style: theme.textTheme.bodyMedium?.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
@@ -96,44 +98,49 @@ class StudentCard extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                    ],
-                  ),
-                  if (isMultiSelect)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8),
-                      child: Text(
-                        '${selectedStudents.length} students selected',
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      ],
                     ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-          
-          // Widget shown in place while dragging
-          childWhenDragging: Opacity(
-            opacity: 0.5,
+            
+            // Widget shown in place while dragging
+            childWhenDragging: Opacity(
+              opacity: 0.5,
+              child: Card(
+                color: backgroundColor.withOpacity(0.5),
+                child: _buildCardContent(context),
+              ),
+            ),
+            
+            // Main widget
             child: Card(
-              color: backgroundColor.withOpacity(0.5),
-              child: _buildCardContent(context),
+              elevation: theme.cardTheme.elevation ?? 1,
+              color: backgroundColor,
+              shape: theme.cardTheme.shape ?? RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: InkWell(
+                onTap: onTap,
+                onLongPress: onLongPress,
+                child: _buildCardContent(context),
+              ),
             ),
+          );
+        }
+
+        // If not in multi-select mode, return a simple Card
+        return Card(
+          elevation: theme.cardTheme.elevation ?? 1,
+          color: backgroundColor,
+          shape: theme.cardTheme.shape ?? RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
           ),
-          
-          // Main widget
-          child: Card(
-            elevation: theme.cardTheme.elevation ?? 1,
-            color: backgroundColor,
-            shape: theme.cardTheme.shape ?? RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: InkWell(
-              onTap: onTap,
-              onLongPress: onLongPress,
-              child: _buildCardContent(context),
-            ),
+          child: InkWell(
+            onTap: onTap,
+            onLongPress: onLongPress,
+            child: _buildCardContent(context),
           ),
         );
       },

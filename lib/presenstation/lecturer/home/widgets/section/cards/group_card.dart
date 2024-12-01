@@ -47,35 +47,47 @@ class GroupCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Build the UI using BlocBuilder to listen to changes in SelectionBloc
     return BlocBuilder<SelectionBloc, SelectionState>(
       builder: (context, state) {
+        // Retrieve the group data from the current state using groupId
         final group = state.groups[groupId];
+        
+        // If the group is null, render an invisible widget to avoid errors
         if (group == null) return const SizedBox.shrink();
 
+        // Filter and create a list of students that belong to the group
         final groupStudentsList = groupStudents
             .where((student) => group.studentIds.contains(student.id))
             .toList();
 
+        // Handle case where no students are in the group by deleting the group
         if (groupStudentsList.isEmpty) {
           final selectionBloc = context.read<SelectionBloc>();
+          // Schedule deletion to prevent issues during widget rebuild
           Future.microtask(() {
             selectionBloc.add(DeleteGroup(groupId));
           });
           return const SizedBox.shrink();
         }
 
+        // Retrieve activities related to the group for display
         final groupActivities = _getGroupActivities(groupStudentsList);
 
+        // Allow drag-and-drop interactions using DragTarget
         return DragTarget<Set<int>>(
+          // Allow drag data only if it is not empty
           onWillAcceptWithDetails: (details) {
             final data = details.data;
             return data.isNotEmpty;
           },
+          // Handle the drop action for student IDs
           onAcceptWithDetails: (details) {
             final studentIds = details.data;
             _handleMultiDrop(context, studentIds);
           },
           builder: (context, candidateData, rejectedData) {
+            // Highlight the card when a drag operation is active
             final isDragging = candidateData.isNotEmpty;
             return Card(
               margin: const EdgeInsets.symmetric(vertical: 8),
@@ -84,6 +96,7 @@ class GroupCard extends StatelessWidget {
                   : null,
               child: InkWell(
                 onTap: () {
+                  // Handle navigation to the GroupPage with relevant data
                   final selectionBloc = context.read<SelectionBloc>();
                   final lecturerCubit = context.read<LecturerDisplayCubit>();
 
@@ -102,11 +115,13 @@ class GroupCard extends StatelessWidget {
                       ),
                     ),
                   ).then((_) {
+                    // Refresh lecturer data after returning from GroupPage
                     lecturerCubit.displayLecturer();
                   });
                 },
                 child: Stack(
                   children: [
+                    // Display group icon and title with student count
                     Padding(
                       padding: const EdgeInsets.all(16),
                       child: Row(
@@ -135,6 +150,7 @@ class GroupCard extends StatelessWidget {
                         ],
                       ),
                     ),
+                    // Display activity icons for the group, if available
                     if (groupActivities.isNotEmpty)
                       ActivityHelper.buildActivityIconsStack(
                         activities: groupActivities,
