@@ -1,4 +1,5 @@
 {
     "cmake.sourceDirectory": "C:/Users/pc/OneDrive/Documents/Sitama-1.4/linux",
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "java.compile.nullAnalysis.mode": "automatic"
 }

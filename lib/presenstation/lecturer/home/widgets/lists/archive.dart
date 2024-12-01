@@ -215,10 +215,10 @@ class _ArchivePageState extends State<ArchivePage> {
                         },
                       ),
               ),
-              floatingActionButton: selectionState.isSelectionMode && 
-                                selectionState.selectedIds.isNotEmpty
-                ? _buildFloatingActionButton(context)
-                : null,
+              floatingActionButton: selectionState.isSelectionMode &&
+                      selectionState.selectedIds.isNotEmpty
+                  ? _buildFloatingActionButton(context, selectionState.selectedIds)
+                  : null,
             ),
           );
         },
@@ -241,7 +241,7 @@ class _ArchivePageState extends State<ArchivePage> {
     );
   }
 
-  Widget _buildFloatingActionButton(BuildContext context) {
+Widget _buildFloatingActionButton(BuildContext context, Set<int> selectedIds) {
   return TweenAnimationBuilder<double>(
     tween: Tween(begin: 0.0, end: 1.0),
     duration: const Duration(milliseconds: 300),
@@ -249,7 +249,7 @@ class _ArchivePageState extends State<ArchivePage> {
       return Transform.scale(
         scale: value,
         child: FloatingActionButton(
-          onPressed: () => showSendMessageBottomSheet(context),
+          onPressed: () => showSendMessageBottomSheet(context, selectedIds),
           backgroundColor: AppColors.lightPrimary,
           elevation: 6,
           shape: const CircleBorder(),
@@ -263,6 +263,7 @@ class _ArchivePageState extends State<ArchivePage> {
     },
   );
 }
+
 
   void _handleStudentTap(BuildContext context, LecturerStudentsEntity student) {
     final state = context.read<SelectionBloc>().state;

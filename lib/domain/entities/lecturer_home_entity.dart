@@ -20,6 +20,7 @@ class LecturerStudentsEntity {
   final String study_program;
   final String major;
   final String academic_year;
+  final bool is_finished;
   final Map<String, bool> activities;
 
   LecturerStudentsEntity({
@@ -31,6 +32,7 @@ class LecturerStudentsEntity {
     required this.study_program,
     required this.major,
     required this.academic_year,
+    this.is_finished = false,
     required this.activities,
     });
 }

@@ -7,6 +7,7 @@ import 'package:sistem_magang/data/models/lecturer_home.dart';
 import 'package:sistem_magang/data/models/lecturer_profile.dart';
 import 'package:sistem_magang/data/models/score_request.dart';
 import 'package:sistem_magang/data/models/log_book.dart';
+import 'package:sistem_magang/data/models/notification.dart';
 import 'package:sistem_magang/data/source/lecturer_api_service.dart';
 import 'package:sistem_magang/domain/repository/lecturer.dart';
 import 'package:sistem_magang/service_locator.dart';
@@ -167,6 +168,21 @@ class LecturerRepositoryImpl extends LecturerRepository{
       },
       (data) {
         return Right(data);
+      },
+    );
+  }
+
+
+  @override
+  Future<Either> addNotification(AddNotificationReqParams request) async {
+    Either result = await sl<LecturerApiService>().addNotification(request);
+    return result.fold(
+      (error) {
+        return Left(error);
+      },
+      (data) {
+        Response response = data;
+        return Right(response);
       },
     );
   }

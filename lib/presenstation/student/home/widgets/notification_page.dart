@@ -20,7 +20,6 @@ class _NotificationPageState extends State<NotificationPage> {
   final _getNotificationsUseCase = sl<GetNotificationsUseCase>();
   List<NotificationItemEntity> _notifications = [];
   bool _isLoading = true;
-  String? _error;
 
   @override
   void initState() {
@@ -38,7 +37,6 @@ class _NotificationPageState extends State<NotificationPage> {
   Future<void> _fetchNotifications() async {
     setState(() {
       _isLoading = true;
-      _error = null;
     });
 
     try {
@@ -47,7 +45,6 @@ class _NotificationPageState extends State<NotificationPage> {
       result.fold(
         (error) {
           setState(() {
-            _error = error.toString();
             _isLoading = false;
           });
           _refreshController.refreshFailed();
@@ -62,7 +59,6 @@ class _NotificationPageState extends State<NotificationPage> {
       );
     } catch (e) {
       setState(() {
-        _error = e.toString();
         _isLoading = false;
       });
       _refreshController.refreshFailed();
@@ -109,39 +105,6 @@ class _NotificationPageState extends State<NotificationPage> {
       );
     }
 
-    if (_error != null) {
-      return Scaffold(
-        backgroundColor: colorScheme.background,
-        appBar: AppBar(
-          backgroundColor: colorScheme.surface,
-          elevation: 0.5,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: colorScheme.onSurface),
-            onPressed: () => Navigator.pop(context),
-          ),
-          title: Text(
-            'Notifikasi',
-            style: theme.textTheme.titleLarge?.copyWith(
-              color: colorScheme.onSurface,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text('$_error'),
-              ElevatedButton(
-                onPressed: _fetchNotifications,
-                child: const Text('Coba Lagi'),
-              ),
-            ],
-          ),
-        ),
-      );
-    }
-
     return Scaffold(
       backgroundColor: colorScheme.background,
       appBar: AppBar(
@@ -177,12 +140,10 @@ class _NotificationPageState extends State<NotificationPage> {
         ),
         actions: [
           if (_notifications.any((n) => n.isRead == 0))
-            TextButton(
+            IconButton(
+              icon: Icon(Icons.done_all, color: colorScheme.onSurface),
               onPressed: _markAllNotificationsAsRead,
-              child: Text(
-                'Tandai Semua Dibaca',
-                style: TextStyle(color: colorScheme.onSurface),
-              ),
+              tooltip: 'Tandai Semua Dibaca',
             ),
         ],
       ),
@@ -207,13 +168,55 @@ class _NotificationPageState extends State<NotificationPage> {
                   return NotificationCard(
                     notification: notification,
                     onTap: () {
-                      (notification);
+                      // Automatically mark as read when expanded
+                      _markNotificationAsRead(notification.id);
                     },
                   );
                 },
               ),
       ),
     );
+  }
+
+  Future<void> _markNotificationAsRead(int notificationId) async {
+    try {
+      // Panggil use case atau logika untuk menandai notifikasi sebagai dibaca
+      final result = await markAllNotificationsReadUseCase.call(
+        param: MarkAllReqParams(
+          notificationIds: [notificationId],
+          isRead: 1,
+        ),
+      );
+
+      result.fold(
+        (error) {
+          // Tangani kesalahan jika gagal memperbarui di server
+          ScaffoldMessenger.of(context).showSnackBar(
+            CustomSnackBar(
+              message: 'Gagal menandai notifikasi sebagai dibaca :(',
+              icon: Icons.error_outline,
+              backgroundColor: Colors.red.shade800,
+            ),
+          );
+        },
+        (_) {
+          // Perbarui status lokal setelah berhasil di server
+          setState(() {
+            _notifications = _notifications.map((n) {
+              return n.id == notificationId ? n.copyWith(isRead: 1) : n;
+            }).toList();
+          });
+        },
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        CustomSnackBar(
+          message: 'Terjadi kesalahan',
+          icon: Icons.error_outline,
+          backgroundColor: Colors.red.shade800,
+        ),
+      );
+    }
   }
 
   Future<void> _markAllNotificationsAsRead() async {

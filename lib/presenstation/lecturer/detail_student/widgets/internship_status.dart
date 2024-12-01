@@ -22,48 +22,34 @@ class InternshipStatusBox extends StatelessWidget {
   });
 
   Future<bool?> _showConfirmationDialog(
-      BuildContext context, bool currentStatus) async {
+    BuildContext context, bool? currentStatus) async {
     return CustomAlertDialog.showConfirmation(
       context: context,
-      title: currentStatus ? 'Batalkan Persetujuan?' : 'Setujui Status Magang?',
-      message: currentStatus
-          ? 'Anda yakin ingin membatalkan persetujuan status magang ini?'
-          : 'Anda yakin ingin menyetujui status magang ini?',
+      title: currentStatus == true ? 'Batalkan Penyelesaian Magang?' : 'Selesaikan Magang?',
+      message: currentStatus == true
+          ? 'Anda yakin ingin membatalkan status penyelesaian magang ini?'
+          : 'Anda yakin ingin menyelesaikan status magang ini?',
       cancelText: 'Batal',
-      confirmText: currentStatus ? 'Batalkan' : 'Setujui',
-    );
-  }
-
-  Widget _buildApproveButton(BuildContext context, bool isApproved) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return IconButton(
-      onPressed: () async {
-        final shouldProceed = await _showConfirmationDialog(context, isApproved);
-        if (shouldProceed == true) {
-          context.read<DetailStudentDisplayCubit>().toggleInternshipApproval(index);
-          if (onApprove != null) {
-            onApprove!();
-          }
-        }
-      },
-      icon: Icon(
-        isApproved ? Icons.check_circle : Icons.check_circle_outline,
-        color: isApproved ? colorScheme.primary : colorScheme.outline,
-      ),
+      confirmText: currentStatus == true ? 'Batalkan' : 'Selesaikan',
     );
   }
 
   Widget _buildInternshipHeader(BuildContext context, ColorScheme colorScheme) {
-    final statusColor = _getStatusColor(colorScheme);
+    final student = students[index];
+    final currentStatus = student.is_finished == true 
+        ? 'Selesai Magang' 
+        : 'Sedang Magang';
+    final statusColor = _getStatusColor(colorScheme, currentStatus);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Row(
           children: [
-            Icon(_getStatusIcon(), color: statusColor),
+            Icon(_getStatusIcon(currentStatus), color: statusColor),
             const SizedBox(width: 8),
             Text(
-              status,
+              currentStatus,
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
@@ -77,12 +63,34 @@ class InternshipStatusBox extends StatelessWidget {
     );
   }
 
+  Widget _buildCompletionButton(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final student = students[index];
+
+    return IconButton(
+      onPressed: () async {
+        final shouldProceed = await _showConfirmationDialog(context, student.is_finished);
+        if (shouldProceed == true) {
+          context.read<DetailStudentDisplayCubit>().toggleInternshipCompletion(index);
+        }
+      },
+      icon: Icon(
+        Icons.check_circle_outline,
+        color: student.is_finished == true
+            ? colorScheme.tertiary 
+            : colorScheme.outline,
+      ),
+    );
+  }
+
   Widget _buildStudentInfo(BuildContext context, DetailStudentEntity student) {
     return Container(
       padding: const EdgeInsets.all(12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          _buildInfoRow('Nama', student.student.name),
+          const SizedBox(height: 8),
           _buildInfoRow('NIM', student.username),
           const SizedBox(height: 8),
           _buildInfoRow('Kelas', student.the_class),
@@ -136,7 +144,6 @@ class InternshipStatusBox extends StatelessWidget {
       builder: (context, state) {
         if (state is DetailLoaded) {
           final student = students[index];
-          // final isApproved = state.isInternshipApproved(index);
 
           return Card(
             elevation: 4,
@@ -145,26 +152,49 @@ class InternshipStatusBox extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
             ),
             child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildInternshipHeader(context, Theme.of(context).colorScheme),
-                  const Divider(height: 24),
-                  _buildStudentInfo(context, student),
-                ],
-              ),
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildInternshipHeader(
+                  context, 
+                  Theme.of(context).colorScheme
+                ),
+                const Divider(height: 24),
+                _buildStudentInfo(context, student),
+                if (student.is_finished == true)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.check_circle, 
+                          color: Theme.of(context).colorScheme.tertiary,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          'Internship Completed',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.tertiary,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+              ],
             ),
-          );
-        }
-        return const SizedBox.shrink();
-      },
-    );
-  }
+          ),
+        );
+      }
+      return const SizedBox.shrink();
+    },
+  );
+}
 
-  Color _getStatusColor(ColorScheme colorScheme) {
-    switch (status.toLowerCase()) {
-      case 'magang':
+  Color _getStatusColor(ColorScheme colorScheme, String currentStatus) {
+    switch (currentStatus.toLowerCase()) {
+      case 'sedang magang':
         return colorScheme.primary;
       case 'selesai magang':
         return colorScheme.tertiary;
@@ -173,9 +203,9 @@ class InternshipStatusBox extends StatelessWidget {
     }
   }
 
-  IconData _getStatusIcon() {
-    switch (status.toLowerCase()) {
-      case 'magang':
+  IconData _getStatusIcon(String currentStatus) {
+    switch (currentStatus.toLowerCase()) {
+      case 'sedang magang':
         return Icons.work_outline;
       case 'selesai magang':
         return Icons.check_circle_outline;

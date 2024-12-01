@@ -188,8 +188,49 @@ class MarkAllReqParams {
     required this.isRead,
   });
 
-  Map<String, dynamic> toJson() => {
-    'notification_ids': notificationIds,
-    'is_read': isRead,
-  };
+  Map<String, dynamic> toMap() {
+    return {
+      'notification_ids': notificationIds,
+      'is_read': isRead == 1 
+    };
+  }
+}
+
+class AddNotificationReqParams {
+  final int userId;
+  final String message;
+  final String date;
+  final String category;
+  final String? detailText;
+
+  // Daftar kategori yang valid
+  static const List<String> validCategories = [
+    'guidance', 
+    'log_book', 
+    'general', 
+    'revisi',
+  ];
+
+  AddNotificationReqParams({
+    required this.userId,
+    required this.message,
+    required this.date,
+    required this.category,
+    this.detailText,
+  }) {
+    // Validasi kategori
+    if (!validCategories.contains(category)) {
+      throw ArgumentError('Invalid notification category: $category');
+    }
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'user_id': userId,
+      'message': message,
+      'date': date,
+      'category': category,
+      'detail_text': detailText,
+    };
+  }
 }

@@ -125,7 +125,7 @@ class _LecturerHomeContentState extends State<LecturerHomeContent>
           children: [
             _buildMainContent(data, students, selectionState),
             if (selectionState.isSelectionMode && selectionState.selectedIds.isNotEmpty)
-              _buildFloatingActionButton(context),
+              _buildFloatingActionButton(context, selectionState.selectedIds),
           ],
         );
       },
@@ -181,7 +181,7 @@ class _LecturerHomeContentState extends State<LecturerHomeContent>
     );
   }
 
-  Widget _buildFloatingActionButton(BuildContext context) {
+  Widget _buildFloatingActionButton(BuildContext context, Set<int> selectedIds) {
     return Positioned(
       bottom: 16,
       right: 16,
@@ -192,7 +192,7 @@ class _LecturerHomeContentState extends State<LecturerHomeContent>
           return Transform.scale(
             scale: value,
             child: FloatingActionButton(
-              onPressed: () => showSendMessageBottomSheet(context),
+              onPressed: () => showSendMessageBottomSheet(context, selectedIds),
               backgroundColor: AppColors.lightPrimary,
               elevation: 6,
               shape: const CircleBorder(),

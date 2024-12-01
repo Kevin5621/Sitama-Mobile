@@ -49,6 +49,12 @@ class DetailStudentModel {
       average_all_assessments: map['average_all_assessments'] as double,
     );
   }
+  static bool _convertToBool(dynamic value) {
+  if (value is bool) return value;
+  if (value is int) return value != 0;
+  if (value is String) return value.toLowerCase() == 'true';
+  return false;
+}
 }
 
 extension DetailStudentXModel on DetailStudentModel {

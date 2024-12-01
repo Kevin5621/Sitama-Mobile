@@ -125,8 +125,6 @@ class _EditLogBookState extends State<EditLogBook> {
                       labelText: 'Judul',
                       labelStyle:
                           TextStyle(color: Theme.of(context).primaryColor),
-                      prefixIcon: Icon(Icons.title,
-                          color: Theme.of(context).primaryColor),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide:
@@ -204,11 +202,6 @@ class _EditLogBookState extends State<EditLogBook> {
                       labelText: 'Aktivitas',
                       labelStyle:
                           TextStyle(color: Theme.of(context).primaryColor),
-                      prefixIcon: Padding(
-                        padding: const EdgeInsets.only(bottom: 45),
-                        child: Icon(Icons.assignment,
-                            color: Theme.of(context).primaryColor),
-                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
