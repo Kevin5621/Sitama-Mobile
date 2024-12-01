@@ -4,7 +4,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sistem_magang/core/constansts/api_urls.dart';
 import 'package:sistem_magang/core/network/dio_client.dart';
 import 'package:sistem_magang/data/models/guidance.dart';
-import 'package:sistem_magang/data/models/score_request.dart';
 import 'package:sistem_magang/data/models/log_book.dart';
 import 'package:sistem_magang/data/models/notification.dart';
 import 'package:sistem_magang/service_locator.dart';
@@ -85,7 +84,6 @@ class LecturerApiServiceImpl extends LecturerApiService {
 
   @override
   Future<Either> updateLogBookNote(UpdateLogBookReqParams request) async {
-
     try {
       SharedPreferences sharedPreferences =
           await SharedPreferences.getInstance();
@@ -169,7 +167,6 @@ class LecturerApiServiceImpl extends LecturerApiService {
       );
       print(response);
       return Right(response);
-
     } on DioException catch (e) {
       print(e.response!.data['errors']?.toString());
       if (e.response != null) {
@@ -182,7 +179,6 @@ class LecturerApiServiceImpl extends LecturerApiService {
 
   @override
   Future<Either> updateFinishedStudent(bool status, int id) async {
-
     try {
       SharedPreferences sharedPreferences =
           await SharedPreferences.getInstance();
@@ -194,7 +190,7 @@ class LecturerApiServiceImpl extends LecturerApiService {
           'Authorization': 'Bearer $token',
         }),
         data: {"is_finished": status},
-
+      );
 
       return Right(response);
     } on DioException catch (e) {

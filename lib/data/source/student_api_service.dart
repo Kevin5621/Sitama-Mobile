@@ -5,7 +5,6 @@ import 'package:sistem_magang/core/constansts/api_urls.dart';
 import 'package:sistem_magang/core/network/dio_client.dart';
 import 'package:sistem_magang/data/models/guidance.dart';
 import 'package:sistem_magang/data/models/log_book.dart';
-import 'package:sistem_magang/data/models/notification.dart';
 import 'package:sistem_magang/service_locator.dart';
 
 abstract class StudentApiService {
