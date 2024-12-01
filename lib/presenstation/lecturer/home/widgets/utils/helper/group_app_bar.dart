@@ -7,7 +7,7 @@ import 'package:sistem_magang/domain/entities/lecturer_home_entity.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_bloc.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_event.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_state.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/section/group/group_actions.dart';
+import 'package:sistem_magang/presenstation/lecturer/home/widgets/utils/helper/group_actions.dart';
 
 class GroupAppBar extends StatelessWidget implements PreferredSizeWidget {
   final GroupModel group;

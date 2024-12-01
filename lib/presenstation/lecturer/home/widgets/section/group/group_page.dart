@@ -3,11 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sistem_magang/domain/entities/lecturer_home_entity.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_bloc.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_state.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/section/group/group_app_bar.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/section/group/group_body.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/section/group/group_fab.dart';
+import 'package:sistem_magang/presenstation/lecturer/home/widgets/utils/helper/group_app_bar.dart';
+import 'package:sistem_magang/presenstation/lecturer/home/widgets/section/group/group_content.dart';
+import 'package:sistem_magang/presenstation/lecturer/home/widgets/utils/helper/group_fab.dart';
 
+// Page representing a student group with detailed view and interactions
 class GroupPage extends StatefulWidget {
+  // List of students in the group and group identifier
   final List<LecturerStudentsEntity> groupStudents;
   final String groupId;
 
@@ -22,28 +24,28 @@ class GroupPage extends StatefulWidget {
 }
 
 class _GroupPageState extends State<GroupPage> {
+  // List to store filtered students based on group and search
   List<LecturerStudentsEntity> _filteredStudents = [];
+  
+  // Refresh indicator key for pull-to-refresh functionality
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey();
 
   @override
   void initState() {
     super.initState();
-    _synchronizeGroupdStudents();
+    // Synchronize students when page is first loaded
+    _synchronizeGroupStudents();
   }
 
-  void _synchronizeGroupdStudents() {
-    final group = context.read<SelectionBloc>().state.groups[widget.groupId];
+  // Synchronize students based on current group selection
+  void _synchronizeGroupStudents() {
+    final selectionBloc = context.read<SelectionBloc>();
+    final group = selectionBloc.state.groups[widget.groupId];
     
-    if (group == null) {
-      setState(() {
-        _filteredStudents = [];
-      });
-      return;
-    }
-    
+    // Filter students based on group membership
     setState(() {
       _filteredStudents = widget.groupStudents
-          .where((student) => group.studentIds.contains(student.id))
+          .where((student) => group!.studentIds.contains(student.id))
           .toList();
     });
   }
@@ -51,13 +53,16 @@ class _GroupPageState extends State<GroupPage> {
   @override
   void didUpdateWidget(GroupPage oldWidget) {
     super.didUpdateWidget(oldWidget);
+    // Resynthesize students if group students change
     if (widget.groupStudents != oldWidget.groupStudents) {
-      _synchronizeGroupdStudents();
+      _synchronizeGroupStudents();
     }
   }
 
+  // Filter students based on search query
   void _filterStudents(String query) {
-    final groupIds = context.read<SelectionBloc>().state.groupIds;
+    final selectionBloc = context.read<SelectionBloc>();
+    final groupIds = selectionBloc.state.groupIds;
     
     if (query.isEmpty) {
       setState(() {
@@ -78,49 +83,43 @@ class _GroupPageState extends State<GroupPage> {
     });
   }
 
+  // Refresh group list
   Future<void> _refreshGroupList() async {
     if (!mounted) return;
-    _synchronizeGroupdStudents();
+    _synchronizeGroupStudents();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<SelectionBloc, SelectionState>(
+      // Listen for changes in group student composition
       listenWhen: (previous, current) => 
           previous.groups[widget.groupId]?.studentIds != 
           current.groups[widget.groupId]?.studentIds,
       listener: (context, state) {
-        _synchronizeGroupdStudents();
+        _synchronizeGroupStudents();
       },
       child: BlocBuilder<SelectionBloc, SelectionState>(
         builder: (context, selectionState) {
           final group = selectionState.groups[widget.groupId];
-          
-          if (group == null) {
-            return const Scaffold(
-              body: Center(
-                child: Text('Group not found'),
-              ),
-            );
-          }
 
           return PopScope(
             child: Scaffold(
               appBar: GroupAppBar(
-                group: group,
+                group: group!,
                 groupId: widget.groupId,
                 selectionState: selectionState,
                 onFilterChanged: _filterStudents,
                 filteredStudents: _filteredStudents,
               ),
-              body: GroupBody(
+              body: GroupContent(
                 refreshIndicatorKey: _refreshIndicatorKey,
                 onRefresh: _refreshGroupList,
                 filteredStudents: _filteredStudents,
               ),
               floatingActionButton: selectionState.isSelectionMode && 
-                                  selectionState.selectedIds.isNotEmpty
-                  ? GroupFAB()
+                                    selectionState.selectedIds.isNotEmpty
+                  ? const GroupFAB()
                   : null,
             ),
           );

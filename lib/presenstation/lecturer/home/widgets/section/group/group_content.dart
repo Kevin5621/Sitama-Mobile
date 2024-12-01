@@ -7,12 +7,14 @@ import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_event.d
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_state.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/widgets/section/cards/student_card.dart';
 
-class GroupBody extends StatefulWidget {
+// Widget to display group content with student list and interaction
+class GroupContent extends StatefulWidget {
+  // Refresh indicator and student filtering parameters
   final GlobalKey<RefreshIndicatorState> refreshIndicatorKey; 
   final Future<void> Function() onRefresh;
   final List<LecturerStudentsEntity> filteredStudents;
 
-  const GroupBody({
+  const GroupContent({
     super.key,
     required this.refreshIndicatorKey,
     required this.onRefresh,
@@ -20,26 +22,26 @@ class GroupBody extends StatefulWidget {
   });
 
   @override
-  State<GroupBody> createState() => _GroupBodyState();
+  State<GroupContent> createState() => _GroupContentState();
 }
 
-class _GroupBodyState extends State<GroupBody> with SingleTickerProviderStateMixin {
+class _GroupContentState extends State<GroupContent> with SingleTickerProviderStateMixin {
+  // Animation controller for list item entrance
   late AnimationController _animationController;
 
   @override
   void initState() {
     super.initState();
+    // Initialize animation for smooth list rendering
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 300),
       vsync: this,
-    );
-
-
-    _animationController.forward();
+    )..forward();
   }
 
   @override
   void dispose() {
+    // Clean up animation controller
     _animationController.dispose();
     super.dispose();
   }
@@ -49,55 +51,28 @@ class _GroupBodyState extends State<GroupBody> with SingleTickerProviderStateMix
     return RefreshIndicator(
       key: widget.refreshIndicatorKey,
       onRefresh: widget.onRefresh,
-      child: widget.filteredStudents.isEmpty
-          ? ListView(
-              children: [
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.7,
-                  child: const Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.group_outlined,
-                          size: 64,
-                          color: Colors.grey,
-                        ),
-                        SizedBox(height: 16),
-                        Text(
-                          'Tidak ada mahasiswa yang diarsipkan',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            )
-          : ListView.separated(
-              padding: const EdgeInsets.all(16),
-              itemCount: widget.filteredStudents.length,
-              separatorBuilder: (context, index) => const SizedBox(height: 14),
-              itemBuilder: (context, index) {
-                final student = widget.filteredStudents[index];
-                return BlocBuilder<SelectionBloc, SelectionState>(
-                  builder: (context, state) {
-                    return StudentCard(
-                      student: student,
-                      isSelected: state.selectedIds.contains(student.id),
-                      onTap: () => _handleStudentTap(context, student),
-                      onLongPress: () => _handleStudentLongPress(context, student),
-                    );
-                  },
-                );
-              },
-            ),
+      child: ListView.separated(
+        padding: const EdgeInsets.all(16),
+        itemCount: widget.filteredStudents.length,
+        separatorBuilder: (context, index) => const SizedBox(height: 14),
+        itemBuilder: (context, index) {
+          final student = widget.filteredStudents[index];
+          return BlocBuilder<SelectionBloc, SelectionState>(
+            builder: (context, state) {
+              return StudentCard(
+                student: student,
+                isSelected: state.selectedIds.contains(student.id),
+                onTap: () => _handleStudentTap(context, student),
+                onLongPress: () => _handleStudentLongPress(context, student),
+              );
+            },
+          );
+        },
+      ),
     );
   }
 
+  // Handles tap on a student card
   void _handleStudentTap(BuildContext context, LecturerStudentsEntity student) {
     final state = context.read<SelectionBloc>().state;
     if (state.isSelectionMode) {
@@ -112,6 +87,7 @@ class _GroupBodyState extends State<GroupBody> with SingleTickerProviderStateMix
     }
   }
 
+  // Handles long press on a student card
   void _handleStudentLongPress(BuildContext context, LecturerStudentsEntity student) {
     final state = context.read<SelectionBloc>().state;
     if (!state.isSelectionMode) {
