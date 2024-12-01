@@ -5,6 +5,7 @@ import 'package:sistem_magang/core/constansts/api_urls.dart';
 import 'package:sistem_magang/core/network/dio_client.dart';
 import 'package:sistem_magang/data/models/guidance.dart';
 import 'package:sistem_magang/data/models/log_book.dart';
+import 'package:sistem_magang/data/models/notification.dart';
 import 'package:sistem_magang/service_locator.dart';
 
 abstract class LecturerApiService {
@@ -17,6 +18,7 @@ abstract class LecturerApiService {
   Future<Either<String, Response>> submitScores(
       int id, List<Map<String, dynamic>> scores);
   Future<Either> updateFinishedStudent(UpdateFinishedStudentReqParams request);
+  Future<Either> addNotification(AddNotificationReqParams request);
 }
 
 class LecturerApiServiceImpl extends LecturerApiService {
@@ -179,7 +181,7 @@ class LecturerApiServiceImpl extends LecturerApiService {
   
   @override
   Future<Either> updateFinishedStudent(
-      UpdateFinishedStudentReqParams request) async {
+    UpdateFinishedStudentReqParams request) async {
     try {
       SharedPreferences sharedPreferences =
           await SharedPreferences.getInstance();
@@ -187,6 +189,30 @@ class LecturerApiServiceImpl extends LecturerApiService {
 
       var response = await sl<DioClient>().put(
         "${ApiUrls.updateFinishedStudent}/${request.id}",
+        options: Options(headers: {
+          'Authorization': 'Bearer $token',
+        }),
+        data: request.toMap(),
+      );
+
+      return Right(response);
+    } on DioException catch (e) {
+      if (e.response != null) {
+        return Left(e.response!.data['errors'].toString());
+      } else {
+        return Left(e.message);
+      }
+    }
+  }
+
+  @override
+  Future<Either> addNotification(AddNotificationReqParams request) async {
+    try {
+      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      var token = sharedPreferences.get('token');
+
+      var response = await sl<DioClient>().post(
+        "${ApiUrls.addNotification}/${request.userId}",
         options: Options(headers: {
           'Authorization': 'Bearer $token',
         }),

@@ -34,6 +34,7 @@ import 'package:sistem_magang/domain/usecases/general/reset_password.dart';
 import 'package:sistem_magang/domain/usecases/general/signin.dart';
 import 'package:sistem_magang/domain/usecases/general/update_photo_profile.dart';
 import 'package:sistem_magang/domain/usecases/lecturer/update_status_guidance.dart';
+import 'package:sistem_magang/domain/usecases/student/notification/add_notification.dart';
 import 'package:sistem_magang/domain/usecases/student/notification/get_notification.dart';
 import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_bloc.dart';
 import 'package:sistem_magang/domain/usecases/student/notification/mark_all_notifications.dart';
@@ -80,6 +81,7 @@ void setupServiceLocator() {
   sl.registerSingleton<UpdateLogBookNoteUseCase>(UpdateLogBookNoteUseCase());
   sl.registerSingleton<UpdateStatusGuidanceUseCase>(UpdateStatusGuidanceUseCase());
   sl.registerSingleton<UpdateFinishedStudentUseCase>(UpdateFinishedStudentUseCase());
+  sl.registerSingleton<AddNotificationsUseCase>(AddNotificationsUseCase());
   sl.registerSingleton<GetAssessments>(GetAssessments());
 
   sl.registerSingleton<GetNotificationsUseCase>(GetNotificationsUseCase());
