@@ -47,6 +47,11 @@ class _LecturerHomeContentState extends State<LecturerHomeContent>
     _animationController.forward();
   }
 
+  Future<void> _refreshData(BuildContext context) async {
+    // Trigger data refresh using LecturerDisplayCubit
+    context.read<LecturerDisplayCubit>().displayLecturer();
+  }
+
   @override
   void dispose() {
     _animationController.dispose();
@@ -59,37 +64,37 @@ class _LecturerHomeContentState extends State<LecturerHomeContent>
     return Scaffold(
       body: MultiBlocProvider(
         providers: [
-        BlocProvider(
-          create: (context) => SelectionBloc()..add(LoadArchivedItems()),
-        ),
-        BlocProvider(
-          create: (context) => LecturerDisplayCubit(
-            selectionBloc: context.read<SelectionBloc>(),
-          )..displayLecturer(),
-          lazy: false, // Penting: membuat cubit langsung diinisialisasi
-        ),
-      ],
-      child: BlocListener<SelectionBloc, SelectionState>(
-        listenWhen: (previous, current) => 
-            previous.archivedIds != current.archivedIds,
-        listener: (context, state) {
-          context.read<LecturerDisplayCubit>().displayLecturer();
-        },
-        child: BlocBuilder<LecturerDisplayCubit, LecturerDisplayState>(
-          builder: (context, state) {
-            if (state is LecturerLoading) {
-              return _buildLoadingState();
-            }
-            if (state is LecturerLoaded) {
-              return _buildLoadedState(state);
-            }
-            if (state is LoadLecturerFailure) {
-              return _buildErrorState(context, state);
-            }
-            return Container();
+          BlocProvider(
+            create: (context) => SelectionBloc()..add(LoadArchivedItems()),
+          ),
+          BlocProvider(
+            create: (context) => LecturerDisplayCubit(
+              selectionBloc: context.read<SelectionBloc>(),
+            )..displayLecturer(),
+            lazy: false, // Penting: membuat cubit langsung diinisialisasi
+          ),
+        ],
+        child: BlocListener<SelectionBloc, SelectionState>(
+          listenWhen: (previous, current) => 
+              previous.archivedIds != current.archivedIds,
+          listener: (context, state) {
+            context.read<LecturerDisplayCubit>().displayLecturer();
           },
+          child: BlocBuilder<LecturerDisplayCubit, LecturerDisplayState>(
+            builder: (context, state) {
+              if (state is LecturerLoading) {
+                return _buildLoadingState();
+              }
+              if (state is LecturerLoaded) {
+                return _buildLoadedState(state);
+              }
+              if (state is LoadLecturerFailure) {
+                return _buildErrorState(context, state);
+              }
+              return Container();
+            },
+          ),
         ),
-      ),
       ),
     );
   }
@@ -123,7 +128,11 @@ class _LecturerHomeContentState extends State<LecturerHomeContent>
       builder: (context, selectionState) {
         return Stack(
           children: [
-            _buildMainContent(data, students, selectionState),
+            RefreshIndicator(
+              onRefresh: () => _refreshData(context),
+              color: AppColors.lightPrimary,
+              child: _buildMainContent(data, students, selectionState),
+            ),
             if (selectionState.isSelectionMode && selectionState.selectedIds.isNotEmpty)
               _buildFloatingActionButton(context, selectionState.selectedIds),
           ],
@@ -145,6 +154,7 @@ class _LecturerHomeContentState extends State<LecturerHomeContent>
     SelectionState selectionState,
   ) {
     return CustomScrollView(
+      physics: const AlwaysScrollableScrollPhysics(), // Important for RefreshIndicator
       slivers: [
         SliverToBoxAdapter(
           child: Container(
@@ -171,7 +181,7 @@ class _LecturerHomeContentState extends State<LecturerHomeContent>
         SliverPadding(
           padding: const EdgeInsets.all(16),
           sliver: StudentList(
-            students: students.toList(), // Diubah ke List karena widget kemungkinan butuh List
+            students: students.toList(), 
             searchAnimation: _searchAnimation,
             animationController: _animationController,
             selectionState: selectionState,

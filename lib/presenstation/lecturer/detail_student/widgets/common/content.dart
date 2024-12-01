@@ -146,14 +146,12 @@ class _TabSectionState extends State<TabSection> with SingleTickerProviderStateM
   }
 }
 
-// Kelas terpisah untuk mengelola notifikasi
+// Notification Manager class to handle logbook notifications
 class NotificationManager {
   static const String _keyPrefix = 'logbook_last_read';
-  
-  // Mendapatkan key yang unik untuk setiap mahasiswa
   String _getKey(int studentId) => '${_keyPrefix}_$studentId';
 
-  // Mengecek apakah ada logbook yang belum dibaca
+  // Method to check if there are any unread logbooks for a student
   Future<bool> hasUnreadLogBooks({
     required int studentId,
     required List<LogBookEntity> logBooks,
@@ -170,7 +168,7 @@ class NotificationManager {
     return logBooks.any((logBook) => logBook.date.isAfter(lastRead));
   }
 
-  // Menandai semua logbook sebagai sudah dibaca
+  // Method to mark all logbooks as read for a student
   Future<void> markLogBooksAsRead({
     required int studentId,
   }) async {
@@ -179,7 +177,7 @@ class NotificationManager {
     await prefs.setString(key, DateTime.now().toIso8601String());
   }
 
-  // Method untuk membersihkan data (optional, bisa digunakan untuk testing atau logout)
+  // Method to clear all notification data (optional, can be used for testing or logout)
   Future<void> clearAllNotifications() async {
     final prefs = await SharedPreferences.getInstance();
     final keys = prefs.getKeys();

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:sistem_magang/core/config/assets/app_images.dart';
 import 'package:sistem_magang/domain/entities/lecturer_detail_student.dart';
 
-/// [ProfileHeader] adalah widget untuk menampilkan header profil mahasiswa
-/// dengan gambar latar belakang, foto profil, nama, username, dan email.
+/// [ProfileHeader] is a widget to display the student's profile header
+/// with a background image, profile picture, name, username, and email.
 class ProfileHeader extends StatelessWidget {
   final DetailStudentEntity detailStudent;
 
@@ -25,7 +25,7 @@ class ProfileHeader extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Bagian yang menampilkan foto profil dalam bentuk lingkaran dengan border putih
+            // This section displays the profile picture in a circular shape with a white border
             Stack(
               alignment: Alignment.center,
               children: [
@@ -49,7 +49,7 @@ class ProfileHeader extends StatelessWidget {
             ),
             const SizedBox(height: 16),
 
-            // Nama mahasiswa yang ditampilkan dengan gaya tebal dan berwarna putih
+            // Display the student's name in bold and white color
             Text(
               detailStudent.student.name,
               style: const TextStyle(
@@ -60,7 +60,7 @@ class ProfileHeader extends StatelessWidget {
             ),
             const SizedBox(height: 4),
 
-            // Username yang ditampilkan dalam background transparan
+           // Display the username in a transparent background
             Container(
               padding: const EdgeInsets.symmetric(
                 horizontal: 12,
@@ -80,7 +80,7 @@ class ProfileHeader extends StatelessWidget {
             ),
             const SizedBox(height: 8),
 
-            // Email yang ditampilkan dengan ikon email
+            // Email displayed with an email icon
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
