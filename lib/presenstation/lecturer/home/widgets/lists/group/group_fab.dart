@@ -12,6 +12,10 @@ class GroupFAB extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<SelectionBloc, SelectionState>(
       builder: (context, state) {
+        if (!state.isSelectionMode || state.selectedIds.isEmpty) {
+          return const SizedBox.shrink();
+        }
+
         return TweenAnimationBuilder<double>(
           tween: Tween(begin: 0.0, end: 1.0),
           duration: const Duration(milliseconds: 300),
@@ -27,7 +31,7 @@ class GroupFAB extends StatelessWidget {
                 elevation: 6,
                 shape: const CircleBorder(),
                 child: const Icon(
-                  Icons.add,
+                  Icons.message,
                   color: AppColors.lightWhite,
                   size: 24,
                 ),

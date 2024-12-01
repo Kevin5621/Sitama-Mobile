@@ -20,7 +20,7 @@ class ToggleItemSelection extends SelectionEvent {
 }
 
 class SelectAll extends SelectionEvent {
-  final List<int> ids;
+  final Set<int> ids;
 
   const SelectAll(this.ids);
 

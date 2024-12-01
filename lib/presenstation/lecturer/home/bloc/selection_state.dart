@@ -50,12 +50,12 @@ class SelectionState extends Equatable {
 
   @override
   List<Object?> get props => [
-        isSelectionMode,
-        selectedIds,
-        archivedIds,
-        groups,
-        isLoading,
-        error,
-        isLocalOperation,
-      ];
+    isSelectionMode,
+    selectedIds,
+    archivedIds,
+    groups,
+    isLoading,
+    error,
+    isLocalOperation,
+  ];
 }

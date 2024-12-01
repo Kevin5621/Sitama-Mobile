@@ -18,7 +18,7 @@ abstract class LecturerApiService {
   Future<Either<String, Response>> submitScores(
       int id, List<Map<String, dynamic>> scores);
   Future<Either> updateFinishedStudent(bool status, int id);
-  Future<Either> addNotification(AddNotificationReqParams request);
+  Future<Either<String, Response>> addNotification(AddNotificationReqParams request);
 }
 
 class LecturerApiServiceImpl extends LecturerApiService {
@@ -203,7 +203,7 @@ class LecturerApiServiceImpl extends LecturerApiService {
   }
 
   @override
-  Future<Either> addNotification(AddNotificationReqParams request) async {
+  Future<Either<String, Response>> addNotification(AddNotificationReqParams request) async {
     try {
       SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
       var token = sharedPreferences.get('token');
@@ -212,17 +212,21 @@ class LecturerApiServiceImpl extends LecturerApiService {
         "${ApiUrls.addNotification}/${request.userId}",
         options: Options(headers: {
           'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
         }),
         data: request.toMap(),
       );
 
       return Right(response);
     } on DioException catch (e) {
-      if (e.response != null) {
-        return Left(e.response!.data['errors'].toString());
-      } else {
-        return Left(e.message);
+      if (e.response?.data != null && e.response!.data['errors'] != null) {
+        final errors = e.response!.data['errors'];
+        if (errors is Map) {
+          return Left(errors.values.join(', '));
+        }
+        return Left(errors.toString());
       }
+      return Left(e.message ?? 'An error occurred');
     }
   }
 }

@@ -117,7 +117,7 @@ class _LecturerHomeContentState extends State<LecturerHomeContent>
 
   Widget _buildLoadedState(LecturerLoaded state) {
     LecturerHomeEntity data = state.lecturerHomeEntity;
-    List<LecturerStudentsEntity> students = _filterStudents(data.students!);
+    Set<LecturerStudentsEntity> students = _filterStudents(data.students!.toSet());
 
     return BlocBuilder<SelectionBloc, SelectionState>(
       builder: (context, selectionState) {
@@ -132,16 +132,16 @@ class _LecturerHomeContentState extends State<LecturerHomeContent>
     );
   }
 
-  List<LecturerStudentsEntity> _filterStudents(List<LecturerStudentsEntity> students) {
+  Set<LecturerStudentsEntity> _filterStudents(Set<LecturerStudentsEntity> students) {
     return students.where((student) {
       return student.name.toLowerCase().contains(_search.toLowerCase()) ||
           student.major.toLowerCase().contains(_search.toLowerCase());
-    }).toList();
+    }).toSet();
   }
 
   Widget _buildMainContent(
     LecturerHomeEntity data,
-    List<LecturerStudentsEntity> students,
+    Set<LecturerStudentsEntity> students,
     SelectionState selectionState,
   ) {
     return CustomScrollView(
@@ -171,7 +171,7 @@ class _LecturerHomeContentState extends State<LecturerHomeContent>
         SliverPadding(
           padding: const EdgeInsets.all(16),
           sliver: StudentList(
-            students: students,
+            students: students.toList(), // Diubah ke List karena widget kemungkinan butuh List
             searchAnimation: _searchAnimation,
             animationController: _animationController,
             selectionState: selectionState,

@@ -2,6 +2,9 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sistem_magang/common/bloc/bloc/notification_bloc.dart';
+import 'package:sistem_magang/common/bloc/bloc/notification_event.dart';
 import 'package:sistem_magang/common/bloc/button/button_state.dart';
 import 'package:sistem_magang/common/bloc/button/button_state_cubit.dart';
 import 'package:sistem_magang/common/widgets/alert.dart';
@@ -287,6 +290,20 @@ class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
       if (confirmed == true) {
         final buttonCubit = ButtonStateCubit();
         
+        // Prepare notification data
+        final notificationData = {
+          'title': widget.guidance.title,
+          'message': _lecturerNote.text.isNotEmpty 
+            ? _lecturerNote.text 
+            : (newStatus == LecturerGuidanceStatus.approved 
+              ? 'Bimbingan Anda Disetujui' 
+              : 'Bimbingan Anda Perlu Direvisi'),
+          'category': newStatus == LecturerGuidanceStatus.approved 
+            ? 'guidance' 
+            : 'revision',
+          'date': DateTime.now().toIso8601String().split('T').first,
+        };
+
         buttonCubit.excute(
           usecase: sl<UpdateStatusGuidanceUseCase>(),
           params: UpdateStatusGuidanceReqParams(
@@ -295,6 +312,14 @@ class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
               ? "approved" 
               : "rejected",
             lecturer_note: _lecturerNote.text
+          ),
+        );
+
+        // Send notification
+        context.read<NotificationBloc>().add(
+          SendNotification(
+            notificationData: notificationData,
+            userIds: {widget.student_id},
           ),
         );
 

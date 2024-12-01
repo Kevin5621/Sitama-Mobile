@@ -3,7 +3,7 @@ import 'package:sistem_magang/domain/entities/lecturer_home_entity.dart';
 
 class LecturerHomeModel {
   final String name;
-  final List<LecturerStudentsModel> ? students;
+  final Set<LecturerStudentsModel> ? students;
 
   LecturerHomeModel({
     required this.name, 
@@ -14,11 +14,11 @@ class LecturerHomeModel {
     return LecturerHomeModel(
       name: map['name'] as String,
       students: map['students'] != null 
-        ? List<LecturerStudentsModel>.from(
-            (map['students'] as List<dynamic>).map<LecturerStudentsModel>(
+        ? (map['students'] as List<dynamic>)
+            .map<LecturerStudentsModel>(
               (x) => LecturerStudentsModel.fromMap(x as Map<String, dynamic>),
-            ),
-          )
+            )
+            .toSet()
         : null,
     );
   }
@@ -39,10 +39,11 @@ extension LecturerHomeXModel on LecturerHomeModel {
         academic_year: data.academic_year,
         activities: data.activities,
         is_finished: _convertToBool(data.is_finished),
-      )).toList() ?? [], 
+      )).toSet() ?? {}, // Ubah menjadi Set
       activities: {}, 
     );
   }
+
   bool _convertToBool(dynamic value) {
     if (value == null) return false;
     if (value is bool) return value;

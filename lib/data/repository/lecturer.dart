@@ -172,16 +172,7 @@ class LecturerRepositoryImpl extends LecturerRepository{
 
 
   @override
-  Future<Either> addNotification(AddNotificationReqParams request) async {
-    Either result = await sl<LecturerApiService>().addNotification(request);
-    return result.fold(
-      (error) {
-        return Left(error);
-      },
-      (data) {
-        Response response = data;
-        return Right(response);
-      },
-    );
+  Future<Either<String, Response>> addNotification(AddNotificationReqParams request) async {
+    return await sl<LecturerApiService>().addNotification(request);
   }
 }

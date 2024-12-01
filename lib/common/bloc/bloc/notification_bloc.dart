@@ -1,58 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:equatable/equatable.dart';
+import 'package:sistem_magang/common/bloc/bloc/notification_event.dart';
+import 'package:sistem_magang/common/bloc/bloc/notification_state.dart';
 import 'package:sistem_magang/data/models/notification.dart';
 import 'package:sistem_magang/domain/usecases/student/notification/add_notification.dart';
-
-// Events
-abstract class NotificationEvent extends Equatable {
-  const NotificationEvent();
-
-  @override
-  List<Object> get props => [];
-}
-
-class SendNotification extends NotificationEvent {
-  final Map<String, dynamic> notificationData;
-  final Set<int> userIds;
-
-  const SendNotification({
-    required this.notificationData,
-    required this.userIds,
-  });
-
-  @override
-  List<Object> get props => [notificationData, userIds];
-}
-
-// States
-abstract class NotificationState extends Equatable {
-  const NotificationState();
-  
-  @override
-  List<Object> get props => [];
-}
-
-class NotificationInitial extends NotificationState {}
-
-class NotificationLoading extends NotificationState {}
-
-class NotificationSent extends NotificationState {
-  final String message;
-
-  const NotificationSent(this.message);
-
-  @override
-  List<Object> get props => [message];
-}
-
-class NotificationError extends NotificationState {
-  final String errorMessage;
-
-  const NotificationError(this.errorMessage);
-
-  @override
-  List<Object> get props => [errorMessage];
-}
 
 // Bloc
 class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {

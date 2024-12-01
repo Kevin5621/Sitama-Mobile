@@ -197,28 +197,27 @@ class MarkAllReqParams {
 }
 
 class AddNotificationReqParams {
-  final int userId;
+  final int? userId;
   final String message;
   final String date;
   final String category;
   final String? detailText;
 
-  // Daftar kategori yang valid
   static const List<String> validCategories = [
-    'guidance', 
-    'log_book', 
-    'general', 
+    'guidance',
+    'log_book',
+    'general',
     'revisi',
   ];
 
   AddNotificationReqParams({
-    required this.userId,
+    this.userId,
     required this.message,
     required this.date,
     required this.category,
     this.detailText,
   }) {
-    // Validasi kategori
+    // Validate kategori
     if (!validCategories.contains(category)) {
       throw ArgumentError('Invalid notification category: $category');
     }

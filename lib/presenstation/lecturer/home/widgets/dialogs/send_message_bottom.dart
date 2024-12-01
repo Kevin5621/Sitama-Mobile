@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sistem_magang/common/bloc/bloc/notification_bloc.dart';
+import 'package:sistem_magang/common/bloc/bloc/notification_state.dart';
 import 'package:sistem_magang/common/widgets/custom_snackbar.dart';
 import 'package:sistem_magang/core/config/themes/app_color.dart';
+
+import '../../../../../common/bloc/bloc/notification_event.dart';
 
 void showSendMessageBottomSheet(BuildContext context, Set<int> selectedIds) {
   final TextEditingController titleController = TextEditingController();
@@ -82,7 +85,6 @@ void showSendMessageBottomSheet(BuildContext context, Set<int> selectedIds) {
   );
 }
 
-// Helper widgets implementation...
 Widget _buildHeader(BuildContext context) {
   final isDark = Theme.of(context).brightness == Brightness.dark;
   return Row(
@@ -231,24 +233,7 @@ void _handleSendMessage(
   TextEditingController messageController,
   Set<int> selectedIds,
 ) {
-  if (titleController.text.isNotEmpty && messageController.text.isNotEmpty) {
-    final notificationData = {
-      'title': titleController.text,
-      'message': messageController.text,
-      'category': 'general',
-      'date': DateTime.now().toIso8601String().split('T').first,
-    };
-
-    context.read<NotificationBloc>().add(
-          SendNotification(
-            notificationData: notificationData,
-            userIds: selectedIds,
-          ),
-        );
-
-    titleController.clear();
-    messageController.clear();
-  } else {
+  if (titleController.text.isEmpty || messageController.text.isEmpty) {
     ScaffoldMessenger.of(context).showSnackBar(
       CustomSnackBar(
         message: 'Tolong Masukkan Judul dan Pesan',
@@ -256,5 +241,20 @@ void _handleSendMessage(
         backgroundColor: Colors.red.shade800,
       ),
     );
+    return;
   }
+
+  final notificationData = {
+    'title': titleController.text,
+    'message': messageController.text,
+    'category': 'general',
+    'date': DateTime.now().toIso8601String().split('T').first,
+  };
+
+  context.read<NotificationBloc>().add(
+    SendNotification(
+      notificationData: notificationData,
+      userIds: selectedIds,
+    ),
+  );
 }
