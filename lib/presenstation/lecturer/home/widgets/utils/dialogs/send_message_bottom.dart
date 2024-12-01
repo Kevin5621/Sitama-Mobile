@@ -205,14 +205,14 @@ Widget _buildSendButton(
                       height: 20,
                       child: CircularProgressIndicator(color: Colors.white),
                     )
-                  : const Row(
+                  : Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.send, size: 20),
-                        SizedBox(width: 8),
+                        const Icon(Icons.send, size: 20),
+                        const SizedBox(width: 8),
                         Text(
-                          'Kirim Pesan',
-                          style: TextStyle(
+                          'Kirim Pesan (${selectedIds.length} Pengguna)',
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),

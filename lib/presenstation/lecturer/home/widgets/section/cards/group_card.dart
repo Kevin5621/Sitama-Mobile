@@ -141,7 +141,7 @@ class GroupCard extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  '${groupStudentsList.length} students',
+                                  '${groupStudentsList.length} Mahasiswa',
                                   style: Theme.of(context).textTheme.bodySmall,
                                 ),
                               ],

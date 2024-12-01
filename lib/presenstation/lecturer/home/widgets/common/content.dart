@@ -207,7 +207,7 @@ class _LecturerHomeContentState extends State<LecturerHomeContent>
               elevation: 6,
               shape: const CircleBorder(),
               child: const Icon(
-                Icons.add,
+                Icons.message,
                 color: AppColors.lightWhite,
                 size: 24,
               ),

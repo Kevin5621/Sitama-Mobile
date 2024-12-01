@@ -254,7 +254,7 @@ Widget _buildFloatingActionButton(BuildContext context, Set<int> selectedIds) {
           elevation: 6,
           shape: const CircleBorder(),
           child: const Icon(
-            Icons.add,
+            Icons.message,
             color: AppColors.lightWhite,
             size: 24,
           ),

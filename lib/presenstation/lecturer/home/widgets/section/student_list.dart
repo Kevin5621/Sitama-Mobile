@@ -177,6 +177,21 @@ class _StudentListState extends State<StudentList> {
     final grouped = <LecturerStudentsEntity>[];
     final archived = <LecturerStudentsEntity>[];
 
+    // Helper function to get the most recent activity timestamp
+    DateTime _getMostRecentActivityTime(Map activities) {
+      if (activities.isEmpty) return DateTime.fromMillisecondsSinceEpoch(0);
+      
+      return activities.values
+        .map((activity) {
+          try {
+            return DateTime.parse(activity['timestamp'] ?? '1970-01-01');
+          } catch (e) {
+            return DateTime.fromMillisecondsSinceEpoch(0);
+          }
+        })
+        .reduce((a, b) => a.isAfter(b) ? a : b);
+    }
+
     for (final student in students) {
       if (state.archivedIds.contains(student.id)) {
         archived.add(student);
@@ -196,6 +211,19 @@ class _StudentListState extends State<StudentList> {
         active.add(student);
       }
     }
+
+    // Sort active and grouped students by most recent activity
+    active.sort((a, b) => 
+      _getMostRecentActivityTime(b.activities).compareTo(
+        _getMostRecentActivityTime(a.activities)
+      )
+    );
+
+    grouped.sort((a, b) => 
+      _getMostRecentActivityTime(b.activities).compareTo(
+        _getMostRecentActivityTime(a.activities)
+      )
+    );
 
     return {
       'active': active,
@@ -288,33 +316,41 @@ class _StudentListState extends State<StudentList> {
         // Organize students into categories for display
         final categorizedStudents = _categorizeStudents(_filteredStudents, state);
         
-        return SliverList(
-          delegate: SliverChildListDelegate([
-            _buildTitle(),
+        // Create a list of widgets to be rendered
+        final List<Widget> sliverChildren = [
+          _buildTitle(),
+          const SizedBox(height: 16),
+          _buildFilterSection(context, state),
+          const SizedBox(height: 16),
+        ];
+
+        // Add active students section
+        if (categorizedStudents['active']!.isNotEmpty) {
+          sliverChildren.addAll([
+            _buildStudentsList(categorizedStudents['active']!),
             const SizedBox(height: 16),
-            Column(
-              children: [
-                _buildFilterSection(context, state),
-                const SizedBox(height: 16),
-                
-                // Active students section
-                if (categorizedStudents['active']!.isNotEmpty) ...[
-                  _buildStudentsList(categorizedStudents['active']!),
-                  const SizedBox(height: 16),
-                ],
-                
-                // Grouped students section
-                ..._buildGroupCards(state, categorizedStudents['grouped']!),
-                if (state.groups.isNotEmpty && 
-                    categorizedStudents['grouped']!.isNotEmpty)
-                  const SizedBox(height: 16),
-                
-                // Archived students section
-                if (categorizedStudents['archived']!.isNotEmpty)
-                  _buildArchiveSection(state, categorizedStudents['archived']!),
-              ],
-            ),
-          ]),
+          ]);
+        }
+
+        // Add grouped students section
+        final groupCards = _buildGroupCards(state, categorizedStudents['grouped']!);
+        if (groupCards.isNotEmpty) {
+          sliverChildren.addAll([
+            ...groupCards,
+            const SizedBox(height: 16),
+          ]);
+        }
+
+        // Add archived students section
+        if (categorizedStudents['archived']!.isNotEmpty) {
+          sliverChildren.add(
+            _buildArchiveSection(state, categorizedStudents['archived']!),
+          );
+        }
+
+        // Return the SliverList with all children
+        return SliverList.list(
+          children: sliverChildren,
         );
       },
     );
