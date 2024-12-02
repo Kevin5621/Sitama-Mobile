@@ -53,21 +53,27 @@ class InternshipStatusBox extends StatelessWidget {
     );
   }
 
-  Widget _buildInternshipHeader(BuildContext context, ColorScheme colorScheme) {
-    final statusColor = _getStatusColor(colorScheme);
+  Widget _buildInternshipHeader(
+    BuildContext context, 
+    ColorScheme colorScheme, 
+    {Color? statusColor}
+  ) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Row(
           children: [
-            Icon(_getStatusIcon(), color: statusColor),
+            Icon(
+              _getStatusIcon(), 
+              color: statusColor ?? colorScheme.primary
+            ),
             const SizedBox(width: 8),
             Text(
-              status,
+              _getStatusText(),
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-                color: statusColor,
+                color: statusColor ?? colorScheme.primary,
               ),
             ),
           ],
@@ -76,6 +82,7 @@ class InternshipStatusBox extends StatelessWidget {
       ],
     );
   }
+
 
   Widget _buildStudentInfo(BuildContext context, DetailStudentEntity student) {
     return Container(
@@ -130,13 +137,13 @@ class InternshipStatusBox extends StatelessWidget {
     );
   }
 
-  @override
+@override
   Widget build(BuildContext context) {
     return BlocBuilder<DetailStudentDisplayCubit, DetailStudentDisplayState>(
       builder: (context, state) {
         if (state is DetailLoaded) {
           final student = students[index];
-          // final isApproved = state.isInternshipApproved(index);
+          final colorScheme = Theme.of(context).colorScheme;
 
           return Card(
             elevation: 4,
@@ -149,7 +156,11 @@ class InternshipStatusBox extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildInternshipHeader(context, Theme.of(context).colorScheme),
+                  _buildInternshipHeader(
+                    context, 
+                    colorScheme, 
+                    statusColor: _getStatusColor(colorScheme)
+                  ),
                   const Divider(height: 24),
                   _buildStudentInfo(context, student),
                 ],
@@ -162,23 +173,32 @@ class InternshipStatusBox extends StatelessWidget {
     );
   }
 
-  Color _getStatusColor(ColorScheme colorScheme) {
+ Color _getStatusColor(ColorScheme colorScheme) {
     switch (status.toLowerCase()) {
       case 'magang':
-        return colorScheme.primary;
-      case 'selesai magang':
-        return colorScheme.tertiary;
+        return isFinished 
+          ? Colors.green
+          : colorScheme.primary;
       default:
-        return colorScheme.primary;
+        return colorScheme.secondary;
+    }
+  }
+
+  String _getStatusText() {
+    switch (status.toLowerCase()) {
+      case 'magang':
+        return isFinished ? 'Selesai Magang' : 'Magang';
+      default:
+        return status;
     }
   }
 
   IconData _getStatusIcon() {
     switch (status.toLowerCase()) {
       case 'magang':
-        return Icons.work_outline;
-      case 'selesai magang':
-        return Icons.check_circle_outline;
+        return isFinished 
+          ? Icons.check_circle
+          : Icons.work_outline;
       default:
         return Icons.work_outline;
     }
