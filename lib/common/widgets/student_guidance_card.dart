@@ -6,6 +6,14 @@ import 'package:sistem_magang/presenstation/general/pdf_viewer/pdf_viewer.dart';
 import 'package:sistem_magang/presenstation/student/guidance/widgets/delete_guidance.dart';
 import 'package:sistem_magang/presenstation/student/guidance/widgets/edit_guidance.dart';
 
+/// Features:
+/// - Expandable UI: The card expands to reveal detailed information.
+/// - Status Indication: Uses icons and colors to represent the guidance status
+///   (e.g., approved, rejected, in progress, or updated).
+/// - File Access: Allows users to view attached PDF files.
+/// - Interactive Actions: Provides buttons to edit or delete guidance sessions.
+/// - Responsive Design: Adjusts styles based on the current app theme and guidance status.
+///
 enum GuidanceStatus { approved, rejected, inProgress, updated }
 
 class GuidanceCard extends StatelessWidget {
@@ -79,16 +87,19 @@ class GuidanceCard extends StatelessWidget {
                       textAlign: TextAlign.left,
                     ),
                   ),
-                  if (lecturerNote != "tidak ada catatan") ...[
-                    const SizedBox(height: 16),
-                    Text(
-                      'Catatan Dosen :',
-                      style: textTheme.titleSmall?.copyWith(
-                        color: status == GuidanceStatus.rejected
-                            ? colorScheme.onError
-                            : colorScheme.onSurface,
-                      ),
+                  const SizedBox(height: 16),
+                  // Display lecturer note section
+                  Text(
+                    'Catatan Dosen:',
+                    style: textTheme.titleSmall?.copyWith(
+                      color: status == GuidanceStatus.rejected
+                          ? colorScheme.onError
+                          : colorScheme.onSurface,
                     ),
+                  ),
+                  const SizedBox(height: 8),
+                  // Check if lecturer note is empty or not
+                  if (lecturerNote.isNotEmpty && lecturerNote != "tidak ada catatan") ...[
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -101,13 +112,22 @@ class GuidanceCard extends StatelessWidget {
                         textAlign: TextAlign.left,
                       ),
                     ),
+                  ] else ...[
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Tidak ada catatan',
+                        style: textTheme.bodyMedium?.copyWith(
+                          color: colorScheme.onSurface.withOpacity(0.5),
+                        ),
+                      ),
+                    ),
                   ],
                   if (nameFile != "tidak ada file") ...[
                     const SizedBox(height: 20),
                     InkWell(
                       onTap: () {
                         if (kIsWeb) {
-                          // html.window.open(nameFile, "_blank");
                         } else {
                           Navigator.push(
                             context,
@@ -123,8 +143,8 @@ class GuidanceCard extends StatelessWidget {
                             Icons.picture_as_pdf_rounded,
                             size: 16,
                             color: status == GuidanceStatus.rejected
-                                ? colorScheme.onError
-                                : colorScheme.onSurface,
+                              ? colorScheme.onError
+                              : colorScheme.onSurface,
                           ),
                           border: OutlineInputBorder(
                             borderRadius:

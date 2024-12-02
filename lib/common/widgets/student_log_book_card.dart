@@ -4,6 +4,12 @@ import 'package:sistem_magang/core/config/themes/app_color.dart';
 import 'package:sistem_magang/presenstation/student/logbook/widgets/delete_log_book.dart';
 import 'package:sistem_magang/presenstation/student/logbook/widgets/edit_log_book.dart';
 
+/// Key Features:
+/// - Displays the logbook entry title and date in a visually appealing card.
+/// - Expands to show detailed information, including description and lecturer notes.
+/// - Provides action buttons for editing and deleting the entry, with confirmation dialogs.
+/// - Uses theming for consistent styling and color management based on the app's theme.
+
 class LogBookItem {
   final int id;
   final String title;
@@ -67,14 +73,14 @@ class LogBookCard extends StatelessWidget {
                       color: colorScheme.onSurface,
                     ),
                   ),
-                  if (item.lecturerNote != "tidak ada catatan") ...[
-                    const SizedBox(height: 16),
-                    Text(
-                      'Catatan Dosen :',
-                      style: theme.textTheme.titleSmall?.copyWith(
-                        color: colorScheme.onSurface,
-                      ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Catatan Dosen :',
+                    style: theme.textTheme.titleSmall?.copyWith(
+                      color: colorScheme.onSurface,
                     ),
+                  ),
+                  if (item.lecturerNote.isNotEmpty && item.lecturerNote != "tidak ada catatan") ...[
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -83,6 +89,16 @@ class LogBookCard extends StatelessWidget {
                           color: colorScheme.onSurface,
                         ),
                         textAlign: TextAlign.left,
+                      ),
+                    ),
+                  ] else ...[
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Tidak ada catatan',
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: colorScheme.onSurface.withOpacity(0.5),
+                        ),
                       ),
                     ),
                   ],

@@ -55,9 +55,7 @@ class LogBookModel {
       title: map['title'] as String,
       activity: map['activity'] as String,
       date: DateFormat('yyyy-MM-dd').parse(map['date'] as String),
-      lecturer_note: map['lecturer_note'] != null
-          ? map['lecturer_note'] as String
-          : 'tidak ada catatan',
+      lecturer_note: map['lecturer_note'] ?? 'tidak ada catatan',
     );
   }
 }
