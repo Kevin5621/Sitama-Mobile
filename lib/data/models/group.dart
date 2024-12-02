@@ -13,7 +13,7 @@ class GroupModel {
     required this.id,
     required this.title,
     required this.iconName,
-    this.iconColor = Colors.blue,
+    required this.iconColor,
     required this.studentIds,
   });
 

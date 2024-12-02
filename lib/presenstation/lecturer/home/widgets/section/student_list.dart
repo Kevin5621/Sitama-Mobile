@@ -163,6 +163,7 @@ class _StudentListState extends State<StudentList> {
       bloc.add(GroupSelectedItems(
         title: result['title'],
         icon: result['icon'],
+        color: result['color'],
         studentIds: Set<int>.from(bloc.state.selectedIds),
       ));
     }
@@ -368,6 +369,7 @@ class _GroupCreationDialog extends StatelessWidget {
         Navigator.of(context).pop({
           'title': title,
           'icon': icon,
+          'color': color,
         });
       },
     );

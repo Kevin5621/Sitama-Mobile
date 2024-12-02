@@ -49,7 +49,7 @@ class StudentCard extends StatelessWidget {
     return BlocBuilder<SelectionBloc, SelectionState>(
       builder: (context, state) {
         // Check if multiple selections are active
-        final isMultiSelect = state.isSelectionMode && state.selectedIds.length > 1;
+        final isMultiSelect = state.isSelectionMode && state.selectedIds.isNotEmpty;
         final selectedStudents = isMultiSelect ? state.selectedIds : {student.id};
 
         // If multiple selection is active, create a draggable card

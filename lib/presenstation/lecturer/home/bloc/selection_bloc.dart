@@ -54,6 +54,14 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
     return reverseIconMap[icon] ?? 'group';
   }
 
+  // Helper method to convert Color to color name
+  Color _mapColorToName(Color color) {
+    final reverseColorMap = GroupModel.colorPalette.asMap().map(
+      (index, paletteColor) => MapEntry(paletteColor, paletteColor)
+    );
+    return reverseColorMap[color] ?? Colors.blue;
+  }
+
   void _onToggleSelectionMode(
       ToggleSelectionMode event, Emitter<SelectionState> emit) {
     emit(state.copyWith(
@@ -229,7 +237,8 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
         final defaultGroup = GroupModel(
           id: 'default_migrated_group',
           title: 'Migrated Students',
-          iconName: 'group', // Use iconName instead of icon
+          iconName: 'group',
+          iconColor: Colors.blue,
           studentIds: legacyGroupIds,
         );
         
@@ -271,7 +280,8 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
       final GroupModel newGroup = GroupModel(
         id: groupId,
         title: event.title.trim(), 
-        iconName: _mapIconToName(event.icon), // Convert icon to iconName
+        iconName: _mapIconToName(event.icon),
+        iconColor: _mapColorToName(event.color),
         studentIds: Set<int>.from(event.studentIds),
       );
 

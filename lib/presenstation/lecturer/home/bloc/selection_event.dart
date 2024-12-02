@@ -59,11 +59,13 @@ class LoadGroupItems extends SelectionEvent {}
 class GroupSelectedItems extends SelectionEvent {
   final String title;
   final IconData icon;
+  final Color color;
   final Set<int> studentIds;
 
   const GroupSelectedItems({
     required this.title,
     required this.icon,
+    required this.color,
     required this.studentIds,
   });
 
