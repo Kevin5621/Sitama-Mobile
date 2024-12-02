@@ -38,20 +38,10 @@ extension LecturerHomeXModel on LecturerHomeModel {
         major: data.major,
         academic_year: data.academic_year,
         activities: data.activities,
-        is_finished: _convertToBool(data.is_finished),
-      )).toSet() ?? {}, // Ubah menjadi Set
+        isFinished: data.isFinished,
+      )).toSet() ?? {},
       activities: {}, 
     );
-  }
-
-  bool _convertToBool(dynamic value) {
-    if (value == null) return false;
-    if (value is bool) return value;
-    if (value is int) return value != 0;
-    if (value is String) {
-      return value.toLowerCase() == 'true' || value == '1';
-    }
-    return false;
   }
 }
 
@@ -64,7 +54,7 @@ class LecturerStudentsModel {
   final String study_program;
   final String major;
   final String academic_year;
-  final bool is_finished; 
+  final bool isFinished; 
   final Map<String, bool> activities;
 
   LecturerStudentsModel({
@@ -76,7 +66,7 @@ class LecturerStudentsModel {
     required this.study_program,
     required this.major,
     required this.academic_year,
-    this.is_finished = false,
+    required this.isFinished,
     this.activities = const {},
   });
 
@@ -90,20 +80,10 @@ class LecturerStudentsModel {
       study_program: map['study_program'] as String,
       major: map['major'] as String,
       academic_year: map['academic_year'] as String,
-      is_finished: _convertToBool(map['is_finished']),
+      isFinished: (map['is_finished'] as bool?) ?? false,
       activities: map['activities'] != null 
         ? Map<String, bool>.from(map['activities'] as Map) 
         : {},
     );
-  }
-
-  static bool _convertToBool(dynamic value) {
-    if (value == null) return false;
-    if (value is bool) return value;
-    if (value is int) return value != 0;
-    if (value is String) {
-      return value.toLowerCase() == 'true' || value == '1';
-    }
-    return false;
   }
 }

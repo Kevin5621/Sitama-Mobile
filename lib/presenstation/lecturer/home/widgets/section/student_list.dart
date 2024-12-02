@@ -97,6 +97,7 @@ class _StudentListState extends State<StudentList> {
         return StudentCard(
           student: student,
           isSelected: state.selectedIds.contains(student.id),
+          isFinished: student.isFinished,
           onTap: () => _handleStudentTap(context, student),
           onLongPress: () => _handleStudentLongPress(context, student),
         );
