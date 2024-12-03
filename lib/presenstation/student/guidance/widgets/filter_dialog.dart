@@ -12,13 +12,14 @@ class FilterDropdown extends StatefulWidget {
 class _FilterDropdownState extends State<FilterDropdown> {
   String _selectedFilter = 'All'; // Default value
 
-  final List<String> _filterOptions = [
-    'All',
-    'Approved',
-    'InProgress',
-    'Rejected',
-    'Updated',
-  ];
+  // Mapping between display labels and backend values replaced with Bing
+  final Map<String, String> _filterOptions = {
+    'Semua': 'All',
+    'Disetujui': 'Approved',
+    'Belum Diperiksa': 'InProgress',
+    'Revisi': 'Rejected',
+    'Diperbarui': 'Updated',
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -27,26 +28,30 @@ class _FilterDropdownState extends State<FilterDropdown> {
         Icons.filter_list_outlined,
         color: Theme.of(context).colorScheme.onBackground,
       ),
-      onSelected: (String value) {
+      onSelected: (String displayLabel) {
+        // Get the backend value based on the selected label
+        String backendValue = _filterOptions[displayLabel]!;
         setState(() {
-          _selectedFilter = value;
+          _selectedFilter = backendValue;
         });
-        widget.onFilterChanged(value);
+        // Send backend value to onFilterChanged function
+        widget.onFilterChanged(backendValue);
       },
       itemBuilder: (BuildContext context) {
-        return _filterOptions.map((String filter) {
+        return _filterOptions.keys.map((String displayLabel) {
+          String backendValue = _filterOptions[displayLabel]!;
           return PopupMenuItem<String>(
-            value: filter,
+            value: displayLabel,
             child: Row(
               children: [
-                if (_selectedFilter == filter)
+                if (_selectedFilter == backendValue)
                   Icon(
                     Icons.check,
                     color: Theme.of(context).primaryColor,
                     size: 18,
                   ),
-                SizedBox(width: _selectedFilter == filter ? 8 : 28),
-                Text(filter),
+                SizedBox(width: _selectedFilter == backendValue ? 8 : 28),
+                Text(displayLabel),
               ],
             ),
           );

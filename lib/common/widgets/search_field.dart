@@ -23,7 +23,7 @@ class SearchField extends StatelessWidget {
       ),
       child: TextField(
         decoration: InputDecoration(
-          hintText: 'Search',
+          hintText: 'Pencarian..',
           hintStyle: TextStyle(
             color: colorScheme.onSurfaceVariant,
             fontSize: 14,

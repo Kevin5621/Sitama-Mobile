@@ -57,7 +57,7 @@ class ArchiveCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'Archived Students',
+                          'Siswa yang Diarsipkan',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,

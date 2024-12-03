@@ -21,6 +21,14 @@ class _NotificationCardState extends State<NotificationCard> {
   // Tracks the expanded state of the notification card
   bool _isExpanded = false;
 
+  // Pemetaan nama kategori untuk ditampilkan
+  final Map<String, String> categoryDisplayNames = {
+    'general': 'Pengumuman Dosen',
+    'guidance': 'Bimbingan',
+    'log_book': 'Catatan Harian',
+    'revisi': 'Revisi',
+  };
+
   // Toggles the expanded state and triggers optional callback
   void _toggleExpand() {
     setState(() {
@@ -112,12 +120,13 @@ class _NotificationCardState extends State<NotificationCard> {
                                 Row(
                                   children: [
                                     Text(
-                                      widget.notification.category,
-                                      style: theme.textTheme.bodySmall?.copyWith(
-                                        color: color,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
+                                          categoryDisplayNames[widget.notification.category.toLowerCase()] ?? 
+                                          widget.notification.category,
+                                          style: theme.textTheme.bodySmall?.copyWith(
+                                            color: color,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
                                     const Spacer(),
                                     Text(
                                       widget.notification.date,
