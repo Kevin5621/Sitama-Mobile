@@ -6,6 +6,25 @@ import 'package:sistem_magang/domain/entities/log_book_entity.dart';
 import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/section/tab_guidance/lecturer_guidance_tab.dart';
 import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/section/tab_logbook/lecturer_log_book_tab.dart';
 
+// Key Features :
+// Captures student and industry internship details
+// Manages internship status approval
+
+// Performance Evaluation:
+// Restricts evaluation access
+// Enables metrics view after internship completion
+
+// Guidance and Supervision:
+// Faculty actions:
+// - Approve progress
+// - Request revisions
+// - Add notes
+// - Export PDF guidance
+
+// Logbook Tracking:
+// Faculty capabilities:
+// - View student activity logs
+// - Comment on log entries
 class TabSection extends StatefulWidget {
   final List<GuidanceEntity> guidances;
   final List<LogBookEntity> logBooks;
@@ -176,17 +195,6 @@ class NotificationManager {
     final key = _getKey(studentId);
     await prefs.setString(key, DateTime.now().toIso8601String());
   }
-
-  // Method to clear all notification data (optional, can be used for testing or logout)
-  Future<void> clearAllNotifications() async {
-    final prefs = await SharedPreferences.getInstance();
-    final keys = prefs.getKeys();
-    for (final key in keys) {
-      if (key.startsWith(_keyPrefix)) {
-        await prefs.remove(key);
-      }
-    }
-  }
 }
 
 class ErrorView extends StatelessWidget {
@@ -194,10 +202,10 @@ class ErrorView extends StatelessWidget {
   final VoidCallback onRetry;
 
   const ErrorView({
-    Key? key,
+    super.key,
     required this.errorMessage,
     required this.onRetry,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

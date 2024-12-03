@@ -26,6 +26,8 @@ class InfoBoxes extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
+          if (internships.isEmpty)
+            Text('Tidak ada data magang'),
           ListView.separated(
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,

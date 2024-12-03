@@ -137,11 +137,11 @@ class InternshipStatusBox extends StatelessWidget {
     );
   }
 
-@override
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<DetailStudentDisplayCubit, DetailStudentDisplayState>(
       builder: (context, state) {
-        if (state is DetailLoaded) {
+        if (state is DetailLoaded && index < students.length) {
           final student = students[index];
           final colorScheme = Theme.of(context).colorScheme;
 
