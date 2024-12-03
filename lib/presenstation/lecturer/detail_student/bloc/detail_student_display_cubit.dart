@@ -41,15 +41,6 @@ class DetailStudentDisplayCubit extends Cubit<DetailStudentDisplayState> {
     }
   }
 
-  void toggleStar() {
-    if (state is DetailLoaded) {
-      final currentState = state as DetailLoaded;
-      emit(currentState.copyWith(
-        isStarRounded: !currentState.isStarRounded,
-      ));
-    }
-  }
-
   // Optional: Method untuk mengatur semua status approval sekaligus
   void setAllInternshipApproval(bool approved) {
     if (state is DetailLoaded) {

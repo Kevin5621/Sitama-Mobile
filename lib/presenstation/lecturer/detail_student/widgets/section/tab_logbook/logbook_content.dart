@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:sistem_magang/common/bloc/bloc/notification_bloc.dart';
 import 'package:sistem_magang/common/bloc/bloc/notification_event.dart';
 import 'package:sistem_magang/common/bloc/button/button_state.dart';
@@ -9,60 +8,50 @@ import 'package:sistem_magang/common/widgets/alert.dart';
 import 'package:sistem_magang/data/models/log_book.dart';
 import 'package:sistem_magang/domain/entities/log_book_entity.dart';
 import 'package:sistem_magang/domain/usecases/lecturer/update_status_logbook.dart';
+import 'package:sistem_magang/presenstation/lecturer/detail_student/pages/detail_student.dart';
 import 'package:sistem_magang/service_locator.dart';
 
-// contains the LogBookContent widget which displays the detailed 
-// content of a logbook entry, including activities, lecturer notes, and 
-// functionality to add new notes.
-
-class LogBookContent extends StatelessWidget {
+class LogBookContent extends StatefulWidget {
   final LogBookEntity logBook;
-  final int studentId;
+  final int student_id;
+  final ColorScheme colorScheme;
+  final TextTheme textTheme;
 
   const LogBookContent({
     super.key,
     required this.logBook,
-    required this.studentId,
+    required this.student_id,
+    required this.colorScheme,
+    required this.textTheme,
   });
 
   @override
+  _LogBookContentState createState() => _LogBookContentState();
+}
+
+class _LogBookContentState extends State<LogBookContent> {
+  final TextEditingController _lecturerNote = TextEditingController();
+
+  bool get hasExistingNote => 
+      widget.logBook.lecturer_note.isNotEmpty && 
+      widget.logBook.lecturer_note != 'tidak ada catatan';
+
+  @override
   Widget build(BuildContext context) {
-    final TextEditingController lecturerNoteController = TextEditingController();
-
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildSection('Aktivitas:', logBook.activity),
-          const SizedBox(height: 16),
-          _buildSection('Catatan Anda:', logBook.lecturer_note),
-          const SizedBox(height: 8),
-          _buildNoteField(lecturerNoteController),
-          const SizedBox(height: 16),
-          _buildActionButtons(context, lecturerNoteController),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSection(String title, String content) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          title,
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 8),
-        Text(content),
+        if (!hasExistingNote) ...[
+          _buildNoteField(),
+          const SizedBox(height: 16),
+          _buildActionButtons(widget.colorScheme),
+        ],
       ],
     );
   }
 
-  Widget _buildNoteField(TextEditingController controller) {
+  Widget _buildNoteField() {
     return TextField(
-      controller: controller,
+      controller: _lecturerNote,
       decoration: InputDecoration(
         hintText: 'Masukkan catatan...',
         border: OutlineInputBorder(
@@ -74,20 +63,21 @@ class LogBookContent extends StatelessWidget {
     );
   }
 
-  Widget _buildActionButtons(BuildContext context, TextEditingController controller) {
+  Widget _buildActionButtons(ColorScheme colorScheme) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         ElevatedButton.icon(
-          icon: Icon(Icons.send),
-          label: Text('Kirim'),
-          onPressed: () => _showConfirmationDialog(context, controller),
+          icon: Icon(Icons.send, color: colorScheme.onPrimary, size: 16),
+          label: Text('Kirim', style: TextStyle(color: colorScheme.onPrimary)),
+          style: ElevatedButton.styleFrom(backgroundColor: colorScheme.primary),
+          onPressed: () => _showConfirmationDialog(),
         ),
       ],
     );
   }
 
-  void _showConfirmationDialog(BuildContext context, TextEditingController controller) {
+  void _showConfirmationDialog() {
     CustomAlertDialog.showConfirmation(
       context: context,
       title: 'Konfirmasi',
@@ -96,19 +86,22 @@ class LogBookContent extends StatelessWidget {
       iconColor: Colors.blue,
     ).then((confirmed) {
       if (confirmed == true) {
-        _handleConfirmation(context, controller.text);
+        _handleConfirmation();
       }
     });
   }
 
-  void _handleConfirmation(BuildContext context, String note) {
+  void _handleConfirmation() {
     final buttonCubit = ButtonStateCubit();
+    
+    if (_lecturerNote.text.trim().isEmpty) {
+      _showErrorDialog('Catatan tidak boleh kosong');
+      return;
+    }
 
     final notificationData = {
-      'title': note.isNotEmpty 
-        ? note 
-        : 'Catatan baru ditambahkan pada logbook Anda',
-      'message': logBook.title,
+      'title': 'Catatan baru ditambahkan pada logbook Anda',
+      'message': widget.logBook.title,
       'category': 'log_book',
       'date': DateTime.now().toIso8601String().split('T').first,
     };
@@ -116,42 +109,54 @@ class LogBookContent extends StatelessWidget {
     buttonCubit.excute(
       usecase: sl<UpdateLogBookNoteUseCase>(),   
       params: UpdateLogBookReqParams(
-        id: logBook.id,
-        lecturer_note: note,
+        id: widget.logBook.id,
+        lecturer_note: _lecturerNote.text.trim(),
       ),
     );
 
     buttonCubit.stream.listen((state) {
       if (state is ButtonSuccessState) {
-        // Notify the student about the new note
         context.read<NotificationBloc>().add(
           SendNotification(
             notificationData: notificationData,
-            userIds: {studentId},
+            userIds: {widget.student_id},
           ),
         );
-        _showSuccessDialog(context);
+        _showSuccessDialog();
       }
       
       if (state is ButtonFailurState) {
-        _showErrorDialog(context, state.errorMessage);
+        _showErrorDialog(state.errorMessage);
       }
     });
   }
 
-  void _showSuccessDialog(BuildContext context) {
+  void _showSuccessDialog() {
     CustomAlertDialog.showSuccess(
       context: context,
       title: 'Berhasil',
       message: 'Berhasil menambahkan catatan log book',
-    );
+    ).then((_) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => DetailStudentPage(id: widget.student_id),
+        ),
+      );
+    });
   }
-
-  void _showErrorDialog(BuildContext context, String errorMessage) {
+  
+  void _showErrorDialog(String errorMessage) {
     CustomAlertDialog.showError(
       context: context,
       title: 'Gagal',
       message: errorMessage,
     );
+  }
+
+  @override
+  void dispose() {
+    _lecturerNote.dispose();
+    super.dispose();
   }
 }

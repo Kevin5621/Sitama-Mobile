@@ -86,7 +86,7 @@ extension DetailStudentXModel on DetailStudentModel {
               title: data.title,
               activity: data.activity,
               date: data.date,
-              lecturer_note: ''))
+              lecturer_note: data.lecturer_note))
           .toList(),
       assessments: assessments
           .map((assessment) => ShowAssessmentEntity(
