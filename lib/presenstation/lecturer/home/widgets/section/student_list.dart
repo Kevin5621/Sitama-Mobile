@@ -215,17 +215,29 @@ class _StudentListState extends State<StudentList> {
     }
 
     // Sort active and grouped students by most recent activity
-    active.sort((a, b) => 
-      _getMostRecentActivityTime(b.activities).compareTo(
-        _getMostRecentActivityTime(a.activities)
-      )
-    );
+    active.sort((a, b) {
+      final aTime = _getMostRecentActivityTime(a.activities);
+      final bTime = _getMostRecentActivityTime(b.activities);
+      // First sort by most recent activity time
+      int comparison = bTime.compareTo(aTime);
+      // If they are the same, sort by student ID
+      if (comparison == 0) {
+        return a.id.compareTo(b.id);
+      }
+      return comparison;
+    });
 
-    grouped.sort((a, b) => 
-      _getMostRecentActivityTime(b.activities).compareTo(
-        _getMostRecentActivityTime(a.activities)
-      )
-    );
+    grouped.sort((a, b) {
+      final aTime = _getMostRecentActivityTime(a.activities);
+      final bTime = _getMostRecentActivityTime(b.activities);
+      // First sort by most recent activity time
+      int comparison = bTime.compareTo(aTime);
+      // If they are the same, sort by student ID
+      if (comparison == 0) {
+        return a.id.compareTo(b.id);
+      }
+      return comparison;
+    });
 
     return {
       'active': active,
