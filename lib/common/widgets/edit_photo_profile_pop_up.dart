@@ -156,7 +156,7 @@ class _EditPhotoProfilePopUpState extends State<EditPhotoProfilePopUp> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       CustomSnackBar(
                         message: 'Silakan pilih foto terlebih dahulu 😉',
-                        icon: Icons.warning,
+                        icon: Icons.warning_outlined,
                         backgroundColor: Colors.orange.shade800,
                       ),
                     );

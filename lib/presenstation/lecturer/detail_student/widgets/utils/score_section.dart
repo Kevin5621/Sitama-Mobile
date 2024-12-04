@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:sistem_magang/domain/entities/lecturer_detail_student.dart';
-import 'package:sistem_magang/presenstation/lecturer/input_score/pages/input_score.dart';
+import 'package:sistem_magang/presenstation/lecturer/input_score/widgets/score_input_overlay.dart';
 
 // widget shows assessment scores for a student, with the following features:
 // - Detailed score breakdown
@@ -108,10 +108,12 @@ class ScoreBox extends StatelessWidget {
 
   // Navigates to the input score page
   void _navigateToInputScorePage(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => InputScorePage(id: id),
+    showDialog(
+      context: context,
+      builder: (context) => ScoreInputOverlay(
+        id: id,
+        onSubmitSuccess: (success) {
+        },
       ),
     );
   }

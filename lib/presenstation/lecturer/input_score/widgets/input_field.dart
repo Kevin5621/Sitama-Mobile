@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:sistem_magang/core/config/themes/app_color.dart';
 import 'package:sistem_magang/domain/entities/score_entity.dart';
 
 class InputField extends StatelessWidget {
@@ -25,24 +24,21 @@ class InputField extends StatelessWidget {
             flex: 2,
             child: TextField(
               controller: controller,
-              decoration: InputDecoration(
-                contentPadding:
-                    EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey[300]!),
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: AppColors.lightPrimary),
-                  borderRadius: BorderRadius.circular(4),
-                ),
+            decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.grey.shade100,
+                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                border: InputBorder.none, 
+                focusedBorder: InputBorder.none,
+                enabledBorder: InputBorder.none,
               ),
               keyboardType: TextInputType.number,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
         ],

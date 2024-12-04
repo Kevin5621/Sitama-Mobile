@@ -1,11 +1,13 @@
 // ignore_for_file: non_constant_identifier_names
 class LecturerHomeEntity {
   final String name;
+  final int id;
   final Set<LecturerStudentsEntity> ? students;
   final Map<String, bool>? activities;
 
   LecturerHomeEntity({
     required this.name, 
+    required this.id, 
     required this.students,
     required this.activities,
     });

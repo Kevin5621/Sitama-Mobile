@@ -3,16 +3,19 @@ import 'package:sistem_magang/domain/entities/lecturer_home_entity.dart';
 
 class LecturerHomeModel {
   final String name;
+  final int id;
   final Set<LecturerStudentsModel> ? students;
 
   LecturerHomeModel({
     required this.name, 
+    required this.id, 
     this.students
     });
 
   factory LecturerHomeModel.fromMap(Map<String, dynamic> map) {
     return LecturerHomeModel(
       name: map['name'] as String,
+      id: map['userId'] as int,
       students: map['students'] != null 
         ? (map['students'] as List<dynamic>)
             .map<LecturerStudentsModel>(
@@ -28,6 +31,7 @@ extension LecturerHomeXModel on LecturerHomeModel {
   LecturerHomeEntity toEntity() {
     return LecturerHomeEntity(
       name: name,
+      id : id,
       students: students?.map<LecturerStudentsEntity>((data) => LecturerStudentsEntity(
         id: data.id,
         name: data.name,
