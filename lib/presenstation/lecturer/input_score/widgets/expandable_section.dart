@@ -91,6 +91,8 @@ class ExpandableSection extends StatelessWidget {
         return Icons.description_rounded;
       case 'Laporan':
         return Icons.insert_drive_file_rounded;
+      case 'Industri':
+        return Icons.factory_rounded;
       default:
         return Icons.article_rounded;
     }

@@ -4,6 +4,7 @@ import 'package:sistem_magang/common/widgets/alert.dart';
 import 'package:sistem_magang/domain/entities/lecturer_detail_student.dart';
 import 'package:sistem_magang/presenstation/lecturer/detail_student/bloc/detail_student_display_cubit.dart';
 import 'package:sistem_magang/presenstation/lecturer/detail_student/bloc/detail_student_display_state.dart';
+import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/utils/seminar_scheduling/seminar_utils.dart';
 
 class InternshipStatusBox extends StatelessWidget {
   final List<DetailStudentEntity> students;
@@ -40,9 +41,26 @@ class InternshipStatusBox extends StatelessWidget {
       onPressed: () async {
         final shouldProceed = await _showConfirmationDialog(context, isApproved);
         if (shouldProceed == true) {
-          context.read<DetailStudentDisplayCubit>().toggleInternshipApproval(index);
-          if (onApprove != null) {
-            onApprove!();
+          if (!isFinished) {
+            // Display the overlay and wait for the result
+            final scheduled = await showSeminarSchedulingOverlay(
+              context,
+              students[index],
+            );
+            
+            // Only toggle approval if seminar scheduling is successful
+            if (scheduled) {
+              context.read<DetailStudentDisplayCubit>().toggleInternshipApproval(index);
+              if (onApprove != null) {
+                onApprove!();
+              }
+            }
+          } else {
+            // For finished status, directly toggle approval without displaying seminar scheduling overlay
+            context.read<DetailStudentDisplayCubit>().toggleInternshipApproval(index);
+            if (onApprove != null) {
+              onApprove!();
+            }
           }
         }
       },

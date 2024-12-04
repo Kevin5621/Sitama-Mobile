@@ -13,10 +13,10 @@ class ScoreInputOverlay extends StatefulWidget {
   final Function(bool)? onSubmitSuccess;
 
   const ScoreInputOverlay({
-    Key? key, 
+    super.key, 
     required this.id, 
     this.onSubmitSuccess
-  }) : super(key: key);
+  });
 
   @override
   _ScoreInputOverlayState createState() => _ScoreInputOverlayState();
