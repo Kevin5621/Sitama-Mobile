@@ -179,21 +179,6 @@ class _StudentListState extends State<StudentList> {
     final grouped = <LecturerStudentsEntity>[];
     final archived = <LecturerStudentsEntity>[];
 
-    // Helper function to get the most recent activity timestamp
-    DateTime _getMostRecentActivityTime(Map activities) {
-      if (activities.isEmpty) return DateTime.fromMillisecondsSinceEpoch(0);
-      
-      return activities.values
-        .map((activity) {
-          try {
-            return DateTime.parse(activity['timestamp'] ?? '1970-01-01');
-          } catch (e) {
-            return DateTime.fromMillisecondsSinceEpoch(0);
-          }
-        })
-        .reduce((a, b) => a.isAfter(b) ? a : b);
-    }
-
     for (final student in students) {
       if (state.archivedIds.contains(student.id)) {
         archived.add(student);
@@ -214,31 +199,29 @@ class _StudentListState extends State<StudentList> {
       }
     }
 
-    // Sort active and grouped students by most recent activity
+    // Sort active students based on their activities
     active.sort((a, b) {
-      final aTime = _getMostRecentActivityTime(a.activities);
-      final bTime = _getMostRecentActivityTime(b.activities);
-      // First sort by most recent activity time
-      int comparison = bTime.compareTo(aTime);
-      // If they are the same, sort by student ID
-      if (comparison == 0) {
-        return a.id.compareTo(b.id);
+      // If a student is finished, they should be at the end
+      if (a.isFinished && !b.isFinished) return 1;
+      if (!a.isFinished && b.isFinished) return -1;
+
+      // Count active activities
+      final aActiveCount = a.activities.values.where((status) => status == true).length;
+      final bActiveCount = b.activities.values.where((status) => status == true).length;
+
+      // If different number of active activities, sort by that
+      if (aActiveCount != bActiveCount) {
+        return bActiveCount.compareTo(aActiveCount);
       }
-      return comparison;
+
+      // If same number of active activities, consider total activities
+      final aTotalCount = a.activities.length;
+      final bTotalCount = b.activities.length;
+
+      return bTotalCount.compareTo(aTotalCount);
     });
 
-    grouped.sort((a, b) {
-      final aTime = _getMostRecentActivityTime(a.activities);
-      final bTime = _getMostRecentActivityTime(b.activities);
-      // First sort by most recent activity time
-      int comparison = bTime.compareTo(aTime);
-      // If they are the same, sort by student ID
-      if (comparison == 0) {
-        return a.id.compareTo(b.id);
-      }
-      return comparison;
-    });
-
+    // Update the lists
     return {
       'active': active,
       'grouped': grouped,
