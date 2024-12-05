@@ -7,6 +7,7 @@ import 'package:sistem_magang/common/bloc/button/button_state.dart';
 import 'package:sistem_magang/common/bloc/button/button_state_cubit.dart';
 import 'package:sistem_magang/common/widgets/basic_app_button.dart';
 import 'package:sistem_magang/common/widgets/custom_snackbar.dart';
+import 'package:sistem_magang/common/widgets/forgot_password.dart';
 import 'package:sistem_magang/core/config/assets/app_images.dart';
 import 'package:sistem_magang/core/config/themes/app_color.dart';
 import 'package:sistem_magang/data/models/signin_req_params.dart';
@@ -143,11 +144,22 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       SizedBox(height: 16),
-                      Text(
-                        'Lupa Kata Sandi ?',
-                        style: TextStyle(
-                          color: AppColors.lightInfo,
-                          fontSize: 12,
+                      TextButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            barrierDismissible: true, // Tambahkan ini untuk memastikan bisa ditutup
+                            builder: (BuildContext context) {
+                              return ForgotPassword(); // Hapus parameter context
+                            },
+                          );
+                        },
+                        child: Text(
+                          'Lupa Kata Sandi ?',
+                          style: TextStyle(
+                            color: AppColors.lightInfo,
+                            fontSize: 12,
+                          ),
                         ),
                       ),
                       SizedBox(height: 24),

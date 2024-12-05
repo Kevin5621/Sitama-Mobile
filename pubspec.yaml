@@ -51,7 +51,8 @@ dependencies:
     flutter_local_notifications: any # Menampilkan notifikasi lokal pada perangkat
 
   # Firebase
-    firebase_core: any           # Integrasi Firebase ke dalam aplikasi
+    firebase_core: ^3.8.1           # Integrasi Firebase ke dalam aplikasi
+    firebase_auth: ^5.3.4
     firebase_messaging: any      # Firebase Cloud Messaging untuk push notifications
 
 dev_dependencies:
