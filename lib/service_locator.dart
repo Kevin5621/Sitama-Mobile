@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sistem_magang/core/network/dio_client.dart';
 import 'package:sistem_magang/core/service/notification_handler_service.dart';
@@ -12,6 +13,7 @@ import 'package:sistem_magang/data/source/student_api_service.dart';
 import 'package:sistem_magang/domain/repository/auth.dart';
 import 'package:sistem_magang/domain/repository/lecturer.dart';
 import 'package:sistem_magang/domain/repository/student.dart';
+import 'package:sistem_magang/domain/usecases/general/forgot_password.dart';
 import 'package:sistem_magang/domain/usecases/lecturer/get_assessmet.dart';
 import 'package:sistem_magang/domain/usecases/lecturer/update_status_logbook.dart';
 import 'package:sistem_magang/domain/usecases/student/guidances/add_guidance_student.dart';
@@ -42,6 +44,9 @@ import 'package:sistem_magang/domain/usecases/student/notification/mark_all_noti
 final sl = GetIt.instance;
 
 void setupServiceLocator() {
+
+  sl.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
+
   sl.registerSingleton<DioClient>(DioClient());
 
   //Service
@@ -51,7 +56,11 @@ void setupServiceLocator() {
   sl.registerSingleton<LecturerApiService>(LecturerApiServiceImpl());
 
   // Repostory
-  sl.registerSingleton<AuthRepostory>(AuthRepostoryImpl());
+  sl.registerSingleton<AuthRepostory>(
+    AuthRepostoryImpl(
+      sl<FirebaseAuth>(),
+    )
+  );
   sl.registerSingleton<StudentRepository>(StudentRepositoryImpl());
   sl.registerSingleton<LecturerRepository>(LecturerRepositoryImpl());
 
@@ -88,6 +97,10 @@ void setupServiceLocator() {
   sl.registerSingleton<UpdatePhotoProfileUseCase>(UpdatePhotoProfileUseCase());
   sl.registerSingleton<ResetPasswordUseCase>(ResetPasswordUseCase());
   sl.registerSingleton<LogoutUseCase>(LogoutUseCase());
+
+  sl.registerFactory<ForgotPasswordUseCase>(
+    () => ForgotPasswordUseCase(sl<AuthRepostoryImpl>())
+  );
 
   sl.registerLazySingleton<NotificationHandlerService>(() => NotificationHandlerService(
     notificationService: sl<NotificationService>(),

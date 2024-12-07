@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sistem_magang/data/models/reset_password_req_params.dart';
 import 'package:sistem_magang/data/models/signin_req_params.dart';
@@ -10,6 +11,9 @@ import 'package:sistem_magang/domain/repository/auth.dart';
 import 'package:sistem_magang/service_locator.dart';
 
 class AuthRepostoryImpl extends AuthRepostory{
+  final FirebaseAuth _firebaseAuth;
+
+  AuthRepostoryImpl(this._firebaseAuth);
 
   @override
   Future<Either> signin(SigninReqParams request) async {
@@ -61,4 +65,21 @@ class AuthRepostoryImpl extends AuthRepostory{
     );
   }
 
+  @override
+  Future<Either<Exception, void>> forgotPassword(String email) async {
+    try {
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
+      return Right(null);
+    } on FirebaseAuthException catch (e) {
+      return Left(AuthException(message: e.message ?? 'Reset password failed'));
+    } catch (e) {
+      return Left(AuthException(message: 'An unexpected error occurred'));
+    }
+  }
+}
+
+class AuthException implements Exception {
+  final String message;
+  
+  AuthException({required this.message});
 }
