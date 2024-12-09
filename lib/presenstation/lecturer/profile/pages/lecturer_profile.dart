@@ -6,12 +6,10 @@ import 'package:provider/provider.dart';
 import 'package:sistem_magang/common/widgets/about_app.dart';
 import 'package:sistem_magang/common/widgets/edit_photo_profile_pop_up.dart';
 import 'package:sistem_magang/common/widgets/log_out_alert.dart';
-import 'package:sistem_magang/common/widgets/notification.dart';
 import 'package:sistem_magang/common/widgets/setting_button.dart';
 import 'package:sistem_magang/core/config/assets/app_images.dart';
 import 'package:sistem_magang/core/config/themes/app_color.dart';
 import 'package:sistem_magang/core/config/themes/theme_provider.dart';
-import 'package:sistem_magang/core/service/notification_service.dart';
 import 'package:sistem_magang/domain/entities/lecturer_profile_entity.dart';
 import 'package:sistem_magang/presenstation/lecturer/profile/pages/faq.dart';
 import 'package:sistem_magang/presenstation/lecturer/profile/bloc/profile_lecturer_cubit.dart';
@@ -168,20 +166,6 @@ class _LecturerProfilePageState extends State<LecturerProfilePage>
             title: isDarkMode ? 'Light Mode' : 'Dark Mode',
             onTap: () {
               themeProvider.toggleTheme();
-            },
-          ),
-          SettingButton(
-            icon: Icons.notifications_active_outlined,
-            title: 'Notification',
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const NotificationSettingsScreen(
-                    userRole: UserRole.dosen,
-                  ),
-                ),
-              );
             },
           ),
           SettingButton(

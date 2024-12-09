@@ -9,13 +9,11 @@ import 'package:sistem_magang/core/config/assets/app_images.dart';
 import 'package:sistem_magang/core/config/themes/app_color.dart';
 import 'package:sistem_magang/common/widgets/log_out_alert.dart';
 import 'package:sistem_magang/core/config/themes/theme_provider.dart';
-import 'package:sistem_magang/core/service/notification_service.dart';
 import 'package:sistem_magang/domain/entities/student_home_entity.dart';
 import 'package:sistem_magang/presenstation/student/faq/pages/faq.dart';
 import 'package:sistem_magang/presenstation/student/profile/bloc/profile_student_cubit.dart';
 import 'package:sistem_magang/presenstation/student/profile/bloc/profile_student_state.dart';
 import 'package:sistem_magang/presenstation/student/profile/widgets/box_industry.dart';
-import 'package:sistem_magang/common/widgets/notification.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -78,20 +76,6 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
             title: isDarkMode ? 'Light Mode' : 'Dark Mode',
             onTap: () {
               themeProvider.toggleTheme();
-            },
-          ),
-          SettingButton(
-            icon: Icons.notifications_active_outlined,
-            title: 'Notification',
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const NotificationSettingsScreen(
-                    userRole: UserRole.mahasiswa,
-                  ),
-                ),
-              );
             },
           ),
           SettingButton(
