@@ -29,16 +29,36 @@ class _EditPhotoProfilePopUpState extends State<EditPhotoProfilePopUp> {
   }
 
   Future<void> _pickImage() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.image,
-      withData: true,
-    );
-    if (result != null && result.files.isNotEmpty) {
-      setState(() {
-        _selectedImage = result.files.first;
-      });
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.image,
+        withData: true,
+      );
+
+      if (result != null && result.files.isNotEmpty) {
+        if (result.files.first.bytes != null) {
+          setState(() {
+            _selectedImage = result.files.first;
+          });
+        } else {
+          throw Exception('File data is null');
+        }
+      } else {
+        throw Exception('No file selected');
+      }
+    } catch (e) {
+      debugPrint('Error picking file: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        CustomSnackBar(
+          message: 'Error selecting image: $e',
+          icon: Icons.error_outline,
+          backgroundColor: Colors.red.shade800,
+        ),
+      );
     }
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +80,7 @@ class _EditPhotoProfilePopUpState extends State<EditPhotoProfilePopUp> {
             
             Navigator.pushAndRemoveUntil(
               context,
-              role == null ? 
+              role == "Student" ? 
                 MaterialPageRoute(
                   builder: (context) => HomePage(
                     currentIndex: 3,

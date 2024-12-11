@@ -12,7 +12,7 @@ class DetailStudentModel {
   final List<GuidanceModel> guidances;
   final List<LogBookModel> log_book;
   final List<ShowAssessmentModel> assessments;
-  final double average_all_assessments;
+  final int average_all_assessments;
 
   DetailStudentModel({
     required this.student,
@@ -46,7 +46,7 @@ class DetailStudentModel {
           (x) => ShowAssessmentModel.fromMap(x as Map<String, dynamic>),
         ),
       ),
-      average_all_assessments: map['average_all_assessments'] as double,
+      average_all_assessments: map['average_all_assessments'] as int,
     );
   }
 }

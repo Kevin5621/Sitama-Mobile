@@ -102,6 +102,7 @@ class PDFViewerPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(extractFileName(pdfUrl)),
         backgroundColor: AppColors.lightBackground,
+        iconTheme: IconThemeData(color: Colors.black),
         actions: <Widget>[
           IconButton(
             icon: const Icon(

@@ -29,17 +29,19 @@ class ListGuidanceModel {
 extension ListGuidanceXModel on ListGuidanceModel {
   ListGuidanceEntity toEntity() {
     return ListGuidanceEntity(
-      guidances: guidances.map<GuidanceEntity>(
-        (data) => GuidanceEntity(
-          id: data.id,
-          title: data.title,
-          activity: data.activity,
-          date: data.date,
-          lecturer_note: data.lecturer_note,
-          name_file: data.name_file,
-          status: data.status,
-        ),
-      ).toList(),
+      guidances: guidances
+          .map<GuidanceEntity>(
+            (data) => GuidanceEntity(
+              id: data.id,
+              title: data.title,
+              activity: data.activity,
+              date: data.date,
+              lecturer_note: data.lecturer_note,
+              name_file: data.name_file,
+              status: data.status,
+            ),
+          )
+          .toList(),
     );
   }
 }
