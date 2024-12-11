@@ -1,7 +1,5 @@
 import 'package:get_it/get_it.dart';
 import 'package:sistem_magang/core/network/dio_client.dart';
-import 'package:sistem_magang/core/service/notification_handler_service.dart';
-import 'package:sistem_magang/core/service/notification_service.dart';
 import 'package:sistem_magang/data/repository/auth.dart';
 import 'package:sistem_magang/data/repository/lecturer.dart';
 import 'package:sistem_magang/data/repository/student.dart';
@@ -42,6 +40,7 @@ import 'package:sistem_magang/domain/usecases/student/notification/mark_all_noti
 final sl = GetIt.instance;
 
 void setupServiceLocator() {
+
   sl.registerSingleton<DioClient>(DioClient());
 
   //Service
@@ -88,11 +87,4 @@ void setupServiceLocator() {
   sl.registerSingleton<UpdatePhotoProfileUseCase>(UpdatePhotoProfileUseCase());
   sl.registerSingleton<ResetPasswordUseCase>(ResetPasswordUseCase());
   sl.registerSingleton<LogoutUseCase>(LogoutUseCase());
-
-  sl.registerLazySingleton<NotificationHandlerService>(() => NotificationHandlerService(
-    notificationService: sl<NotificationService>(),
-    studentApiService: sl<StudentApiService>(),
-    lecturerApiService: sl<LecturerApiService>(),
-  ));
-  sl.registerLazySingleton<NotificationService>(() => NotificationService());
 }

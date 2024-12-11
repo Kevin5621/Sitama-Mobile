@@ -143,11 +143,22 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       SizedBox(height: 16),
-                      Text(
-                        'Lupa Kata Sandi ?',
-                        style: TextStyle(
-                          color: AppColors.lightInfo,
-                          fontSize: 12,
+                      TextButton(
+                        onPressed: () {
+                          // showDialog(
+                          //   context: context,
+                          //   barrierDismissible: true, 
+                          //   builder: (BuildContext context) {
+                          //     return ForgotPassword();
+                          //   },
+                          // );
+                        },
+                        child: Text(
+                          'Lupa Kata Sandi ?',
+                          style: TextStyle(
+                            color: AppColors.lightInfo,
+                            fontSize: 12,
+                          ),
                         ),
                       ),
                       SizedBox(height: 24),

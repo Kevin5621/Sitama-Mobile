@@ -8,7 +8,7 @@
     <application
         android:label="sistem_magang"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name="com.example.sistem_magang.MainActivity"
             android:exported="true"

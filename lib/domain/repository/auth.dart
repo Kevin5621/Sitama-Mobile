@@ -11,5 +11,4 @@ abstract class AuthRepostory {
   Future<Either> resetPassword(ResetPasswordReqParams request);
 
   Future<Either> updatePhotoProfile(UpdateProfileReqParams request);
-  
 } 
