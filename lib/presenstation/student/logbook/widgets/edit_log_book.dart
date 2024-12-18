@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -140,6 +139,8 @@ class _EditLogBookState extends State<EditLogBook> {
                           Theme.of(context).primaryColor.withOpacity(0.05),
                     ),
                   ),
+
+                  //upload date
                   const SizedBox(height: 20),
                   InkWell(
                     onTap: () async {
@@ -194,6 +195,8 @@ class _EditLogBookState extends State<EditLogBook> {
                       ),
                     ),
                   ),
+
+                  //upload activity
                   const SizedBox(height: 20),
                   TextFormField(
                     controller: _activity,

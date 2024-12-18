@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names
 
+import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
 
 import 'package:Sitama/domain/entities/log_book_entity.dart';
@@ -81,24 +82,26 @@ class EditLogBookReqParams {
   final int id;
   final String title;
   final String activity;
-  final String? lecturer_note;
   final DateTime date;
 
   EditLogBookReqParams({
     required this.id, 
     required this.title, 
     required this.activity,    
-    this.lecturer_note,
-    required this.date});
+    required this.date
+  });
 
-  Map<String, dynamic> toMap() {
-    String formattedDate = DateFormat('yyyy-MM-dd').format(date);
-    return <String, dynamic>{
-      'title': title,
-      'activity': activity,
-      'date': formattedDate,
-      'lecturer_note': lecturer_note,
-    };
+  // Converts request parameters to FormData for API submission
+  Future<FormData> toFormData() async {
+    final formData = FormData();
+
+    formData.fields.addAll([
+      MapEntry('title', title),
+      MapEntry('activity', activity),
+      MapEntry('date', DateFormat('yyyy-MM-dd').format(date)),
+    ]);
+
+    return formData;
   }
 }
 
