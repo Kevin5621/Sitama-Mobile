@@ -15,7 +15,7 @@ class LogOutAlert extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => ButtonStateCubit(),
-      child: BlocListener<ButtonStateCubit, ButtonState>(
+      child: BlocConsumer<ButtonStateCubit, ButtonState>(
         listener: (context, state) {
           if (state is ButtonSuccessState) {
             Navigator.pushAndRemoveUntil(
@@ -30,7 +30,7 @@ class LogOutAlert extends StatelessWidget {
             );
           }
         },
-        child: CustomAlertDialog(
+        builder: (context, state) => CustomAlertDialog(
           title: 'Konfirmasi Logout',
           message: 'Apakah Anda yakin ingin keluar dari akun ini?',
           cancelText: 'Batal',
@@ -42,8 +42,7 @@ class LogOutAlert extends StatelessWidget {
             Navigator.of(context).pop();
           },
           onConfirm: () {
-            final buttonCubit = context.read<ButtonStateCubit>();
-            buttonCubit.excute(usecase: sl<LogoutUseCase>());
+            context.read<ButtonStateCubit>().excute(usecase: sl<LogoutUseCase>());
           },
         ),
       ),

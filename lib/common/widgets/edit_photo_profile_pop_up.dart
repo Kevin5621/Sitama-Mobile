@@ -1,5 +1,4 @@
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,6 +21,7 @@ class EditPhotoProfilePopUp extends StatefulWidget {
 
 class _EditPhotoProfilePopUpState extends State<EditPhotoProfilePopUp> {
   PlatformFile? _selectedImage;
+  final GlobalKey<ScaffoldMessengerState> _scaffoldKey = GlobalKey<ScaffoldMessengerState>();
 
   @override
   void dispose() {
@@ -48,13 +48,15 @@ class _EditPhotoProfilePopUpState extends State<EditPhotoProfilePopUp> {
       }
     } catch (e) {
       debugPrint('Error picking file: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        CustomSnackBar(
-          message: 'Error selecting image: $e',
-          icon: Icons.error_outline,
-          backgroundColor: Colors.red.shade800,
-        ),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(_scaffoldKey.currentContext!).showSnackBar(
+          CustomSnackBar(
+            message: 'Error selecting image: $e',
+            icon: Icons.error_outline,
+            backgroundColor: Colors.red.shade800,
+          ),
+        );
+      }
     }
   }
 
@@ -68,8 +70,10 @@ class _EditPhotoProfilePopUpState extends State<EditPhotoProfilePopUp> {
         listener: (context, state) async {
           SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
           var role = sharedPreferences.getString('role');
-         
+
           if (state is ButtonSuccessState) {
+            if (!context.mounted) return;
+
             ScaffoldMessenger.of(context).showSnackBar(
               CustomSnackBar(
                 message: 'Berhasil Mengubah Foto Profil 🎉',
@@ -96,7 +100,7 @@ class _EditPhotoProfilePopUpState extends State<EditPhotoProfilePopUp> {
           }
 
           if (state is ButtonFailurState) {
-            ScaffoldMessenger.of(context).showSnackBar(
+            ScaffoldMessenger.of(_scaffoldKey.currentContext!).showSnackBar(  
               CustomSnackBar(
                 message: state.errorMessage,
                 icon: Icons.error_outline,
@@ -114,7 +118,7 @@ class _EditPhotoProfilePopUpState extends State<EditPhotoProfilePopUp> {
             ),
           ),
           content: Form(
-            child: Container(
+            child: SizedBox(
               width: MediaQuery.of(context).size.width * 0.8,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
