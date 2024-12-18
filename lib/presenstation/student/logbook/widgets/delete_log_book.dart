@@ -1,9 +1,9 @@
-import 'package:flutter/cupertino.dart';
+import 'package:Sitama/common/widgets/alert.dart';
+import 'package:Sitama/core/config/themes/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:Sitama/common/bloc/button/button_state.dart';
 import 'package:Sitama/common/bloc/button/button_state_cubit.dart';
-import 'package:Sitama/common/widgets/basic_app_button.dart';
 import 'package:Sitama/common/widgets/custom_snackbar.dart';
 import 'package:Sitama/domain/usecases/student/logbook/delete_log_book_student.dart';
 import 'package:Sitama/presenstation/student/home/pages/home.dart';
@@ -33,13 +33,14 @@ class _DeleteLogBookState extends State<DeleteLogBook> {
       child: BlocListener<ButtonStateCubit, ButtonState>(
         listener: (context, state) async {
           if (state is ButtonSuccessState) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              CustomSnackBar(
-                message: 'Berhasil Menghapus Log Book 🗑️',
-                icon: Icons.check_circle_outline,  
-                backgroundColor: Colors.green.shade800,  
-              ),
+            // Tampilkan dialog sukses
+            await CustomAlertDialog.showSuccess(
+              context: context,
+              title: 'Berhasil',
+              message: 'Berhasil menghapus bimbingan',
             );
+            
+            // Navigate setelah menampilkan pesan sukses
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
@@ -61,30 +62,23 @@ class _DeleteLogBookState extends State<DeleteLogBook> {
             );
           }
         },
-        child: AlertDialog(
-          title: Text('Hapus Log Book'),
-          content:
-              Text('Apakah anda ingin menghapus log book "${widget.title}"?'),
-          actions: [
-            Builder(builder: (context) {
-              return BasicAppButton(
-                onPressed: () {
-                  context.read<ButtonStateCubit>().excute(
-                        usecase: sl<DeleteLogBookUseCase>(),
-                        params: widget.id,
-                      );
-                },
-                title: 'Delete',
-                height: false,
-              );
-            }),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Cancel'),
-            ),
-          ],
+        child: CustomAlertDialog(
+          title: 'Hapus Bimbingan',
+          message: 'Apakah anda ingin menghapus bimbingan "${widget.title}"?',
+          cancelText: 'Batal',
+          confirmText: 'Hapus',
+          confirmColor: AppColors.lightDanger,
+          icon: Icons.delete_outline, 
+          iconColor: AppColors.lightDanger,
+          onCancel: () {
+            Navigator.of(context).pop();
+          },
+          onConfirm: () {
+            context.read<ButtonStateCubit>().excute(
+              usecase: sl<DeleteLogBookUseCase>(),
+              params: widget.id,
+            );
+          },
         ),
       ),
     );

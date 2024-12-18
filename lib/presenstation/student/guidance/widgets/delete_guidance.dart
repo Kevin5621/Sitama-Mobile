@@ -1,3 +1,4 @@
+import 'package:Sitama/common/widgets/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:Sitama/common/bloc/button/button_state.dart';
@@ -52,11 +53,12 @@ class _DeleteGuidanceState extends State<DeleteGuidance> {
           }
 
           if (state is ButtonFailurState) {
-            // Tampilkan dialog error
-            CustomAlertDialog.showError(
-              context: context,
-              title: 'Gagal',
-              message: state.errorMessage,
+            ScaffoldMessenger.of(context).showSnackBar(
+              CustomSnackBar(
+                message: state.errorMessage,
+                icon: Icons.error_outline,  
+                backgroundColor: Colors.red.shade800,  
+              ),
             );
           }
         },
