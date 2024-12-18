@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:sistem_magang/core/usecase/usecase.dart';
-import 'package:sistem_magang/domain/repository/lecturer.dart';
-import 'package:sistem_magang/service_locator.dart';
+import 'package:Sitama/core/usecase/usecase.dart';
+import 'package:Sitama/domain/repository/lecturer.dart';
+import 'package:Sitama/service_locator.dart';
 
 class GetDetailStudentUseCase implements UseCase<Either, int> {
   @override

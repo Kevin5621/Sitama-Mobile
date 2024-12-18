@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:sistem_magang/data/models/guidance.dart';
-import 'package:sistem_magang/data/models/log_book.dart';
-import 'package:sistem_magang/data/models/notification.dart';
-import 'package:sistem_magang/domain/entities/industry_score.dart';
+import 'package:Sitama/data/models/guidance.dart';
+import 'package:Sitama/data/models/log_book.dart';
+import 'package:Sitama/data/models/notification.dart';
+import 'package:Sitama/domain/entities/industry_score.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class ScoreRepository {

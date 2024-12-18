@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sistem_magang/core/config/assets/app_images.dart';
-import 'package:sistem_magang/domain/entities/lecturer_detail_student.dart';
+import 'package:Sitama/core/config/assets/app_images.dart';
+import 'package:Sitama/domain/entities/lecturer_detail_student.dart';
 
 /// [ProfileHeader] is a widget to display the student's profile header
 /// with a background image, profile picture, name, username, and email.

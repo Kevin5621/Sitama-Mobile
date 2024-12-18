@@ -2,9 +2,9 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:sistem_magang/domain/entities/guidance_entity.dart';
-import 'package:sistem_magang/presenstation/general/pdf_viewer/pdf_viewer.dart';
-import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/section/tab_guidance/guidance_status.dart';
+import 'package:Sitama/domain/entities/guidance_entity.dart';
+import 'package:Sitama/presenstation/general/pdf_viewer/pdf_viewer.dart';
+import 'package:Sitama/presenstation/lecturer/detail_student/widgets/section/tab_guidance/guidance_status.dart';
 
 class GuidanceCardContent extends StatelessWidget {
   final GuidanceEntity guidance;

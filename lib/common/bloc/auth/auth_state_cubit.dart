@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sistem_magang/common/bloc/auth/auth_state.dart';
-import 'package:sistem_magang/domain/usecases/general/is_logged_in.dart';
-import 'package:sistem_magang/service_locator.dart';
+import 'package:Sitama/common/bloc/auth/auth_state.dart';
+import 'package:Sitama/domain/usecases/general/is_logged_in.dart';
+import 'package:Sitama/service_locator.dart';
 
 class AuthStateCubit extends Cubit<AuthState>{
   AuthStateCubit() : super(AppInitialState());

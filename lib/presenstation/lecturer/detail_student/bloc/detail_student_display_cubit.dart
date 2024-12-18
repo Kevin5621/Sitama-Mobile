@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sistem_magang/domain/usecases/lecturer/get_detail_student.dart';
-import 'package:sistem_magang/presenstation/lecturer/detail_student/bloc/detail_student_display_state.dart';
-import 'package:sistem_magang/service_locator.dart';
+import 'package:Sitama/domain/usecases/lecturer/get_detail_student.dart';
+import 'package:Sitama/presenstation/lecturer/detail_student/bloc/detail_student_display_state.dart';
+import 'package:Sitama/service_locator.dart';
 
 class DetailStudentDisplayCubit extends Cubit<DetailStudentDisplayState> {
   DetailStudentDisplayCubit() : super(DetailLoading());

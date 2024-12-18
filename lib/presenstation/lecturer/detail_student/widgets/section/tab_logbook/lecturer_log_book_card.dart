@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sistem_magang/common/widgets/date_relative_time.dart';
-import 'package:sistem_magang/domain/entities/log_book_entity.dart';
-import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/section/tab_logbook/logbook_content.dart';
+import 'package:Sitama/common/widgets/date_relative_time.dart';
+import 'package:Sitama/domain/entities/log_book_entity.dart';
+import 'package:Sitama/presenstation/lecturer/detail_student/widgets/section/tab_logbook/logbook_content.dart';
 
 class LecturerLogBookCard extends StatefulWidget {
   final LogBookEntity logBook;

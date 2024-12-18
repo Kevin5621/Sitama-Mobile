@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sistem_magang/core/config/assets/app_images.dart';
-import 'package:sistem_magang/domain/entities/lecturer_home_entity.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_bloc.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_state.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/utils/helper/activity_helper.dart';
+import 'package:Sitama/core/config/assets/app_images.dart';
+import 'package:Sitama/domain/entities/lecturer_home_entity.dart';
+import 'package:Sitama/presenstation/lecturer/home/bloc/selection_bloc.dart';
+import 'package:Sitama/presenstation/lecturer/home/bloc/selection_state.dart';
+import 'package:Sitama/presenstation/lecturer/home/widgets/utils/helper/activity_helper.dart';
 
 // StudentCard Widget
 // This widget displays a card for each student with their profile image, name, username, major, and class.

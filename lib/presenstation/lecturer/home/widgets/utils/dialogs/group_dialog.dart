@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sistem_magang/data/models/group.dart';
+import 'package:Sitama/data/models/group.dart';
 
 class GroupDialogForm extends StatefulWidget {
   final String? initialTitle;

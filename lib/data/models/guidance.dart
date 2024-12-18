@@ -5,7 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/foundation.dart';
 
-import 'package:sistem_magang/domain/entities/guidance_entity.dart';
+import 'package:Sitama/domain/entities/guidance_entity.dart';
 
 // Model for a list of guidances
 class ListGuidanceModel {
@@ -29,17 +29,19 @@ class ListGuidanceModel {
 extension ListGuidanceXModel on ListGuidanceModel {
   ListGuidanceEntity toEntity() {
     return ListGuidanceEntity(
-      guidances: guidances.map<GuidanceEntity>(
-        (data) => GuidanceEntity(
-          id: data.id,
-          title: data.title,
-          activity: data.activity,
-          date: data.date,
-          lecturer_note: data.lecturer_note,
-          name_file: data.name_file,
-          status: data.status,
-        ),
-      ).toList(),
+      guidances: guidances
+          .map<GuidanceEntity>(
+            (data) => GuidanceEntity(
+              id: data.id,
+              title: data.title,
+              activity: data.activity,
+              date: data.date,
+              lecturer_note: data.lecturer_note,
+              name_file: data.name_file,
+              status: data.status,
+            ),
+          )
+          .toList(),
     );
   }
 }

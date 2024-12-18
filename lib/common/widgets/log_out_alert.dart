@@ -2,13 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sistem_magang/common/bloc/button/button_state.dart';
-import 'package:sistem_magang/common/bloc/button/button_state_cubit.dart';
-import 'package:sistem_magang/common/widgets/basic_app_button.dart';
-import 'package:sistem_magang/core/config/themes/app_color.dart';
-import 'package:sistem_magang/domain/usecases/general/log_out.dart';
-import 'package:sistem_magang/presenstation/general/welcome/pages/welcome.dart';
-import 'package:sistem_magang/service_locator.dart';
+import 'package:Sitama/common/bloc/button/button_state.dart';
+import 'package:Sitama/common/bloc/button/button_state_cubit.dart';
+import 'package:Sitama/common/widgets/basic_app_button.dart';
+import 'package:Sitama/core/config/themes/app_color.dart';
+import 'package:Sitama/domain/usecases/general/log_out.dart';
+import 'package:Sitama/presenstation/general/welcome/pages/welcome.dart';
+import 'package:Sitama/service_locator.dart';
 
 class LogOutAlert extends StatelessWidget {
   const LogOutAlert({super.key});

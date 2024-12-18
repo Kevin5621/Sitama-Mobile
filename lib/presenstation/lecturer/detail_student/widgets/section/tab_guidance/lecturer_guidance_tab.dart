@@ -1,7 +1,7 @@
 // ignore_for_file: non_constant_identifier_names, use_build_context_synchronously, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
-import 'package:sistem_magang/domain/entities/guidance_entity.dart';
+import 'package:Sitama/domain/entities/guidance_entity.dart';
 import 'lecturer_guidance_card.dart';
 
 // Widget to display a list of guidance entries for a lecturer

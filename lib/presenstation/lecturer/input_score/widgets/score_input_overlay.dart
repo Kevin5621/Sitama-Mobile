@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sistem_magang/common/widgets/custom_snackbar.dart';
-import 'package:sistem_magang/core/config/themes/app_color.dart';
-import 'package:sistem_magang/data/models/score_request.dart';
-import 'package:sistem_magang/domain/entities/assessment_entity.dart';
-import 'package:sistem_magang/presenstation/lecturer/input_score/bloc/assessment_cubit.dart';
-import 'package:sistem_magang/presenstation/lecturer/input_score/bloc/assessment_state.dart';
-import 'package:sistem_magang/presenstation/lecturer/input_score/widgets/expandable_section.dart';
+import 'package:Sitama/common/widgets/custom_snackbar.dart';
+import 'package:Sitama/core/config/themes/app_color.dart';
+import 'package:Sitama/data/models/score_request.dart';
+import 'package:Sitama/domain/entities/assessment_entity.dart';
+import 'package:Sitama/presenstation/lecturer/input_score/bloc/assessment_cubit.dart';
+import 'package:Sitama/presenstation/lecturer/input_score/bloc/assessment_state.dart';
+import 'package:Sitama/presenstation/lecturer/input_score/widgets/expandable_section.dart';
 
 class ScoreInputOverlay extends StatefulWidget {
   final int id;

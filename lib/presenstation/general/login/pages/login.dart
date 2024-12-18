@@ -3,17 +3,17 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sistem_magang/common/bloc/button/button_state.dart';
-import 'package:sistem_magang/common/bloc/button/button_state_cubit.dart';
-import 'package:sistem_magang/common/widgets/basic_app_button.dart';
-import 'package:sistem_magang/common/widgets/custom_snackbar.dart';
-import 'package:sistem_magang/core/config/assets/app_images.dart';
-import 'package:sistem_magang/core/config/themes/app_color.dart';
-import 'package:sistem_magang/data/models/signin_req_params.dart';
-import 'package:sistem_magang/domain/usecases/general/signin.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/pages/lecturer_home.dart';
-import 'package:sistem_magang/presenstation/student/home/pages/home.dart';
-import 'package:sistem_magang/service_locator.dart';
+import 'package:Sitama/common/bloc/button/button_state.dart';
+import 'package:Sitama/common/bloc/button/button_state_cubit.dart';
+import 'package:Sitama/common/widgets/basic_app_button.dart';
+import 'package:Sitama/common/widgets/custom_snackbar.dart';
+import 'package:Sitama/core/config/assets/app_images.dart';
+import 'package:Sitama/core/config/themes/app_color.dart';
+import 'package:Sitama/data/models/signin_req_params.dart';
+import 'package:Sitama/domain/usecases/general/signin.dart';
+import 'package:Sitama/presenstation/lecturer/home/pages/lecturer_home.dart';
+import 'package:Sitama/presenstation/student/home/pages/home.dart';
+import 'package:Sitama/service_locator.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

@@ -2,7 +2,7 @@
 
 import 'package:intl/intl.dart';
 
-import 'package:sistem_magang/domain/entities/log_book_entity.dart';
+import 'package:Sitama/domain/entities/log_book_entity.dart';
 
 class ListLogBookModel {
   final List<LogBookModel> log_books;

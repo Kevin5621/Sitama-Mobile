@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sistem_magang/common/bloc/button/button_state.dart';
-import 'package:sistem_magang/core/usecase/usecase.dart';
+import 'package:Sitama/common/bloc/button/button_state.dart';
+import 'package:Sitama/core/usecase/usecase.dart';
 
 class ButtonStateCubit extends Cubit<ButtonState> {
   ButtonStateCubit() : super(ButtonInitialState());

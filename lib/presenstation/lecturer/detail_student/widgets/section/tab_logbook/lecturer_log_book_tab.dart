@@ -2,8 +2,8 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:flutter/material.dart';
-import 'package:sistem_magang/domain/entities/log_book_entity.dart';
-import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/section/tab_logbook/lecturer_log_book_card.dart';
+import 'package:Sitama/domain/entities/log_book_entity.dart';
+import 'package:Sitama/presenstation/lecturer/detail_student/widgets/section/tab_logbook/lecturer_log_book_card.dart';
 
 class LecturerLogBookTab extends StatelessWidget {
   final List<LogBookEntity> logBooks;

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sistem_magang/common/widgets/student_guidance_card.dart';
-import 'package:sistem_magang/common/widgets/search_field.dart';
-import 'package:sistem_magang/domain/entities/guidance_entity.dart';
-import 'package:sistem_magang/presenstation/student/guidance/bloc/guidance_student_cubit.dart';
-import 'package:sistem_magang/presenstation/student/guidance/bloc/guidance_student_state.dart';
-import 'package:sistem_magang/presenstation/student/guidance/widgets/add_guidance.dart';
-import 'package:sistem_magang/presenstation/student/guidance/widgets/filter_dialog.dart';
+import 'package:Sitama/common/widgets/student_guidance_card.dart';
+import 'package:Sitama/common/widgets/search_field.dart';
+import 'package:Sitama/domain/entities/guidance_entity.dart';
+import 'package:Sitama/presenstation/student/guidance/bloc/guidance_student_cubit.dart';
+import 'package:Sitama/presenstation/student/guidance/bloc/guidance_student_state.dart';
+import 'package:Sitama/presenstation/student/guidance/widgets/add_guidance.dart';
+import 'package:Sitama/presenstation/student/guidance/widgets/filter_dialog.dart';
 
 class GuidancePage extends StatefulWidget {
   const GuidancePage({super.key});

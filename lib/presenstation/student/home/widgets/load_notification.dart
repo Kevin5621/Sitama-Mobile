@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sistem_magang/data/models/notification.dart';
+import 'package:Sitama/data/models/notification.dart';
 
 /// A stateful widget to display and manage a notification item.
 /// This widget handles showing a notification card with expandable details.

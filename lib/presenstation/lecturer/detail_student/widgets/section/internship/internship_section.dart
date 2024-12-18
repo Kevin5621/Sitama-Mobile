@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:sistem_magang/domain/entities/lecturer_detail_student.dart';
+import 'package:Sitama/domain/entities/lecturer_detail_student.dart';
 
 class InternshipBox extends StatelessWidget {
   final int index;

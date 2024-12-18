@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:sistem_magang/core/config/themes/app_color.dart';
-import 'package:sistem_magang/presenstation/general/pdf_viewer/pdf_viewer.dart';
-import 'package:sistem_magang/presenstation/student/guidance/widgets/delete_guidance.dart';
-import 'package:sistem_magang/presenstation/student/guidance/widgets/edit_guidance.dart';
+import 'package:Sitama/core/config/themes/app_color.dart';
+import 'package:Sitama/presenstation/general/pdf_viewer/pdf_viewer.dart';
+import 'package:Sitama/presenstation/student/guidance/widgets/delete_guidance.dart';
+import 'package:Sitama/presenstation/student/guidance/widgets/edit_guidance.dart';
 
 /// Features:
 /// - Expandable UI: The card expands to reveal detailed information.

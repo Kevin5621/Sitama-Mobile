@@ -3,15 +3,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sistem_magang/common/bloc/button/button_state.dart';
-import 'package:sistem_magang/common/bloc/button/button_state_cubit.dart';
-import 'package:sistem_magang/common/widgets/basic_app_button.dart';
-import 'package:sistem_magang/common/widgets/custom_snackbar.dart';
-import 'package:sistem_magang/data/models/update_profile_req_params.dart';
-import 'package:sistem_magang/domain/usecases/general/update_photo_profile.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/pages/lecturer_home.dart';
-import 'package:sistem_magang/presenstation/student/home/pages/home.dart';
-import 'package:sistem_magang/service_locator.dart';
+import 'package:Sitama/common/bloc/button/button_state.dart';
+import 'package:Sitama/common/bloc/button/button_state_cubit.dart';
+import 'package:Sitama/common/widgets/basic_app_button.dart';
+import 'package:Sitama/common/widgets/custom_snackbar.dart';
+import 'package:Sitama/data/models/update_profile_req_params.dart';
+import 'package:Sitama/domain/usecases/general/update_photo_profile.dart';
+import 'package:Sitama/presenstation/lecturer/home/pages/lecturer_home.dart';
+import 'package:Sitama/presenstation/student/home/pages/home.dart';
+import 'package:Sitama/service_locator.dart';
 
 class EditPhotoProfilePopUp extends StatefulWidget {
   const EditPhotoProfilePopUp({super.key});
@@ -29,16 +29,36 @@ class _EditPhotoProfilePopUpState extends State<EditPhotoProfilePopUp> {
   }
 
   Future<void> _pickImage() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.image,
-      withData: true,
-    );
-    if (result != null && result.files.isNotEmpty) {
-      setState(() {
-        _selectedImage = result.files.first;
-      });
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.image,
+        withData: true,
+      );
+
+      if (result != null && result.files.isNotEmpty) {
+        if (result.files.first.bytes != null) {
+          setState(() {
+            _selectedImage = result.files.first;
+          });
+        } else {
+          throw Exception('File data is null');
+        }
+      } else {
+        throw Exception('No file selected');
+      }
+    } catch (e) {
+      debugPrint('Error picking file: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        CustomSnackBar(
+          message: 'Error selecting image: $e',
+          icon: Icons.error_outline,
+          backgroundColor: Colors.red.shade800,
+        ),
+      );
     }
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +80,7 @@ class _EditPhotoProfilePopUpState extends State<EditPhotoProfilePopUp> {
             
             Navigator.pushAndRemoveUntil(
               context,
-              role == null ? 
+              role == "Student" ? 
                 MaterialPageRoute(
                   builder: (context) => HomePage(
                     currentIndex: 3,

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sistem_magang/core/config/themes/app_color.dart';
-import 'package:sistem_magang/domain/entities/guidance_entity.dart';
-import 'package:sistem_magang/domain/entities/log_book_entity.dart';
-import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/section/tab_guidance/lecturer_guidance_tab.dart';
-import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/section/tab_logbook/lecturer_log_book_tab.dart';
+import 'package:Sitama/core/config/themes/app_color.dart';
+import 'package:Sitama/domain/entities/guidance_entity.dart';
+import 'package:Sitama/domain/entities/log_book_entity.dart';
+import 'package:Sitama/presenstation/lecturer/detail_student/widgets/section/tab_guidance/lecturer_guidance_tab.dart';
+import 'package:Sitama/presenstation/lecturer/detail_student/widgets/section/tab_logbook/lecturer_log_book_tab.dart';
 
 // Key Features :
 // Captures student and industry internship details

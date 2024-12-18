@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:sistem_magang/core/config/assets/app_images.dart';
-import 'package:sistem_magang/core/config/assets/app_vectors.dart';
-import 'package:sistem_magang/core/config/themes/app_color.dart';
+import 'package:Sitama/core/config/assets/app_images.dart';
+import 'package:Sitama/core/config/assets/app_vectors.dart';
+import 'package:Sitama/core/config/themes/app_color.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:sistem_magang/presenstation/general/login/pages/login.dart';
+import 'package:Sitama/presenstation/general/login/pages/login.dart';
 
 class WelcomePages extends StatelessWidget {
   const WelcomePages({super.key});

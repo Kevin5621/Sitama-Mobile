@@ -1,12 +1,12 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
-import 'package:sistem_magang/domain/entities/lecturer_detail_student.dart';
-import 'package:sistem_magang/domain/repository/lecturer.dart';
-import 'package:sistem_magang/presenstation/lecturer/detail_student/pages/detail_student.dart';
-import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/section/internship/internship_section.dart';
-import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/section/internship/internship_status.dart';
-import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/utils/score_section.dart';
-import 'package:sistem_magang/service_locator.dart';
+import 'package:Sitama/domain/entities/lecturer_detail_student.dart';
+import 'package:Sitama/domain/repository/lecturer.dart';
+import 'package:Sitama/presenstation/lecturer/detail_student/pages/detail_student.dart';
+import 'package:Sitama/presenstation/lecturer/detail_student/widgets/section/internship/internship_section.dart';
+import 'package:Sitama/presenstation/lecturer/detail_student/widgets/section/internship/internship_status.dart';
+import 'package:Sitama/presenstation/lecturer/detail_student/widgets/utils/score_section.dart';
+import 'package:Sitama/service_locator.dart';
 
 class InfoBoxes extends StatelessWidget {
   final List<InternshipStudentEntity> internships;

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sistem_magang/common/bloc/bloc/notification_bloc.dart';
-import 'package:sistem_magang/common/bloc/bloc/notification_state.dart';
-import 'package:sistem_magang/common/widgets/custom_snackbar.dart';
-import 'package:sistem_magang/core/config/themes/app_color.dart';
+import 'package:Sitama/common/bloc/bloc/notification_bloc.dart';
+import 'package:Sitama/common/bloc/bloc/notification_state.dart';
+import 'package:Sitama/common/widgets/custom_snackbar.dart';
+import 'package:Sitama/core/config/themes/app_color.dart';
 
 import '../../../../../../common/bloc/bloc/notification_event.dart';
 

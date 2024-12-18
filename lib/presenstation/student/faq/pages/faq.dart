@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sistem_magang/core/config/themes/app_color.dart';
+import 'package:Sitama/core/config/themes/app_color.dart';
 
 class FAQPage extends StatelessWidget {
   const FAQPage({super.key});

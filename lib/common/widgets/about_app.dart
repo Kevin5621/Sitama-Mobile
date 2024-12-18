@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sistem_magang/core/config/assets/app_images.dart';
+import 'package:Sitama/core/config/assets/app_images.dart';
 
 class AboutAppPage extends StatelessWidget {
   const AboutAppPage({super.key});

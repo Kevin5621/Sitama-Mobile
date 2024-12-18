@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sistem_magang/core/config/themes/app_color.dart';
-import 'package:sistem_magang/data/models/notification.dart';
+import 'package:Sitama/core/config/themes/app_color.dart';
+import 'package:Sitama/data/models/notification.dart';
 
 // NotificationCard with dynamic theming support
 class NotificationCard extends StatefulWidget {

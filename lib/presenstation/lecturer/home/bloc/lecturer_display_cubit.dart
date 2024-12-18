@@ -1,9 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sistem_magang/domain/entities/lecturer_home_entity.dart';
-import 'package:sistem_magang/domain/usecases/lecturer/get_home_lecturer.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/bloc/lecturer_display_state.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_bloc.dart';
-import 'package:sistem_magang/service_locator.dart';
+import 'package:Sitama/domain/entities/lecturer_home_entity.dart';
+import 'package:Sitama/domain/usecases/lecturer/get_home_lecturer.dart';
+import 'package:Sitama/presenstation/lecturer/home/bloc/lecturer_display_state.dart';
+import 'package:Sitama/presenstation/lecturer/home/bloc/selection_bloc.dart';
+import 'package:Sitama/service_locator.dart';
 
 class LecturerDisplayCubit extends Cubit<LecturerDisplayState> {
   final SelectionBloc selectionBloc;

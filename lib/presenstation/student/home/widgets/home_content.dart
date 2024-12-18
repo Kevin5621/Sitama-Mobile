@@ -2,16 +2,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sistem_magang/common/widgets/student_guidance_card.dart';
-import 'package:sistem_magang/common/widgets/student_log_book_card.dart';
-import 'package:sistem_magang/core/config/assets/app_images.dart';
-import 'package:sistem_magang/data/models/notification.dart';
-import 'package:sistem_magang/domain/entities/student_home_entity.dart';
-import 'package:sistem_magang/presenstation/student/home/bloc/student_display_cubit.dart';
-import 'package:sistem_magang/presenstation/student/home/bloc/student_display_state.dart';
-import 'package:sistem_magang/presenstation/student/home/widgets/load_notification.dart';
-import 'package:sistem_magang/presenstation/student/home/widgets/notification_badge.dart';
-import 'package:sistem_magang/presenstation/student/home/widgets/notification_page.dart';
+import 'package:Sitama/common/widgets/student_guidance_card.dart';
+import 'package:Sitama/common/widgets/student_log_book_card.dart';
+import 'package:Sitama/core/config/assets/app_images.dart';
+import 'package:Sitama/data/models/notification.dart';
+import 'package:Sitama/domain/entities/student_home_entity.dart';
+import 'package:Sitama/presenstation/student/home/bloc/student_display_cubit.dart';
+import 'package:Sitama/presenstation/student/home/bloc/student_display_state.dart';
+import 'package:Sitama/presenstation/student/home/widgets/load_notification.dart';
+import 'package:Sitama/presenstation/student/home/widgets/notification_badge.dart';
+import 'package:Sitama/presenstation/student/home/widgets/notification_page.dart';
 
 class HomeContent extends StatefulWidget {
   final VoidCallback allGuidances;

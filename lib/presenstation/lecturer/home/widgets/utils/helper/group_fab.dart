@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sistem_magang/core/config/themes/app_color.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_bloc.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_state.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/utils/dialogs/send_message_bottom.dart';
+import 'package:Sitama/core/config/themes/app_color.dart';
+import 'package:Sitama/presenstation/lecturer/home/bloc/selection_bloc.dart';
+import 'package:Sitama/presenstation/lecturer/home/bloc/selection_state.dart';
+import 'package:Sitama/presenstation/lecturer/home/widgets/utils/dialogs/send_message_bottom.dart';
 
 class GroupFAB extends StatelessWidget {
   const GroupFAB({super.key});

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sistem_magang/presenstation/student/home/bloc/student_display_cubit.dart';
-import 'package:sistem_magang/presenstation/student/home/bloc/student_display_state.dart';
-import 'package:sistem_magang/presenstation/student/home/widgets/notification_badge.dart';
+import 'package:Sitama/presenstation/student/home/bloc/student_display_cubit.dart';
+import 'package:Sitama/presenstation/student/home/bloc/student_display_state.dart';
+import 'package:Sitama/presenstation/student/home/widgets/notification_badge.dart';
 
 class NotificationBadgeContainer extends StatelessWidget {
   final Function(BuildContext) onPressed;

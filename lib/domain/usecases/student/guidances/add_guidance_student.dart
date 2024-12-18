@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:sistem_magang/core/usecase/usecase.dart';
-import 'package:sistem_magang/data/models/guidance.dart';
-import 'package:sistem_magang/domain/repository/student.dart';
-import 'package:sistem_magang/service_locator.dart';
+import 'package:Sitama/core/usecase/usecase.dart';
+import 'package:Sitama/data/models/guidance.dart';
+import 'package:Sitama/domain/repository/student.dart';
+import 'package:Sitama/service_locator.dart';
 
 class AddGuidanceUseCase implements UseCase<Either, AddGuidanceReqParams> {
   @override

@@ -1,8 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:sistem_magang/core/config/themes/app_color.dart';
-import 'package:sistem_magang/domain/entities/lecturer_home_entity.dart';
+import 'package:Sitama/core/config/themes/app_color.dart';
+import 'package:Sitama/domain/entities/lecturer_home_entity.dart';
 
 class ActivityHelper {
   static IconData getActivityIcon(String activity) {

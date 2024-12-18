@@ -1,13 +1,13 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sistem_magang/data/models/reset_password_req_params.dart';
-import 'package:sistem_magang/data/models/signin_req_params.dart';
-import 'package:sistem_magang/data/models/update_profile_req_params.dart';
-import 'package:sistem_magang/data/source/auth_api_service.dart';
-import 'package:sistem_magang/data/source/auth_local_service.dart';
-import 'package:sistem_magang/domain/repository/auth.dart';
-import 'package:sistem_magang/service_locator.dart';
+import 'package:Sitama/data/models/reset_password_req_params.dart';
+import 'package:Sitama/data/models/signin_req_params.dart';
+import 'package:Sitama/data/models/update_profile_req_params.dart';
+import 'package:Sitama/data/source/auth_api_service.dart';
+import 'package:Sitama/data/source/auth_local_service.dart';
+import 'package:Sitama/domain/repository/auth.dart';
+import 'package:Sitama/service_locator.dart';
 
 class AuthRepostoryImpl extends AuthRepostory{
 

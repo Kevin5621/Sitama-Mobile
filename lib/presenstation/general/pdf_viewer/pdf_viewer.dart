@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:sistem_magang/common/widgets/custom_snackbar.dart';
-import 'package:sistem_magang/core/config/themes/app_color.dart';
+import 'package:Sitama/common/widgets/custom_snackbar.dart';
+import 'package:Sitama/core/config/themes/app_color.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:dio/dio.dart';
 
@@ -102,6 +102,7 @@ class PDFViewerPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(extractFileName(pdfUrl)),
         backgroundColor: AppColors.lightBackground,
+        iconTheme: IconThemeData(color: Colors.black),
         actions: <Widget>[
           IconButton(
             icon: const Icon(

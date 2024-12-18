@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sistem_magang/domain/entities/lecturer_home_entity.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/bloc/lecturer_display_cubit.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_bloc.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_event.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_state.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/utils/helper/activity_helper.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/section/group/group_page.dart';
+import 'package:Sitama/domain/entities/lecturer_home_entity.dart';
+import 'package:Sitama/presenstation/lecturer/home/bloc/lecturer_display_cubit.dart';
+import 'package:Sitama/presenstation/lecturer/home/bloc/selection_bloc.dart';
+import 'package:Sitama/presenstation/lecturer/home/bloc/selection_event.dart';
+import 'package:Sitama/presenstation/lecturer/home/bloc/selection_state.dart';
+import 'package:Sitama/presenstation/lecturer/home/widgets/utils/helper/activity_helper.dart';
+import 'package:Sitama/presenstation/lecturer/home/widgets/section/group/group_page.dart';
 
 class GroupCard extends StatelessWidget {
   final String groupId;

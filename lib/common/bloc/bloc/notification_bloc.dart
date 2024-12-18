@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sistem_magang/common/bloc/bloc/notification_event.dart';
-import 'package:sistem_magang/common/bloc/bloc/notification_state.dart';
-import 'package:sistem_magang/data/models/notification.dart';
-import 'package:sistem_magang/domain/usecases/student/notification/add_notification.dart';
+import 'package:Sitama/common/bloc/bloc/notification_event.dart';
+import 'package:Sitama/common/bloc/bloc/notification_state.dart';
+import 'package:Sitama/data/models/notification.dart';
+import 'package:Sitama/domain/usecases/student/notification/add_notification.dart';
 
 class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   final AddNotificationsUseCase addNotificationsUseCase;

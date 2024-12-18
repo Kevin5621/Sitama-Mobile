@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:sistem_magang/domain/entities/lecturer_detail_student.dart';
-import 'package:sistem_magang/presenstation/lecturer/input_score/widgets/score_input_overlay.dart';
+import 'package:Sitama/domain/entities/lecturer_detail_student.dart';
+import 'package:Sitama/presenstation/lecturer/input_score/widgets/score_input_overlay.dart';
 
 // widget shows assessment scores for a student, with the following features:
 // - Detailed score breakdown

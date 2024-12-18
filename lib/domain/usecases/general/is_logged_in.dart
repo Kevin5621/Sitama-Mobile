@@ -1,6 +1,6 @@
-import 'package:sistem_magang/core/usecase/usecase.dart';
-import 'package:sistem_magang/domain/repository/auth.dart';
-import 'package:sistem_magang/service_locator.dart';
+import 'package:Sitama/core/usecase/usecase.dart';
+import 'package:Sitama/domain/repository/auth.dart';
+import 'package:Sitama/service_locator.dart';
 
 class IsLoggedInUseCase implements UseCase<bool, dynamic> {
   @override

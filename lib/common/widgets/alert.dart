@@ -1,7 +1,7 @@
 // custom_alert_dialog.dart
 
 import 'package:flutter/material.dart';
-import 'package:sistem_magang/core/config/themes/app_color.dart';
+import 'package:Sitama/core/config/themes/app_color.dart';
 
 class CustomAlertDialog extends StatelessWidget {
   final String title;

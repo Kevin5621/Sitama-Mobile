@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import 'package:sistem_magang/core/provider/app_providers.dart';
-import 'package:sistem_magang/core/config/themes/app_theme.dart';
-import 'package:sistem_magang/core/config/themes/theme_provider.dart';
-import 'package:sistem_magang/presenstation/general/splash/pages/splash.dart';
-import 'package:sistem_magang/service_locator.dart';
+import 'package:Sitama/core/provider/app_providers.dart';
+import 'package:Sitama/core/config/themes/app_theme.dart';
+import 'package:Sitama/core/config/themes/theme_provider.dart';
+import 'package:Sitama/presenstation/general/splash/pages/splash.dart';
+import 'package:Sitama/service_locator.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,7 +38,7 @@ class _MyAppState extends State<MyApp> {
       builder: (context, themeProvider, child) {
         return MaterialApp(
           navigatorKey: MyApp.navigatorKey,
-          title: 'Sistem Magang',
+          title: 'Sitama',
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
           themeMode: themeProvider.isDarkMode ? ThemeMode.dark : ThemeMode.light,

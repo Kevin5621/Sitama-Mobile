@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:sistem_magang/presenstation/student/guidance/pages/guidance.dart';
-import 'package:sistem_magang/presenstation/student/home/widgets/home_content.dart';
-import 'package:sistem_magang/presenstation/student/logbook/pages/logbook.dart';
-import 'package:sistem_magang/presenstation/student/profile/pages/profile.dart';
+import 'package:Sitama/presenstation/student/guidance/pages/guidance.dart';
+import 'package:Sitama/presenstation/student/home/widgets/home_content.dart';
+import 'package:Sitama/presenstation/student/logbook/pages/logbook.dart';
+import 'package:Sitama/presenstation/student/profile/pages/profile.dart';
 
 /// A stateful widget that serves as the main navigation hub for the student interface.
 /// Contains a bottom navigation bar for switching between different sections of the app.

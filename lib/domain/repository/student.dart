@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:sistem_magang/data/models/guidance.dart';
-import 'package:sistem_magang/data/models/log_book.dart';
+import 'package:Sitama/data/models/guidance.dart';
+import 'package:Sitama/data/models/log_book.dart';
 abstract class StudentRepository {
   Future<Either> getStudentHome();
 

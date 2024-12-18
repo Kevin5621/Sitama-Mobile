@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sistem_magang/domain/entities/lecturer_home_entity.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_bloc.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_state.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/utils/helper/group_app_bar.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/section/group/group_content.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/utils/helper/group_fab.dart';
+import 'package:Sitama/domain/entities/lecturer_home_entity.dart';
+import 'package:Sitama/presenstation/lecturer/home/bloc/selection_bloc.dart';
+import 'package:Sitama/presenstation/lecturer/home/bloc/selection_state.dart';
+import 'package:Sitama/presenstation/lecturer/home/widgets/utils/helper/group_app_bar.dart';
+import 'package:Sitama/presenstation/lecturer/home/widgets/section/group/group_content.dart';
+import 'package:Sitama/presenstation/lecturer/home/widgets/utils/helper/group_fab.dart';
 
 // Page representing a student group with detailed view and interactions
 class GroupPage extends StatefulWidget {

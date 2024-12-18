@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:sistem_magang/domain/entities/score_entity.dart';
+import 'package:Sitama/domain/entities/score_entity.dart';
 
 class InputField extends StatelessWidget {
   final ScoreEntity score;

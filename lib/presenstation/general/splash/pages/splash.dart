@@ -3,12 +3,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:permission_handler/permission_handler.dart';
-import 'package:sistem_magang/common/bloc/auth/auth_state.dart';
-import 'package:sistem_magang/common/bloc/auth/auth_state_cubit.dart';
-import 'package:sistem_magang/core/config/assets/app_images.dart';
-import 'package:sistem_magang/presenstation/general/welcome/pages/welcome.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/pages/lecturer_home.dart';
-import 'package:sistem_magang/presenstation/student/home/pages/home.dart';
+import 'package:Sitama/common/bloc/auth/auth_state.dart';
+import 'package:Sitama/common/bloc/auth/auth_state_cubit.dart';
+import 'package:Sitama/core/config/assets/app_images.dart';
+import 'package:Sitama/presenstation/general/welcome/pages/welcome.dart';
+import 'package:Sitama/presenstation/lecturer/home/pages/lecturer_home.dart';
+import 'package:Sitama/presenstation/student/home/pages/home.dart';
 
 // Future<void> requestNotificationPermissions() async {
 //   if (Platform.isAndroid) {

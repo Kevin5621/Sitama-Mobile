@@ -1,4 +1,4 @@
-package com.example.sistem_magang
+package com.example.Sitama
 
 import io.flutter.embedding.android.FlutterActivity
 

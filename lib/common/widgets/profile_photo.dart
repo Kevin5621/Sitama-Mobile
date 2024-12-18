@@ -1,10 +1,10 @@
 // import 'package:cached_network_image/cached_network_image.dart';
 // import 'package:flutter/material.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:sistem_magang/common/bloc/bloc/photo_cubit.dart';
-// import 'package:sistem_magang/common/bloc/bloc/photo_state.dart';
-// import 'package:sistem_magang/core/config/assets/app_images.dart';
-// import 'package:sistem_magang/core/config/themes/app_color.dart';
+// import 'package:Sitama/common/bloc/bloc/photo_cubit.dart';
+// import 'package:Sitama/common/bloc/bloc/photo_state.dart';
+// import 'package:Sitama/core/config/assets/app_images.dart';
+// import 'package:Sitama/core/config/themes/app_color.dart';
 
 
 // class ProfilePhoto extends StatelessWidget {

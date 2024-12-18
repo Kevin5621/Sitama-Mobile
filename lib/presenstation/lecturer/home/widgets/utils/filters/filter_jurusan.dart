@@ -1,6 +1,6 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:sistem_magang/domain/entities/lecturer_home_entity.dart';
+import 'package:Sitama/domain/entities/lecturer_home_entity.dart';
 
 // A customizable dropdown widget for filtering students by their majors
 // Includes search functionality and supports theming

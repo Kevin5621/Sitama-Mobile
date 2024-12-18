@@ -2,17 +2,17 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sistem_magang/common/widgets/alert.dart';
-import 'package:sistem_magang/domain/entities/lecturer_home_entity.dart';
-import 'package:sistem_magang/presenstation/lecturer/detail_student/pages/detail_student.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_bloc.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_event.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/bloc/selection_state.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/section/cards/archive_card.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/utils/dialogs/group_dialog.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/utils/filters/filter_section.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/section/cards/group_card.dart';
-import 'package:sistem_magang/presenstation/lecturer/home/widgets/section/cards/student_card.dart';
+import 'package:Sitama/common/widgets/alert.dart';
+import 'package:Sitama/domain/entities/lecturer_home_entity.dart';
+import 'package:Sitama/presenstation/lecturer/detail_student/pages/detail_student.dart';
+import 'package:Sitama/presenstation/lecturer/home/bloc/selection_bloc.dart';
+import 'package:Sitama/presenstation/lecturer/home/bloc/selection_event.dart';
+import 'package:Sitama/presenstation/lecturer/home/bloc/selection_state.dart';
+import 'package:Sitama/presenstation/lecturer/home/widgets/section/cards/archive_card.dart';
+import 'package:Sitama/presenstation/lecturer/home/widgets/utils/dialogs/group_dialog.dart';
+import 'package:Sitama/presenstation/lecturer/home/widgets/utils/filters/filter_section.dart';
+import 'package:Sitama/presenstation/lecturer/home/widgets/section/cards/group_card.dart';
+import 'package:Sitama/presenstation/lecturer/home/widgets/section/cards/student_card.dart';
 
 // Widget that displays a list of students with grouping, archiving, and selection capabilities
 // Used in the lecturer's dashboard to manage their supervised students

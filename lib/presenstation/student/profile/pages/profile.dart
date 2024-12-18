@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import 'package:sistem_magang/common/widgets/about_app.dart';
-import 'package:sistem_magang/common/widgets/edit_photo_profile_pop_up.dart';
-import 'package:sistem_magang/common/widgets/reset_password.dart';
-import 'package:sistem_magang/common/widgets/setting_button.dart';
-import 'package:sistem_magang/core/config/assets/app_images.dart';
-import 'package:sistem_magang/core/config/themes/app_color.dart';
-import 'package:sistem_magang/common/widgets/log_out_alert.dart';
-import 'package:sistem_magang/core/config/themes/theme_provider.dart';
-import 'package:sistem_magang/domain/entities/student_home_entity.dart';
-import 'package:sistem_magang/presenstation/student/faq/pages/faq.dart';
-import 'package:sistem_magang/presenstation/student/profile/bloc/profile_student_cubit.dart';
-import 'package:sistem_magang/presenstation/student/profile/bloc/profile_student_state.dart';
-import 'package:sistem_magang/presenstation/student/profile/widgets/box_industry.dart';
+import 'package:Sitama/common/widgets/about_app.dart';
+import 'package:Sitama/common/widgets/edit_photo_profile_pop_up.dart';
+import 'package:Sitama/common/widgets/reset_password.dart';
+import 'package:Sitama/common/widgets/setting_button.dart';
+import 'package:Sitama/core/config/assets/app_images.dart';
+import 'package:Sitama/core/config/themes/app_color.dart';
+import 'package:Sitama/common/widgets/log_out_alert.dart';
+import 'package:Sitama/core/config/themes/theme_provider.dart';
+import 'package:Sitama/domain/entities/student_home_entity.dart';
+import 'package:Sitama/presenstation/student/faq/pages/faq.dart';
+import 'package:Sitama/presenstation/student/profile/bloc/profile_student_cubit.dart';
+import 'package:Sitama/presenstation/student/profile/bloc/profile_student_state.dart';
+import 'package:Sitama/presenstation/student/profile/widgets/box_industry.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});

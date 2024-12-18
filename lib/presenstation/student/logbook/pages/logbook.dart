@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sistem_magang/common/widgets/search_field.dart';
-import 'package:sistem_magang/common/widgets/student_log_book_card.dart';
-import 'package:sistem_magang/domain/entities/log_book_entity.dart';
-import 'package:sistem_magang/presenstation/student/logbook/bloc/log_book_student_cubit.dart';
-import 'package:sistem_magang/presenstation/student/logbook/bloc/log_book_student_state.dart';
-import 'package:sistem_magang/presenstation/student/logbook/widgets/add_log_book.dart';
-import 'package:sistem_magang/presenstation/student/logbook/widgets/filter_dilog.dart';
+import 'package:Sitama/common/widgets/search_field.dart';
+import 'package:Sitama/common/widgets/student_log_book_card.dart';
+import 'package:Sitama/domain/entities/log_book_entity.dart';
+import 'package:Sitama/presenstation/student/logbook/bloc/log_book_student_cubit.dart';
+import 'package:Sitama/presenstation/student/logbook/bloc/log_book_student_state.dart';
+import 'package:Sitama/presenstation/student/logbook/widgets/add_log_book.dart';
+import 'package:Sitama/presenstation/student/logbook/widgets/filter_dilog.dart';
 
 class LogBookPage extends StatefulWidget {
   const LogBookPage({super.key});

@@ -2,14 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:sistem_magang/common/bloc/button/button_state.dart';
-import 'package:sistem_magang/common/bloc/button/button_state_cubit.dart';
-import 'package:sistem_magang/common/widgets/basic_app_button.dart';
-import 'package:sistem_magang/common/widgets/custom_snackbar.dart';
-import 'package:sistem_magang/data/models/log_book.dart';
-import 'package:sistem_magang/domain/usecases/student/logbook/add_log_book_student.dart';
-import 'package:sistem_magang/presenstation/student/home/pages/home.dart';
-import 'package:sistem_magang/service_locator.dart';
+import 'package:Sitama/common/bloc/button/button_state.dart';
+import 'package:Sitama/common/bloc/button/button_state_cubit.dart';
+import 'package:Sitama/common/widgets/basic_app_button.dart';
+import 'package:Sitama/common/widgets/custom_snackbar.dart';
+import 'package:Sitama/data/models/log_book.dart';
+import 'package:Sitama/domain/usecases/student/logbook/add_log_book_student.dart';
+import 'package:Sitama/presenstation/student/home/pages/home.dart';
+import 'package:Sitama/service_locator.dart';
 
 class AddLogBook extends StatefulWidget {
   const AddLogBook({super.key});

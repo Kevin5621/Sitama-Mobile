@@ -1,11 +1,11 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sistem_magang/core/constansts/api_urls.dart';
-import 'package:sistem_magang/core/network/dio_client.dart';
-import 'package:sistem_magang/data/models/guidance.dart';
-import 'package:sistem_magang/data/models/log_book.dart';
-import 'package:sistem_magang/service_locator.dart';
+import 'package:Sitama/core/constansts/api_urls.dart';
+import 'package:Sitama/core/network/dio_client.dart';
+import 'package:Sitama/data/models/guidance.dart';
+import 'package:Sitama/data/models/log_book.dart';
+import 'package:Sitama/service_locator.dart';
 
 abstract class StudentApiService {
   Future<Either> getStudentHome();

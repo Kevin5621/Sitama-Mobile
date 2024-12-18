@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:sistem_magang/core/config/themes/app_color.dart';
-import 'package:sistem_magang/presenstation/student/logbook/widgets/delete_log_book.dart';
-import 'package:sistem_magang/presenstation/student/logbook/widgets/edit_log_book.dart';
+import 'package:Sitama/core/config/themes/app_color.dart';
+import 'package:Sitama/presenstation/student/logbook/widgets/delete_log_book.dart';
+import 'package:Sitama/presenstation/student/logbook/widgets/edit_log_book.dart';
 
 /// Key Features:
 /// - Displays the logbook entry title and date in a visually appealing card.

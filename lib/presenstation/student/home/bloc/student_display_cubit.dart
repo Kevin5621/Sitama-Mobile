@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sistem_magang/domain/usecases/student/general/get_home_student.dart';
-import 'package:sistem_magang/domain/usecases/student/notification/get_notification.dart';
-import 'package:sistem_magang/presenstation/student/home/bloc/student_display_state.dart';
-import 'package:sistem_magang/service_locator.dart';
+import 'package:Sitama/domain/usecases/student/general/get_home_student.dart';
+import 'package:Sitama/domain/usecases/student/notification/get_notification.dart';
+import 'package:Sitama/presenstation/student/home/bloc/student_display_state.dart';
+import 'package:Sitama/service_locator.dart';
 
 class StudentDisplayCubit extends Cubit<StudentDisplayState> {
   StudentDisplayCubit() : super(StudentLoading());

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sistem_magang/common/widgets/alert.dart';
-import 'package:sistem_magang/domain/entities/lecturer_detail_student.dart';
-import 'package:sistem_magang/presenstation/lecturer/detail_student/bloc/detail_student_display_cubit.dart';
-import 'package:sistem_magang/presenstation/lecturer/detail_student/bloc/detail_student_display_state.dart';
+import 'package:Sitama/common/widgets/alert.dart';
+import 'package:Sitama/domain/entities/lecturer_detail_student.dart';
+import 'package:Sitama/presenstation/lecturer/detail_student/bloc/detail_student_display_cubit.dart';
+import 'package:Sitama/presenstation/lecturer/detail_student/bloc/detail_student_display_state.dart';
 
 class InternshipStatusBox extends StatelessWidget {
   final List<DetailStudentEntity> students;

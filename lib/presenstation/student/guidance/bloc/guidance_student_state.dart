@@ -1,4 +1,4 @@
-import 'package:sistem_magang/domain/entities/guidance_entity.dart';
+import 'package:Sitama/domain/entities/guidance_entity.dart';
 
 abstract class GuidanceStudentState {}
 

@@ -1,5 +1,5 @@
-import 'package:sistem_magang/domain/entities/student_home_entity.dart';
-import 'package:sistem_magang/data/models/notification.dart';
+import 'package:Sitama/domain/entities/student_home_entity.dart';
+import 'package:Sitama/data/models/notification.dart';
 
 abstract class StudentDisplayState {}
 

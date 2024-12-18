@@ -1,5 +1,5 @@
-import 'package:sistem_magang/data/models/score.dart';
-import 'package:sistem_magang/domain/entities/assessment_entity.dart';
+import 'package:Sitama/data/models/score.dart';
+import 'package:Sitama/domain/entities/assessment_entity.dart';
 
 class AssessmentModel {
   final String componentName;

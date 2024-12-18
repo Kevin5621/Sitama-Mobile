@@ -1,10 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names
 import 'package:intl/intl.dart';
-import 'package:sistem_magang/data/models/guidance.dart';
-import 'package:sistem_magang/data/models/log_book.dart';
-import 'package:sistem_magang/domain/entities/guidance_entity.dart';
-import 'package:sistem_magang/domain/entities/lecturer_detail_student.dart';
-import 'package:sistem_magang/domain/entities/log_book_entity.dart';
+import 'package:Sitama/data/models/guidance.dart';
+import 'package:Sitama/data/models/log_book.dart';
+import 'package:Sitama/domain/entities/guidance_entity.dart';
+import 'package:Sitama/domain/entities/lecturer_detail_student.dart';
+import 'package:Sitama/domain/entities/log_book_entity.dart';
 
 class DetailStudentModel {
   final InfoStudentModel student;
@@ -12,7 +12,7 @@ class DetailStudentModel {
   final List<GuidanceModel> guidances;
   final List<LogBookModel> log_book;
   final List<ShowAssessmentModel> assessments;
-  final double average_all_assessments;
+  final int average_all_assessments;
 
   DetailStudentModel({
     required this.student,
@@ -46,7 +46,7 @@ class DetailStudentModel {
           (x) => ShowAssessmentModel.fromMap(x as Map<String, dynamic>),
         ),
       ),
-      average_all_assessments: map['average_all_assessments'] as double,
+      average_all_assessments: map['average_all_assessments'] as int,
     );
   }
 }

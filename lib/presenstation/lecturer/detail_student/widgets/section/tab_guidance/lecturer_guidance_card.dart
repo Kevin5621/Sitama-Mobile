@@ -2,20 +2,20 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sistem_magang/common/bloc/bloc/notification_bloc.dart';
-import 'package:sistem_magang/common/bloc/bloc/notification_event.dart';
-import 'package:sistem_magang/common/bloc/button/button_state.dart';
-import 'package:sistem_magang/common/bloc/button/button_state_cubit.dart';
-import 'package:sistem_magang/common/widgets/alert.dart';
-import 'package:sistem_magang/common/widgets/date_relative_time.dart';
-import 'package:sistem_magang/core/config/themes/app_color.dart';
-import 'package:sistem_magang/data/models/guidance.dart';
-import 'package:sistem_magang/domain/entities/guidance_entity.dart';
-import 'package:sistem_magang/domain/usecases/lecturer/update_status_guidance.dart';
-import 'package:sistem_magang/presenstation/lecturer/detail_student/pages/detail_student.dart';
-import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/section/tab_guidance/guidance_status.dart';
-import 'package:sistem_magang/presenstation/lecturer/detail_student/widgets/section/tab_guidance/lecturer_guidance_card_content.dart';
-import 'package:sistem_magang/service_locator.dart';
+import 'package:Sitama/common/bloc/bloc/notification_bloc.dart';
+import 'package:Sitama/common/bloc/bloc/notification_event.dart';
+import 'package:Sitama/common/bloc/button/button_state.dart';
+import 'package:Sitama/common/bloc/button/button_state_cubit.dart';
+import 'package:Sitama/common/widgets/alert.dart';
+import 'package:Sitama/common/widgets/date_relative_time.dart';
+import 'package:Sitama/core/config/themes/app_color.dart';
+import 'package:Sitama/data/models/guidance.dart';
+import 'package:Sitama/domain/entities/guidance_entity.dart';
+import 'package:Sitama/domain/usecases/lecturer/update_status_guidance.dart';
+import 'package:Sitama/presenstation/lecturer/detail_student/pages/detail_student.dart';
+import 'package:Sitama/presenstation/lecturer/detail_student/widgets/section/tab_guidance/guidance_status.dart';
+import 'package:Sitama/presenstation/lecturer/detail_student/widgets/section/tab_guidance/lecturer_guidance_card_content.dart';
+import 'package:Sitama/service_locator.dart';
 
 class LecturerGuidanceCard extends StatefulWidget {
   final GuidanceEntity guidance;
