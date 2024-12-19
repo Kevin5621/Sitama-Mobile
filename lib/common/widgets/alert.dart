@@ -13,6 +13,7 @@ class CustomAlertDialog extends StatelessWidget {
   final VoidCallback? onConfirm;
   final IconData? icon;
   final Color? iconColor;
+  final Widget Function(BuildContext)? confirmButton;
 
   const CustomAlertDialog({
     super.key,
@@ -25,6 +26,7 @@ class CustomAlertDialog extends StatelessWidget {
     this.onConfirm,
     this.icon,
     this.iconColor,
+    this.confirmButton,
   });
 
   static Future<bool?> show({
@@ -180,7 +182,8 @@ class CustomAlertDialog extends StatelessWidget {
               ),
             ),
           ),
-        ElevatedButton(
+        // Using confirmButton if available, otherwise use default ElevatedButton
+        confirmButton?.call(context) ?? ElevatedButton(
           onPressed: onConfirm ?? () {},
           style: ElevatedButton.styleFrom(
             backgroundColor: confirmColor ?? colorScheme.primary,

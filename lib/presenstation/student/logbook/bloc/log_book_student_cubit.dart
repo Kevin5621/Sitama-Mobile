@@ -6,7 +6,7 @@ import 'package:Sitama/service_locator.dart';
 class LogBookStudentCubit extends Cubit<LogBookStudentState> {
   LogBookStudentCubit() : super(LogBookLoading());
 
-  void displayLogBook() async {
+  Future<void> displayLogBook() async {
     var resullt = await sl<GetLogBookStudentUseCase>().call();
     resullt.fold(
       (error) {

@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 import 'package:Sitama/core/config/themes/app_color.dart';
 import 'package:Sitama/presenstation/general/pdf_viewer/pdf_viewer.dart';
 import 'package:Sitama/presenstation/student/guidance/widgets/delete_guidance.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:Sitama/common/bloc/button/button_state_cubit.dart';
 import 'package:Sitama/presenstation/student/guidance/widgets/edit_guidance.dart';
 
 /// Features:
@@ -203,10 +205,13 @@ class GuidanceCard extends StatelessWidget {
                             showDialog(
                               context: context,
                               builder: (context) {
-                                return DeleteGuidance(
-                                  id: id,
-                                  title: title,
-                                  curentPage: curentPage,
+                                return BlocProvider<ButtonStateCubit>(
+                                  create: (context) => ButtonStateCubit(),
+                                  child: DeleteGuidance(
+                                    id: id,
+                                    title: title,
+                                    curentPage: curentPage,
+                                  ),
                                 );
                               },
                             );

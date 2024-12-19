@@ -136,7 +136,7 @@ class LogBookCard extends StatelessWidget {
                           showDialog(
                             context: context,
                             builder: (context) {
-                              return DeleteLogBook(
+                              return DeleteLogBooks(
                                 id: item.id,
                                 title: item.title,
                                 curentPage: item.curentPage,

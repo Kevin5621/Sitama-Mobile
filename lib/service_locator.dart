@@ -1,3 +1,5 @@
+import 'package:Sitama/presenstation/student/guidance/bloc/guidance_student_cubit.dart';
+import 'package:Sitama/presenstation/student/logbook/bloc/log_book_student_cubit.dart';
 import 'package:get_it/get_it.dart';
 import 'package:Sitama/core/network/dio_client.dart';
 import 'package:Sitama/data/repository/auth.dart';
@@ -56,6 +58,8 @@ void setupServiceLocator() {
 
   //bloc
   sl.registerSingleton<SelectionBloc>(SelectionBloc());
+  sl.registerLazySingleton(() => GuidanceStudentCubit());
+  sl.registerLazySingleton(() => LogBookStudentCubit());
   
   // Usecase
   sl.registerSingleton<SigninUseCase>(SigninUseCase());

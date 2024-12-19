@@ -6,14 +6,14 @@ import 'package:Sitama/service_locator.dart';
 class GuidanceStudentCubit extends Cubit<GuidanceStudentState> {
   GuidanceStudentCubit() : super(GuidanceLoading());
 
-  void displayGuidance() async {
+  Future<void> displayGuidance() async {
     var resullt = await sl<GetGuidancesStudentUseCase>().call();
     resullt.fold(
       (error) {
         emit(LoadGuidanceFailure(errorMessage: error));
       },
       (data) {
-        emit(GuidanceLoaded(guidanceEntity: data)); 
+        emit(GuidanceLoaded(guidanceEntity: data));
       },
     );
   }
