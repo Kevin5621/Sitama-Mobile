@@ -10,15 +10,15 @@ class LecturerLogBookTab extends StatelessWidget {
   final int student_id;
 
   const LecturerLogBookTab({
-    super.key, 
-    required this.logBooks, 
+    super.key,
+    required this.logBooks,
     required this.student_id,
   });
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      shrinkWrap: true,
+      physics: const ClampingScrollPhysics(),
       itemCount: logBooks.length,
       itemBuilder: (context, index) {
         return LecturerLogBookCard(
