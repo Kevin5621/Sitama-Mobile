@@ -100,8 +100,8 @@ class _LogBookContentState extends State<LogBookContent> {
     }
 
     final notificationData = {
-      'title': 'Catatan baru ditambahkan pada logbook Anda',
       'message': widget.logBook.title,
+      'detailText': _lecturerNote,
       'category': 'log_book',
       'date': DateTime.now().toIso8601String().split('T').first,
     };

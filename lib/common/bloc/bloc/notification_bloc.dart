@@ -25,7 +25,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
           message: event.notificationData['message'],
           date: event.notificationData['date'] ?? DateTime.now().toIso8601String().split('T').first,
           category: event.notificationData['category'] ?? 'general',
-          detailText: event.notificationData['title'],
+          detailText: event.notificationData['detailText'],
         );
 
         final result = await addNotificationsUseCase(param: request);

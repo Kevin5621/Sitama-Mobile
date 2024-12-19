@@ -152,10 +152,10 @@ class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
     final buttonCubit = ButtonStateCubit();
     
     final notificationData = {
-      'title': _lecturerNote.text.isNotEmpty 
+      'message': widget.guidance.title,
+      'detailText': _lecturerNote.text.isNotEmpty
         ? _lecturerNote.text 
         : GuidanceStatusHelper.getNotificationTitle(newStatus),
-      'message': widget.guidance.title,
       'category': GuidanceStatusHelper.getNotificationCategory(newStatus),
       'date': DateTime.now().toIso8601String().split('T').first,
     };
@@ -169,15 +169,14 @@ class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
       ),
     );
 
-    context.read<NotificationBloc>().add(
-      SendNotification(
-        notificationData: notificationData,
-        userIds: {widget.student_id},
-      ),
-    );
-
     buttonCubit.stream.listen((state) {
       if (state is ButtonSuccessState) {
+        context.read<NotificationBloc>().add(
+          SendNotification(
+            notificationData: notificationData,
+            userIds: {widget.student_id},
+          ),
+        );
         _showSuccessAndNavigate();
       }
       
