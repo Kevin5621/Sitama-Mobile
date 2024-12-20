@@ -129,10 +129,29 @@ class _AddLogBookState extends State<AddLogBook> {
                         firstDate: DateTime(2000),
                         lastDate: DateTime.now(),
                         builder: (context, child) {
+                          // Get the current brightness
+                          final isDark = Theme.of(context).brightness == Brightness.dark;
+                          
                           return Theme(
                             data: Theme.of(context).copyWith(
-                              colorScheme: ColorScheme.light(
-                                primary: Theme.of(context).primaryColor,
+                              colorScheme: isDark 
+                                ? ColorScheme.dark(
+                                    primary: Theme.of(context).primaryColor,
+                                    onPrimary: Colors.white,
+                                    surface: Theme.of(context).colorScheme.surface,
+                                    onSurface: Theme.of(context).colorScheme.onSurface,
+                                  )
+                                : ColorScheme.light(
+                                    primary: Theme.of(context).primaryColor,
+                                    onPrimary: Colors.white,
+                                    surface: Theme.of(context).colorScheme.surface,
+                                    onSurface: Theme.of(context).colorScheme.onSurface,
+                                  ),
+                              dialogBackgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                              textButtonTheme: TextButtonThemeData(
+                                style: TextButton.styleFrom(
+                                  foregroundColor: Theme.of(context).primaryColor,
+                                ),
                               ),
                             ),
                             child: child!,
