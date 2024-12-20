@@ -33,13 +33,19 @@ class _LecturerLogBookCardState extends State<LecturerLogBookCard> {
       child: Theme(
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
-          title: Text(widget.logBook.title),
+          title: Text(
+            widget.logBook.title,
+            textAlign: TextAlign.start,
+          ),
           subtitle: Text(
             RelativeTimeUtil.getRelativeTime(widget.logBook.date),
             style: textTheme.bodySmall?.copyWith(
               color: colorScheme.onSurface.withOpacity(0.7),
             ),
+            textAlign: TextAlign.start,
           ),
+          expandedAlignment: Alignment.centerLeft,
+          childrenPadding: EdgeInsets.zero,
           children: [
             _buildLogBookDetails(colorScheme, textTheme),
           ],
@@ -51,61 +57,78 @@ class _LecturerLogBookCardState extends State<LecturerLogBookCard> {
   Widget _buildLogBookDetails(ColorScheme colorScheme, TextTheme textTheme) {
     return Padding(
       padding: const EdgeInsets.all(16),
+      child: Container(
+        width: double.infinity,
+        alignment: Alignment.centerLeft,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            _buildSection('Aktivitas:', widget.logBook.activity, textTheme),
+            const SizedBox(height: 16),
+            if (hasNote) _buildLecturerNote(textTheme),
+            if (hasNote) const SizedBox(height: 16),
+            LogBookContent(
+              logBook: widget.logBook,
+              student_id: widget.student_id,
+              colorScheme: colorScheme,
+              textTheme: textTheme,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSection(String title, String content, TextTheme textTheme) {
+    return Container(
+      width: double.infinity,
+      alignment: Alignment.centerLeft,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          _buildSection('Aktivitas:', widget.logBook.activity, textTheme),
-          const SizedBox(height: 16),
-          if (hasNote) _buildLecturerNote(textTheme),
-          if (hasNote) const SizedBox(height: 16),
-          LogBookContent(
-            logBook: widget.logBook,
-            student_id: widget.student_id,
-            colorScheme: colorScheme,
-            textTheme: textTheme,
+          Text(
+            title,
+            style: textTheme.bodyMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+            textAlign: TextAlign.start,
+          ),
+          const SizedBox(height: 8),
+          Text(
+            content,
+            style: textTheme.bodyMedium,
+            textAlign: TextAlign.start,
           ),
         ],
       ),
     );
   }
 
-  Widget _buildSection(String title, String content, TextTheme textTheme) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: textTheme.bodyMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          content,
-          style: textTheme.bodyMedium,
-          textAlign: TextAlign.start,
-        ),
-      ],
-    );
-  }
-
   Widget _buildLecturerNote(TextTheme textTheme) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Catatan Anda:',
-          style: textTheme.bodyMedium?.copyWith(
-            fontWeight: FontWeight.bold,
+    return Container(
+      width: double.infinity,
+      alignment: Alignment.centerLeft,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Text(
+            'Catatan Anda:',
+            style: textTheme.bodyMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+            textAlign: TextAlign.start,
           ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          widget.logBook.lecturer_note,
-          style: textTheme.bodyMedium,
-          textAlign: TextAlign.start,
-        ),
-      ],
+          const SizedBox(height: 8),
+          Text(
+            widget.logBook.lecturer_note,
+            style: textTheme.bodyMedium,
+            textAlign: TextAlign.start,
+          ),
+        ],
+      ),
     );
   }
 }

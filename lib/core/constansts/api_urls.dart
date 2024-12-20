@@ -1,6 +1,6 @@
 class ApiUrls {
   // Base URL for the API
-  static const baseUrl = 'http://192.168.1.8:8000/api/';
+  static const baseUrl = 'http://192.168.36.1:8000/api/';
 
   // Authentication endpoints
   static const login = '${baseUrl}login';
