@@ -195,31 +195,33 @@ class GuidanceCard extends StatelessWidget {
                             );
                           },
                         ),
-                        const SizedBox(width: 10),
-                        _buildActionButton(
-                          context: context,
-                          icon: Icons.delete,
-                          label: 'Delete',
-                          color: AppColors.lightDanger,
-                          onTap: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return BlocProvider<ButtonStateCubit>(
-                                  create: (context) => ButtonStateCubit(),
-                                  child: DeleteGuidance(
-                                    id: id,
-                                    title: title,
-                                    curentPage: curentPage,
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                        ),
+                        if (status == GuidanceStatus.inProgress) ...[
+                          const SizedBox(width: 10),
+                          _buildActionButton(
+                            context: context,
+                            icon: Icons.delete,
+                            label: 'Delete',
+                            color: AppColors.lightDanger,
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return BlocProvider<ButtonStateCubit>(
+                                    create: (context) => ButtonStateCubit(),
+                                    child: DeleteGuidance(
+                                      id: id,
+                                      title: title,
+                                      curentPage: curentPage,
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        ],
                       ],
                     ),
-                  ],
+                  ]
                 ],
               ),
             ),
