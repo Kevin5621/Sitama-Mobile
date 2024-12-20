@@ -1,3 +1,4 @@
+import 'package:Sitama/core/config/themes/app_color.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,6 +25,9 @@ class _AddLogBookState extends State<AddLogBook> {
   final TextEditingController _title = TextEditingController();
   final TextEditingController _activity = TextEditingController();
 
+  bool _titleError = false;
+  bool _activityError = false;
+  
   @override
   void dispose() {
     _title.dispose();
@@ -103,22 +107,41 @@ class _AddLogBookState extends State<AddLogBook> {
                     controller: _title,
                     decoration: InputDecoration(
                       labelText: 'Judul',
-                      labelStyle:
-                          TextStyle(color: Theme.of(context).primaryColor),
+                      labelStyle: TextStyle(
+                        color: _titleError ? AppColors.lightDanger : Theme.of(context).primaryColor
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide:
-                            BorderSide(color: Theme.of(context).primaryColor),
+                       borderSide: BorderSide(
+                          color: _titleError ? AppColors.lightDanger : Theme.of(context).primaryColor
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(
+                          color: _titleError ? AppColors.lightDanger : Colors.grey
+                        ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide(
-                            color: Theme.of(context).primaryColor, width: 2),
+                          color: _titleError ? AppColors.lightDanger : Theme.of(context).primaryColor,
+                          width: 2
+                        ),
                       ),
+                      errorText: _titleError ? 'Judul tidak boleh kosong' : null,
                       filled: true,
                       fillColor:
                           Theme.of(context).primaryColor.withOpacity(0.05),
                     ),
+                    onChanged: (value) {
+                      // Clear error when user starts typing
+                      if (_titleError) {
+                        setState(() {
+                          _titleError = false;
+                        });
+                      }
+                    },
                   ),
                   const SizedBox(height: 20),
                   InkWell(
@@ -199,20 +222,38 @@ class _AddLogBookState extends State<AddLogBook> {
                     maxLines: 3,
                     decoration: InputDecoration(
                       labelText: 'Aktivitas',
-                      labelStyle:
-                          TextStyle(color: Theme.of(context).primaryColor),
+                      labelStyle: TextStyle(
+                        color: _activityError ? AppColors.lightDanger : Theme.of(context).primaryColor
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(
+                          color: _titleError ? AppColors.lightDanger : Colors.grey
+                        ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide(
-                            color: Theme.of(context).primaryColor, width: 2),
+                          color: _activityError ? AppColors.lightDanger : Theme.of(context).primaryColor,
+                          width: 2
+                        ),
                       ),
+                      errorText: _activityError ? 'Aktivitas tidak boleh kosong' : null,
                       filled: true,
                       fillColor:
                           Theme.of(context).primaryColor.withOpacity(0.05),
                     ),
+                    onChanged: (value) {
+                      // Clear error when user starts typing
+                      if (_activityError) {
+                        setState(() {
+                          _activityError = false;
+                        });
+                      }
+                    },
                   ),
                 ],
               ),
@@ -222,14 +263,23 @@ class _AddLogBookState extends State<AddLogBook> {
             Builder(builder: (context) {
               return BasicAppButton(
                 onPressed: () {
-                  context.read<ButtonStateCubit>().excute(
-                        usecase: sl<AddLogBookUseCase>(),
-                        params: AddLogBookReqParams(
-                          title: _title.text,
-                          activity: _activity.text,
-                          date: _date,
-                        ),
-                      );
+                  // Update validation state
+                  setState(() {
+                    _titleError = _title.text.trim().isEmpty;
+                    _activityError = _activity.text.trim().isEmpty;
+                  });
+
+                  // Only proceed if there are no errors
+                  if (!_titleError && !_activityError) {
+                    context.read<ButtonStateCubit>().excute(
+                      usecase: sl<AddLogBookUseCase>(),
+                      params: AddLogBookReqParams(
+                        title: _title.text.trim(),
+                        activity: _activity.text.trim(),
+                        date: _date,
+                      ),
+                    );
+                  }
                 },
                 title: 'Add',
                 height: false,
@@ -239,7 +289,7 @@ class _AddLogBookState extends State<AddLogBook> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Cancel'),
+              child: Text('Cancel'),
             ),
           ],
         ),

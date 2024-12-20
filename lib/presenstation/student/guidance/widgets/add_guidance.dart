@@ -1,3 +1,4 @@
+import 'package:Sitama/core/config/themes/app_color.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,6 +24,9 @@ class _AddGuidanceState extends State<AddGuidance> {
   final TextEditingController _title = TextEditingController();
   final TextEditingController _activity = TextEditingController();
   PlatformFile? _selectedFile;
+  
+  bool _titleError = false;
+  bool _activityError = false;
 
   @override
   void dispose() {
@@ -37,7 +41,7 @@ class _AddGuidanceState extends State<AddGuidance> {
       allowedExtensions: ['pdf'],
       withData: true,
     );
-    if (result != null){
+    if (result != null) {
       setState(() {
         _selectedFile = result.files.first;
       });
@@ -72,7 +76,7 @@ class _AddGuidanceState extends State<AddGuidance> {
               CustomSnackBar(
                 message: state.errorMessage,
                 icon: Icons.error_outline,  
-                backgroundColor: Colors.red.shade800,  
+                backgroundColor: AppColors.lightDanger,  
               ),
             );
           }
@@ -105,7 +109,7 @@ class _AddGuidanceState extends State<AddGuidance> {
             ],
           ),
           content: Form(
-            child: Container(
+            child: SizedBox(
               width: MediaQuery.of(context).size.width * 0.8,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -114,18 +118,40 @@ class _AddGuidanceState extends State<AddGuidance> {
                     controller: _title,
                     decoration: InputDecoration(
                       labelText: 'Judul',
-                      labelStyle: TextStyle(color: Theme.of(context).primaryColor),
+                      labelStyle: TextStyle(
+                        color: _titleError ? AppColors.lightDanger : Theme.of(context).primaryColor
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Theme.of(context).primaryColor),
+                        borderSide: BorderSide(
+                          color: _titleError ? AppColors.lightDanger : Theme.of(context).primaryColor
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(
+                          color: _titleError ? AppColors.lightDanger : Colors.grey
+                        ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Theme.of(context).primaryColor, width: 2),
+                        borderSide: BorderSide(
+                          color: _titleError ? AppColors.lightDanger : Theme.of(context).primaryColor,
+                          width: 2
+                        ),
                       ),
+                      errorText: _titleError ? 'Judul tidak boleh kosong' : null,
                       filled: true,
                       fillColor: Theme.of(context).primaryColor.withOpacity(0.05),
                     ),
+                    onChanged: (value) {
+                      // Clear error when user starts typing
+                      if (_titleError) {
+                        setState(() {
+                          _titleError = false;
+                        });
+                      }
+                    },
                   ),
                   const SizedBox(height: 20),
                   InkWell(
@@ -202,17 +228,37 @@ class _AddGuidanceState extends State<AddGuidance> {
                     maxLines: 3,
                     decoration: InputDecoration(
                       labelText: 'Aktivitas',
-                      labelStyle: TextStyle(color: Theme.of(context).primaryColor),
+                      labelStyle: TextStyle(
+                        color: _activityError ? AppColors.lightDanger : Theme.of(context).primaryColor
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(
+                          color: _activityError ? AppColors.lightDanger : Colors.grey
+                        ),
+                      ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Theme.of(context).primaryColor, width: 2),
+                        borderSide: BorderSide(
+                          color: _activityError ? AppColors.lightDanger : Theme.of(context).primaryColor,
+                          width: 2
+                        ),
                       ),
+                      errorText: _activityError ? 'Aktivitas tidak boleh kosong' : null,
                       filled: true,
                       fillColor: Theme.of(context).primaryColor.withOpacity(0.05),
                     ),
+                    onChanged: (value) {
+                      // Clear error when user starts typing
+                      if (_activityError) {
+                        setState(() {
+                          _activityError = false;
+                        });
+                      }
+                    },
                   ),
                   const SizedBox(height: 20),
                   InkWell(
@@ -257,7 +303,7 @@ class _AddGuidanceState extends State<AddGuidance> {
                             ),
                             if (_selectedFile != null)
                               IconButton(
-                                icon: const Icon(Icons.clear, color: Colors.red),
+                                icon: const Icon(Icons.clear, color: AppColors.lightDanger),
                                 onPressed: () {
                                   setState(() {
                                     _selectedFile = null;
@@ -277,15 +323,24 @@ class _AddGuidanceState extends State<AddGuidance> {
             Builder(builder: (context) {
               return BasicAppButton(
                 onPressed: () {
-                  context.read<ButtonStateCubit>().excute(
-                        usecase: sl<AddGuidanceUseCase>(),
-                        params: AddGuidanceReqParams(
-                          title: _title.text,
-                          activity: _activity.text,
-                          date: _date,
-                          file: _selectedFile
-                        ),
-                      );
+                  // Update validation state
+                  setState(() {
+                    _titleError = _title.text.trim().isEmpty;
+                    _activityError = _activity.text.trim().isEmpty;
+                  });
+
+                  // Only proceed if there are no errors
+                  if (!_titleError && !_activityError) {
+                    context.read<ButtonStateCubit>().excute(
+                      usecase: sl<AddGuidanceUseCase>(),
+                      params: AddGuidanceReqParams(
+                        title: _title.text.trim(),
+                        activity: _activity.text.trim(),
+                        date: _date,
+                        file: _selectedFile
+                      ),
+                    );
+                  }
                 },
                 title: 'Add',
                 height: false,
