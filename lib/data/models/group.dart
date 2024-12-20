@@ -31,14 +31,15 @@ class GroupModel {
 
   // Predefined color palette
   static final List<Color> colorPalette = [
-    Colors.blue,
-    Colors.green,
-    Colors.red,
-    Colors.purple,
-    Colors.orange,
-    Colors.teal,
-    Colors.pink,
-    Colors.indigo,
+  Colors.purple,
+  Colors.indigo,
+  Colors.blue,
+  Colors.teal,
+  Colors.green,
+  Colors.pink,
+  Colors.red,
+  Colors.orange,
+  Colors.grey,
   ];
 
   // Getter to retrieve the icon associated with the group model
