@@ -95,11 +95,14 @@ class _FilterJurusanState extends State<FilterJurusan> {
                 color: widget.primaryColor ?? colorScheme.primary,
               ),
               const SizedBox(width: 8),
-              Text(
-                'Jurusan',
-                style: widget.hintStyle ?? TextStyle(
-                  fontSize: 14,
-                  color: (widget.primaryColor ?? colorScheme.primary).withOpacity(0.7),
+              Expanded(
+                child: Text(
+                  'Jurusan',
+                  style: widget.hintStyle ?? TextStyle(
+                    fontSize: 14,
+                    color: (widget.primaryColor ?? colorScheme.primary).withOpacity(0.7),
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],

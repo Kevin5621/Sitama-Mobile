@@ -97,11 +97,14 @@ class _FilterTahunState extends State<FilterTahun> {
                 color: widget.primaryColor ?? colorScheme.primary,
               ),
               const SizedBox(width: 8),
-              Text(
-                'Tahun',
-                style: widget.hintStyle ?? TextStyle(
-                  fontSize: 14,
-                  color: (widget.primaryColor ?? colorScheme.primary).withOpacity(0.7),
+              Expanded(
+                child: Text(
+                  'Tahun',
+                  style: widget.hintStyle ?? TextStyle(
+                    fontSize: 14,
+                    color: (widget.primaryColor ?? colorScheme.primary).withOpacity(0.7),
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],

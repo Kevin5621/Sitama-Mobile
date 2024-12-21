@@ -77,23 +77,28 @@ class _AddGuidanceState extends State<AddGuidance> {
           ),
           title: Row(
             children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(
-                  Icons.add_task_rounded,
-                  color: Theme.of(context).primaryColor,
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    Icons.add_task_rounded,
+                    color: Theme.of(context).primaryColor,
+                  ),
                 ),
               ),
               const SizedBox(width: 12),
-              const Text(
-                'Tambah Bimbingan',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+              Expanded(
+                flex: 3,
+                child: const Text(
+                  'Tambah Bimbingan',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ],
@@ -256,14 +261,17 @@ class _AddGuidanceState extends State<AddGuidance> {
                       }
                     },
                   ),
+
+                  //upload pdf
                   const SizedBox(height: 20),
                   InkWell(
                     onTap: _pickFile,
                     child: Container(
+                      height: 56,
                       decoration: BoxDecoration(
                         border: Border.all(
-                          color: _selectedFile != null 
-                              ? Theme.of(context).primaryColor 
+                          color: _selectedFile != null
+                              ? Theme.of(context).primaryColor
                               : Colors.grey,
                         ),
                         borderRadius: BorderRadius.circular(12),
@@ -271,43 +279,41 @@ class _AddGuidanceState extends State<AddGuidance> {
                             ? Theme.of(context).primaryColor.withOpacity(0.05)
                             : null,
                       ),
-                      child: InputDecorator(
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(
+                      padding: EdgeInsets.symmetric(horizontal: 12),
+                      child: Row(
+                        children: [
+                          Icon(
                             Icons.file_upload,
                             color: _selectedFile != null
                                 ? Theme.of(context).primaryColor
                                 : Colors.grey,
                           ),
-                          border: InputBorder.none,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                _selectedFile != null
-                                    ? _selectedFile!.name
-                                    : "Upload File (Opsional)",
-                                style: TextStyle(
-                                  color: _selectedFile != null
-                                      ? Theme.of(context).primaryColor
-                                      : Colors.grey,
-                                ),
-                                overflow: TextOverflow.ellipsis,
+                          SizedBox(width: 12),
+                          Expanded(
+                            child: Text(
+                              _selectedFile != null
+                                  ? _selectedFile!.name
+                                  : "Upload File (Opsional)",
+                              style: TextStyle(
+                                color: _selectedFile != null
+                                    ? Theme.of(context).primaryColor
+                                    : Colors.grey,
                               ),
+                              overflow: TextOverflow.ellipsis,
                             ),
-                            if (_selectedFile != null)
-                              IconButton(
-                                icon: const Icon(Icons.clear, color: AppColors.lightDanger),
-                                onPressed: () {
-                                  setState(() {
-                                    _selectedFile = null;
-                                  });
-                                },
-                              ),
-                          ],
-                        ),
+                          ),
+                          if (_selectedFile != null)
+                            IconButton(
+                              padding: EdgeInsets.zero,
+                              constraints: BoxConstraints(minWidth: 40),
+                              icon: const Icon(Icons.clear, color: AppColors.lightDanger),
+                              onPressed: () {
+                                setState(() {
+                                  _selectedFile = null;
+                                });
+                              },
+                            ),
+                        ],
                       ),
                     ),
                   ),
