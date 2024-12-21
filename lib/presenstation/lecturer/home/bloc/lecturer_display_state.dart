@@ -6,12 +6,22 @@ class LecturerLoading extends LecturerDisplayState {}
 
 class LecturerLoaded extends LecturerDisplayState {
   final LecturerHomeEntity lecturerHomeEntity;
+  final bool isOffline;
 
-  LecturerLoaded({required this.lecturerHomeEntity});
+  LecturerLoaded({
+    required this.lecturerHomeEntity,
+    this.isOffline = false,
+  });
 }
 
 class LoadLecturerFailure extends LecturerDisplayState {
   final String errorMessage;
+  final bool isOffline;
+  final LecturerHomeEntity? cachedData;
 
-  LoadLecturerFailure({required this.errorMessage});
+  LoadLecturerFailure({
+    required this.errorMessage,
+    this.isOffline = false,
+    this.cachedData,
+  });
 }

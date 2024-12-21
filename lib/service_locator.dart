@@ -37,11 +37,13 @@ import 'package:Sitama/domain/usecases/student/notification/add_notification.dar
 import 'package:Sitama/domain/usecases/student/notification/get_notification.dart';
 import 'package:Sitama/presenstation/lecturer/home/bloc/selection_bloc.dart';
 import 'package:Sitama/domain/usecases/student/notification/mark_all_notifications.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 final sl = GetIt.instance;
 
-void setupServiceLocator() {
+void setupServiceLocator(SharedPreferences prefs) {
+  sl.registerSingleton<SharedPreferences>(prefs);
 
   sl.registerSingleton<DioClient>(DioClient());
 

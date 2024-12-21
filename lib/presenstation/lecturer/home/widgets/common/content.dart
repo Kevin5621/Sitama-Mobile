@@ -1,5 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:Sitama/presenstation/lecturer/home/bloc/offline_mode_handler.dart';
+import 'package:Sitama/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:Sitama/core/config/assets/app_images.dart';
@@ -13,6 +15,7 @@ import 'package:Sitama/presenstation/lecturer/home/bloc/selection_state.dart';
 import 'package:Sitama/presenstation/lecturer/home/widgets/common/header.dart';
 import 'package:Sitama/presenstation/lecturer/home/widgets/utils/dialogs/send_message_bottom.dart';
 import 'package:Sitama/presenstation/lecturer/home/widgets/section/student_list.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LecturerHomeContent extends StatefulWidget {
   const LecturerHomeContent({super.key});
@@ -60,44 +63,48 @@ class _LecturerHomeContentState extends State<LecturerHomeContent>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context); // Required by AutomaticKeepAliveClientMixin
-    return Scaffold(
-      body: MultiBlocProvider(
-        providers: [
-          BlocProvider(
-            create: (context) => SelectionBloc()..add(LoadArchivedItems()),
-          ),
-          BlocProvider(
-            create: (context) => LecturerDisplayCubit(
-              selectionBloc: context.read<SelectionBloc>(),
-            )..displayLecturer(),
-            lazy: false, // Penting: membuat cubit langsung diinisialisasi
-          ),
-        ],
-        child: BlocListener<SelectionBloc, SelectionState>(
-          listenWhen: (previous, current) => 
-              previous.archivedIds != current.archivedIds,
-          listener: (context, state) {
-            context.read<LecturerDisplayCubit>().displayLecturer();
-          },
-          child: BlocBuilder<LecturerDisplayCubit, LecturerDisplayState>(
-            builder: (context, state) {
-              if (state is LecturerLoading) {
-                return _buildLoadingState();
-              }
-              if (state is LecturerLoaded) {
-                return _buildLoadedState(state);
-              }
-              if (state is LoadLecturerFailure) {
-                return _buildErrorState(context, state);
-              }
-              return Container();
+    super.build(context);
+    return ConnectivityHandler(
+      child: Scaffold(
+        body: MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => SelectionBloc()..add(LoadArchivedItems()),
+            ),
+            BlocProvider(
+              create: (context) => LecturerDisplayCubit(
+                selectionBloc: context.read<SelectionBloc>(),
+                prefs: sl<SharedPreferences>(),
+              )..displayLecturer(),
+              lazy: false,
+            ),
+          ],
+          child: BlocListener<SelectionBloc, SelectionState>(
+            listenWhen: (previous, current) => 
+                previous.archivedIds != current.archivedIds,
+            listener: (context, state) {
+              context.read<LecturerDisplayCubit>().displayLecturer();
             },
+            child: BlocBuilder<LecturerDisplayCubit, LecturerDisplayState>(
+              builder: (context, state) {
+                if (state is LecturerLoading) {
+                  return _buildLoadingState();
+                }
+                if (state is LecturerLoaded) {
+                  return _buildLoadedState(state);
+                }
+                if (state is LoadLecturerFailure) {
+                  return _buildErrorState(context, state);
+                }
+                return Container();
+              },
+            ),
           ),
         ),
       ),
     );
   }
+
 
   Widget _buildLoadingState() {
     return const Center(
@@ -131,9 +138,27 @@ class _LecturerHomeContentState extends State<LecturerHomeContent>
             RefreshIndicator(
               onRefresh: () => _refreshData(context),
               color: AppColors.lightPrimary,
-              child: _buildMainContent(data, students, selectionState),
+              child: Column(
+                children: [
+                  if (state.isOffline)
+                    Container(
+                      width: double.infinity,
+                      color: AppColors.lightGray,
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: const Text(
+                        'Mode Offline - Anda sedang offline',
+                        style: TextStyle(color: Colors.white),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  Expanded(
+                    child: _buildMainContent(data, students, selectionState),
+                  ),
+                ],
+              ),
             ),
-            if (selectionState.isSelectionMode && selectionState.selectedIds.isNotEmpty)
+            if (selectionState.isSelectionMode && 
+                selectionState.selectedIds.isNotEmpty)
               _buildFloatingActionButton(context, selectionState.selectedIds),
           ],
         );
@@ -223,33 +248,56 @@ class _LecturerHomeContentState extends State<LecturerHomeContent>
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.error_outline,
-            size: 48,
-            color: Colors.red[300],
-          ),
-          const SizedBox(height: 16),
-          Text(
-            state.errorMessage,
-            style: const TextStyle(
-              color: Colors.grey,
-              fontSize: 14,
+          if (state.isOffline && state.cachedData != null) ...[
+            const Icon(
+              Icons.cloud_off,
+              size: 48,
+              color: AppColors.lightGray,
             ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 24),
-          ElevatedButton(
-            onPressed: () {
-              context.read<LecturerDisplayCubit>().displayLecturer();
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.lightPrimary,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+            const SizedBox(height: 16),
+            const Text(
+              'Anda sedang offline',
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 14,
               ),
+              textAlign: TextAlign.center,
             ),
-            child: const Text('Retry'),
-          ),
+            const SizedBox(height: 24),
+            _buildMainContent(
+              state.cachedData!,
+              state.cachedData!.students!.toSet(),
+              context.read<SelectionBloc>().state,
+            ),
+          ] else ...[
+            Icon(
+              Icons.error_outline,
+              size: 48,
+              color: Colors.red[300],
+            ),
+            const SizedBox(height: 16),
+            Text(
+              state.errorMessage,
+              style: const TextStyle(
+                color: Colors.grey,
+                fontSize: 14,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: () {
+                context.read<LecturerDisplayCubit>().displayLecturer();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.lightPrimary,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: const Text('Retry'),
+            ),
+          ],
         ],
       ),
     );

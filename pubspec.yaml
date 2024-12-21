@@ -28,6 +28,8 @@ dependencies:
   # Networking and APIs
     dio: any                     # HTTP client untuk komunikasi API yang efisien
     get_it: any                  # Service locator untuk dependency injection
+    connectivity_plus: ^6.1.1    # Mendukung pengecekan koneksi internet
+    fluttertoast: ^8.0.8         # Menampilkan toast notifikasi
 
   # Functional Programming and Utilities
     dartz: any                   # Menyediakan tipe data functional seperti `Either`, `Option`
@@ -39,9 +41,9 @@ dependencies:
 
   # File Management
     file_picker: any             # Memungkinkan pemilihan file dari perangkat
-    path_provider: any
-    permission_handler: any
-    open_file: any
+    path_provider: any           # Menyediakan akses ke direktori sistem
+    permission_handler: any      # Mengelola izin aplikasi
+    open_file: any               # Membuka file dari perangkat
     
   # UI Components
     syncfusion_flutter_pdfviewer: any # PDF viewer untuk menampilkan file PDF dalam aplikasi

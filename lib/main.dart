@@ -6,10 +6,12 @@ import 'package:Sitama/core/config/themes/app_theme.dart';
 import 'package:Sitama/core/config/themes/theme_provider.dart';
 import 'package:Sitama/presenstation/general/splash/pages/splash.dart';
 import 'package:Sitama/service_locator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  setupServiceLocator();
+  final prefs = await SharedPreferences.getInstance();
+  setupServiceLocator(prefs);
   
   runApp(
     MultiProvider(
