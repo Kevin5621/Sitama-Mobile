@@ -59,16 +59,6 @@ class _AddLogBookState extends State<AddLogBook> {
               (Route<dynamic> route) => false,
             );
           }
-
-          if (state is ButtonFailurState) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              CustomSnackBar(
-                message: state.errorMessage,
-                icon: Icons.error_outline,  
-                backgroundColor: Colors.red.shade800,  
-              ),
-            );
-          }
         },
         child: AlertDialog(
           shape: RoundedRectangleBorder(
@@ -130,6 +120,9 @@ class _AddLogBookState extends State<AddLogBook> {
                         ),
                       ),
                       errorText: _titleError ? 'Judul tidak boleh kosong' : null,
+                      errorStyle: TextStyle(
+                        color: AppColors.lightDanger,
+                      ),
                       filled: true,
                       fillColor:
                           Theme.of(context).primaryColor.withOpacity(0.05),
@@ -242,6 +235,9 @@ class _AddLogBookState extends State<AddLogBook> {
                         ),
                       ),
                       errorText: _activityError ? 'Aktivitas tidak boleh kosong' : null,
+                      errorStyle: TextStyle(
+                        color: AppColors.lightDanger,
+                      ),
                       filled: true,
                       fillColor:
                           Theme.of(context).primaryColor.withOpacity(0.05),

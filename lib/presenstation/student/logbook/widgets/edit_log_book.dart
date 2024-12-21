@@ -1,3 +1,4 @@
+import 'package:Sitama/core/config/themes/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -34,6 +35,9 @@ class _EditLogBookState extends State<EditLogBook> {
 
   final TextEditingController _title = TextEditingController();
   final TextEditingController _activity = TextEditingController();
+
+  bool _titleError = false;
+  bool _activityError = false;
 
   @override
   void initState() {
@@ -122,22 +126,44 @@ class _EditLogBookState extends State<EditLogBook> {
                     controller: _title,
                     decoration: InputDecoration(
                       labelText: 'Judul',
-                      labelStyle:
-                          TextStyle(color: Theme.of(context).primaryColor),
+                      labelStyle: TextStyle(
+                        color: _titleError ? AppColors.lightDanger : Theme.of(context).primaryColor
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide:
-                            BorderSide(color: Theme.of(context).primaryColor),
+                       borderSide: BorderSide(
+                          color: _titleError ? AppColors.lightDanger : Theme.of(context).primaryColor
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(
+                          color: _titleError ? AppColors.lightDanger : Colors.grey
+                        ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide(
-                            color: Theme.of(context).primaryColor, width: 2),
+                          color: _titleError ? AppColors.lightDanger : Theme.of(context).primaryColor,
+                          width: 2
+                        ),
+                      ),
+                      errorText: _titleError ? 'Judul tidak boleh kosong' : null,
+                      errorStyle: TextStyle(
+                        color: AppColors.lightDanger,
                       ),
                       filled: true,
                       fillColor:
                           Theme.of(context).primaryColor.withOpacity(0.05),
                     ),
+                    onChanged: (value) {
+                      // Clear error when user starts typing
+                      if (_titleError) {
+                        setState(() {
+                          _titleError = false;
+                        });
+                      }
+                    },
                   ),
 
                   //upload date
@@ -203,20 +229,41 @@ class _EditLogBookState extends State<EditLogBook> {
                     maxLines: 3,
                     decoration: InputDecoration(
                       labelText: 'Aktivitas',
-                      labelStyle:
-                          TextStyle(color: Theme.of(context).primaryColor),
+                      labelStyle: TextStyle(
+                        color: _activityError ? AppColors.lightDanger : Theme.of(context).primaryColor
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(
+                          color: _titleError ? AppColors.lightDanger : Colors.grey
+                        ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide(
-                            color: Theme.of(context).primaryColor, width: 2),
+                          color: _activityError ? AppColors.lightDanger : Theme.of(context).primaryColor,
+                          width: 2
+                        ),
+                      ),
+                      errorText: _activityError ? 'Aktivitas tidak boleh kosong' : null,
+                      errorStyle: TextStyle(
+                        color: AppColors.lightDanger,
                       ),
                       filled: true,
                       fillColor:
                           Theme.of(context).primaryColor.withOpacity(0.05),
                     ),
+                    onChanged: (value) {
+                      // Clear error when user starts typing
+                      if (_activityError) {
+                        setState(() {
+                          _activityError = false;
+                        });
+                      }
+                    },
                   ),
                 ],
               ),
@@ -226,17 +273,26 @@ class _EditLogBookState extends State<EditLogBook> {
             Builder(builder: (context) {
               return BasicAppButton(
                 onPressed: () {
-                  context.read<ButtonStateCubit>().excute(
-                        usecase: sl<EditLogBookUseCase>(),
-                        params: EditLogBookReqParams(
-                          id: widget.id,
-                          title: _title.text,
-                          activity: _activity.text,
-                          date: _date,
-                        ),
-                      );
+                  // Update validation state
+                  setState(() {
+                    _titleError = _title.text.trim().isEmpty;
+                    _activityError = _activity.text.trim().isEmpty;
+                  });
+
+                  // Only proceed if there are no errors
+                  if (!_titleError && !_activityError) {
+                    context.read<ButtonStateCubit>().excute(
+                      usecase: sl<EditLogBookUseCase>(),
+                      params: EditLogBookReqParams(
+                        id: widget.id,
+                        title: _title.text.trim(),
+                        activity: _activity.text.trim(),
+                        date: _date,
+                      ),
+                    );
+                  }
                 },
-                title: 'Edit',
+                title: 'Add',
                 height: false,
               );
             }),
@@ -244,7 +300,7 @@ class _EditLogBookState extends State<EditLogBook> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Cancel'),
+              child: Text('Cancel'),
             ),
           ],
         ),
