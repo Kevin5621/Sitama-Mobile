@@ -24,7 +24,7 @@ class _AddGuidanceState extends State<AddGuidance> {
   final TextEditingController _title = TextEditingController();
   final TextEditingController _activity = TextEditingController();
   PlatformFile? _selectedFile;
-  
+
   bool _titleError = false;
   bool _activityError = false;
 
@@ -41,7 +41,7 @@ class _AddGuidanceState extends State<AddGuidance> {
       allowedExtensions: ['pdf'],
       withData: true,
     );
-    if (result != null) {
+    if (result != null){
       setState(() {
         _selectedFile = result.files.first;
       });
@@ -68,6 +68,16 @@ class _AddGuidanceState extends State<AddGuidance> {
                 builder: (context) => const HomePage(currentIndex: 1),
               ),
               (Route<dynamic> route) => false,
+            );
+          }
+
+          if (state is ButtonFailurState) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              CustomSnackBar(
+                message: state.errorMessage,
+                icon: Icons.error_outline,  
+                backgroundColor: Colors.red.shade800,  
+              ),
             );
           }
         },
