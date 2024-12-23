@@ -3,7 +3,7 @@ import 'package:Sitama/domain/entities/score_entity.dart';
 class ScoreModel {
   final int id;
   final String name;
-  final int? score;
+  final double? score;
 
   ScoreModel({required this.id, required this.name, this.score});
 
@@ -11,7 +11,7 @@ class ScoreModel {
     return ScoreModel(
       id: map['id'] as int,
       name: map['name'] as String,
-      score: map['score'] != null ? map['score'] as int : null,
+      score: map['score'] != null ? map['score'] as double : null,
     );
   }
 

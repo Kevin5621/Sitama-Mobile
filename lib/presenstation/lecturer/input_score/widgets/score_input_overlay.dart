@@ -162,7 +162,7 @@ class _ScoreInputOverlayState extends State<ScoreInputOverlay> {
     final List<ScoreRequest> scores = _controllers.entries.map((entry) {
       return ScoreRequest(
         detailedAssessmentComponentsId: entry.key,
-        score: int.tryParse(entry.value.text) ?? 0,
+        score: double.tryParse(entry.value.text) ?? 0,
       );
     }).toList();
 

@@ -1,7 +1,7 @@
 class ScoreEntity {
   final int id;
   final String name;
-  final int? score;
+  final double? score;
 
   ScoreEntity({
     required this.id, 

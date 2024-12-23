@@ -1,8 +1,11 @@
 class ScoreRequest {
   final int detailedAssessmentComponentsId;
-  final int score;
+  final double score;
 
-  ScoreRequest({required this.detailedAssessmentComponentsId, required this.score});
+  ScoreRequest({
+    required this.detailedAssessmentComponentsId, 
+    required this.score
+  });
 
   Map<String, dynamic> toMap() {
     return {

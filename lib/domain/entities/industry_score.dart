@@ -3,7 +3,7 @@ class IndustryScore {
   String companyName;
   DateTime startDate;
   DateTime endDate;
-  final int? score;
+  final double? score;
 
   IndustryScore({
     required this.title,

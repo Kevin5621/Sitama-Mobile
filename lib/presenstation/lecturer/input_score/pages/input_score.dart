@@ -92,7 +92,7 @@ class _InputScorePageState extends State<InputScorePage> {
     final List<ScoreRequest> scores = controllers.entries.map((entry) {
       return ScoreRequest(
         detailedAssessmentComponentsId: entry.key,
-        score: int.tryParse(entry.value.text) ?? 0,
+        score: double.tryParse(entry.value.text) ?? 0,
       );
     }).toList();
 

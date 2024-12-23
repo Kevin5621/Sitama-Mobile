@@ -6,7 +6,7 @@ class InputField extends StatelessWidget {
   final ScoreEntity score;
   final TextEditingController? controller;
 
-  const InputField({Key? key, required this.score, this.controller })
+  const InputField({Key? key, required this.score, this.controller})
       : super(key: key);
 
   @override
@@ -24,16 +24,18 @@ class InputField extends StatelessWidget {
             flex: 2,
             child: TextField(
               controller: controller,
-            decoration: InputDecoration(
+              decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.grey.shade100,
                 contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                border: InputBorder.none, 
+                border: InputBorder.none,
                 focusedBorder: InputBorder.none,
                 enabledBorder: InputBorder.none,
               ),
-              keyboardType: TextInputType.number,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: const TextInputType.numberWithOptions(decimal: true), // Allow decimals
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*$')), // Allow numbers and one decimal point
+              ],
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 16,

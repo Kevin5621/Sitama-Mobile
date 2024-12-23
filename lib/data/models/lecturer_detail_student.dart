@@ -12,7 +12,7 @@ class DetailStudentModel {
   final List<GuidanceModel> guidances;
   final List<LogBookModel> log_book;
   final List<ShowAssessmentModel> assessments;
-  final int average_all_assessments;
+  final double average_all_assessments;
 
   DetailStudentModel({
     required this.student,
@@ -46,7 +46,7 @@ class DetailStudentModel {
           (x) => ShowAssessmentModel.fromMap(x as Map<String, dynamic>),
         ),
       ),
-      average_all_assessments: map['average_all_assessments'] as int,
+      average_all_assessments: map['average_all_assessments'] as double,
     );
   }
 }
@@ -162,8 +162,7 @@ class ShowAssessmentModel {
   factory ShowAssessmentModel.fromMap(Map<String, dynamic> map) {
     return ShowAssessmentModel(
       component_name: map['component_name'] as String,
-      average_score:
-          (map['average_score'] as num).toDouble(), // Convert to double
+      average_score: (map['average_score'] as num).toDouble(),
     );
   }
 }

@@ -153,7 +153,6 @@ class LecturerApiServiceImpl extends LecturerApiService {
       SharedPreferences sharedPreferences =
           await SharedPreferences.getInstance();
       var token = sharedPreferences.getString('token');
-      print(scores);
 
       var response = await Dio().post(
         "${ApiUrls.submitScores}/$id",
@@ -165,10 +164,8 @@ class LecturerApiServiceImpl extends LecturerApiService {
           "scores": scores,
         },
       );
-      print(response);
       return Right(response);
     } on DioException catch (e) {
-      print(e.response!.data['errors']?.toString());
       if (e.response != null) {
         return Left(e.response!.data['errors']?.toString() ?? 'Unknown error');
       } else {
