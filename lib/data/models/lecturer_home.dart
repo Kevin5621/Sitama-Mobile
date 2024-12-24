@@ -4,13 +4,13 @@ import 'package:Sitama/domain/entities/lecturer_home_entity.dart';
 class LecturerHomeModel {
   final String name;
   final int id;
-  final Set<LecturerStudentsModel> ? students;
+  final Set<LecturerStudentsModel>? students;
 
   LecturerHomeModel({
     required this.name, 
     required this.id, 
     this.students
-    });
+  });
 
   factory LecturerHomeModel.fromMap(Map<String, dynamic> map) {
     return LecturerHomeModel(
@@ -31,7 +31,7 @@ extension LecturerHomeXModel on LecturerHomeModel {
   LecturerHomeEntity toEntity() {
     return LecturerHomeEntity(
       name: name,
-      id : id,
+      id: id,
       students: students?.map<LecturerStudentsEntity>((data) => LecturerStudentsEntity(
         id: data.id,
         name: data.name,
@@ -43,6 +43,8 @@ extension LecturerHomeXModel on LecturerHomeModel {
         academic_year: data.academic_year,
         activities: data.activities,
         isFinished: data.isFinished,
+        hasNewLogbook: data.hasNewLogbook,
+        lastUpdated: data.lastUpdated,
       )).toSet() ?? {},
       activities: {}, 
     );
@@ -58,8 +60,10 @@ class LecturerStudentsModel {
   final String study_program;
   final String major;
   final String academic_year;
-  final bool isFinished; 
+  final bool isFinished;
   final Map<String, bool> activities;
+  final bool hasNewLogbook;
+  final DateTime? lastUpdated;
 
   LecturerStudentsModel({
     required this.id,
@@ -72,6 +76,8 @@ class LecturerStudentsModel {
     required this.academic_year,
     required this.isFinished,
     this.activities = const {},
+    required this.hasNewLogbook,
+    this.lastUpdated,
   });
 
   factory LecturerStudentsModel.fromMap(Map<String, dynamic> map) {
@@ -88,6 +94,10 @@ class LecturerStudentsModel {
       activities: map['activities'] != null 
         ? Map<String, bool>.from(map['activities'] as Map) 
         : {},
+      hasNewLogbook: (map['hasNewLogbook'] as bool?) ?? false,
+      lastUpdated: map['lastUpdated'] != null 
+        ? DateTime.parse(map['lastUpdated'] as String)
+        : null,
     );
   }
 }

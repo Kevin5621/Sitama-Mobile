@@ -46,6 +46,10 @@ class LecturerDisplayCubit extends Cubit<LecturerDisplayState> {
                   academic_year: s['academic_year'],
                   isFinished: s['isFinished'],
                   activities: Map<String, bool>.from(s['activities']),
+                  hasNewLogbook: s['hasNewLogbook'] ?? false,
+                  lastUpdated: s['lastUpdated'] != null 
+                      ? DateTime.parse(s['lastUpdated'])
+                      : null,
                 ))
               .toSet(),
           activities: Map<String, bool>.from(jsonData['activities'] ?? {}),
@@ -55,7 +59,7 @@ class LecturerDisplayCubit extends Cubit<LecturerDisplayState> {
           isOffline: true,
         ));
       } catch (e) {
-        null;
+        print('Error loading cached data: $e');
       }
     }
   }
@@ -76,6 +80,8 @@ class LecturerDisplayCubit extends Cubit<LecturerDisplayState> {
             'academic_year': s.academic_year,
             'isFinished': s.isFinished,
             'activities': s.activities,
+            'hasNewLogbook': s.hasNewLogbook,
+            'lastUpdated': s.lastUpdated?.toIso8601String(),
           }).toList(),
         'activities': data.activities,
       };

@@ -24,6 +24,8 @@ class LecturerStudentsEntity {
   final String academic_year;
   final bool isFinished;
   final Map<String, bool> activities;
+  final bool hasNewLogbook;
+  final DateTime? lastUpdated;
 
   LecturerStudentsEntity({
     required this.id,
@@ -36,5 +38,7 @@ class LecturerStudentsEntity {
     required this.academic_year,
     required this.isFinished,
     required this.activities,
+    required this.hasNewLogbook,
+    required this.lastUpdated,
     });
 }

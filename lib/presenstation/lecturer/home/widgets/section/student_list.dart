@@ -1,3 +1,4 @@
+import 'package:Sitama/core/config/themes/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:Sitama/common/widgets/alert.dart';
@@ -88,16 +89,50 @@ class _StudentListState extends State<StudentList> {
     );
   }
 
-  // Builds individual student card with selection capability
   Widget _buildStudentItem(LecturerStudentsEntity student) {
     return BlocBuilder<SelectionBloc, SelectionState>(
-      builder: (context, state) {
-        return StudentCard(
-          student: student,
-          isSelected: state.selectedIds.contains(student.id),
-          isFinished: student.isFinished,
-          onTap: () => _handleStudentTap(context, student),
-          onLongPress: () => _handleStudentLongPress(context, student),
+      builder: (context, state) {        
+        return Stack(
+          children: [
+            StudentCard(
+              student: student,
+              isSelected: state.selectedIds.contains(student.id),
+              isFinished: student.isFinished,
+              onTap: () => _handleStudentTap(context, student),
+              onLongPress: () => _handleStudentLongPress(context, student),
+            ),
+            // Notifikasi untuk logbook baru
+            if (student.hasNewLogbook) 
+              Positioned(
+                top: 8,
+                left: 8,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: AppColors.lightWarning,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.book,
+                        size: 14,
+                        color: Theme.of(context).colorScheme.onPrimary,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        'New Logbook',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+          ],
         );
       },
     );
@@ -166,7 +201,7 @@ class _StudentListState extends State<StudentList> {
       ));
     }
   }
-
+  
   // Categorizes students into active, grouped, and archived lists
   // This helps organize the UI into distinct sections
   Map<String, List<LecturerStudentsEntity>> _categorizeStudents(
@@ -177,6 +212,7 @@ class _StudentListState extends State<StudentList> {
     final grouped = <LecturerStudentsEntity>[];
     final archived = <LecturerStudentsEntity>[];
 
+    // Kategorisasi seperti sebelumnya
     for (final student in students) {
       if (state.archivedIds.contains(student.id)) {
         archived.add(student);
@@ -197,29 +233,29 @@ class _StudentListState extends State<StudentList> {
       }
     }
 
-    // Sort active students based on their activities
+    // Sort by latest update time with null safety
     active.sort((a, b) {
-      // If a student is finished, they should be at the end
-      if (a.isFinished && !b.isFinished) return 1;
-      if (!a.isFinished && b.isFinished) return -1;
-
-      // Count active activities
-      final aActiveCount = a.activities.values.where((status) => status == true).length;
-      final bActiveCount = b.activities.values.where((status) => status == true).length;
-
-      // If different number of active activities, sort by that
-      if (aActiveCount != bActiveCount) {
-        return bActiveCount.compareTo(aActiveCount);
-      }
-
-      // If same number of active activities, consider total activities
-      final aTotalCount = a.activities.length;
-      final bTotalCount = b.activities.length;
-
-      return bTotalCount.compareTo(aTotalCount);
+      if (a.lastUpdated == null && b.lastUpdated == null) return 0;
+      if (a.lastUpdated == null) return 1;
+      if (b.lastUpdated == null) return -1;
+      return b.lastUpdated!.compareTo(a.lastUpdated!);
     });
 
-    // Update the lists
+    // Use the same logic for grouped and archived
+    grouped.sort((a, b) {
+      if (a.lastUpdated == null && b.lastUpdated == null) return 0;
+      if (a.lastUpdated == null) return 1;
+      if (b.lastUpdated == null) return -1;
+      return b.lastUpdated!.compareTo(a.lastUpdated!);
+    });
+
+    archived.sort((a, b) {
+      if (a.lastUpdated == null && b.lastUpdated == null) return 0;
+      if (a.lastUpdated == null) return 1;
+      if (b.lastUpdated == null) return -1;
+      return b.lastUpdated!.compareTo(a.lastUpdated!);
+    });
+
     return {
       'active': active,
       'grouped': grouped,

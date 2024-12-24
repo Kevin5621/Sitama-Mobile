@@ -1,14 +1,34 @@
 import 'package:Sitama/core/config/themes/app_color.dart';
 import 'package:Sitama/presenstation/lecturer/detail_student/widgets/section/tab_guidance/lecturer_guidance_tab.dart';
 import 'package:Sitama/presenstation/lecturer/detail_student/widgets/section/tab_logbook/lecturer_log_book_tab.dart';
+import 'package:Sitama/presenstation/lecturer/detail_student/widgets/section/tab_logbook/notification_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:Sitama/presenstation/lecturer/detail_student/bloc/detail_student_display_cubit.dart';
 import 'package:Sitama/presenstation/lecturer/detail_student/bloc/detail_student_display_state.dart';
-import 'package:Sitama/presenstation/lecturer/detail_student/widgets/common/content.dart';
 import 'package:Sitama/presenstation/lecturer/detail_student/widgets/common/header.dart';
 import 'package:Sitama/presenstation/lecturer/detail_student/widgets/section/info_section.dart';
 import 'package:Sitama/presenstation/lecturer/detail_student/widgets/utils/statistics.dart';
+
+// Key Features :
+// Captures student and industry internship details
+// Manages internship status approval
+
+// Performance Evaluation:
+// Restricts evaluation access
+// Enables metrics view after internship completion
+
+// Guidance and Supervision:
+// Faculty actions:
+// - Approve progress
+// - Request revisions
+// - Add notes
+// - Export PDF guidance
+
+// Logbook Tracking:
+// Faculty capabilities:
+// - View student activity logs
+// - Comment on log entries
 
 class DetailStudentPage extends StatefulWidget {
   final int id;
