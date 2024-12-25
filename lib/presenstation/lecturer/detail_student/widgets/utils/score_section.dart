@@ -13,6 +13,7 @@ class ScoreBox extends StatelessWidget {
   final List<ShowAssessmentEntity> assessments;
   final String average_all_assessments;
   final bool isFinished;
+  final bool isOffline;
 
   const ScoreBox({
     super.key,
@@ -20,6 +21,7 @@ class ScoreBox extends StatelessWidget {
     required this.assessments,
     required this.isFinished,
     required this.average_all_assessments,
+    this.isOffline = false,
   });
 
   @override
@@ -69,7 +71,7 @@ class ScoreBox extends StatelessWidget {
   // Builds the header with title and add score button
   Widget _buildScoreHeader(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final bool isButtonEnabled = isFinished;
+    final bool isButtonEnabled = isFinished && !isOffline;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -85,7 +87,9 @@ class ScoreBox extends StatelessWidget {
         Tooltip(
           message: isButtonEnabled 
               ? 'Tambahkan atau Edit Nilai' 
-              : 'Selesaikan bagian internship untuk menambahkan nilai',
+              : isOffline 
+                  ? 'Tidak dapat menambah nilai dalam mode offline'
+                  : 'Selesaikan bagian internship untuk menambahkan nilai',
           child: IconButton(
             icon: Icon(
               Icons.add_circle_rounded,

@@ -11,6 +11,7 @@ class InternshipStatusBox extends StatelessWidget {
   final String status;
   final VoidCallback? onApprove;
   final bool isFinished;
+  final bool isOffline;
 
   const InternshipStatusBox({
     super.key,
@@ -19,6 +20,7 @@ class InternshipStatusBox extends StatelessWidget {
     required this.status,
     required this.isFinished,
     this.onApprove,
+    this.isOffline = false,
   });
 
   Future<bool?> _showConfirmationDialog(

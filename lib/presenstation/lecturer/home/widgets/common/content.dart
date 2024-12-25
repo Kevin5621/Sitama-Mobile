@@ -146,7 +146,7 @@ class _LecturerHomeContentState extends State<LecturerHomeContent>
                       color: AppColors.lightGray,
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       child: const Text(
-                        'Mode Offline - Anda sedang offline',
+                        'Menggunakan data tersimpan Anda sedang offline',
                         style: TextStyle(color: Colors.white),
                         textAlign: TextAlign.center,
                       ),

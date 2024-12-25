@@ -1,5 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:Sitama/presenstation/lecturer/home/bloc/offline_mode_handler.dart';
+import 'package:Sitama/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +16,7 @@ import 'package:Sitama/domain/entities/lecturer_profile_entity.dart';
 import 'package:Sitama/presenstation/lecturer/profile/pages/faq.dart';
 import 'package:Sitama/presenstation/lecturer/profile/bloc/profile_lecturer_cubit.dart';
 import 'package:Sitama/presenstation/lecturer/profile/bloc/profile_lecturer_state.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LecturerProfilePage extends StatefulWidget {
   const LecturerProfilePage({super.key});
@@ -35,32 +38,101 @@ class _LecturerProfilePageState extends State<LecturerProfilePage>
     final colorScheme = Theme.of(context).colorScheme;
 
     return BlocProvider(
-      create: (context) => ProfileLecturerCubit()..displayLecturer(),
-      child: BlocBuilder<ProfileLecturerCubit, ProfileLecturerState>(
-        builder: (context, state) {
-          if (state is LecturerLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (state is LecturerLoaded) {
+      create: (context) => ProfileLecturerCubit(
+        prefs: sl<SharedPreferences>(),
+      )..displayLecturer(),
+      child: ConnectivityHandler(
+        child: BlocBuilder<ProfileLecturerCubit, ProfileLecturerState>(
+          builder: (context, state) {
             return Scaffold(
-              body: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    _header(colorScheme, state.lecturerProfileEntity),
-                    const SizedBox(height: 22),
-                    _settingsList(context, isDarkMode),
-                  ],
-                ),
+              body: Column(
+                children: [
+                  if (state is LecturerLoaded && state.isOffline)
+                    Container(
+                      width: double.infinity,
+                      color: AppColors.lightGray,
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: const Text(
+                        'Menggunakan data tersimpan Anda sedang offline',
+                        style: TextStyle(color: Colors.white),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  Expanded(
+                    child: _buildContent(state, colorScheme, isDarkMode),
+                  ),
+                ],
               ),
             );
-          }
-          if (state is LoadLecturerFailure) {
-            return Text(state.errorMessage);
-          }
-          return Container();
-        },
+          },
+        ),
       ),
     );
+  }
+
+  Widget _buildContent(ProfileLecturerState state, ColorScheme colorScheme, bool isDarkMode) {
+    if (state is LecturerLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    if (state is LecturerLoaded) {
+      return SingleChildScrollView(
+        child: Column(
+          children: [
+            _header(colorScheme, state.lecturerProfileEntity),
+            const SizedBox(height: 22),
+            _settingsList(context, isDarkMode),
+          ],
+        ),
+      );
+    }
+    if (state is LoadLecturerFailure) {
+      if (state.isOffline && state.cachedData != null) {
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+              _header(colorScheme, state.cachedData!),
+              const SizedBox(height: 22),
+              _settingsList(context, isDarkMode),
+            ],
+          ),
+        );
+      }
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.error_outline,
+              size: 48,
+              color: Colors.red[300],
+            ),
+            const SizedBox(height: 16),
+            Text(
+              state.errorMessage,
+              style: const TextStyle(
+                color: Colors.grey,
+                fontSize: 14,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: () {
+                context.read<ProfileLecturerCubit>().displayLecturer();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.lightPrimary,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: const Text('Retry'),
+            ),
+          ],
+        ),
+      );
+    }
+    return Container();
   }
 
   Stack _header(colorScheme, LecturerProfileEntity profile) {
@@ -206,53 +278,6 @@ class _LecturerProfilePageState extends State<LecturerProfilePage>
           ),
         ],
       ),
-    );
-  }
-}
-
-class InfoRow extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final String value;
-  final ColorScheme colorScheme;
-
-  const InfoRow({
-    super.key,
-    required this.icon,
-    required this.label,
-    required this.value,
-    required this.colorScheme,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(
-          icon,
-          size: 20,
-          color: colorScheme.onSurface,
-        ),
-        const SizedBox(width: 8),
-        Text(
-          '$label: ',
-          style: TextStyle(
-            color: colorScheme.onSurface,
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        Expanded(
-          child: Text(
-            value,
-            style: TextStyle(
-              color: colorScheme.onBackground,
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

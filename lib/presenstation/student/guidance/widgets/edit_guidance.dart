@@ -93,16 +93,6 @@ class _EditGuidanceState extends State<EditGuidance> {
               (Route<dynamic> route) => false,
             );
           }
-
-          if (state is ButtonFailurState) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              CustomSnackBar(
-                message: state.errorMessage,
-                icon: Icons.error_outline,  
-                backgroundColor: Colors.red.shade800,  
-              ),
-            );
-          }
         },
         child: AlertDialog(
           shape: RoundedRectangleBorder(

@@ -31,11 +31,9 @@ class _ConnectivityHandlerState extends State<ConnectivityHandler> {
   void _updateConnectionStatus(ConnectivityResult result) async {
     final isOffline = result == ConnectivityResult.none;
     
-    // Jika sebelumnya offline dan sekarang online
     if (_wasOffline && !isOffline) {
       if (context.mounted) {
         final cubit = context.read<LecturerDisplayCubit>();
-        // Refresh data ketika kembali online
         cubit.displayLecturer();
       }
     }

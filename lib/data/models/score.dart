@@ -11,7 +11,7 @@ class ScoreModel {
     return ScoreModel(
       id: map['id'] as int,
       name: map['name'] as String,
-      score: map['score'] != null ? map['score'] as double : null,
+      score: map['score'] != null ? (map['score'] as num).toDouble() : null,
     );
   }
 

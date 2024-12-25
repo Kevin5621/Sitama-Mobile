@@ -17,6 +17,12 @@ class LecturerGuidanceTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
+    // Add null check
+    if (guidances.isEmpty) {
+      return const Center(child: Text('Tidak ada data bimbingan'));
+    }
+
     // Create a scrollable list of guidance cards
     return ListView.builder(
       physics: const ClampingScrollPhysics(),

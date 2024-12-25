@@ -46,7 +46,7 @@ class DetailStudentModel {
           (x) => ShowAssessmentModel.fromMap(x as Map<String, dynamic>),
         ),
       ),
-      average_all_assessments: map['average_all_assessments'] as double,
+      average_all_assessments: (map['average_all_assessments'] as num).toDouble(),
     );
   }
 }

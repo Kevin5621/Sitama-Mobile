@@ -8,9 +8,9 @@ class ProfileHeader extends StatelessWidget {
   final DetailStudentEntity detailStudent;
 
   const ProfileHeader({
-    Key? key,
+    super.key,
     required this.detailStudent,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +60,7 @@ class ProfileHeader extends StatelessWidget {
             ),
             const SizedBox(height: 4),
 
-           // Display the username in a transparent background
+            // Display the username in a transparent background
             Container(
               padding: const EdgeInsets.symmetric(
                 horizontal: 12,

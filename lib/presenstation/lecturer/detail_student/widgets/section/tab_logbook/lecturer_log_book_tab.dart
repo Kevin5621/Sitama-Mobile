@@ -17,6 +17,12 @@ class LecturerLogBookTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    // Add null check
+    if (logBooks.isEmpty) {
+      return const Center(child: Text('Tidak ada data bimbingan'));
+    }
+    
     return ListView.builder(
       physics: const ClampingScrollPhysics(),
       itemCount: logBooks.length,

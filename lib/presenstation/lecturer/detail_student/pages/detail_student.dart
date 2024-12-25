@@ -1,7 +1,9 @@
 import 'package:Sitama/core/config/themes/app_color.dart';
+import 'package:Sitama/domain/entities/lecturer_detail_student.dart';
 import 'package:Sitama/presenstation/lecturer/detail_student/widgets/section/tab_guidance/lecturer_guidance_tab.dart';
 import 'package:Sitama/presenstation/lecturer/detail_student/widgets/section/tab_logbook/lecturer_log_book_tab.dart';
 import 'package:Sitama/presenstation/lecturer/detail_student/widgets/section/tab_logbook/notification_manager.dart';
+import 'package:Sitama/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:Sitama/presenstation/lecturer/detail_student/bloc/detail_student_display_cubit.dart';
@@ -29,6 +31,7 @@ import 'package:Sitama/presenstation/lecturer/detail_student/widgets/utils/stati
 // Faculty capabilities:
 // - View student activity logs
 // - Comment on log entries
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DetailStudentPage extends StatefulWidget {
   final int id;
@@ -39,7 +42,8 @@ class DetailStudentPage extends StatefulWidget {
   _DetailStudentPageState createState() => _DetailStudentPageState();
 }
 
-class _DetailStudentPageState extends State<DetailStudentPage> with SingleTickerProviderStateMixin {
+class _DetailStudentPageState extends State<DetailStudentPage>
+    with SingleTickerProviderStateMixin {
   late ScrollController _scrollController;
   late TabController _tabController;
   bool _isButtonVisible = true;
@@ -62,7 +66,6 @@ class _DetailStudentPageState extends State<DetailStudentPage> with SingleTicker
   }
 
   void _scrollListener() {
-    // Replace 600.0 with the actual offset where TabSection starts
     if (_scrollController.position.pixels >= 600.0 && _isButtonVisible) {
       setState(() {
         _isButtonVisible = false;
@@ -75,10 +78,10 @@ class _DetailStudentPageState extends State<DetailStudentPage> with SingleTicker
   }
 
   void _scrollToTabSection() {
-    final RenderBox renderBox = 
+    final RenderBox renderBox =
         _tabSectionKey.currentContext?.findRenderObject() as RenderBox;
     final position = renderBox.localToGlobal(Offset.zero);
-    
+
     _scrollController.animateTo(
       position.dy,
       duration: const Duration(milliseconds: 500),
@@ -90,83 +93,24 @@ class _DetailStudentPageState extends State<DetailStudentPage> with SingleTicker
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocProvider(
-        create: (context) => DetailStudentDisplayCubit()..displayStudent(widget.id),
+        create: (context) => DetailStudentDisplayCubit(
+          prefs: sl<SharedPreferences>(),
+        )..displayStudent(widget.id),
         child: BlocBuilder<DetailStudentDisplayCubit, DetailStudentDisplayState>(
           builder: (context, state) {
             if (state is DetailLoading) {
               return const Center(child: CircularProgressIndicator());
             }
-            if (state is DetailLoaded) {
-              final detailStudent = state.detailStudentEntity;
-              return NestedScrollView(
-                controller: _scrollController,
-                headerSliverBuilder: (context, innerBoxIsScrolled) {
-                  return [
-                    SliverAppBar(
-                      expandedHeight: 250,
-                      pinned: true,
-                      backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-                      flexibleSpace: FlexibleSpaceBar(
-                        background: ProfileHeader(detailStudent: detailStudent),
-                      ),
-                    ),
-                    SliverToBoxAdapter(
-                      child: Column(
-                        children: [
-                          const SizedBox(height: 16),
-                          StatisticsSection(
-                            guidanceLength: detailStudent.guidances.length,
-                            logBookLength: detailStudent.log_book.length,
-                          ),
-                          InfoBoxes(
-                            internships: detailStudent.internships,
-                            students: detailStudent,
-                            id: widget.id,
-                          ),
-                        ],
-                      ),
-                    ),
-                    SliverPersistentHeader(
-                      pinned: true,
-                      delegate: _SliverAppBarDelegate(
-                        TabBar(
-                          controller: _tabController,
-                          dividerColor: Colors.transparent,
-                          tabs: const [
-                            Tab(text: 'Bimbingan'),
-                            Tab(text: 'Log Book'),
-                          ],
-                          labelColor: AppColors.lightPrimary,
-                          unselectedLabelColor: AppColors.lightGray,
-                          indicatorColor: AppColors.lightPrimary,
-                          indicatorSize: TabBarIndicatorSize.label,
-                          labelStyle: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ];
-                },
-                body: Container(
-                  key: _tabSectionKey,
-                  child: TabBarView(
-                    controller: _tabController,
-                    children: [
-                      LecturerGuidanceTab(
-                        guidances: detailStudent.guidances,
-                        student_id: widget.id,
-                      ),
-                      LecturerLogBookTab(
-                        logBooks: detailStudent.log_book,
-                        student_id: widget.id,
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            }
+            
+            // Handle failure state with cached data
             if (state is DetailFailure) {
+              if (state.isOffline && state.cachedData != null) {
+                return _buildMainContent(
+                  context,
+                  state.cachedData!,
+                  isOffline: true,
+                );
+              }
               return ErrorView(
                 errorMessage: state.errorMessage,
                 onRetry: () {
@@ -174,6 +118,16 @@ class _DetailStudentPageState extends State<DetailStudentPage> with SingleTicker
                 },
               );
             }
+
+            // Handle loaded state
+            if (state is DetailLoaded) {
+              return _buildMainContent(
+                context,
+                state.detailStudentEntity,
+                isOffline: state.isOffline,
+              );
+            }
+
             return Container();
           },
         ),
@@ -184,6 +138,97 @@ class _DetailStudentPageState extends State<DetailStudentPage> with SingleTicker
               child: const Icon(Icons.arrow_downward),
             )
           : null,
+    );
+  }
+
+  Widget _buildMainContent(
+    BuildContext context,
+    DetailStudentEntity detailStudent, {
+    bool isOffline = false,
+  }) {
+    return Column(
+      children: [
+        if (isOffline)
+          Container(
+            width: double.infinity,
+            color: AppColors.lightGray,
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: const Text(
+              'Menggunakan data tersimpan Anda sedang offline',
+              style: TextStyle(color: Colors.white),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        Expanded(
+          child: NestedScrollView(
+            controller: _scrollController,
+            headerSliverBuilder: (context, innerBoxIsScrolled) {
+              return [
+                SliverAppBar(
+                  expandedHeight: 250,
+                  pinned: true,
+                  backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+                  flexibleSpace: FlexibleSpaceBar(
+                    background: ProfileHeader(detailStudent: detailStudent),
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 16),
+                      StatisticsSection(
+                        guidanceLength: detailStudent.guidances.length,
+                        logBookLength: detailStudent.log_book.length,
+                      ),
+                      InfoBoxes(
+                        internships: detailStudent.internships,
+                        students: detailStudent,
+                        id: widget.id,
+                      ),
+                    ],
+                  ),
+                ),
+                SliverPersistentHeader(
+                  pinned: true,
+                  delegate: _SliverAppBarDelegate(
+                    TabBar(
+                      controller: _tabController,
+                      dividerColor: Colors.transparent,
+                      tabs: const [
+                        Tab(text: 'Bimbingan'),
+                        Tab(text: 'Log Book'),
+                      ],
+                      labelColor: AppColors.lightPrimary,
+                      unselectedLabelColor: AppColors.lightGray,
+                      indicatorColor: AppColors.lightPrimary,
+                      indicatorSize: TabBarIndicatorSize.label,
+                      labelStyle: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ];
+            },
+            body: Container(
+              key: _tabSectionKey,
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  LecturerGuidanceTab(
+                    guidances: detailStudent.guidances,
+                    student_id: widget.id,
+                  ),
+                  LecturerLogBookTab(
+                    logBooks: detailStudent.log_book,
+                    student_id: widget.id,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

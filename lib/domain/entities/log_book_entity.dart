@@ -20,4 +20,24 @@ class LogBookEntity {
     required this.date,
     required this.lecturer_note,
   });
+
+  factory LogBookEntity.fromJson(Map<String, dynamic> json) {
+    return LogBookEntity(
+      id: json['id'],
+      title: json['title'],
+      activity: json['activity'],
+      date: DateTime.parse(json['date']),
+      lecturer_note: json['lecturer_note'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'activity': activity,
+      'date': date.toIso8601String(),
+      'lecturer_note': lecturer_note,
+    };
+  }
 }

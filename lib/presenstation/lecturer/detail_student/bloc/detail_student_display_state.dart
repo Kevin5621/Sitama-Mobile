@@ -6,36 +6,37 @@ class DetailLoading extends DetailStudentDisplayState {}
 
 class DetailLoaded extends DetailStudentDisplayState {
   final DetailStudentEntity detailStudentEntity;
-  final Map<int, bool> internshipApprovalStatus; // Menyimpan status approval untuk setiap internship
-  final bool isStarRounded;
+  final Map<int, bool> internshipApprovalStatus;
+  final bool isOffline;
 
   DetailLoaded({
     required this.detailStudentEntity,
     Map<int, bool>? internshipApprovalStatus,
-    this.isStarRounded = false,
+    this.isOffline = false,
   }) : internshipApprovalStatus = internshipApprovalStatus ?? {};
 
-  // Helper method untuk mendapatkan status approval berdasarkan index
-  bool isInternshipApproved(int index) {
-    return internshipApprovalStatus[index] ?? false;
-  }
-
-  // Method untuk membuat salinan state dengan status approval yang diperbarui
   DetailLoaded copyWith({
     DetailStudentEntity? detailStudentEntity,
     Map<int, bool>? internshipApprovalStatus,
     bool? isStarRounded,
+    bool? isOffline,
   }) {
     return DetailLoaded(
       detailStudentEntity: detailStudentEntity ?? this.detailStudentEntity,
       internshipApprovalStatus: internshipApprovalStatus ?? this.internshipApprovalStatus,
-      isStarRounded: isStarRounded ?? this.isStarRounded,
+      isOffline: isOffline ?? this.isOffline,
     );
   }
 }
 
 class DetailFailure extends DetailStudentDisplayState {
   final String errorMessage;
+  final bool isOffline;
+  final DetailStudentEntity? cachedData;
 
-  DetailFailure({required this.errorMessage});
+  DetailFailure({
+    required this.errorMessage,
+    this.isOffline = false,
+    this.cachedData,
+  });
 }
