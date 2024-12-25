@@ -47,7 +47,7 @@ dependencies:
     open_file: any               # Membuka file dari perangkat
     
   # UI Components
-    syncfusion_flutter_pdfviewer: any # PDF viewer untuk menampilkan file PDF dalam aplikasi
+    syncfusion_flutter_pdfviewer: 28.1.35 # PDF viewer untuk menampilkan file PDF dalam aplikasi
     pull_to_refresh: any          # Menambahkan fitur pull-to-refresh pada halaman list
 
   # Notifications
