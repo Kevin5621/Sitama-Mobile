@@ -1,3 +1,4 @@
+import 'package:Sitama/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +15,7 @@ import 'package:Sitama/presenstation/student/faq/pages/faq.dart';
 import 'package:Sitama/presenstation/student/profile/bloc/profile_student_cubit.dart';
 import 'package:Sitama/presenstation/student/profile/bloc/profile_student_state.dart';
 import 'package:Sitama/presenstation/student/profile/widgets/box_industry.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -24,16 +26,18 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClientMixin {
   @override
-  bool get wantKeepAlive => true;  
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);  
+    super.build(context);
     final themeProvider = Provider.of<ThemeProvider>(context);
     final isDarkMode = themeProvider.isDarkMode;
 
     return BlocProvider(
-      create: (context) => ProfileStudentCubit()..displayStudent(),
+      create: (context) => ProfileStudentCubit(
+        prefs: sl<SharedPreferences>(),
+      )..displayStudent(),
       child: BlocBuilder<ProfileStudentCubit, ProfileStudentState>(
         builder: (context, state) {
           if (state is StudentLoading) {
@@ -56,7 +60,27 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
             );
           }
           if (state is LoadStudentFailure) {
-            return Text(state.errorMessage);
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.error_outline, size: 48, color: Colors.red[300]),
+                  const SizedBox(height: 16),
+                  Text(
+                    state.errorMessage,
+                    style: const TextStyle(color: Colors.grey, fontSize: 14),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 24),
+                  ElevatedButton(
+                    onPressed: () {
+                      context.read<ProfileStudentCubit>().displayStudent();
+                    },
+                    child: const Text('Retry'),
+                  ),
+                ],
+              ),
+            );
           }
           return Container();
         },

@@ -6,9 +6,9 @@ class IndustryCard extends StatelessWidget {
   final List<InternshipStudentEntity>? internships;
 
   const IndustryCard({
-    Key? key,
+    super.key,
     required this.internships,
-  }) : super(key: key);
+  });
 
   Widget _buildInternshipInfo({
     required BuildContext context,
@@ -132,7 +132,7 @@ class IndustryCard extends StatelessWidget {
                 ),
               ),
             ),
-            if (internships!.length > 1) // Tampilkan TabBar hanya jika ada lebih dari 1 internship
+            if (internships!.length > 1)
               TabBar(
                 isScrollable: true,
                 dividerColor: Colors.transparent,
@@ -142,7 +142,7 @@ class IndustryCard extends StatelessWidget {
                 indicatorWeight: 3,
                 indicatorColor: colorScheme.primary,
                 padding: const EdgeInsets.symmetric(horizontal: 24),
-                tabAlignment: TabAlignment.center, // Atur TabBar agar di tengah
+                tabAlignment: TabAlignment.center,
                 labelPadding: const EdgeInsets.only(right: 24),
                 labelStyle: const TextStyle(
                   fontSize: 15,

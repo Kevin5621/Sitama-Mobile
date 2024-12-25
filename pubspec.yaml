@@ -42,6 +42,7 @@ dependencies:
   # File Management
     file_picker: any             # Memungkinkan pemilihan file dari perangkat
     path_provider: any           # Menyediakan akses ke direktori sistem
+    path: any
     permission_handler: any      # Mengelola izin aplikasi
     open_file: any               # Membuka file dari perangkat
     

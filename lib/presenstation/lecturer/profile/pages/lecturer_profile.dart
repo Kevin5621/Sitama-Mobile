@@ -1,6 +1,5 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:Sitama/presenstation/lecturer/home/bloc/offline_mode_handler.dart';
 import 'package:Sitama/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,31 +40,12 @@ class _LecturerProfilePageState extends State<LecturerProfilePage>
       create: (context) => ProfileLecturerCubit(
         prefs: sl<SharedPreferences>(),
       )..displayLecturer(),
-      child: ConnectivityHandler(
-        child: BlocBuilder<ProfileLecturerCubit, ProfileLecturerState>(
-          builder: (context, state) {
-            return Scaffold(
-              body: Column(
-                children: [
-                  if (state is LecturerLoaded && state.isOffline)
-                    Container(
-                      width: double.infinity,
-                      color: AppColors.lightGray,
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: const Text(
-                        'Menggunakan data tersimpan Anda sedang offline',
-                        style: TextStyle(color: Colors.white),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  Expanded(
-                    child: _buildContent(state, colorScheme, isDarkMode),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
+      child: BlocBuilder<ProfileLecturerCubit, ProfileLecturerState>(
+        builder: (context, state) {
+          return Scaffold(
+            body: _buildContent(state, colorScheme, isDarkMode),
+          );
+        },
       ),
     );
   }
@@ -86,17 +66,6 @@ class _LecturerProfilePageState extends State<LecturerProfilePage>
       );
     }
     if (state is LoadLecturerFailure) {
-      if (state.isOffline && state.cachedData != null) {
-        return SingleChildScrollView(
-          child: Column(
-            children: [
-              _header(colorScheme, state.cachedData!),
-              const SizedBox(height: 22),
-              _settingsList(context, isDarkMode),
-            ],
-          ),
-        );
-      }
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

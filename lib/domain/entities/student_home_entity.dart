@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:Sitama/domain/entities/guidance_entity.dart';
 import 'package:Sitama/domain/entities/lecturer_detail_student.dart';
 import 'package:Sitama/domain/entities/log_book_entity.dart';
@@ -19,6 +21,26 @@ class StudentProfileEntity {
   final String email;
   final String ? photo_profile;
   final List<InternshipStudentEntity> ? internships;
+
+  factory StudentProfileEntity.fromJson(Map<String, dynamic> json) {
+    return StudentProfileEntity(
+      name: json['name'],
+      username: json['username'],
+      email: json['email'],
+      photo_profile: json['photo_profile'],
+      internships: json['internships'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'username': username,
+      'email': email,
+      'photo_profile': photo_profile,
+      'internships': internships,
+    };
+  }
 
   StudentProfileEntity({
     required this.name,
