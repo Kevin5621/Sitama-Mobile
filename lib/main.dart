@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import 'package:sitama/core/provider/app_providers.dart';
 import 'package:sitama/core/config/themes/app_theme.dart';
 import 'package:sitama/core/config/themes/theme_provider.dart';
-import 'package:sitama/presenstation/general/splash/pages/splash.dart';
+import 'package:sitama/core/shared/provider/app_providers.dart';
+import 'package:sitama/features/auth/ui/pages/splash.dart';
 import 'package:sitama/service_locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
