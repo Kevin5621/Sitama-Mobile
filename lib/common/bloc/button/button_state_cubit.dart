@@ -6,27 +6,30 @@ import 'package:Sitama/core/usecase/usecase.dart';
 class ButtonStateCubit extends Cubit<ButtonState> {
   ButtonStateCubit() : super(ButtonInitialState());
 
-  void excute({dynamic params, required UseCase usecase}) async {
-
+  void startLoading() {
     emit(ButtonLoadingState());
+  }
+
+  void resetState() {
+    emit(ButtonInitialState());
+  }
+
+  void excute({dynamic params, required UseCase usecase}) async {
+    startLoading();
     
-    try{
+    try {
       Either result = await usecase.call(param: params);
 
-      result.fold((error){
-        emit(
-          ButtonFailurState(errorMessage: error)
-        );
-      }, 
-      (data) {
-        emit(
-          ButtonSuccessState()
-        );
-      });
-    } catch (e){
-      emit(
-        ButtonFailurState(errorMessage: e.toString())
+      result.fold(
+        (error) {
+          emit(ButtonFailurState(errorMessage: error));
+        }, 
+        (data) {
+          emit(ButtonSuccessState());
+        },
       );
+    } catch (e) {
+      emit(ButtonFailurState(errorMessage: e.toString()));
     }
   }
 }

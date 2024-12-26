@@ -93,9 +93,6 @@ class _LecturerHomeContentState extends State<LecturerHomeContent>
                 if (state is LecturerLoaded) {
                   return _buildLoadedState(state);
                 }
-                if (state is LoadLecturerFailure) {
-                  return _buildErrorState(context, state);
-                }
                 return Container();
               },
             ),
@@ -239,66 +236,6 @@ class _LecturerHomeContentState extends State<LecturerHomeContent>
             ),
           );
         },
-      ),
-    );
-  }
-
-  Widget _buildErrorState(BuildContext context, LoadLecturerFailure state) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          if (state.isOffline && state.cachedData != null) ...[
-            const Icon(
-              Icons.cloud_off,
-              size: 48,
-              color: AppColors.lightGray,
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'Anda sedang offline',
-              style: TextStyle(
-                color: Colors.grey,
-                fontSize: 14,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 24),
-            _buildMainContent(
-              state.cachedData!,
-              state.cachedData!.students!.toSet(),
-              context.read<SelectionBloc>().state,
-            ),
-          ] else ...[
-            Icon(
-              Icons.error_outline,
-              size: 48,
-              color: Colors.red[300],
-            ),
-            const SizedBox(height: 16),
-            Text(
-              state.errorMessage,
-              style: const TextStyle(
-                color: Colors.grey,
-                fontSize: 14,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: () {
-                context.read<LecturerDisplayCubit>().displayLecturer();
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.lightPrimary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              child: const Text('Retry'),
-            ),
-          ],
-        ],
       ),
     );
   }

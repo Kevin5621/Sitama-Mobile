@@ -1,5 +1,8 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:async';
+import 'package:Sitama/common/widgets/error_content.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:Sitama/common/widgets/student_guidance_card.dart';
@@ -29,6 +32,8 @@ class HomeContent extends StatefulWidget {
 
 class _HomeContentState extends State<HomeContent> with AutomaticKeepAliveClientMixin {
   late final StudentDisplayCubit _studentCubit;
+  late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
+  bool _wasError = false;
 
   @override
   bool get wantKeepAlive => true;
@@ -37,10 +42,24 @@ class _HomeContentState extends State<HomeContent> with AutomaticKeepAliveClient
   void initState() {
     super.initState();
     _studentCubit = StudentDisplayCubit()..displayStudent();
+    _setupConnectivityListener();
+  }
+
+  void _setupConnectivityListener() {
+    _connectivitySubscription = Connectivity()
+        .onConnectivityChanged
+        .listen((List<ConnectivityResult> results) {
+      bool hasConnection = results.contains(ConnectivityResult.wifi) || 
+                          results.contains(ConnectivityResult.mobile);
+      if (_wasError && hasConnection) {
+        _studentCubit.displayStudent();
+      }
+    });
   }
 
   @override
   void dispose() {
+    _connectivitySubscription.cancel();
     _studentCubit.close();
     super.dispose();
   }
@@ -53,6 +72,13 @@ class _HomeContentState extends State<HomeContent> with AutomaticKeepAliveClient
       create: (context) => _studentCubit,
       child: BlocBuilder<StudentDisplayCubit, StudentDisplayState>(
         builder: (context, state) {
+          // Update _wasError berdasarkan state
+          if (state is LoadStudentFailure) {
+            _wasError = true;
+          } else if (state is StudentLoaded) {
+            _wasError = false;
+          }
+
           return AnimatedSwitcher(
             duration: const Duration(milliseconds: 300),
             child: _buildContent(context, state),
@@ -63,47 +89,35 @@ class _HomeContentState extends State<HomeContent> with AutomaticKeepAliveClient
   }
 
   Widget _buildContent(BuildContext context, StudentDisplayState state) {
-    if (state is StudentLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-    if (state is StudentLoaded) {
-      return RefreshIndicator(
-        onRefresh: () async {
-          _studentCubit.displayStudent();
-        },
-        child: CustomScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          slivers: [
-            _header(context, state), 
-            _buildSectionHeader(context, 'Bimbingan Terbaru', widget.allGuidances),
-            _guidancesList(state.studentHomeEntity),
-            _buildSectionHeader(context, 'Log Book Terbaru', widget.allLogBooks),
-            _logBooksList(state.studentHomeEntity),
-            const SliverToBoxAdapter(child: SizedBox(height: 20)),
-          ],
+    return switch (state) {
+      StudentLoading() => const Center(child: CircularProgressIndicator()),
+      StudentLoaded() => _buildLoadedContent(state),
+      LoadStudentFailure() => ErrorContent(
+          errorMessage: state.errorMessage,
+          onRetry: () => _studentCubit.displayStudent(),
+          wasError: _wasError,
         ),
-      );
-    }
-    if (state is LoadStudentFailure) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              state.errorMessage,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 16),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () => _studentCubit.displayStudent(),
-              child: const Text('Retry'),
-            ),
-          ],
-        ),
-      );
-    }
-    return Container();
+      _ => Container(),
+    };
+  }
+
+  Widget _buildLoadedContent(StudentLoaded state) {
+    return RefreshIndicator(
+      onRefresh: () async {
+        _studentCubit.displayStudent();
+      },
+      child: CustomScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        slivers: [
+          _header(context, state),
+          _buildSectionHeader(context, 'Bimbingan Terbaru', widget.allGuidances),
+          _guidancesList(state.studentHomeEntity),
+          _buildSectionHeader(context, 'Log Book Terbaru', widget.allLogBooks),
+          _logBooksList(state.studentHomeEntity),
+          const SliverToBoxAdapter(child: SizedBox(height: 20)),
+        ],
+      ),
+    );
   }
 
   /// Builds a section header with title and forward arrow
