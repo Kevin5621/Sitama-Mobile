@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:Sitama/common/widgets/alert.dart';
-import 'package:Sitama/domain/entities/lecturer_detail_student.dart';
-import 'package:Sitama/presenstation/lecturer/detail_student/bloc/detail_student_display_cubit.dart';
-import 'package:Sitama/presenstation/lecturer/detail_student/bloc/detail_student_display_state.dart';
+import 'package:sitama/common/widgets/alert.dart';
+import 'package:sitama/domain/entities/lecturer_detail_student.dart';
+import 'package:sitama/presenstation/lecturer/detail_student/bloc/detail_student_display_cubit.dart';
+import 'package:sitama/presenstation/lecturer/detail_student/bloc/detail_student_display_state.dart';
 
 class InternshipStatusBox extends StatelessWidget {
   final List<DetailStudentEntity> students;
@@ -38,10 +38,11 @@ class InternshipStatusBox extends StatelessWidget {
 
   Widget _buildApproveButton(BuildContext context, bool isApproved) {
     final colorScheme = Theme.of(context).colorScheme;
+    
     return IconButton(
       onPressed: () async {
         final shouldProceed = await _showConfirmationDialog(context, isApproved);
-        if (shouldProceed == true) {
+        if (shouldProceed == true && context.mounted) {
           context.read<DetailStudentDisplayCubit>().toggleInternshipApproval(index);
           if (onApprove != null) {
             onApprove!();
@@ -84,7 +85,6 @@ class InternshipStatusBox extends StatelessWidget {
       ],
     );
   }
-
 
   Widget _buildStudentInfo(BuildContext context, DetailStudentEntity student) {
     return Container(

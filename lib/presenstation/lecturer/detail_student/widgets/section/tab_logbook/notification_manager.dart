@@ -1,5 +1,5 @@
 // Notification Manager class to handle logbook notifications
-import 'package:Sitama/domain/entities/log_book_entity.dart';
+import 'package:sitama/domain/entities/log_book_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

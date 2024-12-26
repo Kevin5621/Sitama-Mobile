@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:Sitama/common/widgets/custom_snackbar.dart';
-import 'package:Sitama/common/widgets/reset_password_field.dart';
-import 'package:Sitama/core/config/themes/app_color.dart';
-import 'package:Sitama/data/models/reset_password_req_params.dart';
-import 'package:Sitama/domain/usecases/general/reset_password.dart';
-import 'package:Sitama/service_locator.dart';
+import 'package:sitama/common/widgets/custom_snackbar.dart';
+import 'package:sitama/common/widgets/reset_password_field.dart';
+import 'package:sitama/core/config/themes/app_color.dart';
+import 'package:sitama/data/models/reset_password_req_params.dart';
+import 'package:sitama/domain/usecases/general/reset_password.dart';
+import 'package:sitama/service_locator.dart';
 
 class ResetPasswordPage extends StatefulWidget {
   const ResetPasswordPage({super.key});

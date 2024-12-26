@@ -1,7 +1,9 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
-import 'package:Sitama/common/widgets/date_relative_time.dart';
-import 'package:Sitama/domain/entities/log_book_entity.dart';
-import 'package:Sitama/presenstation/lecturer/detail_student/widgets/section/tab_logbook/logbook_content.dart';
+import 'package:sitama/common/widgets/date_relative_time.dart';
+import 'package:sitama/domain/entities/log_book_entity.dart';
+import 'package:sitama/presenstation/lecturer/detail_student/widgets/section/tab_logbook/logbook_content.dart';
 
 class LecturerLogBookCard extends StatefulWidget {
   final LogBookEntity logBook;
@@ -29,7 +31,7 @@ class _LecturerLogBookCardState extends State<LecturerLogBookCard> {
 
     return Card(
       margin: const EdgeInsets.all(8),
-      color: colorScheme.surface,
+      color: colorScheme.surfaceContainer,
       child: Theme(
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
@@ -40,7 +42,7 @@ class _LecturerLogBookCardState extends State<LecturerLogBookCard> {
           subtitle: Text(
             RelativeTimeUtil.getRelativeTime(widget.logBook.date),
             style: textTheme.bodySmall?.copyWith(
-              color: colorScheme.onSurface.withOpacity(0.7),
+              color: colorScheme.onSurface.withAlpha((0.7*255).round()),
             ),
             textAlign: TextAlign.start,
           ),

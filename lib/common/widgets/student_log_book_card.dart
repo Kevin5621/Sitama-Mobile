@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:Sitama/core/config/themes/app_color.dart';
-import 'package:Sitama/presenstation/student/logbook/widgets/delete_log_book.dart';
-import 'package:Sitama/presenstation/student/logbook/widgets/edit_log_book.dart';
+import 'package:sitama/core/config/themes/app_color.dart';
+import 'package:sitama/presenstation/student/logbook/widgets/delete_log_book.dart';
+import 'package:sitama/presenstation/student/logbook/widgets/edit_log_book.dart';
 
 /// Key Features:
 /// - Displays the logbook entry title and date in a visually appealing card.
@@ -45,7 +45,7 @@ class LogBookCard extends StatelessWidget {
     return Card(
       elevation: 2,
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      color: colorScheme.surface,
+      color: colorScheme.surfaceContainer,
       child: Theme(
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
@@ -97,7 +97,7 @@ class LogBookCard extends StatelessWidget {
                       child: Text(
                         'Tidak ada catatan',
                         style: theme.textTheme.bodyMedium?.copyWith(
-                          color: colorScheme.onSurface.withOpacity(0.5),
+                          color: colorScheme.onSurface.withAlpha((0.5*255).round()),
                         ),
                       ),
                     ),

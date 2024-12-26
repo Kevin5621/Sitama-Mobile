@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:Sitama/presenstation/student/guidance/pages/guidance.dart';
-import 'package:Sitama/presenstation/student/home/widgets/home_content.dart';
-import 'package:Sitama/presenstation/student/logbook/pages/logbook.dart';
-import 'package:Sitama/presenstation/student/profile/pages/profile.dart';
+import 'package:sitama/presenstation/student/guidance/pages/guidance.dart';
+import 'package:sitama/presenstation/student/home/widgets/home_content.dart';
+import 'package:sitama/presenstation/student/logbook/pages/logbook.dart';
+import 'package:sitama/presenstation/student/profile/pages/profile.dart';
 
 /// A stateful widget that serves as the main navigation hub for the student interface.
 /// Contains a bottom navigation bar for switching between different sections of the app.
@@ -11,7 +11,7 @@ class HomePage extends StatefulWidget {
   /// Defaults to 0 (Home page).
   final int currentIndex;
 
-  const HomePage({Key? key, this.currentIndex = 0}) : super(key: key);
+  const HomePage({super.key, this.currentIndex = 0});
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin{
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withAlpha((0.1*255).round()),
               blurRadius: 20,
               offset: const Offset(0, -2),
             ),
@@ -86,9 +86,9 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin{
           child: BottomNavigationBar(
             currentIndex: _currentIndex,
             type: BottomNavigationBarType.fixed,
-            backgroundColor: Theme.of(context).colorScheme.surface,
+            backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
             selectedItemColor: Theme.of(context).colorScheme.primary,
-            unselectedItemColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+            unselectedItemColor: Theme.of(context).colorScheme.onSurface.withAlpha((0.6*255).round()),
             selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
             elevation: 0,
             onTap: (index) {

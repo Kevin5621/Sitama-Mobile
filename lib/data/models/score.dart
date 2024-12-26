@@ -1,4 +1,4 @@
-import 'package:Sitama/domain/entities/score_entity.dart';
+import 'package:sitama/domain/entities/score_entity.dart';
 
 class ScoreModel {
   final int id;

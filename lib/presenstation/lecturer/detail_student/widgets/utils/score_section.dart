@@ -1,7 +1,9 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:Sitama/domain/entities/lecturer_detail_student.dart';
-import 'package:Sitama/presenstation/lecturer/input_score/widgets/score_input_overlay.dart';
+import 'package:sitama/domain/entities/lecturer_detail_student.dart';
+import 'package:sitama/presenstation/lecturer/input_score/widgets/score_input_overlay.dart';
 
 // widget shows assessment scores for a student, with the following features:
 // - Detailed score breakdown
@@ -36,11 +38,11 @@ class ScoreBox extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(
-        color: colorScheme.surface,
+        color: colorScheme.surfaceContainer,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: colorScheme.shadow.withOpacity(0.1),
+            color: colorScheme.shadow.withAlpha((0.1*255).round()),
             spreadRadius: 2,
             blurRadius: 12,
             offset: const Offset(0, 4),
@@ -95,7 +97,7 @@ class ScoreBox extends StatelessWidget {
               Icons.add_circle_rounded,
               color: isButtonEnabled 
                   ? colorScheme.primary 
-                  : colorScheme.onSurface.withOpacity(0.38),
+                  : colorScheme.onSurface.withAlpha((0.3*2558).round()),
               size: 32,
             ),
             onPressed: isButtonEnabled 
@@ -158,7 +160,7 @@ class ScoreBox extends StatelessWidget {
               fontWeight: isTotal ? FontWeight.w700 : FontWeight.w500,
               color: isTotal 
                   ? colorScheme.primary 
-                  : colorScheme.onSurface.withOpacity(0.87),
+                  : colorScheme.onSurface.withAlpha((0.8*2557).round()),
             ),
           ),
         ),
@@ -166,8 +168,8 @@ class ScoreBox extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
             color: isTotal
-                ? colorScheme.primary.withOpacity(0.12)
-                : colorScheme.surfaceVariant,
+                ? colorScheme.primary.withAlpha((0.1*2552).round())
+                : colorScheme.tertiary,
             borderRadius: BorderRadius.circular(16),
           ),
           child: Text(
@@ -177,7 +179,7 @@ class ScoreBox extends StatelessWidget {
               fontWeight: isTotal ? FontWeight.w700 : FontWeight.w600,
               color: isTotal
                   ? colorScheme.primary
-                  : colorScheme.onSurface.withOpacity(0.87),
+                  : colorScheme.onSurface.withAlpha((0.8*2557).round()),
             ),
           ),
         ),
@@ -203,7 +205,7 @@ class ScoreBox extends StatelessWidget {
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
           child: Container(
-            color: Colors.black.withOpacity(0.3),
+            color: Colors.black.withAlpha((0.3*255).round()),
             child: const Center(
               child: Text(
                 'Selesaikan bagian Magang\nuntuk memodifikasi Nilai',

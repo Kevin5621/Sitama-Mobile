@@ -1,6 +1,6 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:Sitama/domain/entities/lecturer_home_entity.dart';
+import 'package:sitama/domain/entities/lecturer_home_entity.dart';
 
 // A customizable dropdown widget for filtering students by academic year
 // Provides search functionality and supports theming
@@ -82,8 +82,8 @@ class _FilterTahunState extends State<FilterTahun> {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: (widget.primaryColor ?? colorScheme.primary).withOpacity(0.2)),
-        color: widget.backgroundColor ?? colorScheme.surface,
+        border: Border.all(color: (widget.primaryColor ?? colorScheme.primary).withAlpha((0.2*255).round())),
+        color: widget.backgroundColor ?? colorScheme.surfaceContainer,
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton2<String>(
@@ -102,7 +102,7 @@ class _FilterTahunState extends State<FilterTahun> {
                   'Tahun',
                   style: widget.hintStyle ?? TextStyle(
                     fontSize: 14,
-                    color: (widget.primaryColor ?? colorScheme.primary).withOpacity(0.7),
+                    color: (widget.primaryColor ?? colorScheme.primary).withAlpha((0.7*255).round()),
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -153,7 +153,7 @@ class _FilterTahunState extends State<FilterTahun> {
             width: 150,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              color: widget.backgroundColor ?? colorScheme.surface,
+              color: widget.backgroundColor ?? colorScheme.surfaceContainer,
             ),
           ),
           // Customize dropdown appearance
@@ -161,7 +161,7 @@ class _FilterTahunState extends State<FilterTahun> {
             maxHeight: 300,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              color: widget.backgroundColor ?? colorScheme.surface,
+              color: widget.backgroundColor ?? colorScheme.surfaceContainer,
             ),
             offset: const Offset(0, -4),
             scrollbarTheme: ScrollbarThemeData(
@@ -201,7 +201,7 @@ class _FilterTahunState extends State<FilterTahun> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide(
-                      color: (widget.primaryColor ?? colorScheme.primary).withOpacity(0.2),
+                      color: (widget.primaryColor ?? colorScheme.primary).withAlpha((0.2*255).round()),
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(

@@ -1,8 +1,8 @@
 // ignore_for_file: non_constant_identifier_names
 
-import 'package:Sitama/domain/entities/guidance_entity.dart';
-import 'package:Sitama/domain/entities/lecturer_detail_student.dart';
-import 'package:Sitama/domain/entities/log_book_entity.dart';
+import 'package:sitama/domain/entities/guidance_entity.dart';
+import 'package:sitama/domain/entities/lecturer_detail_student.dart';
+import 'package:sitama/domain/entities/log_book_entity.dart';
 
 class StudentHomeEntity {
   final String name;

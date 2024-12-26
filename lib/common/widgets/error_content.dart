@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:Sitama/core/config/assets/app_images.dart';
-import 'package:Sitama/common/bloc/button/button_state.dart';
-import 'package:Sitama/common/bloc/button/button_state_cubit.dart';
+import 'package:sitama/core/config/assets/app_images.dart';
+import 'package:sitama/common/bloc/button/button_state.dart';
+import 'package:sitama/common/bloc/button/button_state_cubit.dart';
 
 class ErrorContent extends StatefulWidget {
   final String errorMessage;

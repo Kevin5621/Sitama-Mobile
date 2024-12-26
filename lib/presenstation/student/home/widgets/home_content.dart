@@ -1,20 +1,18 @@
-// ignore_for_file: deprecated_member_use
-
 import 'dart:async';
-import 'package:Sitama/common/widgets/error_content.dart';
+import 'package:sitama/common/widgets/error_content.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:Sitama/common/widgets/student_guidance_card.dart';
-import 'package:Sitama/common/widgets/student_log_book_card.dart';
-import 'package:Sitama/core/config/assets/app_images.dart';
-import 'package:Sitama/data/models/notification.dart';
-import 'package:Sitama/domain/entities/student_home_entity.dart';
-import 'package:Sitama/presenstation/student/home/bloc/student_display_cubit.dart';
-import 'package:Sitama/presenstation/student/home/bloc/student_display_state.dart';
-import 'package:Sitama/presenstation/student/home/widgets/load_notification.dart';
-import 'package:Sitama/presenstation/student/home/widgets/notification_badge.dart';
-import 'package:Sitama/presenstation/student/home/widgets/notification_page.dart';
+import 'package:sitama/common/widgets/student_guidance_card.dart';
+import 'package:sitama/common/widgets/student_log_book_card.dart';
+import 'package:sitama/core/config/assets/app_images.dart';
+import 'package:sitama/data/models/notification.dart';
+import 'package:sitama/domain/entities/student_home_entity.dart';
+import 'package:sitama/presenstation/student/home/bloc/student_display_cubit.dart';
+import 'package:sitama/presenstation/student/home/bloc/student_display_state.dart';
+import 'package:sitama/presenstation/student/home/widgets/load_notification.dart';
+import 'package:sitama/presenstation/student/home/widgets/notification_badge.dart';
+import 'package:sitama/presenstation/student/home/widgets/notification_page.dart';
 
 class HomeContent extends StatefulWidget {
   final VoidCallback allGuidances;
@@ -79,9 +77,11 @@ class _HomeContentState extends State<HomeContent> with AutomaticKeepAliveClient
             _wasError = false;
           }
 
-          return AnimatedSwitcher(
-            duration: const Duration(milliseconds: 300),
-            child: _buildContent(context, state),
+          return RepaintBoundary(
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              child: _buildContent(context, state),
+            ),
           );
         },
       ),
@@ -135,7 +135,7 @@ class _HomeContentState extends State<HomeContent> with AutomaticKeepAliveClient
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: colorScheme.onBackground,
+                color: colorScheme.onSurface,
               ),
             ),
             InkWell(
@@ -143,7 +143,7 @@ class _HomeContentState extends State<HomeContent> with AutomaticKeepAliveClient
               child: Icon(
                 Icons.arrow_forward_ios, 
                 size: 14,
-                color: colorScheme.onBackground,
+                color: colorScheme.onSurface,
               ),
             ),
           ],
@@ -194,95 +194,95 @@ class _HomeContentState extends State<HomeContent> with AutomaticKeepAliveClient
   /// - Notification button with badge
   /// - Background pattern
   /// - Notification loading widget
-    SliverToBoxAdapter _header(BuildContext context, StudentDisplayState state) {
-  final colorScheme = Theme.of(context).colorScheme;
-  
-  NotificationItemEntity? latestNotification;
-  if (state is StudentLoaded) {
-    latestNotification = state.notifications?.getLatestGeneralNotification();
-  }
-  
-  return SliverToBoxAdapter(
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          width: double.infinity,
-          height: 160,
-          padding: const EdgeInsets.symmetric(horizontal: 32),
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(AppImages.homePattern),
-              fit: BoxFit.cover,
+  SliverToBoxAdapter _header(BuildContext context, StudentDisplayState state) {
+    final colorScheme = Theme.of(context).colorScheme;
+    
+    NotificationItemEntity? latestNotification;
+    if (state is StudentLoaded) {
+      latestNotification = state.notifications?.getLatestGeneralNotification();
+    }
+    
+    return SliverToBoxAdapter(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: double.infinity,
+            height: 160,
+            padding: const EdgeInsets.symmetric(horizontal: 32),
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(AppImages.homePattern),
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    'HELLO,',
-                    style: TextStyle(
-                      fontSize: 12, 
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  if (state is StudentLoaded)
-                    Text(
-                      state.studentHomeEntity.name,
-                      style: const TextStyle(
-                        fontSize: 20, 
-                        fontWeight: FontWeight.bold,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'HELLO,',
+                      style: TextStyle(
+                        fontSize: 12, 
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
-                ],
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  color: colorScheme.primary,
-                  shape: BoxShape.circle,
-                ),
-                child: BlocBuilder<StudentDisplayCubit, StudentDisplayState>(
-                  builder: (context, state) {
-                    int unreadCount = 0;
-                    
-                    if (state is StudentLoaded && state.notifications != null) {
-                      unreadCount = state.notifications!.getUnreadCount();
-                    }
-
-                    return NotificationBadge(
-                      count: unreadCount,  
-                      child: Builder(
-                        builder: (BuildContext context) => IconButton(
-                          icon: Icon(
-                            Icons.notifications,
-                            color: colorScheme.onPrimary,
-                          ),
-                          onPressed: () => _navigateToNotifications(context),
+                    if (state is StudentLoaded)
+                      Text(
+                        state.studentHomeEntity.name,
+                        style: const TextStyle(
+                          fontSize: 20, 
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                    );
-                  },
+                  ],
                 ),
-              )
-            ],
+                Container(
+                  decoration: BoxDecoration(
+                    color: colorScheme.primary,
+                    shape: BoxShape.circle,
+                  ),
+                  child: BlocBuilder<StudentDisplayCubit, StudentDisplayState>(
+                    builder: (context, state) {
+                      int unreadCount = 0;
+                      
+                      if (state is StudentLoaded && state.notifications != null) {
+                        unreadCount = state.notifications!.getUnreadCount();
+                      }
+
+                      return NotificationBadge(
+                        count: unreadCount,  
+                        child: Builder(
+                          builder: (BuildContext context) => IconButton(
+                            icon: Icon(
+                              Icons.notifications,
+                              color: colorScheme.onPrimary,
+                            ),
+                            onPressed: () => _navigateToNotifications(context),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                )
+              ],
+            ),
           ),
-        ),
-        const SizedBox(height: 16),
-        Container(
-          color: colorScheme.background,
-          child: LoadNotification(
-            onClose: () {},
-            notification: latestNotification,
+          const SizedBox(height: 16),
+          Container(
+            color: colorScheme.surface,
+            child: LoadNotification(
+              onClose: () {},
+              notification: latestNotification,
+            ),
           ),
-        ),
-      ],
-    ),
-  );
-}
+        ],
+      ),
+    );
+  }
 
   /// Navigation helper for notifications page
   void _navigateToNotifications(BuildContext context) {

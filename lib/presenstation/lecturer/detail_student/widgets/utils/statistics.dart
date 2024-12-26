@@ -4,8 +4,7 @@ class StatisticsSection extends StatelessWidget {
   final int guidanceLength;
   final int logBookLength;
   const StatisticsSection(
-      {Key? key, required this.guidanceLength, required this.logBookLength})
-      : super(key: key);
+      {super.key, required this.guidanceLength, required this.logBookLength});
 
   @override
   Widget build(BuildContext context) {
@@ -40,12 +39,12 @@ class StatItem extends StatelessWidget {
   final Color color;
 
   const StatItem({
-    Key? key,
+    super.key,
     required this.label,
     required this.value,
     required this.icon,
     required this.color,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +53,7 @@ class StatItem extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
+            color: color.withAlpha((0.1*255).round()),
             shape: BoxShape.circle,
           ),
           child: Icon(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:Sitama/data/models/group.dart';
+import 'package:sitama/data/models/group.dart';
 
 class GroupDialogForm extends StatefulWidget {
   final String? initialTitle;
@@ -100,7 +100,7 @@ class _GroupDialogFormState extends State<GroupDialogForm> {
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        border: Border.all(color: colorScheme.outline.withOpacity(0.2)),
+        border: Border.all(color: colorScheme.outline.withAlpha((0.2*255).round())),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Wrap(
@@ -118,7 +118,7 @@ class _GroupDialogFormState extends State<GroupDialogForm> {
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: selectedIcon == icon
-                        ? selectedColor.withOpacity(0.15)
+                        ? selectedColor.withAlpha((0.1*2555).round())
                         : Colors.transparent,
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
@@ -162,7 +162,7 @@ class _GroupDialogFormState extends State<GroupDialogForm> {
                       : null,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
+                      color: Colors.black.withAlpha((0.2*255).round()),
                       spreadRadius: 1,
                       blurRadius: 2,
                     )

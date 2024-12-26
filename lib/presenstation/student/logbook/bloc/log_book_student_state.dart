@@ -1,4 +1,4 @@
-import 'package:Sitama/domain/entities/log_book_entity.dart';
+import 'package:sitama/domain/entities/log_book_entity.dart';
 
 abstract class LogBookStudentState {}
 

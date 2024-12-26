@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:Sitama/core/config/themes/app_color.dart';
+import 'package:sitama/core/config/themes/app_color.dart';
 
 class FAQPage extends StatelessWidget {
   const FAQPage({super.key});
@@ -110,13 +110,13 @@ class FAQPage extends StatelessWidget {
   Widget _buildFAQSection(BuildContext context, String question, List<String> answers, bool isDarkMode) {
     return Card(
       margin: const EdgeInsets.only(bottom: 16.0),
-      color: isDarkMode ? AppColors.darkWhite.withOpacity(0.1) : AppColors.lightWhite,
+      color: isDarkMode ? AppColors.darkWhite.withAlpha((0.1*255).round()) : AppColors.lightWhite,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
         side: BorderSide(
           color: isDarkMode 
-              ? AppColors.darkGray.withOpacity(0.2) 
-              : AppColors.lightGray.withOpacity(0.2),
+              ? AppColors.darkGray.withAlpha((0.2*255).round()) 
+              : AppColors.lightGray.withAlpha((0.2*255).round()),
           width: 1.5,
         ),
       ),
@@ -141,8 +141,8 @@ class FAQPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 14,
                 color: isDarkMode 
-                    ? AppColors.lightWhite.withOpacity(0.9) 
-                    : AppColors.lightBlack.withOpacity(0.9),
+                    ? AppColors.lightWhite.withAlpha((0.9*255).round()) 
+                    : AppColors.lightBlack.withAlpha((0.9*255).round()),
               ),
             ),
             contentPadding: const EdgeInsets.symmetric(

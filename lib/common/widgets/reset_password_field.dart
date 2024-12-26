@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:Sitama/core/config/themes/app_color.dart';
+import 'package:sitama/core/config/themes/app_color.dart';
 
 class PasswordFormField extends StatelessWidget {
   final TextEditingController controller;
@@ -57,18 +57,18 @@ class PasswordFormField extends StatelessWidget {
             ),
             errorText: errorText,
             filled: true,
-            fillColor: errorText != null ? errorColor.withOpacity(0.1) : fillColor,
+            fillColor: errorText != null ? errorColor.withAlpha((0.1*255).round()) : fillColor,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide(
-                color: errorText != null ? errorColor : onSurfaceColor.withOpacity(0.2),
+                color: errorText != null ? errorColor : onSurfaceColor.withAlpha((0.2*255).round()),
                 width: 1.5,
               ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide(
-                color: errorText != null ? errorColor : onSurfaceColor.withOpacity(0.2),
+                color: errorText != null ? errorColor : onSurfaceColor.withAlpha((0.2*255).round()),
                 width: 1.5,
               ),
             ),
@@ -88,12 +88,12 @@ class PasswordFormField extends StatelessWidget {
             ),
             prefixIcon: Icon(
               Icons.lock_outline,
-              color: errorText != null ? errorColor : onSurfaceColor.withOpacity(0.7),
+              color: errorText != null ? errorColor : onSurfaceColor.withAlpha((0.7*255).round()),
             ),
             suffixIcon: IconButton(
               icon: Icon(
                 isPasswordVisible ? Icons.visibility_off : Icons.visibility,
-                color: errorText != null ? errorColor : onSurfaceColor.withOpacity(0.7),
+                color: errorText != null ? errorColor : onSurfaceColor.withAlpha((0.7*255).round()),
               ),
               onPressed: () => onToggleVisibility(fieldIndex),
             ),

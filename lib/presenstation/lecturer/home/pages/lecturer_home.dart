@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:Sitama/presenstation/lecturer/home/widgets/common/content.dart';
-import 'package:Sitama/presenstation/lecturer/profile/pages/lecturer_profile.dart';
+import 'package:sitama/presenstation/lecturer/home/widgets/common/content.dart';
+import 'package:sitama/presenstation/lecturer/profile/pages/lecturer_profile.dart';
 
 /// A stateful widget that serves as the main navigation hub for the lecturer interface.
 /// Contains a bottom navigation bar for switching between different sections of the app.
@@ -70,7 +70,7 @@ class _LecturerHomePageState extends State<LecturerHomePage> with AutomaticKeepA
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withAlpha((0.1*255).round()),
               blurRadius: 20,
               offset: const Offset(0, -2),
             ),
@@ -82,9 +82,9 @@ class _LecturerHomePageState extends State<LecturerHomePage> with AutomaticKeepA
           child: BottomNavigationBar(
             currentIndex: _currentIndex,
             type: BottomNavigationBarType.fixed,
-            backgroundColor: Theme.of(context).colorScheme.surface,
+            backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
             selectedItemColor: Theme.of(context).colorScheme.primary,
-            unselectedItemColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+            unselectedItemColor: Theme.of(context).colorScheme.onSurface.withAlpha((0.6*255).round()),
             selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
             elevation: 0,
             onTap: (index) {

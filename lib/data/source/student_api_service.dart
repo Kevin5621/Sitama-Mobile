@@ -1,11 +1,11 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:Sitama/core/constansts/api_urls.dart';
-import 'package:Sitama/core/network/dio_client.dart';
-import 'package:Sitama/data/models/guidance.dart';
-import 'package:Sitama/data/models/log_book.dart';
-import 'package:Sitama/service_locator.dart';
+import 'package:sitama/core/constansts/api_urls.dart';
+import 'package:sitama/core/network/dio_client.dart';
+import 'package:sitama/data/models/guidance.dart';
+import 'package:sitama/data/models/log_book.dart';
+import 'package:sitama/service_locator.dart';
 
 abstract class StudentApiService {
   Future<Either> getStudentHome();
@@ -283,10 +283,8 @@ class StudentApiServiceImpl extends StudentApiService {
           },
         )
       );
-      print(response);
       return Right(response);
     } on DioException catch (e) {
-      print(e);
       if (e.response != null) {
         return Left(e.response!.data['errors'].toString());
       } else {

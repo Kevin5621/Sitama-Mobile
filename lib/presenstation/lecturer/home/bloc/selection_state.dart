@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:Sitama/data/models/group.dart';
+import 'package:sitama/data/models/group.dart';
 
 class SelectionState extends Equatable {
   final bool isSelectionMode;

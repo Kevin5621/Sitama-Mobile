@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:Sitama/domain/entities/score_entity.dart';
+import 'package:sitama/domain/entities/score_entity.dart';
 
 class InputField extends StatelessWidget {
   final ScoreEntity score;
   final TextEditingController? controller;
 
-  const InputField({Key? key, required this.score, this.controller})
-      : super(key: key);
+  const InputField({super.key, required this.score, this.controller});
 
   @override
   Widget build(BuildContext context) {

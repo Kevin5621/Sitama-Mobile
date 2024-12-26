@@ -1,4 +1,4 @@
-import 'package:Sitama/domain/entities/lecturer_profile_entity.dart';
+import 'package:sitama/domain/entities/lecturer_profile_entity.dart';
 
 abstract class ProfileLecturerState {}
 

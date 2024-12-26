@@ -1,11 +1,9 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 class AppColors {
   // Light Theme Colors
   static const lightPrimary = Color(0xFF3D568F);
-  static var lightPrimary500 = Color(0xff3D568F).withOpacity(0.1);
+  static var lightPrimary500 = Color(0xff3D568F).withAlpha((0.1*255).round());
   static const lightBackground = Color(0xFFFDFDF5);
   static const lightGray = Color(0xff71727A);
   static const lightGray500 = Color(0xffDADADA);
@@ -22,7 +20,7 @@ class AppColors {
   // Versi lebih terang untuk primary
   static const darkPrimaryLight = Color(0xFF5B7AC7);  
   static const darkPrimaryDark = Color(0xFF001442);   
-  static var darkPrimary500 = Color(0xFF5B7AC7).withOpacity(0.2);
+  static var darkPrimary500 = Color(0xFF5B7AC7).withAlpha((0.2*255).round());
   
   static const darkBackground = Color(0xFF121212);    
   static const darkGray = Colors.grey;        

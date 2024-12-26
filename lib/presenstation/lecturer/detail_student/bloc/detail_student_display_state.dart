@@ -1,4 +1,4 @@
-import 'package:Sitama/domain/entities/lecturer_detail_student.dart';
+import 'package:sitama/domain/entities/lecturer_detail_student.dart';
 
 abstract class DetailStudentDisplayState {}
 

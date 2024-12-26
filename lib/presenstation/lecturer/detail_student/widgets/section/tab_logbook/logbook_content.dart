@@ -1,15 +1,17 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:Sitama/common/bloc/bloc/notification_bloc.dart';
-import 'package:Sitama/common/bloc/bloc/notification_event.dart';
-import 'package:Sitama/common/bloc/button/button_state.dart';
-import 'package:Sitama/common/bloc/button/button_state_cubit.dart';
-import 'package:Sitama/common/widgets/alert.dart';
-import 'package:Sitama/data/models/log_book.dart';
-import 'package:Sitama/domain/entities/log_book_entity.dart';
-import 'package:Sitama/domain/usecases/lecturer/update_status_logbook.dart';
-import 'package:Sitama/presenstation/lecturer/detail_student/pages/detail_student.dart';
-import 'package:Sitama/service_locator.dart';
+import 'package:sitama/common/bloc/bloc/notification_bloc.dart';
+import 'package:sitama/common/bloc/bloc/notification_event.dart';
+import 'package:sitama/common/bloc/button/button_state.dart';
+import 'package:sitama/common/bloc/button/button_state_cubit.dart';
+import 'package:sitama/common/widgets/alert.dart';
+import 'package:sitama/data/models/log_book.dart';
+import 'package:sitama/domain/entities/log_book_entity.dart';
+import 'package:sitama/domain/usecases/lecturer/update_status_logbook.dart';
+import 'package:sitama/presenstation/lecturer/detail_student/pages/detail_student.dart';
+import 'package:sitama/service_locator.dart';
 
 class LogBookContent extends StatefulWidget {
   final LogBookEntity logBook;
@@ -31,7 +33,7 @@ class LogBookContent extends StatefulWidget {
 
 class _LogBookContentState extends State<LogBookContent> {
   final TextEditingController _lecturerNote = TextEditingController();
-
+  
   bool get hasExistingNote => 
       widget.logBook.lecturer_note.isNotEmpty && 
       widget.logBook.lecturer_note != 'tidak ada catatan';
@@ -116,6 +118,7 @@ class _LogBookContentState extends State<LogBookContent> {
 
     buttonCubit.stream.listen((state) {
       if (state is ButtonSuccessState) {
+        if (!mounted) return;
         context.read<NotificationBloc>().add(
           SendNotification(
             notificationData: notificationData,
@@ -137,6 +140,7 @@ class _LogBookContentState extends State<LogBookContent> {
       title: 'Berhasil',
       message: 'Berhasil menambahkan catatan log book',
     ).then((_) {
+      if (!mounted) return;
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(

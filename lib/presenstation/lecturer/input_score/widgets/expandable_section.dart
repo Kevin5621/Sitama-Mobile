@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:Sitama/domain/entities/score_entity.dart';
+import 'package:sitama/domain/entities/score_entity.dart';
 
 class ExpandableSection extends StatelessWidget {
   final String title;
@@ -21,11 +21,11 @@ class ExpandableSection extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
+        color: theme.colorScheme.surfaceContainer,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: theme.colorScheme.onSurface.withOpacity(0.1),
+            color: theme.colorScheme.onSurface.withAlpha((0.1*255).round()),
             blurRadius: 6,
             offset: const Offset(0, 2),
           ),
@@ -54,7 +54,7 @@ class ExpandableSection extends StatelessWidget {
           leading: Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: theme.colorScheme.primary.withOpacity(0.1),
+              color: theme.colorScheme.primary.withAlpha((0.1*255).round()),
               shape: BoxShape.circle,
             ),
             child: Icon(
@@ -130,7 +130,7 @@ class InputField extends StatelessWidget {
               controller: controller,
               decoration: InputDecoration(
                 filled: true,
-                fillColor: theme.colorScheme.surface,
+                fillColor: theme.colorScheme.surfaceContainer,
                 contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                 border: InputBorder.none,
                 focusedBorder: OutlineInputBorder(

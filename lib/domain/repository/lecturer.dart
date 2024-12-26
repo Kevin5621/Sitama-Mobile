@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:Sitama/data/models/guidance.dart';
-import 'package:Sitama/data/models/log_book.dart';
-import 'package:Sitama/data/models/notification.dart';
-import 'package:Sitama/domain/entities/industry_score.dart';
+import 'package:sitama/data/models/guidance.dart';
+import 'package:sitama/data/models/log_book.dart';
+import 'package:sitama/data/models/notification.dart';
+import 'package:sitama/domain/entities/industry_score.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class ScoreRepository {

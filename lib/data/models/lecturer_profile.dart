@@ -1,6 +1,6 @@
 // ignore_for_file: non_constant_identifier_names
 
-import 'package:Sitama/domain/entities/lecturer_profile_entity.dart';
+import 'package:sitama/domain/entities/lecturer_profile_entity.dart';
 
 class LecturerProfileModel {
   final String name;

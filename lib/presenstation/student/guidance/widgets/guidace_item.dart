@@ -10,14 +10,14 @@ class BimbinganItem extends StatelessWidget {
   final String description;
 
   const BimbinganItem({
-    Key? key,
+    super.key,
     required this.title,
     required this.date,
     required this.status,
     required this.description,
     String? fileUrl,
     String? fileSize,
-  }) : super(key: key);
+  });
 
   String? get fileUrl => null;
 

@@ -1,10 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names
 import 'package:intl/intl.dart';
-import 'package:Sitama/data/models/guidance.dart';
-import 'package:Sitama/data/models/log_book.dart';
-import 'package:Sitama/domain/entities/guidance_entity.dart';
-import 'package:Sitama/domain/entities/lecturer_detail_student.dart';
-import 'package:Sitama/domain/entities/log_book_entity.dart';
+import 'package:sitama/data/models/guidance.dart';
+import 'package:sitama/data/models/log_book.dart';
+import 'package:sitama/domain/entities/guidance_entity.dart';
+import 'package:sitama/domain/entities/lecturer_detail_student.dart';
+import 'package:sitama/domain/entities/log_book_entity.dart';
 
 class DetailStudentModel {
   final InfoStudentModel student;

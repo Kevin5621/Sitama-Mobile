@@ -1,18 +1,18 @@
 import 'dart:convert';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:Sitama/domain/entities/lecturer_home_entity.dart';
-import 'package:Sitama/domain/usecases/lecturer/get_home_lecturer.dart';
-import 'package:Sitama/presenstation/lecturer/home/bloc/lecturer_display_state.dart';
-import 'package:Sitama/presenstation/lecturer/home/bloc/selection_bloc.dart';
-import 'package:Sitama/service_locator.dart';
+import 'package:sitama/domain/entities/lecturer_home_entity.dart';
+import 'package:sitama/domain/usecases/lecturer/get_home_lecturer.dart';
+import 'package:sitama/presenstation/lecturer/home/bloc/lecturer_display_state.dart';
+import 'package:sitama/presenstation/lecturer/home/bloc/selection_bloc.dart';
+import 'package:sitama/service_locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LecturerDisplayCubit extends Cubit<LecturerDisplayState> {
   final SelectionBloc selectionBloc;
   final SharedPreferences _prefs;
   LecturerHomeEntity? _cachedData;
-  static const String CACHE_KEY = 'lecturer_home_data';
+  static const String cacheKey = 'lecturer_home_data';
 
   LecturerDisplayCubit({
     required this.selectionBloc,
@@ -27,7 +27,7 @@ class LecturerDisplayCubit extends Cubit<LecturerDisplayState> {
   }
 
   Future<void> _loadCachedData() async {
-    final cachedJson = _prefs.getString(CACHE_KEY);
+    final cachedJson = _prefs.getString(cacheKey);
     if (cachedJson != null) {
       try {
         final Map<String, dynamic> jsonData = json.decode(cachedJson);
@@ -58,8 +58,8 @@ class LecturerDisplayCubit extends Cubit<LecturerDisplayState> {
           lecturerHomeEntity: _cachedData!,
           isOffline: true,
         ));
+      // ignore: empty_catches
       } catch (e) {
-        print('Error loading cached data: $e');
       }
     }
   }
@@ -85,9 +85,9 @@ class LecturerDisplayCubit extends Cubit<LecturerDisplayState> {
           }).toList(),
         'activities': data.activities,
       };
-      await _prefs.setString(CACHE_KEY, json.encode(jsonData));
+      await _prefs.setString(cacheKey, json.encode(jsonData));
+    // ignore: empty_catches
     } catch (e) {
-      print('Error caching data: $e');
     }
   }
 

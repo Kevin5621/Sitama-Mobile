@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:Sitama/common/widgets/search_field.dart';
-import 'package:Sitama/core/config/themes/app_color.dart';
-import 'package:Sitama/data/models/group.dart';
-import 'package:Sitama/domain/entities/lecturer_home_entity.dart';
-import 'package:Sitama/presenstation/lecturer/home/bloc/selection_bloc.dart';
-import 'package:Sitama/presenstation/lecturer/home/bloc/selection_event.dart';
-import 'package:Sitama/presenstation/lecturer/home/bloc/selection_state.dart';
-import 'package:Sitama/presenstation/lecturer/home/widgets/utils/helper/group_actions.dart';
+import 'package:sitama/common/widgets/search_field.dart';
+import 'package:sitama/core/config/themes/app_color.dart';
+import 'package:sitama/data/models/group.dart';
+import 'package:sitama/domain/entities/lecturer_home_entity.dart';
+import 'package:sitama/presenstation/lecturer/home/bloc/selection_bloc.dart';
+import 'package:sitama/presenstation/lecturer/home/bloc/selection_event.dart';
+import 'package:sitama/presenstation/lecturer/home/bloc/selection_state.dart';
+import 'package:sitama/presenstation/lecturer/home/widgets/utils/helper/group_actions.dart';
 
 class GroupAppBar extends StatelessWidget implements PreferredSizeWidget {
   final GroupModel group;

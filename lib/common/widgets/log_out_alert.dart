@@ -1,12 +1,12 @@
-import 'package:Sitama/common/widgets/alert.dart';
+import 'package:sitama/common/widgets/alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:Sitama/common/bloc/button/button_state.dart';
-import 'package:Sitama/common/bloc/button/button_state_cubit.dart';
-import 'package:Sitama/core/config/themes/app_color.dart';
-import 'package:Sitama/domain/usecases/general/log_out.dart';
-import 'package:Sitama/presenstation/general/welcome/pages/welcome.dart';
-import 'package:Sitama/service_locator.dart';
+import 'package:sitama/common/bloc/button/button_state.dart';
+import 'package:sitama/common/bloc/button/button_state_cubit.dart';
+import 'package:sitama/core/config/themes/app_color.dart';
+import 'package:sitama/domain/usecases/general/log_out.dart';
+import 'package:sitama/presenstation/general/welcome/pages/welcome.dart';
+import 'package:sitama/service_locator.dart';
 
 class LogOutAlert extends StatelessWidget {
   const LogOutAlert({super.key});

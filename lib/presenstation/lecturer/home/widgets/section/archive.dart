@@ -2,17 +2,17 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:Sitama/common/widgets/alert.dart';
-import 'package:Sitama/common/widgets/custom_snackbar.dart';
-import 'package:Sitama/common/widgets/search_field.dart';
-import 'package:Sitama/core/config/themes/app_color.dart';
-import 'package:Sitama/domain/entities/lecturer_home_entity.dart';
-import 'package:Sitama/presenstation/lecturer/detail_student/pages/detail_student.dart';
-import 'package:Sitama/presenstation/lecturer/home/bloc/selection_bloc.dart';
-import 'package:Sitama/presenstation/lecturer/home/bloc/selection_event.dart';
-import 'package:Sitama/presenstation/lecturer/home/bloc/selection_state.dart';
-import 'package:Sitama/presenstation/lecturer/home/widgets/utils/dialogs/send_message_bottom.dart';
-import 'package:Sitama/presenstation/lecturer/home/widgets/section/cards/student_card.dart';
+import 'package:sitama/common/widgets/alert.dart';
+import 'package:sitama/common/widgets/custom_snackbar.dart';
+import 'package:sitama/common/widgets/search_field.dart';
+import 'package:sitama/core/config/themes/app_color.dart';
+import 'package:sitama/domain/entities/lecturer_home_entity.dart';
+import 'package:sitama/presenstation/lecturer/detail_student/pages/detail_student.dart';
+import 'package:sitama/presenstation/lecturer/home/bloc/selection_bloc.dart';
+import 'package:sitama/presenstation/lecturer/home/bloc/selection_event.dart';
+import 'package:sitama/presenstation/lecturer/home/bloc/selection_state.dart';
+import 'package:sitama/presenstation/lecturer/home/widgets/utils/dialogs/send_message_bottom.dart';
+import 'package:sitama/presenstation/lecturer/home/widgets/section/cards/student_card.dart';
 
 class ArchivePage extends StatefulWidget {
   final List<LecturerStudentsEntity> archivedStudents;

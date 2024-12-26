@@ -1,15 +1,15 @@
-import 'package:Sitama/common/widgets/basic_app_button.dart';
-import 'package:Sitama/common/widgets/custom_snackbar.dart';
+import 'package:sitama/common/widgets/basic_app_button.dart';
+import 'package:sitama/common/widgets/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:Sitama/common/bloc/button/button_state.dart';
-import 'package:Sitama/presenstation/student/guidance/bloc/guidance_student_cubit.dart';
-import 'package:Sitama/common/bloc/button/button_state_cubit.dart';
-import 'package:Sitama/common/widgets/alert.dart';
-import 'package:Sitama/core/config/themes/app_color.dart';
-import 'package:Sitama/domain/usecases/student/guidances/delete_guidance_student.dart';
-import 'package:Sitama/presenstation/student/home/pages/home.dart';
-import 'package:Sitama/service_locator.dart';
+import 'package:sitama/common/bloc/button/button_state.dart';
+import 'package:sitama/presenstation/student/guidance/bloc/guidance_student_cubit.dart';
+import 'package:sitama/common/bloc/button/button_state_cubit.dart';
+import 'package:sitama/common/widgets/alert.dart';
+import 'package:sitama/core/config/themes/app_color.dart';
+import 'package:sitama/domain/usecases/student/guidances/delete_guidance_student.dart';
+import 'package:sitama/presenstation/student/home/pages/home.dart';
+import 'package:sitama/service_locator.dart';
 
 class DeleteGuidance extends StatefulWidget {
   final int id;

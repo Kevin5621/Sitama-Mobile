@@ -1,6 +1,5 @@
-// ignore_for_file: deprecated_member_use
 import 'package:flutter/material.dart';
-import 'package:Sitama/core/config/themes/app_color.dart';
+import 'package:sitama/core/config/themes/app_color.dart';
 
 class AppTheme {
   static final lightTheme = ThemeData(
@@ -13,15 +12,14 @@ class AppTheme {
     colorScheme: ColorScheme.light(
       primary: AppColors.lightPrimary,
       secondary: AppColors.lightWarning,
-      background: AppColors.lightBackground,
-      surface: AppColors.lightWhite,
+      surface: AppColors.lightBackground,
+      surfaceContainer: AppColors.lightWhite,
       error: AppColors.lightDanger500,
       onPrimary: AppColors.lightWhite,
       onSecondary: AppColors.lightBlack,
-      onBackground: AppColors.lightBlack,
       onSurface: AppColors.lightBlack,
       onError: AppColors.lightBlack,
-      surfaceVariant: AppColors.lightPrimary500,
+      tertiary: AppColors.lightPrimary500,
       inversePrimary: AppColors.lightPrimary,
     ),
 
@@ -108,15 +106,14 @@ class AppTheme {
     colorScheme: ColorScheme.dark(
       primary: AppColors.darkPrimaryLight,
       secondary: AppColors.darkWarning,
-      background: AppColors.darkBackground,
-      surface: AppColors.darkWhite, 
+      surface: AppColors.darkBackground,
+      surfaceContainer: AppColors.darkWhite, 
       error: AppColors.darkDanger500,
       onPrimary: AppColors.lightWhite, 
       onSecondary: AppColors.lightWhite,
-      onBackground: AppColors.lightWhite,
       onSurface: AppColors.lightWhite,
       onError: AppColors.lightWhite,
-      surfaceVariant: AppColors.darkPrimary500,
+      tertiary: AppColors.darkPrimary500,
       inversePrimary: AppColors.darkPrimaryDark,
     ),
 

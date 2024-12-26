@@ -2,9 +2,9 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:Sitama/domain/entities/guidance_entity.dart';
-import 'package:Sitama/presenstation/general/pdf_viewer/pdf_viewer.dart';
-import 'package:Sitama/presenstation/lecturer/detail_student/widgets/section/tab_guidance/guidance_status.dart';
+import 'package:sitama/domain/entities/guidance_entity.dart';
+import 'package:sitama/presenstation/general/pdf_viewer/pdf_viewer.dart';
+import 'package:sitama/presenstation/lecturer/detail_student/widgets/section/tab_guidance/guidance_status.dart';
 
 class GuidanceCardContent extends StatelessWidget {
   final GuidanceEntity guidance;
@@ -90,7 +90,7 @@ class GuidanceCardContent extends StatelessWidget {
             borderRadius: const BorderRadius.all(Radius.circular(12)),
             borderSide: BorderSide(
               color: currentStatus == LecturerGuidanceStatus.rejected
-                  ? colorScheme.onError.withOpacity(0.5)
+                  ? colorScheme.onError.withAlpha((0.5*255).round())
                   : colorScheme.outline,
             ),
           ),

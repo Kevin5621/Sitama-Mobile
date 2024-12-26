@@ -5,10 +5,10 @@ class SearchField extends StatelessWidget {
   final VoidCallback onFilterPressed;
 
   const SearchField({
-    Key? key,
+    super.key,
     required this.onChanged,
     required this.onFilterPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class SearchField extends StatelessWidget {
       height: 40,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        color: colorScheme.surfaceVariant.withOpacity(0.3),
+        color: colorScheme.tertiary.withAlpha((0.3*255).round()),
       ),
       child: TextField(
         decoration: InputDecoration(

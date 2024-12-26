@@ -1,4 +1,4 @@
-import 'package:Sitama/domain/entities/student_home_entity.dart';
+import 'package:sitama/domain/entities/student_home_entity.dart';
 
 abstract class ProfileStudentState {}
 

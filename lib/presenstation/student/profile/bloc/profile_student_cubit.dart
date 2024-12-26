@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:Sitama/domain/entities/student_home_entity.dart';
+import 'package:sitama/domain/entities/student_home_entity.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:Sitama/domain/usecases/student/general/get_profile_student.dart';
-import 'package:Sitama/presenstation/student/profile/bloc/profile_student_state.dart';
-import 'package:Sitama/service_locator.dart';
+import 'package:sitama/domain/usecases/student/general/get_profile_student.dart';
+import 'package:sitama/presenstation/student/profile/bloc/profile_student_state.dart';
+import 'package:sitama/service_locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileStudentCubit extends Cubit<ProfileStudentState> {

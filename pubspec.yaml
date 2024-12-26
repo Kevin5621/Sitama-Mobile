@@ -1,4 +1,4 @@
-name: Sitama
+name: sitama
 description: 'A new Flutter project.'
 
 publish_to: 'none'
@@ -16,28 +16,27 @@ dependencies:
     cupertino_icons: any         # Ikon iOS untuk aplikasi Flutter
     flutter_svg: any             # Mendukung tampilan gambar SVG
     dropdown_button2: any        # Kustomisasi dropdown button untuk Flutter
-    animated_gradient: any
 
   # State Management
-    flutter_bloc: any            # Implementasi pattern BLoC untuk manajemen state
-    provider: any                # Package untuk state management berbasis provider
+    flutter_bloc: ^8.1.2         # Implementasi pattern BLoC untuk manajemen state
+    provider: ^6.1.2             # Package untuk state management berbasis provider
     
   # Date and Time Formatting
-    intl: any                     # Format tanggal, waktu, dan internasionalisasi
+    intl: ^0.18.0                # Format tanggal, waktu, dan internasionalisasi
   
   # Networking and APIs
-    dio: any                     # HTTP client untuk komunikasi API yang efisien
+    dio: ^5.2.0                  # HTTP client untuk komunikasi API yang efisien
     get_it: any                  # Service locator untuk dependency injection
     connectivity_plus: ^6.1.1    # Mendukung pengecekan koneksi internet
     fluttertoast: ^8.0.8         # Menampilkan toast notifikasi
 
   # Functional Programming and Utilities
     dartz: any                   # Menyediakan tipe data functional seperti `Either`, `Option`
-    equatable: any               # Membantu untuk membandingkan objek tanpa overriding `==`
+    equatable: ^2.0.5            # Membantu untuk membandingkan objek tanpa overriding `==`
     logger: any                  # Logging utility untuk debug
 
   # Local Storage and Preferences
-    shared_preferences: any      # Menyimpan data kecil secara lokal, seperti preferensi pengguna
+    shared_preferences: ^2.1.0   # Menyimpan data kecil secara lokal, seperti preferensi pengguna
 
   # File Management
     file_picker: any             # Memungkinkan pemilihan file dari perangkat
@@ -47,8 +46,8 @@ dependencies:
     open_file: any               # Membuka file dari perangkat
     
   # UI Components
-    syncfusion_flutter_pdfviewer: 28.1.35 # PDF viewer untuk menampilkan file PDF dalam aplikasi
-    pull_to_refresh: any          # Menambahkan fitur pull-to-refresh pada halaman list
+    syncfusion_flutter_pdfviewer: ^28.1.35 # PDF viewer untuk menampilkan file PDF dalam aplikasi
+    pull_to_refresh: any         # Menambahkan fitur pull-to-refresh pada halaman list
 
   # Notifications
     flutter_local_notifications: any # Menampilkan notifikasi lokal pada perangkat

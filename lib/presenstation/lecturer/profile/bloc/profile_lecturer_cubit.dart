@@ -1,10 +1,10 @@
 import 'dart:convert';
-import 'package:Sitama/domain/entities/lecturer_profile_entity.dart';
+import 'package:sitama/domain/entities/lecturer_profile_entity.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:Sitama/domain/usecases/lecturer/get_profile_lecturer.dart';
-import 'package:Sitama/presenstation/lecturer/profile/bloc/profile_lecturer_state.dart';
-import 'package:Sitama/service_locator.dart';
+import 'package:sitama/domain/usecases/lecturer/get_profile_lecturer.dart';
+import 'package:sitama/presenstation/lecturer/profile/bloc/profile_lecturer_state.dart';
+import 'package:sitama/service_locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileLecturerCubit extends Cubit<ProfileLecturerState> {

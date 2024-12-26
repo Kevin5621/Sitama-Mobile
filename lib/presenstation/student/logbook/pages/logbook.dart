@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:Sitama/common/widgets/search_field.dart';
-import 'package:Sitama/common/widgets/student_log_book_card.dart';
-import 'package:Sitama/domain/entities/log_book_entity.dart';
-import 'package:Sitama/presenstation/student/logbook/bloc/log_book_student_cubit.dart';
-import 'package:Sitama/presenstation/student/logbook/bloc/log_book_student_state.dart';
-import 'package:Sitama/presenstation/student/logbook/widgets/add_log_book.dart';
-import 'package:Sitama/presenstation/student/logbook/widgets/filter_dilog.dart';
+import 'package:sitama/common/widgets/search_field.dart';
+import 'package:sitama/common/widgets/student_log_book_card.dart';
+import 'package:sitama/domain/entities/log_book_entity.dart';
+import 'package:sitama/presenstation/student/logbook/bloc/log_book_student_cubit.dart';
+import 'package:sitama/presenstation/student/logbook/bloc/log_book_student_state.dart';
+import 'package:sitama/presenstation/student/logbook/widgets/add_log_book.dart';
+import 'package:sitama/presenstation/student/logbook/widgets/filter_dilog.dart';
 
 class LogBookPage extends StatefulWidget {
   const LogBookPage({super.key});
@@ -62,13 +62,13 @@ class _LogBookPageState extends State<LogBookPage> with AutomaticKeepAliveClient
                     snap: false,
                     pinned: true,
                     elevation: 0,
-                    backgroundColor: theme.colorScheme.background,
+                    backgroundColor: theme.colorScheme.surface,
                     title: Text(
                       'LogBook',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: theme.colorScheme.onBackground, 
+                        color: theme.colorScheme.onSurface, 
                       ),
                     ),
                     centerTitle: true,
@@ -82,7 +82,7 @@ class _LogBookPageState extends State<LogBookPage> with AutomaticKeepAliveClient
                         },
                         icon: Icon(
                           Icons.add,
-                          color: theme.colorScheme.onBackground, 
+                          color: theme.colorScheme.onSurface, 
                         ),
                       )
                     ],

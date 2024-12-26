@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:Sitama/common/bloc/button/button_state.dart';
-import 'package:Sitama/common/bloc/button/button_state_cubit.dart';
-import 'package:Sitama/common/widgets/basic_app_button.dart';
-import 'package:Sitama/common/widgets/custom_snackbar.dart';
-import 'package:Sitama/core/config/assets/app_images.dart';
-import 'package:Sitama/core/config/themes/app_color.dart';
-import 'package:Sitama/data/models/signin_req_params.dart';
-import 'package:Sitama/domain/usecases/general/signin.dart';
-import 'package:Sitama/presenstation/lecturer/home/pages/lecturer_home.dart';
-import 'package:Sitama/presenstation/student/home/pages/home.dart';
-import 'package:Sitama/service_locator.dart';
+import 'package:sitama/common/bloc/button/button_state.dart';
+import 'package:sitama/common/bloc/button/button_state_cubit.dart';
+import 'package:sitama/common/widgets/basic_app_button.dart';
+import 'package:sitama/common/widgets/custom_snackbar.dart';
+import 'package:sitama/core/config/assets/app_images.dart';
+import 'package:sitama/core/config/themes/app_color.dart';
+import 'package:sitama/data/models/signin_req_params.dart';
+import 'package:sitama/domain/usecases/general/signin.dart';
+import 'package:sitama/presenstation/lecturer/home/pages/lecturer_home.dart';
+import 'package:sitama/presenstation/student/home/pages/home.dart';
+import 'package:sitama/service_locator.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -23,8 +21,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  late TextEditingController _usernameController = TextEditingController();
-  late TextEditingController _passwordController = TextEditingController();
+  final GlobalKey<ScaffoldMessengerState> _scaffoldKey = GlobalKey<ScaffoldMessengerState>();
+  late final TextEditingController _usernameController = TextEditingController();
+  late final TextEditingController _passwordController = TextEditingController();
   bool _obscureText = true;
 
   @override
@@ -37,6 +36,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       body: BlocProvider(
         create: (context) => ButtonStateCubit(),
         child: BlocListener<ButtonStateCubit, ButtonState>(
@@ -47,6 +47,7 @@ class _LoginPageState extends State<LoginPage> {
               var role = sharedPreferences.getString('role');
 
               if (role == 'Student') {
+                if (!context.mounted) return;
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
@@ -54,6 +55,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 );
               } else {
+                if (!context.mounted) return;
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
@@ -63,7 +65,7 @@ class _LoginPageState extends State<LoginPage> {
               }
             }
             if (state is ButtonFailurState) {
-              ScaffoldMessenger.of(context).showSnackBar(
+              _scaffoldKey.currentState?.showSnackBar(
                 CustomSnackBar(
                   message: state.errorMessage,
                   icon: Icons.error_outline,

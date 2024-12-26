@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:Sitama/core/config/assets/app_images.dart';
-import 'package:Sitama/domain/entities/lecturer_home_entity.dart';
-import 'package:Sitama/presenstation/lecturer/home/bloc/selection_bloc.dart';
-import 'package:Sitama/presenstation/lecturer/home/bloc/selection_state.dart';
-import 'package:Sitama/presenstation/lecturer/home/widgets/utils/helper/activity_helper.dart';
+import 'package:sitama/core/config/assets/app_images.dart';
+import 'package:sitama/domain/entities/lecturer_home_entity.dart';
+import 'package:sitama/presenstation/lecturer/home/bloc/selection_bloc.dart';
+import 'package:sitama/presenstation/lecturer/home/bloc/selection_state.dart';
+import 'package:sitama/presenstation/lecturer/home/widgets/utils/helper/activity_helper.dart';
 
 // StudentCard Widget
 // This widget displays a card for each student with their profile image, name, username, major, and class.
@@ -43,8 +43,8 @@ class StudentCard extends StatelessWidget {
 
     // Determine background color based on selection state
     final backgroundColor = isSelected 
-        ? colorScheme.primary.withOpacity(0.3)
-        : colorScheme.surface;
+        ? colorScheme.primary.withAlpha((0.3*255).round())
+        : colorScheme.surfaceContainer;
 
     return BlocBuilder<SelectionBloc, SelectionState>(
       builder: (context, state) {
@@ -121,7 +121,7 @@ class StudentCard extends StatelessWidget {
             childWhenDragging: Opacity(
               opacity: 0.5,
               child: Card(
-                color: backgroundColor.withOpacity(0.5),
+                color: backgroundColor.withAlpha((0.5*255).round()),
                 child: _buildCardContent(context),
               ),
             ),
@@ -166,11 +166,11 @@ class StudentCard extends StatelessWidget {
 
     // Determine background color based on selection state
     final backgroundColor = isSelected 
-        ? colorScheme.primary.withOpacity(0.3)
-        : colorScheme.surface;
+        ? colorScheme.primary.withAlpha((0.3*255).round())
+        : colorScheme.surfaceContainer;
 
     final textColor = colorScheme.onSurface;
-    final normal = theme.textTheme.bodySmall?.color ?? colorScheme.onSurface.withOpacity(0.6);
+    final normal = theme.textTheme.bodySmall?.color ?? colorScheme.onSurface.withAlpha((0.6*255).round());
     final selected = theme.brightness == Brightness.dark ? Colors.white : Colors.black;
 
     // Get active activities for display
@@ -186,7 +186,7 @@ class StudentCard extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
-                color: colorScheme.primary.withOpacity(0.1),
+                color: colorScheme.primary.withAlpha((0.1*255).round()),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
@@ -204,7 +204,7 @@ class StudentCard extends StatelessWidget {
             context: context,
             isSelected: isSelected,
             borderColor: isSelected 
-              ? colorScheme.onPrimary.withOpacity(0.8)
+              ? colorScheme.onPrimary.withAlpha((0.8*255).round())
               : backgroundColor,
           ),
         
@@ -221,7 +221,7 @@ class StudentCard extends StatelessWidget {
                     width: 40,
                     decoration: BoxDecoration(
                       color: isSelected 
-                          ? colorScheme.primary.withOpacity(0.5)
+                          ? colorScheme.primary.withAlpha((0.5*255).round())
                           : backgroundColor,
                       shape: BoxShape.circle,
                       border: Border.all(

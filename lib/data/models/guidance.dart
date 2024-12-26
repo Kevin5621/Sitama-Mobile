@@ -5,7 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/foundation.dart';
 
-import 'package:Sitama/domain/entities/guidance_entity.dart';
+import 'package:sitama/domain/entities/guidance_entity.dart';
 
 // Model for a list of guidances
 class ListGuidanceModel {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:Sitama/domain/entities/lecturer_detail_student.dart';
+import 'package:sitama/domain/entities/lecturer_detail_student.dart';
 
 class IndustryCard extends StatelessWidget {
   final List<InternshipStudentEntity>? internships;
@@ -24,7 +24,7 @@ class IndustryCard extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: colorScheme.primary.withOpacity(0.1),
+            color: colorScheme.primary.withAlpha((0.1*255).round()),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Icon(
@@ -41,7 +41,7 @@ class IndustryCard extends StatelessWidget {
               Text(
                 label,
                 style: TextStyle(
-                  color: colorScheme.onSurface.withOpacity(0.6),
+                  color: colorScheme.onSurface.withAlpha((0.6*255).round()),
                   fontSize: 13,
                   fontWeight: FontWeight.w500,
                 ),
@@ -78,12 +78,12 @@ class IndustryCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: colorScheme.shadow.withOpacity(0.08),
+              color: colorScheme.shadow.withAlpha((0.08*255).round()),
               offset: const Offset(0, 4),
               blurRadius: 12,
             )
           ],
-          color: colorScheme.surface,
+          color: colorScheme.surfaceContainer,
         ),
         child: Center(
           child: Text(
@@ -106,12 +106,12 @@ class IndustryCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: colorScheme.shadow.withOpacity(0.08),
+              color: colorScheme.shadow.withAlpha((0.08*255).round()),
               offset: const Offset(0, 4),
               blurRadius: 12,
             )
           ],
-          color: colorScheme.surface,
+          color: colorScheme.surfaceContainer,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -137,7 +137,7 @@ class IndustryCard extends StatelessWidget {
                 isScrollable: true,
                 dividerColor: Colors.transparent,
                 labelColor: colorScheme.primary,
-                unselectedLabelColor: colorScheme.onSurface.withOpacity(0.5),
+                unselectedLabelColor: colorScheme.onSurface.withAlpha((0.5*255).round()),
                 indicatorSize: TabBarIndicatorSize.label,
                 indicatorWeight: 3,
                 indicatorColor: colorScheme.primary,

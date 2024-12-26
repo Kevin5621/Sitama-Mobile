@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:Sitama/core/usecase/usecase.dart';
-import 'package:Sitama/data/models/guidance.dart';
-import 'package:Sitama/domain/repository/lecturer.dart';
-import 'package:Sitama/service_locator.dart';
+import 'package:sitama/core/usecase/usecase.dart';
+import 'package:sitama/data/models/guidance.dart';
+import 'package:sitama/domain/repository/lecturer.dart';
+import 'package:sitama/service_locator.dart';
 
 class UpdateStatusGuidanceUseCase implements UseCase<Either, UpdateStatusGuidanceReqParams> {
   @override

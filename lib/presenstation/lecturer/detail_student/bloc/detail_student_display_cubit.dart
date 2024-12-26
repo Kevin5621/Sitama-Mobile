@@ -1,16 +1,16 @@
 import 'dart:convert';
-import 'package:Sitama/domain/entities/lecturer_detail_student.dart';
-import 'package:Sitama/domain/repository/lecturer.dart';
+import 'package:sitama/domain/entities/lecturer_detail_student.dart';
+import 'package:sitama/domain/repository/lecturer.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:Sitama/domain/usecases/lecturer/get_detail_student.dart';
-import 'package:Sitama/presenstation/lecturer/detail_student/bloc/detail_student_display_state.dart';
-import 'package:Sitama/service_locator.dart';
+import 'package:sitama/domain/usecases/lecturer/get_detail_student.dart';
+import 'package:sitama/presenstation/lecturer/detail_student/bloc/detail_student_display_state.dart';
+import 'package:sitama/service_locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DetailStudentDisplayCubit extends Cubit<DetailStudentDisplayState> {
   final SharedPreferences prefs;
-  static const int CACHE_DURATION_HOURS = 24;
+  static const int cacheDuration = 24;
 
   DetailStudentDisplayCubit({
     required this.prefs,
@@ -22,7 +22,7 @@ class DetailStudentDisplayCubit extends Cubit<DetailStudentDisplayState> {
     
     final cacheTime = DateTime.parse(timestamp);
     final now = DateTime.now();
-    return now.difference(cacheTime).inHours < CACHE_DURATION_HOURS;
+    return now.difference(cacheTime).inHours < cacheDuration;
   }
 
   Future<void> cacheData(String key, dynamic data) async {
@@ -65,7 +65,6 @@ class DetailStudentDisplayCubit extends Cubit<DetailStudentDisplayState> {
             break;
         }
       } catch (e) {
-        print('Error syncing action: ${action['action']} - ${e.toString()}');
         continue;
       }
     }

@@ -1,4 +1,4 @@
-import 'package:Sitama/domain/entities/assessment_entity.dart';
+import 'package:sitama/domain/entities/assessment_entity.dart';
 
 abstract class AssessmentState {}
 

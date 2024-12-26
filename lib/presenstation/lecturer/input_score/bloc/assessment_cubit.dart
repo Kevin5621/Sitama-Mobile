@@ -1,9 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:Sitama/data/models/score_request.dart';
-import 'package:Sitama/domain/repository/lecturer.dart';
-import 'package:Sitama/domain/usecases/lecturer/get_assessmet.dart';
-import 'package:Sitama/presenstation/lecturer/input_score/bloc/assessment_state.dart';
-import 'package:Sitama/service_locator.dart';
+import 'package:sitama/data/models/score_request.dart';
+import 'package:sitama/domain/repository/lecturer.dart';
+import 'package:sitama/domain/usecases/lecturer/get_assessmet.dart';
+import 'package:sitama/presenstation/lecturer/input_score/bloc/assessment_state.dart';
+import 'package:sitama/service_locator.dart';
 
 class AssessmentCubit extends Cubit<AssessmentState> {
   final LecturerRepository _repository;

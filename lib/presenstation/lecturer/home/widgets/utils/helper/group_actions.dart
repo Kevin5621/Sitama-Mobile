@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:Sitama/common/widgets/alert.dart';
-import 'package:Sitama/common/widgets/custom_snackbar.dart';
-import 'package:Sitama/data/models/group.dart';
-import 'package:Sitama/presenstation/lecturer/home/bloc/selection_bloc.dart';
-import 'package:Sitama/presenstation/lecturer/home/bloc/selection_event.dart';
-import 'package:Sitama/presenstation/lecturer/home/widgets/utils/dialogs/group_dialog.dart';
+import 'package:sitama/common/widgets/alert.dart';
+import 'package:sitama/common/widgets/custom_snackbar.dart';
+import 'package:sitama/data/models/group.dart';
+import 'package:sitama/presenstation/lecturer/home/bloc/selection_bloc.dart';
+import 'package:sitama/presenstation/lecturer/home/bloc/selection_event.dart';
+import 'package:sitama/presenstation/lecturer/home/widgets/utils/dialogs/group_dialog.dart';
 
 class GroupActions {
   static Future<void> showUngroupConfirmation(
@@ -25,7 +25,7 @@ class GroupActions {
         );
       return;
     }
-
+    
     final colorScheme = Theme.of(context).colorScheme;
     final result = await CustomAlertDialog.show(
       context: context,
@@ -39,6 +39,7 @@ class GroupActions {
     );
 
     if (result == true) {
+      if (!context.mounted) return;
       final selectionBloc = context.read<SelectionBloc>();
       
       // Perform ungroup
@@ -49,7 +50,8 @@ class GroupActions {
       
       // Clear selection mode
       selectionBloc.add(ClearSelectionMode());
-      
+
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         CustomSnackBar(
           message: '${selectedIds.length} item berhasil dikeluarkan dari Group',
@@ -73,6 +75,7 @@ class GroupActions {
     );
 
     if (result != null) {
+      if (!context.mounted) return;
       context.read<SelectionBloc>().add(
         UpdateGroup(
           groupId: groupId,
@@ -103,6 +106,7 @@ class GroupActions {
     );
 
     if (result == true) {
+      if (!context.mounted) return;
       // Keluarkan semua mahasiswa dari group terlebih dahulu
       if (group.studentIds.isNotEmpty) {
         context.read<SelectionBloc>().add(UnGroupItems(Set.from(group.studentIds)));

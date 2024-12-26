@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:Sitama/common/widgets/custom_snackbar.dart';
-import 'package:Sitama/data/models/notification.dart';
-import 'package:Sitama/domain/usecases/student/notification/get_notification.dart';
-import 'package:Sitama/domain/usecases/student/notification/mark_all_notifications.dart';
-import 'package:Sitama/service_locator.dart';
-import 'package:Sitama/presenstation/student/home/widgets/notification_card.dart';
+import 'package:sitama/common/widgets/custom_snackbar.dart';
+import 'package:sitama/data/models/notification.dart';
+import 'package:sitama/domain/usecases/student/notification/get_notification.dart';
+import 'package:sitama/domain/usecases/student/notification/mark_all_notifications.dart';
+import 'package:sitama/service_locator.dart';
+import 'package:sitama/presenstation/student/home/widgets/notification_card.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({super.key});
@@ -20,6 +20,7 @@ class _NotificationPageState extends State<NotificationPage> {
   final _getNotificationsUseCase = sl<GetNotificationsUseCase>();
   List<NotificationItemEntity> _notifications = [];
   bool _isLoading = true;
+  final GlobalKey<ScaffoldMessengerState> _scaffoldKey = GlobalKey<ScaffoldMessengerState>();
 
   @override
   void initState() {
@@ -80,9 +81,10 @@ class _NotificationPageState extends State<NotificationPage> {
 
     if (_isLoading) {
       return Scaffold(
-        backgroundColor: colorScheme.background,
+        key: _scaffoldKey,
+        backgroundColor: colorScheme.surface,
         appBar: AppBar(
-          backgroundColor: colorScheme.surface,
+          backgroundColor: colorScheme.surfaceContainer,
           elevation: 0.5,
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: colorScheme.onSurface),
@@ -106,9 +108,9 @@ class _NotificationPageState extends State<NotificationPage> {
     }
 
     return Scaffold(
-      backgroundColor: colorScheme.background,
+      backgroundColor: colorScheme.surface,
       appBar: AppBar(
-        backgroundColor: colorScheme.surface,
+        backgroundColor: colorScheme.surfaceContainer,
         elevation: 0.5,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: colorScheme.onSurface),
@@ -188,6 +190,8 @@ class _NotificationPageState extends State<NotificationPage> {
         ),
       );
 
+      if (!mounted) return;
+
       result.fold(
         (error) {
           // Tangani kesalahan jika gagal memperbarui di server
@@ -209,6 +213,7 @@ class _NotificationPageState extends State<NotificationPage> {
         },
       );
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         CustomSnackBar(
           message: 'Terjadi kesalahan',
@@ -224,6 +229,8 @@ class _NotificationPageState extends State<NotificationPage> {
       // Panggil use case untuk menandai notifikasi sebagai dibaca di server
       final result = await markAllNotificationsReadUseCase.call();
 
+      if (!mounted) return;  // Periksa mounted setelah operasi async
+
       result.fold((error) {
         // Tangani kesalahan jika gagal memperbarui di server
         ScaffoldMessenger.of(context).showSnackBar(
@@ -236,12 +243,11 @@ class _NotificationPageState extends State<NotificationPage> {
       }, (_) {
         // Perbarui status lokal setelah berhasil di server
         setState(() {
-          _notifications =
-              _notifications.map((n) => n.copyWith(isRead: 1)).toList();
+          _notifications = _notifications.map((n) => n.copyWith(isRead: 1)).toList();
         });
       });
     } catch (e) {
-      print(e);
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         CustomSnackBar(
           message: 'Terjadi kesalahan',

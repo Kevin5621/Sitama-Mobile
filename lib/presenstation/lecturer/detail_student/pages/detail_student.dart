@@ -1,16 +1,16 @@
-import 'package:Sitama/core/config/themes/app_color.dart';
-import 'package:Sitama/domain/entities/lecturer_detail_student.dart';
-import 'package:Sitama/presenstation/lecturer/detail_student/widgets/section/tab_guidance/lecturer_guidance_tab.dart';
-import 'package:Sitama/presenstation/lecturer/detail_student/widgets/section/tab_logbook/lecturer_log_book_tab.dart';
-import 'package:Sitama/presenstation/lecturer/detail_student/widgets/section/tab_logbook/notification_manager.dart';
-import 'package:Sitama/service_locator.dart';
+import 'package:sitama/core/config/themes/app_color.dart';
+import 'package:sitama/domain/entities/lecturer_detail_student.dart';
+import 'package:sitama/presenstation/lecturer/detail_student/widgets/section/tab_guidance/lecturer_guidance_tab.dart';
+import 'package:sitama/presenstation/lecturer/detail_student/widgets/section/tab_logbook/lecturer_log_book_tab.dart';
+import 'package:sitama/presenstation/lecturer/detail_student/widgets/section/tab_logbook/notification_manager.dart';
+import 'package:sitama/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:Sitama/presenstation/lecturer/detail_student/bloc/detail_student_display_cubit.dart';
-import 'package:Sitama/presenstation/lecturer/detail_student/bloc/detail_student_display_state.dart';
-import 'package:Sitama/presenstation/lecturer/detail_student/widgets/common/header.dart';
-import 'package:Sitama/presenstation/lecturer/detail_student/widgets/section/info_section.dart';
-import 'package:Sitama/presenstation/lecturer/detail_student/widgets/utils/statistics.dart';
+import 'package:sitama/presenstation/lecturer/detail_student/bloc/detail_student_display_cubit.dart';
+import 'package:sitama/presenstation/lecturer/detail_student/bloc/detail_student_display_state.dart';
+import 'package:sitama/presenstation/lecturer/detail_student/widgets/common/header.dart';
+import 'package:sitama/presenstation/lecturer/detail_student/widgets/section/info_section.dart';
+import 'package:sitama/presenstation/lecturer/detail_student/widgets/utils/statistics.dart';
 
 // Key Features :
 // Captures student and industry internship details

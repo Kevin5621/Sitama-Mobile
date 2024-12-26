@@ -1,20 +1,20 @@
-import 'package:Sitama/service_locator.dart';
+import 'package:sitama/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import 'package:Sitama/common/widgets/about_app.dart';
-import 'package:Sitama/common/widgets/edit_photo_profile_pop_up.dart';
-import 'package:Sitama/common/widgets/reset_password.dart';
-import 'package:Sitama/common/widgets/setting_button.dart';
-import 'package:Sitama/core/config/assets/app_images.dart';
-import 'package:Sitama/core/config/themes/app_color.dart';
-import 'package:Sitama/common/widgets/log_out_alert.dart';
-import 'package:Sitama/core/config/themes/theme_provider.dart';
-import 'package:Sitama/domain/entities/student_home_entity.dart';
-import 'package:Sitama/presenstation/student/faq/pages/faq.dart';
-import 'package:Sitama/presenstation/student/profile/bloc/profile_student_cubit.dart';
-import 'package:Sitama/presenstation/student/profile/bloc/profile_student_state.dart';
-import 'package:Sitama/presenstation/student/profile/widgets/box_industry.dart';
+import 'package:sitama/common/widgets/about_app.dart';
+import 'package:sitama/common/widgets/edit_photo_profile_pop_up.dart';
+import 'package:sitama/common/widgets/reset_password.dart';
+import 'package:sitama/common/widgets/setting_button.dart';
+import 'package:sitama/core/config/assets/app_images.dart';
+import 'package:sitama/core/config/themes/app_color.dart';
+import 'package:sitama/common/widgets/log_out_alert.dart';
+import 'package:sitama/core/config/themes/theme_provider.dart';
+import 'package:sitama/domain/entities/student_home_entity.dart';
+import 'package:sitama/presenstation/student/faq/pages/faq.dart';
+import 'package:sitama/presenstation/student/profile/bloc/profile_student_cubit.dart';
+import 'package:sitama/presenstation/student/profile/bloc/profile_student_state.dart';
+import 'package:sitama/presenstation/student/profile/widgets/box_industry.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {

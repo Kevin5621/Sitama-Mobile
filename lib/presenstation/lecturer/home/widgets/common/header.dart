@@ -1,10 +1,8 @@
-// ignore_for_file: deprecated_member_use
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:Sitama/common/widgets/search_field.dart';
-import 'package:Sitama/presenstation/lecturer/home/bloc/selection_bloc.dart';
-import 'package:Sitama/presenstation/lecturer/home/bloc/selection_event.dart';
+import 'package:sitama/common/widgets/search_field.dart';
+import 'package:sitama/presenstation/lecturer/home/bloc/selection_bloc.dart';
+import 'package:sitama/presenstation/lecturer/home/bloc/selection_event.dart';
 
 class Header extends StatelessWidget {
   final String name;
@@ -51,7 +49,7 @@ class Header extends StatelessWidget {
     height: 40,
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(8),
-      color: colorScheme.surface,
+      color: colorScheme.surfaceContainer,
       border: Border.all(
         color: colorScheme.outline,
         width: 1,

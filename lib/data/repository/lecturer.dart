@@ -1,15 +1,15 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:Sitama/data/models/assessment.dart';
-import 'package:Sitama/data/models/guidance.dart';
-import 'package:Sitama/data/models/lecturer_detail_student.dart';
-import 'package:Sitama/data/models/lecturer_home.dart';
-import 'package:Sitama/data/models/lecturer_profile.dart';
-import 'package:Sitama/data/models/notification.dart';
-import 'package:Sitama/data/models/log_book.dart';
-import 'package:Sitama/data/source/lecturer_api_service.dart';
-import 'package:Sitama/domain/repository/lecturer.dart';
-import 'package:Sitama/service_locator.dart';
+import 'package:sitama/data/models/assessment.dart';
+import 'package:sitama/data/models/guidance.dart';
+import 'package:sitama/data/models/lecturer_detail_student.dart';
+import 'package:sitama/data/models/lecturer_home.dart';
+import 'package:sitama/data/models/lecturer_profile.dart';
+import 'package:sitama/data/models/notification.dart';
+import 'package:sitama/data/models/log_book.dart';
+import 'package:sitama/data/source/lecturer_api_service.dart';
+import 'package:sitama/domain/repository/lecturer.dart';
+import 'package:sitama/service_locator.dart';
 
 class LecturerRepositoryImpl extends LecturerRepository{
   @override

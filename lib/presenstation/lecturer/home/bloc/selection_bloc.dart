@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:Sitama/data/models/group.dart';
+import 'package:sitama/data/models/group.dart';
 import 'selection_event.dart';
 import 'selection_state.dart';
 
@@ -102,7 +102,6 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
 
   void _onSendMessage(SendMessage event, Emitter<SelectionState> emit) {
     // Implement message sending logic here
-    print('Sending message: ${event.message} to ${state.selectedIds}');
     emit(state.copyWith(
       isSelectionMode: false,
       selectedIds: {},

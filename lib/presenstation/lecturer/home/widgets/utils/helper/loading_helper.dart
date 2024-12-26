@@ -1,4 +1,4 @@
-import 'package:Sitama/core/config/themes/app_color.dart';
+import 'package:sitama/core/config/themes/app_color.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
@@ -70,7 +70,7 @@ class _ImmersiveLoadingWidgetState extends State<ImmersiveLoadingWidget>
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: widget.primaryColor.withOpacity(0.5),
+                          color: widget.primaryColor.withAlpha((0.5*255).round()),
                           width: 4,
                         ),
                       ),
@@ -89,7 +89,7 @@ class _ImmersiveLoadingWidgetState extends State<ImmersiveLoadingWidget>
                       height: 40,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: widget.primaryColor.withOpacity(0.3),
+                        color: widget.primaryColor.withAlpha((0.3*255).round()),
                       ),
                     ),
                   );

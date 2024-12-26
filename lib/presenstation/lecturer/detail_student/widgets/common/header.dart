@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:Sitama/core/config/assets/app_images.dart';
-import 'package:Sitama/domain/entities/lecturer_detail_student.dart';
+import 'package:sitama/core/config/assets/app_images.dart';
+import 'package:sitama/domain/entities/lecturer_detail_student.dart';
 
 /// [ProfileHeader] is a widget to display the student's profile header
 /// with a background image, profile picture, name, username, and email.
@@ -67,7 +67,7 @@ class ProfileHeader extends StatelessWidget {
                 vertical: 4,
               ),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withAlpha((0.2*255).round()),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(

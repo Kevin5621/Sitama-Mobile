@@ -1,20 +1,20 @@
 // ignore_for_file: library_private_types_in_public_api
 
-import 'package:Sitama/presenstation/lecturer/home/bloc/offline_mode_handler.dart';
-import 'package:Sitama/service_locator.dart';
+import 'package:sitama/presenstation/lecturer/home/bloc/offline_mode_handler.dart';
+import 'package:sitama/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:Sitama/core/config/assets/app_images.dart';
-import 'package:Sitama/core/config/themes/app_color.dart';
-import 'package:Sitama/domain/entities/lecturer_home_entity.dart';
-import 'package:Sitama/presenstation/lecturer/home/bloc/lecturer_display_cubit.dart';
-import 'package:Sitama/presenstation/lecturer/home/bloc/lecturer_display_state.dart';
-import 'package:Sitama/presenstation/lecturer/home/bloc/selection_bloc.dart';
-import 'package:Sitama/presenstation/lecturer/home/bloc/selection_event.dart';
-import 'package:Sitama/presenstation/lecturer/home/bloc/selection_state.dart';
-import 'package:Sitama/presenstation/lecturer/home/widgets/common/header.dart';
-import 'package:Sitama/presenstation/lecturer/home/widgets/utils/dialogs/send_message_bottom.dart';
-import 'package:Sitama/presenstation/lecturer/home/widgets/section/student_list.dart';
+import 'package:sitama/core/config/assets/app_images.dart';
+import 'package:sitama/core/config/themes/app_color.dart';
+import 'package:sitama/domain/entities/lecturer_home_entity.dart';
+import 'package:sitama/presenstation/lecturer/home/bloc/lecturer_display_cubit.dart';
+import 'package:sitama/presenstation/lecturer/home/bloc/lecturer_display_state.dart';
+import 'package:sitama/presenstation/lecturer/home/bloc/selection_bloc.dart';
+import 'package:sitama/presenstation/lecturer/home/bloc/selection_event.dart';
+import 'package:sitama/presenstation/lecturer/home/bloc/selection_state.dart';
+import 'package:sitama/presenstation/lecturer/home/widgets/common/header.dart';
+import 'package:sitama/presenstation/lecturer/home/widgets/utils/dialogs/send_message_bottom.dart';
+import 'package:sitama/presenstation/lecturer/home/widgets/section/student_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LecturerHomeContent extends StatefulWidget {
@@ -65,43 +65,44 @@ class _LecturerHomeContentState extends State<LecturerHomeContent>
   Widget build(BuildContext context) {
     super.build(context);
     return ConnectivityHandler(
-      child: Scaffold(
-        body: MultiBlocProvider(
-          providers: [
-            BlocProvider(
-              create: (context) => SelectionBloc()..add(LoadArchivedItems()),
-            ),
-            BlocProvider(
-              create: (context) => LecturerDisplayCubit(
-                selectionBloc: context.read<SelectionBloc>(),
-                prefs: sl<SharedPreferences>(),
-              )..displayLecturer(),
-              lazy: false,
-            ),
-          ],
-          child: BlocListener<SelectionBloc, SelectionState>(
-            listenWhen: (previous, current) => 
-                previous.archivedIds != current.archivedIds,
-            listener: (context, state) {
-              context.read<LecturerDisplayCubit>().displayLecturer();
-            },
-            child: BlocBuilder<LecturerDisplayCubit, LecturerDisplayState>(
-              builder: (context, state) {
-                if (state is LecturerLoading) {
-                  return _buildLoadingState();
-                }
-                if (state is LecturerLoaded) {
-                  return _buildLoadedState(state);
-                }
-                return Container();
+      child: RepaintBoundary(
+        child: Scaffold(
+          body: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => SelectionBloc()..add(LoadArchivedItems()),
+              ),
+              BlocProvider(
+                create: (context) => LecturerDisplayCubit(
+                  selectionBloc: context.read<SelectionBloc>(),
+                  prefs: sl<SharedPreferences>(),
+                )..displayLecturer(),
+                lazy: false,
+              ),
+            ],
+            child: BlocListener<SelectionBloc, SelectionState>(
+              listenWhen: (previous, current) => 
+                  previous.archivedIds != current.archivedIds,
+              listener: (context, state) {
+                context.read<LecturerDisplayCubit>().displayLecturer();
               },
+              child: BlocBuilder<LecturerDisplayCubit, LecturerDisplayState>(
+                builder: (context, state) {
+                  if (state is LecturerLoading) {
+                    return _buildLoadingState();
+                  }
+                  if (state is LecturerLoaded) {
+                    return _buildLoadedState(state);
+                  }
+                  return Container();
+                },
+              ),
             ),
           ),
         ),
       ),
     );
   }
-
 
   Widget _buildLoadingState() {
     return const Center(
@@ -128,7 +129,7 @@ class _LecturerHomeContentState extends State<LecturerHomeContent>
     LecturerHomeEntity data = state.lecturerHomeEntity;
     Set<LecturerStudentsEntity> students = _filterStudents(data.students!.toSet());
 
-    return BlocBuilder<SelectionBloc, SelectionState>(
+    return BlocBuilder<SelectionBloc, SelectionState>( 
       builder: (context, selectionState) {
         return Stack(
           children: [

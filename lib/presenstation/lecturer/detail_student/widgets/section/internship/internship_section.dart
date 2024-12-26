@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:Sitama/domain/entities/lecturer_detail_student.dart';
+import 'package:sitama/domain/entities/lecturer_detail_student.dart';
 
 class InternshipBox extends StatelessWidget {
   final int index;
@@ -26,7 +26,7 @@ class InternshipBox extends StatelessWidget {
         Text(
           '$label:',
           style: TextStyle(
-            color: colorScheme.onSurface.withOpacity(0.6),
+            color: colorScheme.onSurface.withAlpha((0.6*255).round()),
             fontSize: 14,
           ),
         ),
@@ -53,11 +53,11 @@ class InternshipBox extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: colorScheme.surface,
+        color: colorScheme.surfaceContainer,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withAlpha((0.0*2555).round()),
             spreadRadius: 1,
             blurRadius: 10,
             offset: Offset(0, 4),
@@ -72,7 +72,7 @@ class InternshipBox extends StatelessWidget {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: colorScheme.primary.withOpacity(0.1),
+                  color: colorScheme.primary.withAlpha((0.1*255).round()),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(

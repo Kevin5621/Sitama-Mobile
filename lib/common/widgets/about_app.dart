@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:Sitama/core/config/assets/app_images.dart';
+import 'package:sitama/core/config/assets/app_images.dart';
 
 class AboutAppPage extends StatelessWidget {
   const AboutAppPage({super.key});
@@ -34,11 +34,11 @@ class AboutAppPage extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: theme.colorScheme.surface,
+              color: theme.colorScheme.surfaceContainer,
               borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
               boxShadow: [
                 BoxShadow(
-                  color: theme.colorScheme.shadow.withOpacity(0.1),
+                  color: theme.colorScheme.shadow.withAlpha((0.1*255).round()),
                   spreadRadius: 1,
                   blurRadius: 4,
                   offset: const Offset(0, -2),
@@ -57,7 +57,7 @@ class AboutAppPage extends StatelessWidget {
                 Text(
                   'Dikembangkan oleh Tim Sitama',
                   style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurface.withOpacity(0.6),
+                    color: theme.colorScheme.onSurface.withAlpha(153*255),
                   ),
                 ),
               ],
@@ -115,7 +115,7 @@ class AboutAppPage extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: theme.colorScheme.surface,
+              color: theme.colorScheme.surfaceContainer,
               borderRadius: BorderRadius.circular(16),
             ),
             child: Text(
@@ -166,11 +166,11 @@ class AboutAppPage extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
+        color: theme.colorScheme.surfaceContainer,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: theme.colorScheme.shadow.withOpacity(0.1),
+            color: theme.colorScheme.shadow.withAlpha((0.1*255).round()),
             spreadRadius: 1,
             blurRadius: 4,
             offset: const Offset(0, 2),
@@ -182,7 +182,7 @@ class AboutAppPage extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: theme.colorScheme.primary.withOpacity(0.1),
+              color: theme.colorScheme.primary.withAlpha((0.1*255).round()),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(
@@ -206,7 +206,7 @@ class AboutAppPage extends StatelessWidget {
                 Text(
                   description,
                   style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurface.withOpacity(0.6),
+                    color: theme.colorScheme.onSurface.withAlpha((0.6*255).round()),
                   ),
                 ),
               ],

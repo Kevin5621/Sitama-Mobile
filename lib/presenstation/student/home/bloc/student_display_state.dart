@@ -1,5 +1,5 @@
-import 'package:Sitama/domain/entities/student_home_entity.dart';
-import 'package:Sitama/data/models/notification.dart';
+import 'package:sitama/domain/entities/student_home_entity.dart';
+import 'package:sitama/data/models/notification.dart';
 
 abstract class StudentDisplayState {}
 

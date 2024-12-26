@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:Sitama/common/widgets/custom_snackbar.dart';
-import 'package:Sitama/core/config/themes/app_color.dart';
+import 'package:sitama/common/widgets/custom_snackbar.dart';
+import 'package:sitama/core/config/themes/app_color.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:dio/dio.dart';
 
@@ -45,6 +45,7 @@ class PDFViewerPage extends StatelessWidget {
       String fileName = extractFileName(pdfUrl);
       String filePath = '${dir.path}/$fileName';
 
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         CustomSnackBar(
           message: 'Mulai mengunduh file...',
@@ -60,12 +61,13 @@ class PDFViewerPage extends StatelessWidget {
           if (total != -1) {
             double progress = received / total * 100;
             if (progress % 20 == 0) {
+              if (!context.mounted) return;
               ScaffoldMessenger.of(context).showSnackBar(
                 CustomSnackBar(
                   message: 'Mengunduh: ${progress.toStringAsFixed(0)}%',
                   duration: const Duration(milliseconds: 500),
                   icon: Icons.downloading_rounded,
-                  backgroundColor: AppColors.lightPrimary.withOpacity(0.9),
+                  backgroundColor: AppColors.lightPrimary.withAlpha((0.9*255).round()),
                 ),
               );
             }
@@ -73,6 +75,7 @@ class PDFViewerPage extends StatelessWidget {
         }
       );
 
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         CustomSnackBar(
           message: 'File berhasil diunduh',
@@ -86,6 +89,7 @@ class PDFViewerPage extends StatelessWidget {
         ),
       );
     } catch (e) {
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         CustomSnackBar(
           message: 'Gagal mengunduh file: ${e.toString()}',

@@ -1,12 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:Sitama/core/config/themes/app_color.dart';
-import 'package:Sitama/presenstation/general/pdf_viewer/pdf_viewer.dart';
-import 'package:Sitama/presenstation/student/guidance/widgets/delete_guidance.dart';
+import 'package:sitama/core/config/themes/app_color.dart';
+import 'package:sitama/presenstation/general/pdf_viewer/pdf_viewer.dart';
+import 'package:sitama/presenstation/student/guidance/widgets/delete_guidance.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:Sitama/common/bloc/button/button_state_cubit.dart';
-import 'package:Sitama/presenstation/student/guidance/widgets/edit_guidance.dart';
+import 'package:sitama/common/bloc/button/button_state_cubit.dart';
+import 'package:sitama/presenstation/student/guidance/widgets/edit_guidance.dart';
 
 /// Features:
 /// - Expandable UI: The card expands to reveal detailed information.
@@ -50,7 +50,7 @@ class GuidanceCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
       color: status == GuidanceStatus.rejected
           ? colorScheme.error
-          : colorScheme.surface,
+          : colorScheme.surfaceContainer,
       child: Theme(
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
@@ -68,7 +68,7 @@ class GuidanceCard extends StatelessWidget {
             style: textTheme.bodySmall?.copyWith(
               color: status == GuidanceStatus.rejected
                   ? colorScheme.onError
-                  : colorScheme.onSurface.withOpacity(0.7),
+                  : colorScheme.onSurface.withAlpha((0.7*255).round()),
             ),
           ),
           children: [
@@ -120,7 +120,7 @@ class GuidanceCard extends StatelessWidget {
                       child: Text(
                         'Tidak ada catatan',
                         style: textTheme.bodyMedium?.copyWith(
-                          color: colorScheme.onSurface.withOpacity(0.5),
+                          color: colorScheme.onSurface.withAlpha((0.5*255).round()),
                         ),
                       ),
                     ),
@@ -153,7 +153,7 @@ class GuidanceCard extends StatelessWidget {
                                 const BorderRadius.all(Radius.circular(12)),
                             borderSide: BorderSide(
                               color: status == GuidanceStatus.rejected
-                                  ? colorScheme.onError.withOpacity(0.5)
+                                  ? colorScheme.onError.withAlpha((0.5*255).round())
                                   : colorScheme.outline,
                             ),
                           ),
@@ -267,7 +267,7 @@ class GuidanceCard extends StatelessWidget {
         return const Icon(Icons.check_circle, color: AppColors.lightSuccess);
       case GuidanceStatus.inProgress:
         return Icon(Icons.remove_circle,
-            color: colorScheme.onSurface.withOpacity(0.5));
+            color: colorScheme.onSurface.withAlpha((0.5*255).round()));
       case GuidanceStatus.rejected:
         return const Icon(Icons.error, color: AppColors.lightDanger);
       case GuidanceStatus.updated:

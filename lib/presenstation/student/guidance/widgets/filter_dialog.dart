@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class FilterDropdown extends StatefulWidget {
   final Function(String) onFilterChanged;
 
-  const FilterDropdown({Key? key, required this.onFilterChanged}) : super(key: key);
+  const FilterDropdown({super.key, required this.onFilterChanged});
 
   @override
   State<FilterDropdown> createState() => _FilterDropdownState();
@@ -26,7 +26,7 @@ class _FilterDropdownState extends State<FilterDropdown> {
     return PopupMenuButton<String>(
       icon: Icon(
         Icons.filter_list_outlined,
-        color: Theme.of(context).colorScheme.onBackground,
+        color: Theme.of(context).colorScheme.onSurface,
       ),
       onSelected: (String displayLabel) {
         // Get the backend value based on the selected label

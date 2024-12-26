@@ -1,5 +1,5 @@
-import 'package:Sitama/domain/entities/industry_score.dart';
-import 'package:Sitama/domain/repository/lecturer.dart';
+import 'package:sitama/domain/entities/industry_score.dart';
+import 'package:sitama/domain/repository/lecturer.dart';
 
 class UpdateScoresUseCase {
   final ScoreRepository repository;

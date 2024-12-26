@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:Sitama/domain/entities/lecturer_home_entity.dart';
-import 'package:Sitama/presenstation/lecturer/home/bloc/lecturer_display_cubit.dart';
-import 'package:Sitama/presenstation/lecturer/home/bloc/selection_bloc.dart';
-import 'package:Sitama/presenstation/lecturer/home/bloc/selection_state.dart';
-import 'package:Sitama/presenstation/lecturer/home/widgets/section/archive.dart';
+import 'package:sitama/domain/entities/lecturer_home_entity.dart';
+import 'package:sitama/presenstation/lecturer/home/bloc/lecturer_display_cubit.dart';
+import 'package:sitama/presenstation/lecturer/home/bloc/selection_bloc.dart';
+import 'package:sitama/presenstation/lecturer/home/bloc/selection_state.dart';
+import 'package:sitama/presenstation/lecturer/home/widgets/section/archive.dart';
 
 class ArchiveCard extends StatelessWidget {
   final List<LecturerStudentsEntity> archivedStudents;

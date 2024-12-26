@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:Sitama/common/widgets/student_guidance_card.dart';
-import 'package:Sitama/common/widgets/search_field.dart';
-import 'package:Sitama/domain/entities/guidance_entity.dart';
-import 'package:Sitama/presenstation/student/guidance/bloc/guidance_student_cubit.dart';
-import 'package:Sitama/presenstation/student/guidance/bloc/guidance_student_state.dart';
-import 'package:Sitama/presenstation/student/guidance/widgets/add_guidance.dart';
-import 'package:Sitama/presenstation/student/guidance/widgets/filter_dialog.dart';
+import 'package:sitama/common/widgets/student_guidance_card.dart';
+import 'package:sitama/common/widgets/search_field.dart';
+import 'package:sitama/domain/entities/guidance_entity.dart';
+import 'package:sitama/presenstation/student/guidance/bloc/guidance_student_cubit.dart';
+import 'package:sitama/presenstation/student/guidance/bloc/guidance_student_state.dart';
+import 'package:sitama/presenstation/student/guidance/widgets/add_guidance.dart';
+import 'package:sitama/presenstation/student/guidance/widgets/filter_dialog.dart';
 
 class GuidancePage extends StatefulWidget {
   const GuidancePage({super.key});
@@ -61,14 +61,14 @@ class _GuidancePageState extends State<GuidancePage> with AutomaticKeepAliveClie
                     floating: false,
                     snap: false,
                     pinned: true,
-                    backgroundColor: theme.colorScheme.background,
+                    backgroundColor: theme.colorScheme.surface,
                     elevation: 0,
                     title: Text(
                       'Bimbingan',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: theme.colorScheme.onBackground, 
+                        color: theme.colorScheme.onSurface, 
                       ),
                     ),
                     centerTitle: true,
@@ -82,7 +82,7 @@ class _GuidancePageState extends State<GuidancePage> with AutomaticKeepAliveClie
                         },
                         icon: Icon(
                           Icons.add,
-                          color: theme.colorScheme.onBackground, 
+                          color: theme.colorScheme.onSurface, 
                         ),
                       )
                     ],

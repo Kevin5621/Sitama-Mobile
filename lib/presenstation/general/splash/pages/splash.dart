@@ -1,26 +1,12 @@
-// import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:permission_handler/permission_handler.dart';
-import 'package:Sitama/common/bloc/auth/auth_state.dart';
-import 'package:Sitama/common/bloc/auth/auth_state_cubit.dart';
-import 'package:Sitama/core/config/assets/app_images.dart';
-import 'package:Sitama/presenstation/general/welcome/pages/welcome.dart';
-import 'package:Sitama/presenstation/lecturer/home/pages/lecturer_home.dart';
-import 'package:Sitama/presenstation/student/home/pages/home.dart';
-
-// Future<void> requestNotificationPermissions() async {
-//   if (Platform.isAndroid) {
-//     final status = await Permission.notification.request();
-//     if (status.isGranted) {
-//       print('Notification permission granted');
-//     } else if (status.isDenied) {
-//       print('Notification permission denied');
-//     }
-//   }
-// }
-
+import 'package:sitama/common/bloc/auth/auth_state.dart';
+import 'package:sitama/common/bloc/auth/auth_state_cubit.dart';
+import 'package:sitama/core/config/assets/app_images.dart';
+import 'package:sitama/presenstation/general/welcome/pages/welcome.dart';
+import 'package:sitama/presenstation/lecturer/home/pages/lecturer_home.dart';
+import 'package:sitama/presenstation/student/home/pages/home.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -30,6 +16,8 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
+  final GlobalKey<ScaffoldMessengerState> _scaffoldKey = GlobalKey<ScaffoldMessengerState>();
+
   @override
   void initState() {
     super.initState();
@@ -39,6 +27,7 @@ class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       body: Stack(children: [
         Container(
           decoration: BoxDecoration(
@@ -58,6 +47,7 @@ class _SplashPageState extends State<SplashPage> {
 
   Future<void> redirect() async {
     await Future.delayed(const Duration(seconds: 2));
+    if (!mounted) return;
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
@@ -81,5 +71,3 @@ class _SplashPageState extends State<SplashPage> {
     );
   }
 }
-
-

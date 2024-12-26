@@ -1,8 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:Sitama/core/config/themes/app_color.dart';
-import 'package:Sitama/domain/entities/lecturer_home_entity.dart';
+import 'package:sitama/core/config/themes/app_color.dart';
+import 'package:sitama/domain/entities/lecturer_home_entity.dart';
 
 class ActivityHelper {
   static IconData getActivityIcon(String activity) {
@@ -65,13 +65,13 @@ class ActivityHelper {
                         border: Border.all(
                           color: borderColor ?? 
                             (isSelected 
-                              ? Theme.of(context).colorScheme.onPrimary.withOpacity(0.8)
-                              : Theme.of(context).colorScheme.surface),
+                              ? Theme.of(context).colorScheme.onPrimary.withAlpha((0.8*255).round())
+                              : Theme.of(context).colorScheme.surfaceContainer),
                           width: 1.5,
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
+                            color: Theme.of(context).colorScheme.onSurface.withAlpha((0.2*255).round()),
                             spreadRadius: 1,
                             blurRadius: 2,
                             offset: const Offset(0, 1),

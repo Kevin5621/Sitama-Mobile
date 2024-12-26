@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:Sitama/core/config/themes/app_color.dart';
-import 'package:Sitama/data/models/notification.dart';
+import 'package:sitama/core/config/themes/app_color.dart';
+import 'package:sitama/data/models/notification.dart';
 
 // NotificationCard with dynamic theming support
 class NotificationCard extends StatefulWidget {
@@ -85,8 +85,8 @@ class _NotificationCardState extends State<NotificationCard> {
             // Background color varies based on read status and theme
             decoration: BoxDecoration(
               color: widget.notification.isRead == 1 
-                ? colorScheme.surface
-                : color.withOpacity(0.1),
+                ? colorScheme.surfaceContainer
+                : color.withAlpha((0.1*255).round()),
             ),
             child: Material(
               color: Colors.transparent,
@@ -106,7 +106,7 @@ class _NotificationCardState extends State<NotificationCard> {
                           Container(
                             padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
-                              color: color.withOpacity(0.1),
+                              color: color.withAlpha((0.1*255).round()),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Icon(icon, color: color, size: 24),
@@ -168,7 +168,7 @@ class _NotificationCardState extends State<NotificationCard> {
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
                               // Subtle background for additional details using theme colors
-                              color: colorScheme.surfaceVariant.withOpacity(0.2),
+                              color: colorScheme.tertiary.withAlpha((0.2*255).round()),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Text(

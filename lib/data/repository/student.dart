@@ -1,12 +1,12 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:Sitama/data/models/guidance.dart';
-import 'package:Sitama/data/models/log_book.dart';
-import 'package:Sitama/data/models/notification.dart';
-import 'package:Sitama/data/models/student_home.dart';
-import 'package:Sitama/data/source/student_api_service.dart';
-import 'package:Sitama/domain/repository/student.dart';
-import 'package:Sitama/service_locator.dart';
+import 'package:sitama/data/models/guidance.dart';
+import 'package:sitama/data/models/log_book.dart';
+import 'package:sitama/data/models/notification.dart';
+import 'package:sitama/data/models/student_home.dart';
+import 'package:sitama/data/source/student_api_service.dart';
+import 'package:sitama/domain/repository/student.dart';
+import 'package:sitama/service_locator.dart';
 
 class StudentRepositoryImpl extends StudentRepository {
   @override

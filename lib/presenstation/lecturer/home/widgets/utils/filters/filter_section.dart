@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:Sitama/domain/entities/lecturer_home_entity.dart';
-import 'package:Sitama/presenstation/lecturer/home/bloc/selection_bloc.dart';
-import 'package:Sitama/presenstation/lecturer/home/bloc/selection_state.dart';
-import 'package:Sitama/presenstation/lecturer/home/widgets/utils/filters/filter_jurusan.dart';
-import 'package:Sitama/presenstation/lecturer/home/widgets/utils/filters/filter_tahun.dart';
+import 'package:sitama/domain/entities/lecturer_home_entity.dart';
+import 'package:sitama/presenstation/lecturer/home/bloc/selection_bloc.dart';
+import 'package:sitama/presenstation/lecturer/home/bloc/selection_state.dart';
+import 'package:sitama/presenstation/lecturer/home/widgets/utils/filters/filter_jurusan.dart';
+import 'package:sitama/presenstation/lecturer/home/widgets/utils/filters/filter_tahun.dart';
 
 class FilterSection extends StatefulWidget {
   final VoidCallback? onArchiveTap;
@@ -127,11 +127,11 @@ class _FilterSectionState extends State<FilterSection> {
         return Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
+            color: Theme.of(context).colorScheme.surfaceContainer,
             borderRadius: BorderRadius.circular(8),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withAlpha((0.05*255).round()),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),

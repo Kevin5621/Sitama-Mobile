@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:Sitama/data/models/notification.dart';
+import 'package:sitama/data/models/notification.dart';
 
 /// A stateful widget to display and manage a notification item.
 /// This widget handles showing a notification card with expandable details.
@@ -120,19 +120,19 @@ class _LoadNotificationState extends State<LoadNotification> with SingleTickerPr
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Card(
           elevation: 2,
-          shadowColor: colorScheme.shadow.withOpacity(0.1),
+          shadowColor: colorScheme.shadow.withAlpha((0.1*255).round()),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
             side: BorderSide(
-              color: colorScheme.outline.withOpacity(0.12),
+              color: colorScheme.outline.withAlpha((0.12*255).round()),
               width: 1,
             ),
           ),
           child: InkWell(
             onTap: _toggleExpand,
             borderRadius: BorderRadius.circular(16),
-            splashColor: colorScheme.primary.withOpacity(0.1),
-            highlightColor: colorScheme.primary.withOpacity(0.05),
+            splashColor: colorScheme.primary.withAlpha((0.1*255).round()),
+            highlightColor: colorScheme.primary.withAlpha((0.05*255).round()),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 300),
               curve: Curves.easeInOut,
@@ -175,11 +175,11 @@ class _LoadNotificationState extends State<LoadNotification> with SingleTickerPr
     return Container(
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: colorScheme.secondaryContainer.withOpacity(0.7),
+        color: colorScheme.secondaryContainer.withAlpha((0.7*255).round()),
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: colorScheme.shadow.withOpacity(0.08),
+            color: colorScheme.shadow.withAlpha((0.08*255).round()),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -235,10 +235,10 @@ class _LoadNotificationState extends State<LoadNotification> with SingleTickerPr
         width: double.infinity,
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: colorScheme.surfaceVariant.withOpacity(0.35),
+          color: colorScheme.tertiary.withAlpha((0.35*255).round()),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: colorScheme.outlineVariant.withOpacity(0.5),
+            color: colorScheme.outlineVariant.withAlpha((0.5*255).round()),
             width: 1,
           ),
         ),

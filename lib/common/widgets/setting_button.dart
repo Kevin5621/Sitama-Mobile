@@ -6,11 +6,11 @@ class SettingButton extends StatelessWidget {
   final VoidCallback onTap;
 
   const SettingButton({
-    Key? key,
+    super.key,
     required this.icon,
     required this.title,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,11 +19,11 @@ class SettingButton extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
-        color: colorScheme.surface,
+        color: colorScheme.surfaceContainer,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: colorScheme.shadow.withOpacity(0.1),
+            color: colorScheme.shadow.withAlpha((0.1*255).round()),
             spreadRadius: 1,
             blurRadius: 5,
           ),
@@ -44,7 +44,7 @@ class SettingButton extends StatelessWidget {
         trailing: Icon(
           Icons.arrow_forward_ios,
           size: 16,
-          color: colorScheme.onSurface.withOpacity(0.5),
+          color: colorScheme.onSurface.withAlpha((0.5*255).round()),
         ),
         onTap: onTap,
       ),

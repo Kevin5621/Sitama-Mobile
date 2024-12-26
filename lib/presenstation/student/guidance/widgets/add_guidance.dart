@@ -1,16 +1,16 @@
-import 'package:Sitama/core/config/themes/app_color.dart';
+import 'package:sitama/core/config/themes/app_color.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:Sitama/common/bloc/button/button_state.dart';
-import 'package:Sitama/common/bloc/button/button_state_cubit.dart';
-import 'package:Sitama/common/widgets/basic_app_button.dart';
-import 'package:Sitama/common/widgets/custom_snackbar.dart';
-import 'package:Sitama/data/models/guidance.dart';
-import 'package:Sitama/domain/usecases/student/guidances/add_guidance_student.dart';
-import 'package:Sitama/presenstation/student/home/pages/home.dart';
-import 'package:Sitama/service_locator.dart';
+import 'package:sitama/common/bloc/button/button_state.dart';
+import 'package:sitama/common/bloc/button/button_state_cubit.dart';
+import 'package:sitama/common/widgets/basic_app_button.dart';
+import 'package:sitama/common/widgets/custom_snackbar.dart';
+import 'package:sitama/data/models/guidance.dart';
+import 'package:sitama/domain/usecases/student/guidances/add_guidance_student.dart';
+import 'package:sitama/presenstation/student/home/pages/home.dart';
+import 'package:sitama/service_locator.dart';
 
 class AddGuidance extends StatefulWidget {
   const AddGuidance({super.key});
@@ -81,7 +81,7 @@ class _AddGuidanceState extends State<AddGuidance> {
                 child: Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor.withOpacity(0.1),
+                    color: Theme.of(context).primaryColor.withAlpha((0.1*255).round()),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
@@ -140,7 +140,7 @@ class _AddGuidanceState extends State<AddGuidance> {
                         color: AppColors.lightDanger,
                       ),
                       filled: true,
-                      fillColor: Theme.of(context).primaryColor.withOpacity(0.05),
+                      fillColor: Theme.of(context).primaryColor.withAlpha((0.05*255).round()),
                     ),
                     onChanged: (value) {
                       // Clear error when user starts typing
@@ -169,13 +169,13 @@ class _AddGuidanceState extends State<AddGuidance> {
                                 ? ColorScheme.dark(
                                     primary: Theme.of(context).primaryColor,
                                     onPrimary: Colors.white,
-                                    surface: Theme.of(context).colorScheme.surface,
+                                    surface: Theme.of(context).colorScheme.surfaceContainer,
                                     onSurface: Theme.of(context).colorScheme.onSurface,
                                   )
                                 : ColorScheme.light(
                                     primary: Theme.of(context).primaryColor,
                                     onPrimary: Colors.white,
-                                    surface: Theme.of(context).colorScheme.surface,
+                                    surface: Theme.of(context).colorScheme.surfaceContainer,
                                     onSurface: Theme.of(context).colorScheme.onSurface,
                                   ),
                               dialogBackgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -206,7 +206,7 @@ class _AddGuidanceState extends State<AddGuidance> {
                           borderSide: BorderSide(color: Theme.of(context).primaryColor, width: 2),
                         ),
                         filled: true,
-                        fillColor: Theme.of(context).primaryColor.withOpacity(0.05),
+                        fillColor: Theme.of(context).primaryColor.withAlpha((0.05).round()),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -250,7 +250,7 @@ class _AddGuidanceState extends State<AddGuidance> {
                         color: AppColors.lightDanger,
                       ),
                       filled: true,
-                      fillColor: Theme.of(context).primaryColor.withOpacity(0.05),
+                      fillColor: Theme.of(context).primaryColor.withAlpha((0.05).round()),
                     ),
                     onChanged: (value) {
                       // Clear error when user starts typing
@@ -276,7 +276,7 @@ class _AddGuidanceState extends State<AddGuidance> {
                         ),
                         borderRadius: BorderRadius.circular(12),
                         color: _selectedFile != null
-                            ? Theme.of(context).primaryColor.withOpacity(0.05)
+                            ? Theme.of(context).primaryColor.withAlpha((0.05).round())
                             : null,
                       ),
                       padding: EdgeInsets.symmetric(horizontal: 12),

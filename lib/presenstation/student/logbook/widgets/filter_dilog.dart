@@ -10,9 +10,9 @@ class SortFilterButton extends StatefulWidget {
   final Function(SortMode) onSortModeChanged;
 
   const SortFilterButton({
-    Key? key,
+    super.key,
     required this.onSortModeChanged,
-  }) : super(key: key);
+  });
 
   @override
   State<SortFilterButton> createState() => _SortFilterButtonState();
@@ -35,7 +35,7 @@ class _SortFilterButtonState extends State<SortFilterButton> {
     return PopupMenuButton<SortMode>(
       icon: Icon(
         Icons.filter_list_outlined,
-        color: Theme.of(context).colorScheme.onBackground,
+        color: Theme.of(context).colorScheme.onSurface,
       ),
       onSelected: (SortMode value) {
         setState(() {

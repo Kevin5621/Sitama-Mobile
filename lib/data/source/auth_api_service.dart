@@ -1,12 +1,12 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:Sitama/core/constansts/api_urls.dart';
-import 'package:Sitama/core/network/dio_client.dart';
-import 'package:Sitama/data/models/reset_password_req_params.dart';
-import 'package:Sitama/data/models/signin_req_params.dart';
-import 'package:Sitama/data/models/update_profile_req_params.dart';
-import 'package:Sitama/service_locator.dart';
+import 'package:sitama/core/constansts/api_urls.dart';
+import 'package:sitama/core/network/dio_client.dart';
+import 'package:sitama/data/models/reset_password_req_params.dart';
+import 'package:sitama/data/models/signin_req_params.dart';
+import 'package:sitama/data/models/update_profile_req_params.dart';
+import 'package:sitama/service_locator.dart';
 
 abstract class AuthApiService {
   Future<Either> signin(SigninReqParams request);

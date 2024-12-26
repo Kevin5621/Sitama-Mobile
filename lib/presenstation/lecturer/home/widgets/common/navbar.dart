@@ -5,10 +5,10 @@ class Navbar extends StatelessWidget {
   final Function(int) onTap;
 
   const Navbar({
-    Key? key,
+    super.key,
     required this.currentIndex,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class Navbar extends StatelessWidget {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withAlpha((0.1*255).round()),
               blurRadius: 20,
               offset: const Offset(0, -2),
           ),
@@ -27,9 +27,9 @@ class Navbar extends StatelessWidget {
         child: BottomNavigationBar(
           currentIndex: currentIndex,
           type: BottomNavigationBarType.fixed,
-          backgroundColor: Theme.of(context).colorScheme.surface,
+          backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
           selectedItemColor: Theme.of(context).colorScheme.primary,
-          unselectedItemColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+          unselectedItemColor: Theme.of(context).colorScheme.onSurface.withAlpha((0.6*255).round()),
           selectedFontSize: 12,
           unselectedFontSize: 12,
           elevation: 0,
@@ -40,7 +40,7 @@ class Navbar extends StatelessWidget {
                 Icons.home,
                 color: currentIndex == 0
                     ? Theme.of(context).colorScheme.primary
-                    : Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                    : Theme.of(context).colorScheme.onSurface.withAlpha((0.6*255).round()),
               ),
               label: 'Home',
             ),
@@ -49,7 +49,7 @@ class Navbar extends StatelessWidget {
                 Icons.person,
                 color: currentIndex == 1
                     ? Theme.of(context).colorScheme.primary
-                    : Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                    : Theme.of(context).colorScheme.onSurface.withAlpha((0.6*255).round()),
               ),
               label: 'Profile',
             ),

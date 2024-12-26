@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:Sitama/domain/entities/lecturer_home_entity.dart';
-import 'package:Sitama/presenstation/lecturer/home/bloc/lecturer_display_cubit.dart';
-import 'package:Sitama/presenstation/lecturer/home/bloc/selection_bloc.dart';
-import 'package:Sitama/presenstation/lecturer/home/bloc/selection_event.dart';
-import 'package:Sitama/presenstation/lecturer/home/bloc/selection_state.dart';
-import 'package:Sitama/presenstation/lecturer/home/widgets/utils/helper/activity_helper.dart';
-import 'package:Sitama/presenstation/lecturer/home/widgets/section/group/group_page.dart';
+import 'package:sitama/domain/entities/lecturer_home_entity.dart';
+import 'package:sitama/presenstation/lecturer/home/bloc/lecturer_display_cubit.dart';
+import 'package:sitama/presenstation/lecturer/home/bloc/selection_bloc.dart';
+import 'package:sitama/presenstation/lecturer/home/bloc/selection_event.dart';
+import 'package:sitama/presenstation/lecturer/home/bloc/selection_state.dart';
+import 'package:sitama/presenstation/lecturer/home/widgets/utils/helper/activity_helper.dart';
+import 'package:sitama/presenstation/lecturer/home/widgets/section/group/group_page.dart';
 
 class GroupCard extends StatelessWidget {
   final String groupId;
@@ -92,7 +92,7 @@ class GroupCard extends StatelessWidget {
             return Card(
               margin: const EdgeInsets.symmetric(vertical: 8),
               color: isDragging
-                  ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
+                  ? Theme.of(context).colorScheme.primary.withAlpha((0.1*255).round())
                   : null,
               child: InkWell(
                 onTap: () {
@@ -158,7 +158,7 @@ class GroupCard extends StatelessWidget {
                       ActivityHelper.buildActivityIconsStack(
                         activities: groupActivities,
                         context: context,
-                        borderColor: Theme.of(context).colorScheme.surface,
+                        borderColor: Theme.of(context).colorScheme.surfaceContainer,
                       ),
                   ],
                 ),

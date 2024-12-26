@@ -1,21 +1,21 @@
-// ignore_for_file: non_constant_identifier_names, use_build_context_synchronously, library_private_types_in_public_api
+// ignore_for_file: non_constant_identifier_names
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:Sitama/common/bloc/bloc/notification_bloc.dart';
-import 'package:Sitama/common/bloc/bloc/notification_event.dart';
-import 'package:Sitama/common/bloc/button/button_state.dart';
-import 'package:Sitama/common/bloc/button/button_state_cubit.dart';
-import 'package:Sitama/common/widgets/alert.dart';
-import 'package:Sitama/common/widgets/date_relative_time.dart';
-import 'package:Sitama/core/config/themes/app_color.dart';
-import 'package:Sitama/data/models/guidance.dart';
-import 'package:Sitama/domain/entities/guidance_entity.dart';
-import 'package:Sitama/domain/usecases/lecturer/update_status_guidance.dart';
-import 'package:Sitama/presenstation/lecturer/detail_student/pages/detail_student.dart';
-import 'package:Sitama/presenstation/lecturer/detail_student/widgets/section/tab_guidance/guidance_status.dart';
-import 'package:Sitama/presenstation/lecturer/detail_student/widgets/section/tab_guidance/lecturer_guidance_card_content.dart';
-import 'package:Sitama/service_locator.dart';
+import 'package:sitama/common/bloc/bloc/notification_bloc.dart';
+import 'package:sitama/common/bloc/bloc/notification_event.dart';
+import 'package:sitama/common/bloc/button/button_state.dart';
+import 'package:sitama/common/bloc/button/button_state_cubit.dart';
+import 'package:sitama/common/widgets/alert.dart';
+import 'package:sitama/common/widgets/date_relative_time.dart';
+import 'package:sitama/core/config/themes/app_color.dart';
+import 'package:sitama/data/models/guidance.dart';
+import 'package:sitama/domain/entities/guidance_entity.dart';
+import 'package:sitama/domain/usecases/lecturer/update_status_guidance.dart';
+import 'package:sitama/presenstation/lecturer/detail_student/pages/detail_student.dart';
+import 'package:sitama/presenstation/lecturer/detail_student/widgets/section/tab_guidance/guidance_status.dart';
+import 'package:sitama/presenstation/lecturer/detail_student/widgets/section/tab_guidance/lecturer_guidance_card_content.dart';
+import 'package:sitama/service_locator.dart';
 
 class LecturerGuidanceCard extends StatefulWidget {
   final GuidanceEntity guidance;
@@ -50,7 +50,7 @@ class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
       margin: const EdgeInsets.all(8),
       color: currentStatus == LecturerGuidanceStatus.rejected
           ? colorScheme.error
-          : colorScheme.surface,
+          : colorScheme.surfaceContainer,
       child: Theme(
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
@@ -59,9 +59,9 @@ class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
           subtitle: Text(
             RelativeTimeUtil.getRelativeTime(widget.guidance.date),
             style: textTheme.bodySmall?.copyWith(
-              color: currentStatus == LecturerGuidanceStatus.rejected
-                  ? colorScheme.onError.withOpacity(0.7)
-                  : colorScheme.onSurface.withOpacity(0.7),
+            color: currentStatus == LecturerGuidanceStatus.rejected
+                ? colorScheme.onError.withAlpha((0.7*255).round())
+                : colorScheme.onSurface.withAlpha((0.7*255).round()),
             ),
           ),
           children: [
@@ -84,13 +84,11 @@ class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
       case LecturerGuidanceStatus.approved:
         return const Icon(Icons.check_circle, color: AppColors.lightSuccess);
       case LecturerGuidanceStatus.inProgress:
-        return Icon(Icons.remove_circle, color: colorScheme.onSurface.withOpacity(0.5));
+        return Icon(Icons.remove_circle, color: colorScheme.onSurface.withAlpha((0.5*255).round()));
       case LecturerGuidanceStatus.rejected:
         return const Icon(Icons.error, color: AppColors.lightDanger);
       case LecturerGuidanceStatus.updated:
         return const Icon(Icons.add_circle, color: AppColors.lightWarning);
-      default:
-        return Icon(Icons.circle, color: colorScheme.onSurface);
     }
   }
 
@@ -117,7 +115,7 @@ class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
 
   void _showConfirmationDialog(LecturerGuidanceStatus newStatus) {
     final colorScheme = Theme.of(context).colorScheme;
-    
+
     IconData dialogIcon;
     Color dialogIconColor;
 
@@ -150,12 +148,12 @@ class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
 
   void _handleStatusUpdate(LecturerGuidanceStatus newStatus) {
     final buttonCubit = ButtonStateCubit();
-    
+
     final notificationData = {
       'message': widget.guidance.title,
       'detailText': _lecturerNote.text.isNotEmpty
-        ? _lecturerNote.text 
-        : GuidanceStatusHelper.getNotificationTitle(newStatus),
+          ? _lecturerNote.text
+          : GuidanceStatusHelper.getNotificationTitle(newStatus),
       'category': GuidanceStatusHelper.getNotificationCategory(newStatus),
       'date': DateTime.now().toIso8601String().split('T').first,
     };
@@ -171,6 +169,7 @@ class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
 
     buttonCubit.stream.listen((state) {
       if (state is ButtonSuccessState) {
+        if (!mounted) return;
         context.read<NotificationBloc>().add(
           SendNotification(
             notificationData: notificationData,
@@ -179,7 +178,7 @@ class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
         );
         _showSuccessAndNavigate();
       }
-      
+
       if (state is ButtonFailurState) {
         _showErrorDialog(state.errorMessage);
       }
@@ -192,6 +191,7 @@ class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
       title: 'Berhasil',
       message: 'Berhasil mengupdate status bimbingan',
     ).then((_) {
+      if (!mounted) return;
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
