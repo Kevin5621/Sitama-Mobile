@@ -26,6 +26,36 @@ class _LoginPageState extends State<LoginPage> {
   late final TextEditingController _passwordController = TextEditingController();
   bool _obscureText = true;
 
+  void _showErrorSnackbar(String message) {
+    final snackBar = CustomSnackBar(
+      message: message,
+      icon: Icons.error_outline,
+      backgroundColor: Colors.red.shade800,
+      duration: const Duration(seconds: 3),
+      action: SnackBarAction(
+        label: 'OK',
+        textColor: Colors.white,
+        onPressed: () {
+          _scaffoldKey.currentState?.hideCurrentSnackBar();
+        },
+      ),
+    );
+    
+    _scaffoldKey.currentState?.showSnackBar(snackBar);
+  }
+
+  bool _validateInputs() {
+    if (_usernameController.text.isEmpty) {
+      _showErrorSnackbar('NIM/NIP tidak boleh kosong');
+      return false;
+    }
+    if (_passwordController.text.isEmpty) {
+      _showErrorSnackbar('Kata sandi tidak boleh kosong');
+      return false;
+    }
+    return true;
+  }
+
   @override
   void dispose() {
     _usernameController.dispose();
@@ -35,12 +65,13 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ScaffoldMessenger(
       key: _scaffoldKey,
-      body: BlocProvider(
-        create: (context) => ButtonStateCubit(),
-        child: BlocListener<ButtonStateCubit, ButtonState>(
-          listener: (context, state) async {
+      child: Scaffold(
+        body: BlocProvider(
+          create: (context) => ButtonStateCubit(),
+          child: BlocListener<ButtonStateCubit, ButtonState>(
+            listener: (context, state) async {
             if (state is ButtonSuccessState) {
               SharedPreferences sharedPreferences =
                   await SharedPreferences.getInstance();
@@ -65,123 +96,133 @@ class _LoginPageState extends State<LoginPage> {
               }
             }
             if (state is ButtonFailurState) {
-              _scaffoldKey.currentState?.showSnackBar(
-                CustomSnackBar(
-                  message: state.errorMessage,
-                  icon: Icons.error_outline,
-                  backgroundColor: Colors.red.shade800,
-                ),
-              );
-            }
-          },
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  width: double.infinity,
-                  height: 312,
-                  color: AppColors.lightPrimary500,
-                  child: Center(
-                    child: Image.asset(AppImages.loginvektor),
+                String errorMessage = state.errorMessage;
+                
+                // Map specific error codes/messages to user-friendly messages
+                if (errorMessage.contains('invalid_credentials')) {
+                  errorMessage = 'NIM/NIP atau kata sandi salah';
+                } else if (errorMessage.contains('network_error')) {
+                  errorMessage = 'Gagal terhubung ke server. Periksa koneksi internet Anda';
+                } else if (errorMessage.contains('account_locked')) {
+                  errorMessage = 'Akun Anda terkunci. Silakan hubungi admin';
+                } else {
+                  errorMessage = 'Terjadi kesalahan. Silakan coba lagi nanti';
+                }
+                
+                _showErrorSnackbar(errorMessage);
+              }
+            },
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: 312,
+                    color: AppColors.lightPrimary500,
+                    child: Center(
+                      child: Image.asset(AppImages.loginvektor),
+                    ),
                   ),
-                ),
-                SizedBox(height: 20),
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: Icon(
-                        Icons.arrow_back_ios_rounded,
-                        size: 16,
-                      ),
-                    ),
-                    Text(
-                      'Login',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  SizedBox(height: 20),
+                  Row(
                     children: [
-                      TextField(
-                        controller: _usernameController,
-                        decoration: InputDecoration(
-                          labelText: 'NIM / NIP',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(12)),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 16),
-                      TextField(
-                        controller: _passwordController,
-                        obscureText: _obscureText,
-                        decoration: InputDecoration(
-                          labelText: 'Kata sandi',
-                          border: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(12)),
-                          ),
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              _obscureText
-                                  ? Icons.visibility_off
-                                  : Icons.visibility,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _obscureText = !_obscureText;
-                              });
-                            },
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 16),
-                      TextButton(
+                      IconButton(
                         onPressed: () {
-                          // showDialog(
-                          //   context: context,
-                          //   barrierDismissible: true, 
-                          //   builder: (BuildContext context) {
-                          //     return ForgotPassword();
-                          //   },
-                          // );
+                          Navigator.pop(context);
                         },
-                        child: Text(
-                          'Lupa Kata Sandi ?',
-                          style: TextStyle(
-                            color: AppColors.lightInfo,
-                            fontSize: 12,
-                          ),
+                        icon: Icon(
+                          Icons.arrow_back_ios_rounded,
+                          size: 16,
                         ),
                       ),
-                      SizedBox(height: 24),
-                      Builder(builder: (context) {
-                        return BasicAppButton(
+                      Text(
+                        'Login',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextField(
+                          controller: _usernameController,
+                          decoration: InputDecoration(
+                            labelText: 'NIM / NIP',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(12)),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 16),
+                        TextField(
+                          controller: _passwordController,
+                          obscureText: _obscureText,
+                          decoration: InputDecoration(
+                            labelText: 'Kata sandi',
+                            border: const OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(12)),
+                            ),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _obscureText
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _obscureText = !_obscureText;
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 16),
+                        TextButton(
                           onPressed: () {
-                            context.read<ButtonStateCubit>().excute(
+                            // showDialog(
+                            //   context: context,
+                            //   barrierDismissible: true, 
+                            //   builder: (BuildContext context) {
+                            //     return ForgotPassword();
+                            //   },
+                            // );
+                          },
+                          child: Text(
+                            'Lupa Kata Sandi ?',
+                            style: TextStyle(
+                              color: AppColors.lightInfo,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 24),
+                        Builder(builder: (context) {
+                          return BasicAppButton(
+                            onPressed: () {
+                              if (_validateInputs()) {
+                                context.read<ButtonStateCubit>().excute(
                                   usecase: sl<SigninUseCase>(),
                                   params: SigninReqParams(
                                     username: _usernameController.text,
                                     password: _passwordController.text,
                                   ),
                                 );
-                          },
-                          title: 'Login',
-                        );
-                      })
-                    ],
-                  ),
-                )
-              ],
+                              }
+                            },
+                            title: 'Login',
+                          );
+                        })
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),

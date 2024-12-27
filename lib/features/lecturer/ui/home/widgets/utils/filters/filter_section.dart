@@ -58,7 +58,8 @@ class _FilterSectionState extends State<FilterSection> {
         Expanded(
           child: ElevatedButton.icon(
             onPressed: widget.onGroupTap,
-            icon: const Icon(Icons.add_circle_outline),
+            icon: Icon(Icons.add_circle_outline, 
+              color: Theme.of(context).colorScheme.onSecondary),
             label: const Text('Buat Group'),
             style: ElevatedButton.styleFrom(
               backgroundColor: Theme.of(context).colorScheme.secondary,
@@ -73,11 +74,12 @@ class _FilterSectionState extends State<FilterSection> {
         Expanded(
           child: ElevatedButton.icon(
             onPressed: widget.onArchiveTap,
-            icon: const Icon(Icons.archive),
+            icon: Icon(Icons.archive,
+              color: Theme.of(context).colorScheme.onPrimary),
             label: const Text('Arsip'),
             style: ElevatedButton.styleFrom(
               backgroundColor: Theme.of(context).colorScheme.primary,
-              foregroundColor: Colors.white,
+              foregroundColor: Theme.of(context).colorScheme.onPrimary,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
