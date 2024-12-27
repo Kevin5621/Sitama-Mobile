@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sitama/core/config/assets/app_images.dart';
 import 'package:sitama/features/lecturer/domain/entities/lecturer_home_entity.dart';
@@ -54,11 +55,21 @@ class StudentCard extends StatelessWidget {
 
         // If multiple selection is active, create a draggable card
         if (isMultiSelect) {
-          return Draggable<Set<int>>(
+          return LongPressDraggable<Set<int>>(
+            // Tambahkan delay untuk membedakan tap dan drag
+            delay: const Duration(milliseconds: 150),
             data: state.selectedIds,
-            dragAnchorStrategy: pointerDragAnchorStrategy,
-            
-            // Feedback widget displayed while dragging
+            dragAnchorStrategy: (draggable, context, position) {
+              // Custom anchor point untuk drag
+              return Offset(
+                context.size!.width / 2,
+                context.size!.height / 2,
+              );
+            },
+            // Tambahkan feedback untuk touch events
+            onDragStarted: () {
+              HapticFeedback.mediumImpact();
+            },
             feedback: Material(
               elevation: 4.0,
               borderRadius: BorderRadius.circular(8),

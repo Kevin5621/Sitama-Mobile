@@ -86,6 +86,8 @@ class GroupCard extends StatelessWidget {
             final studentIds = details.data;
             _handleMultiDrop(context, studentIds);
           },
+          // Tambahkan hit test behavior
+          hitTestBehavior: HitTestBehavior.translucent,
           builder: (context, candidateData, rejectedData) {
             // Highlight the card when a drag operation is active
             final isDragging = candidateData.isNotEmpty;
