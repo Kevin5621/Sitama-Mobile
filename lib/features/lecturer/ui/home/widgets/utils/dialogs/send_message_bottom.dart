@@ -6,7 +6,7 @@ import 'package:sitama/features/lecturer/ui/home/bloc/notification/notification_
 import 'package:sitama/features/lecturer/ui/home/bloc/notification/notification_event.dart';
 import 'package:sitama/features/lecturer/ui/home/bloc/notification/notification_state.dart';
 
-void showSendMessageBottomSheet(BuildContext context, Set<int> selectedIds) {
+void showSendMessageBottomSheet(BuildContext context, List<int> selectedIds) {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController messageController = TextEditingController();
   final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -28,14 +28,14 @@ void showSendMessageBottomSheet(BuildContext context, Set<int> selectedIds) {
                 child: BlocListener<NotificationBloc, NotificationState>(
                   listener: (context, state) {
                     if (state is NotificationSent) {
-                      ScaffoldMessenger.of(context).showSnackBar(
+                      Navigator.pop(context);
+                      ScaffoldMessenger.of(dialogContext).showSnackBar(
                         CustomSnackBar(
                           message: 'Pesan Berhasil Terkirim! 📩',
                           icon: Icons.check_circle_outline,
                           backgroundColor: Colors.green.shade800,
                         ),
                       );
-                      Navigator.pop(dialogContext);
                     } else if (state is NotificationError) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         CustomSnackBar(
@@ -171,7 +171,7 @@ Widget _buildSendButton(
   BuildContext context,
   TextEditingController titleController,
   TextEditingController messageController,
-  Set<int> selectedIds,
+  List<int> selectedIds,
 ) {
   final isDark = Theme.of(context).brightness == Brightness.dark;
 
@@ -230,7 +230,7 @@ void _handleSendMessage(
   BuildContext context,
   TextEditingController titleController,
   TextEditingController messageController,
-  Set<int> selectedIds,
+  List<int> selectedIds,
 ) {
   if (titleController.text.isEmpty || messageController.text.isEmpty) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -244,8 +244,9 @@ void _handleSendMessage(
   }
 
   final notificationData = {
-    'title': titleController.text,
-    'message': messageController.text,
+    'user_id' : selectedIds,
+    'message': titleController.text,
+    'detailText': messageController.text,
     'category': 'general',
     'date': DateTime.now().toIso8601String().split('T').first,
   };
@@ -253,7 +254,6 @@ void _handleSendMessage(
   context.read<NotificationBloc>().add(
     SendNotification(
       notificationData: notificationData,
-      userIds: selectedIds,
     ),
   );
 }

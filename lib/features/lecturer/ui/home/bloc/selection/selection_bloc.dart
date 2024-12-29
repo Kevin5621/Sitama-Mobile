@@ -14,7 +14,7 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
   SelectionBloc()
       : super(const SelectionState(
           isSelectionMode: false,
-          selectedIds: {},
+          selectedIds: [],
           archivedIds: {},
           groups: {},
         )) {
@@ -66,13 +66,13 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
       ToggleSelectionMode event, Emitter<SelectionState> emit) {
     emit(state.copyWith(
       isSelectionMode: !state.isSelectionMode,
-      selectedIds: const {},
+      selectedIds: [],
     ));
   }
 
   void _onToggleItemSelection(
       ToggleItemSelection event, Emitter<SelectionState> emit) {
-    final selectedIds = Set<int>.from(state.selectedIds);
+    final selectedIds = List<int>.from(state.selectedIds);
     if (selectedIds.contains(event.id)) {
       selectedIds.remove(event.id);
     } else {
@@ -86,7 +86,7 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
   }
 
   void _onSelectAll(SelectAll event, Emitter<SelectionState> emit) {
-    final selectedIds = Set<int>.from(event.ids);
+    final selectedIds = List<int>.from(event.ids);
     emit(state.copyWith(
       selectedIds: selectedIds,
       isSelectionMode: selectedIds.isNotEmpty,
@@ -95,7 +95,7 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
 
   void _onDeselectAll(DeselectAll event, Emitter<SelectionState> emit) {
     emit(state.copyWith(
-      selectedIds: {},
+      selectedIds:[],
       isSelectionMode: false,
     ));
   }
@@ -104,7 +104,7 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
     // Implement message sending logic here
     emit(state.copyWith(
       isSelectionMode: false,
-      selectedIds: {},
+      selectedIds: [],
     ));
   }
 
@@ -135,7 +135,7 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
 ) async {
   emit(state.copyWith(
     isSelectionMode: false,
-    selectedIds: {},
+    selectedIds: [],
   ));
 }
 
@@ -153,7 +153,7 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
 
       emit(state.copyWith(
         isSelectionMode: false,
-        selectedIds: {},
+        selectedIds: [],
         archivedIds: newArchivedIds,
         isLoading: false,
       ));
@@ -179,7 +179,7 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
       // Update state immediately for UI responsiveness
       emit(state.copyWith(
         archivedIds: updatedArchivedIds,
-        selectedIds: {},
+        selectedIds: [],
         isSelectionMode: false,
         isLocalOperation: true,
       ));
@@ -291,7 +291,7 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
 
       emit(state.copyWith(
         isSelectionMode: false,
-        selectedIds: {},
+        selectedIds: [],
         groups: updatedGroups,
         isLoading: false,
       ));
@@ -328,7 +328,7 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
       // Update state immediately for UI responsiveness
       emit(state.copyWith(
         groups: updatedGroups,
-        selectedIds: {},
+        selectedIds: [],
         isSelectionMode: false,
         isLocalOperation: true,
       ));
@@ -368,7 +368,7 @@ class SelectionBloc extends Bloc<SelectionEvent, SelectionState> {
     }
   }
 
-  Future<void> _saveGroupIds(Set<int> ids) async {
+  Future<void> _saveGroupIds(List<int> ids) async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final List<String> groupIds = ids.map((id) => id.toString()).toList();

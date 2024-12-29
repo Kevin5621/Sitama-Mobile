@@ -214,7 +214,7 @@ class _LecturerHomeContentState extends State<LecturerHomeContent>
     );
   }
 
-  Widget _buildFloatingActionButton(BuildContext context, Set<int> selectedIds) {
+  Widget _buildFloatingActionButton(BuildContext context, List<int> selectedIds) {
     return Positioned(
       bottom: 16,
       right: 16,

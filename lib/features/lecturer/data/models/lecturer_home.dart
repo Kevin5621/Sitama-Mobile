@@ -36,6 +36,7 @@ extension LecturerHomeXModel on LecturerHomeModel {
       id: id,
       students: students?.map<LecturerStudentsEntity>((data) => LecturerStudentsEntity(
         id: data.id,
+        user_id: data.user_id,
         name: data.name,
         username: data.username,
         photo_profile: data.photo_profile,
@@ -55,6 +56,7 @@ extension LecturerHomeXModel on LecturerHomeModel {
 
 class LecturerStudentsModel {
   final int id;
+  final int user_id;
   final String name;
   final String username;
   final String? photo_profile;
@@ -69,6 +71,7 @@ class LecturerStudentsModel {
 
   LecturerStudentsModel({
     required this.id,
+    required this.user_id,
     required this.name,
     required this.username,
     this.photo_profile,
@@ -85,6 +88,7 @@ class LecturerStudentsModel {
   factory LecturerStudentsModel.fromMap(Map<String, dynamic> map) {
     return LecturerStudentsModel(
       id: map['id'] as int,
+      user_id: map['user_id'] as int,
       name: map['name'] as String,
       username: map['username'] as String,
       photo_profile: map['photo_profile'] as String?,

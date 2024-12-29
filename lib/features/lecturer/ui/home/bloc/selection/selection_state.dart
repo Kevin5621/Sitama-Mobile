@@ -3,16 +3,16 @@ import 'package:sitama/features/lecturer/data/models/group.dart';
 
 class SelectionState extends Equatable {
   final bool isSelectionMode;
-  final Set<int> selectedIds;
+  final List<int> selectedIds; // Mengubah dari Set<int> ke List<int>
   final Set<int> archivedIds;
-  final Map<String, GroupModel> groups; 
+  final Map<String, GroupModel> groups;
   final bool isLoading;
   final String? error;
   final bool isLocalOperation;
 
   const SelectionState({
     this.isSelectionMode = false,
-    this.selectedIds = const {},
+    this.selectedIds = const [],
     this.archivedIds = const {},
     this.groups = const {},
     this.isLoading = false,
@@ -22,7 +22,7 @@ class SelectionState extends Equatable {
 
   SelectionState copyWith({
     bool? isSelectionMode,
-    Set<int>? selectedIds,
+    List<int>? selectedIds, // Disesuaikan ke List<int>
     Set<int>? archivedIds,
     Map<String, GroupModel>? groups,
     bool? isLoading,
@@ -40,8 +40,9 @@ class SelectionState extends Equatable {
     );
   }
 
-  Set<int> get groupIds {
-    Set<int> allGroupIds = {};
+  List<int> get groupIds {
+    // Mengembalikan List<int> untuk konsistensi
+    List<int> allGroupIds = [];
     for (var group in groups.values) {
       allGroupIds.addAll(group.studentIds);
     }
@@ -50,12 +51,12 @@ class SelectionState extends Equatable {
 
   @override
   List<Object?> get props => [
-    isSelectionMode,
-    selectedIds,
-    archivedIds,
-    groups,
-    isLoading,
-    error,
-    isLocalOperation,
-  ];
+        isSelectionMode,
+        selectedIds,
+        archivedIds,
+        groups,
+        isLoading,
+        error,
+        isLocalOperation,
+      ];
 }

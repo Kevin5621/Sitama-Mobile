@@ -43,7 +43,7 @@ class SendMessage extends SelectionEvent {
 class ArchiveSelectedItems extends SelectionEvent {}
 
 class UnarchiveItems extends SelectionEvent {
-  final Set<int> ids;
+  final List<int> ids;
   
   const UnarchiveItems(this.ids);
 
@@ -74,7 +74,7 @@ class GroupSelectedItems extends SelectionEvent {
 }
 
 class UnGroupItems extends SelectionEvent {
-  final Set<int> ids;
+  final List<int> ids;
   
   const UnGroupItems(this.ids);
 

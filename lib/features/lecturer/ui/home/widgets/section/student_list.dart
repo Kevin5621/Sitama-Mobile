@@ -96,7 +96,7 @@ class _StudentListState extends State<StudentList> {
           children: [
             StudentCard(
               student: student,
-              isSelected: state.selectedIds.contains(student.id),
+              isSelected: state.selectedIds.contains(student.user_id),
               isFinished: student.isFinished,
               onTap: () => _handleStudentTap(context, student),
               onLongPress: () => _handleStudentLongPress(context, student),
@@ -142,7 +142,7 @@ class _StudentListState extends State<StudentList> {
   // Handles tap: Opens detail view in normal mode, toggles selection in selection mode
   void _handleStudentTap(BuildContext context, LecturerStudentsEntity student) {
     if (widget.selectionState.isSelectionMode) {
-      context.read<SelectionBloc>().add(ToggleItemSelection(student.id));
+      context.read<SelectionBloc>().add(ToggleItemSelection(student.user_id));
     } else {
       Navigator.push(
         context,
@@ -158,7 +158,7 @@ class _StudentListState extends State<StudentList> {
     if (!widget.selectionState.isSelectionMode) {
       final bloc = context.read<SelectionBloc>();
       bloc.add(ToggleSelectionMode());
-      bloc.add(ToggleItemSelection(student.id));
+      bloc.add(ToggleItemSelection(student.user_id));
     }
   }
 
@@ -215,14 +215,14 @@ class _StudentListState extends State<StudentList> {
 
     // Kategorisasi seperti sebelumnya
     for (final student in students) {
-      if (state.archivedIds.contains(student.id)) {
+      if (state.archivedIds.contains(student.user_id)) {
         archived.add(student);
         continue;
       }
 
       bool isInGroup = false;
       for (var group in state.groups.values) {
-        if (group.studentIds.contains(student.id)) {
+        if (group.studentIds.contains(student.user_id)) {
           grouped.add(student);
           isInGroup = true;
           break;
@@ -289,7 +289,7 @@ class _StudentListState extends State<StudentList> {
 
     return state.groups.entries.map((entry) {
       final groupStudents = groupedStudents
-          .where((student) => entry.value.studentIds.contains(student.id))
+          .where((student) => entry.value.studentIds.contains(student.user_id))
           .toList();
       
       if (groupStudents.isEmpty) {

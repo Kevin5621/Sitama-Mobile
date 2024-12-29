@@ -10,7 +10,7 @@ import 'package:sitama/features/lecturer/ui/home/widgets/utils/dialogs/group_dia
 class GroupActions {
   static Future<void> showUngroupConfirmation(
     BuildContext context, 
-    Set<int> selectedIds,
+    List<int> selectedIds,
     int totalMembers,
   ) async {
     final remainingMembers = totalMembers - selectedIds.length;
@@ -109,7 +109,7 @@ class GroupActions {
       if (!context.mounted) return;
       // Keluarkan semua mahasiswa dari group terlebih dahulu
       if (group.studentIds.isNotEmpty) {
-        context.read<SelectionBloc>().add(UnGroupItems(Set.from(group.studentIds)));
+        context.read<SelectionBloc>().add(UnGroupItems(List.from(group.studentIds)));
       }
       // Kemudian hapus group
       context.read<SelectionBloc>().add(DeleteGroup(groupId));

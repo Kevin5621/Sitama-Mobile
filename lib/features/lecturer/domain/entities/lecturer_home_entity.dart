@@ -15,6 +15,7 @@ class LecturerHomeEntity {
 
 class LecturerStudentsEntity {
   final int id;
+  final int user_id;
   final String name;
   final String username;
   final String? photo_profile;
@@ -29,6 +30,7 @@ class LecturerStudentsEntity {
 
   LecturerStudentsEntity({
     required this.id,
+    required this.user_id,
     required this.name,
     required this.username,
     this.photo_profile,

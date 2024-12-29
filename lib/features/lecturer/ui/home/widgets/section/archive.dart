@@ -79,7 +79,7 @@ class _ArchivePageState extends State<ArchivePage> {
   }
   
   Future<void> _showUnarchiveConfirmation(
-    BuildContext context, Set<int> selectedIds) async {
+    BuildContext context, List<int> selectedIds) async {
     final colorScheme = Theme.of(context).colorScheme;
     final result = await CustomAlertDialog.show(
       context: context,
@@ -242,7 +242,7 @@ class _ArchivePageState extends State<ArchivePage> {
     );
   }
 
-Widget _buildFloatingActionButton(BuildContext context, Set<int> selectedIds) {
+Widget _buildFloatingActionButton(BuildContext context, List<int> selectedIds) {
   return TweenAnimationBuilder<double>(
     tween: Tween(begin: 0.0, end: 1.0),
     duration: const Duration(milliseconds: 300),

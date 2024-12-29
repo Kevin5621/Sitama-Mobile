@@ -89,7 +89,7 @@ class MarkAllReqParams {
 }
 
 class AddNotificationReqParams {
-  final int? userId;
+  final List<int> userIds; // Mengubah dari `set` ke `List<int>` untuk mendukung array
   final String message;
   final String date;
   final String category;
@@ -103,21 +103,26 @@ class AddNotificationReqParams {
   ];
 
   AddNotificationReqParams({
-    this.userId,
+    required this.userIds, // Mengharuskan userIds untuk diisi
     required this.message,
     required this.date,
     required this.category,
     this.detailText,
   }) {
-    // Validate kategori
+    // Validasi kategori
     if (!validCategories.contains(category)) {
       throw ArgumentError('Invalid notification category: $category');
+    }
+
+    // Validasi userIds
+    if (userIds.isEmpty) {
+      throw ArgumentError('userIds cannot be empty');
     }
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'user_id': userId,
+      'user_id': userIds, // Tetap mempertahankan array
       'message': message,
       'date': date,
       'category': category,

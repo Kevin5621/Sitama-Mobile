@@ -206,7 +206,7 @@ class LecturerApiServiceImpl extends LecturerApiService {
       var token = sharedPreferences.get('token');
 
       var response = await sl<DioClient>().post(
-        "${ApiUrls.addNotification}/${request.userId}",
+        "${ApiUrls.addNotification}",
         options: Options(headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',

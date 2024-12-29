@@ -37,6 +37,7 @@ class LecturerDisplayCubit extends Cubit<LecturerDisplayState> {
           students: (jsonData['students'] as List?)
               ?.map((s) => LecturerStudentsEntity(
                   id: s['id'],
+                  user_id: s['user_id'],
                   name: s['name'],
                   username: s['username'],
                   photo_profile: s['photo_profile'],

@@ -55,7 +55,7 @@ class GroupModel {
         'id': id,
         'title': title,
         'iconName': iconName,
-        'iconColor': iconColor.b,
+        'iconColor': iconColor.value,
         'studentIds': studentIds.toList(),
       };
 
@@ -65,7 +65,7 @@ class GroupModel {
         id: json['id'] as String,
         title: json['title'] as String,
         iconName: json['iconName'] as String,
-        iconColor: Color(json['iconColor'] ?? Colors.blue.b),
+        iconColor: Color(json['iconColor'] ?? Colors.blue.value),
         studentIds: Set<int>.from(json['studentIds']),
       );
     } catch (e) {

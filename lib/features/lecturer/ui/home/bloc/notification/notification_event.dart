@@ -10,13 +10,11 @@ abstract class NotificationEvent extends Equatable {
 
 class SendNotification extends NotificationEvent {
   final Map<String, dynamic> notificationData; // Notification details (message, date, category, detailtext)
-  final Set<int> userIds; // Unique IDs of users to whom notifications will be sent
 
   const SendNotification({
     required this.notificationData,
-    required this.userIds,
   });
 
   @override
-  List<Object> get props => [notificationData, userIds];
+  List<Object> get props => [notificationData];
 }

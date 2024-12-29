@@ -101,13 +101,6 @@ class _LogBookContentState extends State<LogBookContent> {
       return;
     }
 
-    final notificationData = {
-      'message': widget.logBook.title,
-      'detailText': _lecturerNote,
-      'category': 'log_book',
-      'date': DateTime.now().toIso8601String().split('T').first,
-    };
-
     buttonCubit.excute(
       usecase: sl<UpdateLogBookNoteUseCase>(),   
       params: UpdateLogBookReqParams(
@@ -119,12 +112,6 @@ class _LogBookContentState extends State<LogBookContent> {
     buttonCubit.stream.listen((state) {
       if (state is ButtonSuccessState) {
         if (!mounted) return;
-        context.read<NotificationBloc>().add(
-          SendNotification(
-            notificationData: notificationData,
-            userIds: {widget.student_id},
-          ),
-        );
         _showSuccessDialog();
       }
       

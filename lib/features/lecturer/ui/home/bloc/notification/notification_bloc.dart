@@ -18,23 +18,20 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     emit(NotificationLoading());
 
     try {
-      for (final userId in event.userIds) {
-        // Construct request parameters with default values for date and category if not provided
-        final request = AddNotificationReqParams(
-          userId: userId,
-          message: event.notificationData['message'],
-          date: event.notificationData['date'] ?? DateTime.now().toIso8601String().split('T').first,
-          category: event.notificationData['category'] ?? 'general',
-          detailText: event.notificationData['detailText'],
-        );
+      final request = AddNotificationReqParams(
+        userIds: event.notificationData['user_id'],
+        message: event.notificationData['message'],
+        date: event.notificationData['date'] ?? DateTime.now().toIso8601String().split('T').first,
+        category: event.notificationData['category'] ?? 'general',
+        detailText: event.notificationData['detailText'],
+      );
 
-        final result = await addNotificationsUseCase(param: request);
+      final result = await addNotificationsUseCase(param: request);
 
-        result.fold(
-          (failure) => emit(NotificationError(failure.toString())),
-          (success) => emit(const NotificationSent('Notification sent successfully')),
-        );
-      }
+      result.fold(
+        (failure) => emit(NotificationError(failure.toString())),
+        (success) => emit(const NotificationSent('Notification sent successfully')),
+      );
     } catch (e) {
       // Catch unexpected errors and emit a failure state
       emit(NotificationError('An unexpected error occurred: ${e.toString()}'));

@@ -149,15 +149,6 @@ class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
   void _handleStatusUpdate(LecturerGuidanceStatus newStatus) {
     final buttonCubit = ButtonStateCubit();
 
-    final notificationData = {
-      'message': widget.guidance.title,
-      'detailText': _lecturerNote.text.isNotEmpty
-          ? _lecturerNote.text
-          : GuidanceStatusHelper.getNotificationTitle(newStatus),
-      'category': GuidanceStatusHelper.getNotificationCategory(newStatus),
-      'date': DateTime.now().toIso8601String().split('T').first,
-    };
-
     buttonCubit.excute(
       usecase: sl<UpdateStatusGuidanceUseCase>(),
       params: UpdateStatusGuidanceReqParams(
@@ -170,12 +161,6 @@ class _LecturerGuidanceCardState extends State<LecturerGuidanceCard> {
     buttonCubit.stream.listen((state) {
       if (state is ButtonSuccessState) {
         if (!mounted) return;
-        context.read<NotificationBloc>().add(
-          SendNotification(
-            notificationData: notificationData,
-            userIds: {widget.student_id},
-          ),
-        );
         _showSuccessAndNavigate();
       }
 

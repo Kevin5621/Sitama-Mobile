@@ -55,7 +55,7 @@ class StudentCard extends StatelessWidget {
 
         // If multiple selection is active, create a draggable card
         if (isMultiSelect) {
-          return LongPressDraggable<Set<int>>(
+          return LongPressDraggable<List<int>>(
             // Tambahkan delay untuk membedakan tap dan drag
             delay: const Duration(milliseconds: 150),
             data: state.selectedIds,
