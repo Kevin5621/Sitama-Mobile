@@ -20,7 +20,7 @@ class LogOutAlert extends StatelessWidget {
           if (state is ButtonSuccessState) {
             Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (context) => const WelcomePages()),
+              MaterialPageRoute(builder: (context) => WelcomePages()),
               (route) => false,
             );
           }

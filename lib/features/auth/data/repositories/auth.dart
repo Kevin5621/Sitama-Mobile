@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sitama/features/auth/data/models/reset_password_req_params.dart';
+import 'package:sitama/features/auth/data/models/signin_google_req_params.dart';
 import 'package:sitama/features/auth/data/models/signin_req_params.dart';
 import 'package:sitama/features/auth/data/sources/auth_api_service.dart';
 import 'package:sitama/features/auth/data/sources/auth_local_service.dart';
@@ -58,6 +59,20 @@ class AuthRepostoryImpl extends AuthRepostory{
     return result.fold(
       (error) => Left(error),
       (data) => Right(data),
+    );
+  }
+
+  @override
+  Future<Either> signinGoogle(SigninGoogleReqParams request) async {
+    Either result = await sl<AuthApiService>().signinGoogle(request);
+    return result.fold(
+            (error) {
+          return Left(error);
+        },
+            (data) async {
+          Response response = data;
+          return Right(response);
+        }
     );
   }
 }

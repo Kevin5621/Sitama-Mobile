@@ -7,11 +7,14 @@ import 'package:sitama/core/shared/provider/app_providers.dart';
 import 'package:sitama/features/auth/ui/pages/splash.dart';
 import 'package:sitama/service_locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
   setupServiceLocator(prefs);
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   
   runApp(
     MultiProvider(

@@ -4,6 +4,7 @@ class ApiUrls {
 
   // Authentication endpoints
   static const login = '${baseUrl}login';
+  static const loginGoogle = '${baseUrl}loginGoogle';
 
   // Student-related endpoints
   static const studentHome = '${baseUrl}student/home';
