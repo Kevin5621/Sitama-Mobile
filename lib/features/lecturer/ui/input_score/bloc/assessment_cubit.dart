@@ -24,6 +24,7 @@ class AssessmentCubit extends Cubit<AssessmentState> {
   }
 
   Future<void> submitScores(int id, List<ScoreRequest> scores) async {
+
     final result = await _repository.submitScores(
       id,
       scores.map((e) => e.toMap()).toList(),

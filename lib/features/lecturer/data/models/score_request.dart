@@ -9,7 +9,7 @@ class ScoreRequest {
 
   Map<String, dynamic> toMap() {
     return {
-      'detailedAssessmentComponentsId': detailedAssessmentComponentsId,
+      'detailed_assessment_components_id': detailedAssessmentComponentsId,
       'score': score,
     };
   }

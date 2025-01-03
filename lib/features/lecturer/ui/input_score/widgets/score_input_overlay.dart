@@ -159,10 +159,11 @@ class _ScoreInputOverlayState extends State<ScoreInputOverlay> {
   }
 
   void _onSubmit(BuildContext context) {
+
     final List<ScoreRequest> scores = _controllers.entries.map((entry) {
       return ScoreRequest(
         detailedAssessmentComponentsId: entry.key,
-        score: double.tryParse(entry.value.text) ?? 0,
+        score: double.tryParse(entry.value.text) ?? 0, // Pastikan 0 valid
       );
     }).toList();
 
@@ -178,7 +179,10 @@ class _ScoreInputOverlayState extends State<ScoreInputOverlay> {
     }
 
     context.read<AssessmentCubit>().submitScores(widget.id, scores);
+
+    print(scores.map((score) => 'ScoreRequest(id: ${score.detailedAssessmentComponentsId}, score: ${score.score})').toList());
   }
+
 
   void _handleSubmitSuccess(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(

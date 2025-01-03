@@ -193,7 +193,7 @@ class ScoreBox extends StatelessWidget {
       context, 
       'Rata - rata', 
       average_all_assessments, 
-      isTotal: true
+      isTotal: false
     );
   }
 
