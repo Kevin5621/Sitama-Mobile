@@ -6,6 +6,8 @@ import 'package:sitama/features/student/ui/profile/bloc/profile_student_state.da
 import 'package:sitama/service_locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../data/models/student_home.dart';
+
 class ProfileStudentCubit extends Cubit<ProfileStudentState> {
   final SharedPreferences prefs;
   
@@ -19,7 +21,8 @@ class ProfileStudentCubit extends Cubit<ProfileStudentState> {
       final cachedJson = prefs.getString('cached_student_data');
       
       if (cachedJson != null) {
-        final cachedData = StudentProfileEntity.fromJson(json.decode(cachedJson));
+        final cachedData = StudentProfileModel.fromMap(json.decode(cachedJson)).toEntity();
+
         emit(StudentLoaded(studentProfileEntity: cachedData));
       } else {
         // If no cached data, make initial API call
