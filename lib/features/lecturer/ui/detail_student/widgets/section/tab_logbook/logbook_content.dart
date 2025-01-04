@@ -1,14 +1,11 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sitama/core/shared/widgets/alert/alert.dart';
 import 'package:sitama/core/shared/widgets/buttons/button_state.dart';
 import 'package:sitama/core/shared/widgets/buttons/button_state_cubit.dart';
 import 'package:sitama/features/lecturer/domain/usecases/update_status_logbook.dart';
 import 'package:sitama/features/lecturer/ui/detail_student/pages/detail_student.dart';
-import 'package:sitama/features/lecturer/ui/home/bloc/notification/notification_bloc.dart';
-import 'package:sitama/features/lecturer/ui/home/bloc/notification/notification_event.dart';
 import 'package:sitama/features/shared/data/models/log_book.dart';
 import 'package:sitama/features/student/domain/entities/log_book_entity.dart';
 import 'package:sitama/service_locator.dart';

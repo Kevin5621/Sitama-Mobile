@@ -17,7 +17,7 @@ import '../../../lecturer/ui/home/pages/lecturer_home.dart';
 import '../../../student/ui/home/pages/home.dart';
 
 class WelcomePages extends StatefulWidget {
-  WelcomePages({super.key});
+  const WelcomePages({super.key});
 
   @override
   _WelcomePagesState createState() => _WelcomePagesState();

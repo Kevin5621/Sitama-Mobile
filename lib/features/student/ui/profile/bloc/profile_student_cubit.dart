@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sitama/features/student/domain/entities/student_home_entity.dart';
 import 'package:sitama/features/student/domain/usecases/general/get_profile_student.dart';
 import 'package:sitama/features/student/ui/profile/bloc/profile_student_state.dart';
 import 'package:sitama/service_locator.dart';
