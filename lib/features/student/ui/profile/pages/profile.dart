@@ -250,5 +250,3 @@ class Student_ProfilePageState extends State<StudentProfilePage> with AutomaticK
     );
   }
 }
-
-

@@ -1,6 +1,5 @@
 import 'dart:convert';
-import 'package:sitama/features/lecturer/domain/entities/lecturer_profile_entity.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:sitama/features/lecturer/data/models/lecturer_profile.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sitama/features/lecturer/domain/usecases/get_profile_lecturer.dart';
 import 'package:sitama/features/lecturer/ui/profile/bloc/profile_lecturer_state.dart';
@@ -16,78 +15,27 @@ class ProfileLecturerCubit extends Cubit<ProfileLecturerState> {
 
   void displayLecturer() async {
     try {
-      // Cek Conectivty
-      final connectivityResult = await Connectivity().checkConnectivity();
-      final isOffline = connectivityResult == ConnectivityResult.none;
-
-      // Try to load cached data
-      final cachedJson = prefs.getString('cached_profile_data');
+      // Get cached data from SharedPreferences
+      final cachedJson = prefs.getString('cached_lecturer_data');
       
       if (cachedJson != null) {
-        try {
-          final Map<String, dynamic> jsonMap = json.decode(cachedJson);
-          final cachedData = LecturerProfileEntity.fromJson(jsonMap);
-          
-          // If offline, use cache
-          if (isOffline) {
-            emit(LecturerLoaded(
-              lecturerProfileEntity: cachedData,
-              isOffline: true,
-            ));
-            return;
-          }
-        } catch (e) {
-          await prefs.remove('cached_profile_data');
-        }
-      }
+        final cachedData = LecturerProfileModel.fromMap(json.decode(cachedJson)).toEntity();
 
-      if (!isOffline) {
+        emit(LecturerLoaded(lecturerProfileEntity: cachedData));
+      } else {
+        // If no cached data, make initial API call
         var result = await sl<GetProfileLecturerUseCase>().call();
         result.fold(
-          (error) {
-          // If error occurs, try to load cached data
-            if (cachedJson != null) {
-              try {
-                final jsonMap = json.decode(cachedJson);
-                final cachedData = LecturerProfileEntity.fromJson(jsonMap);
-                emit(LoadLecturerFailure(
-                  errorMessage: error,
-                  isOffline: true,
-                  cachedData: cachedData,
-                ));
-              } catch (e) {
-                emit(LoadLecturerFailure(
-                  errorMessage: error,
-                  isOffline: isOffline,
-                ));
-              }
-            } else {
-              emit(LoadLecturerFailure(
-                errorMessage: error,
-                isOffline: isOffline,
-              ));
-            }
-          },
+          (error) => emit(LoadLecturerFailure(errorMessage: error)),
           (data) async {
             // Cache the new data
-            await prefs.setString('cached_profile_data', json.encode(data.toJson()));
-            emit(LecturerLoaded(
-              lecturerProfileEntity: data,
-              isOffline: false,
-            ));
+            await prefs.setString('cached_lecturer_data', json.encode(data.toJson()));
+            emit(LecturerLoaded(lecturerProfileEntity: data));
           },
         );
-      } else {
-        emit(LoadLecturerFailure(
-          errorMessage: 'Tidak ada Internet, tidak ada data yang tersimpan',
-          isOffline: true,
-        ));
       }
     } catch (e) {
-      emit(LoadLecturerFailure(
-        errorMessage: e.toString(),
-        isOffline: false,
-      ));
+      emit(LoadLecturerFailure(errorMessage: e.toString()));
     }
   }
 }
