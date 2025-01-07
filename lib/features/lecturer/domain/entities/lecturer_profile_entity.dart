@@ -7,8 +7,8 @@ class LecturerProfileEntity {
 
   factory LecturerProfileEntity.fromJson(Map<String, dynamic> json) {
     return LecturerProfileEntity(
-      name: json['name'],
-      username: json['username'],
+      name: json['name'] ?? '',
+      username: json['username'] ?? '',
       photo_profile: json['photo_profile'],
     );
   }

@@ -17,14 +17,14 @@ import 'package:sitama/core/config/themes/theme_provider.dart';
 import 'package:sitama/features/student/domain/entities/student_home_entity.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+class StudentProfilePage extends StatefulWidget {
+  const StudentProfilePage({super.key});
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  State<StudentProfilePage> createState() => Student_ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClientMixin {
+class Student_ProfilePageState extends State<StudentProfilePage> with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 

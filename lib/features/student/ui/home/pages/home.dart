@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin{
       _buildHomeContent(),
       const GuidancePage(),
       const LogBookPage(),
-      const ProfilePage(),
+      const StudentProfilePage(),
     ];
 
     return Scaffold(
