@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sitama/core/shared/widgets/common/error_content.dart';
 import 'package:sitama/core/shared/widgets/common/search_field.dart';
 import 'package:sitama/features/student/domain/entities/guidance_entity.dart';
 import 'package:sitama/features/student/ui/guidance/bloc/guidance_student_cubit.dart';
@@ -21,6 +22,7 @@ class _GuidancePageState extends State<GuidancePage> with AutomaticKeepAliveClie
 
   @override
   bool get wantKeepAlive => true;  
+  bool _wasError = false;
 
   List<GuidanceEntity> _filterGuidances(List<GuidanceEntity> guidances) {
     return guidances.where((guidance) {
@@ -38,17 +40,32 @@ class _GuidancePageState extends State<GuidancePage> with AutomaticKeepAliveClie
     }).toList();
   }
 
-  @override
+   @override
   Widget build(BuildContext context) {
     super.build(context);
     final theme = Theme.of(context);
     
-    var blocProvider = BlocProvider(
+    return Scaffold(
+      body: BlocProvider(
         create: (context) => GuidanceStudentCubit()..displayGuidance(),
         child: BlocBuilder<GuidanceStudentCubit, GuidanceStudentState>(
           builder: (context, state) {
+            // Update error state
+            if (state is LoadGuidanceFailure) {
+              _wasError = true;
+            } else if (state is GuidanceLoaded) {
+              _wasError = false;
+            }
+
             if (state is GuidanceLoading) {
               return const Center(child: CircularProgressIndicator());
+            }
+            if (state is LoadGuidanceFailure) {
+              return ErrorContent(
+                errorMessage: state.errorMessage,
+                onRetry: () => context.read<GuidanceStudentCubit>().displayGuidance(),
+                wasError: _wasError,
+              );
             }
             if (state is GuidanceLoaded) {
               List<GuidanceEntity> filteredGuidances = 
@@ -144,9 +161,7 @@ class _GuidancePageState extends State<GuidancePage> with AutomaticKeepAliveClie
             return Container();
           },
         ),
-      );
-    return Scaffold(
-      body: blocProvider,
+      ),
     );
   }
 }

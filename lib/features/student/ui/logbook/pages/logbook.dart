@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sitama/core/shared/widgets/common/error_content.dart';
 import 'package:sitama/features/student/domain/entities/log_book_entity.dart';
 import 'package:sitama/features/student/ui/logbook/widgets/student_log_book_card.dart';
 import 'package:sitama/core/shared/widgets/common/search_field.dart';
@@ -21,6 +22,7 @@ class _LogBookPageState extends State<LogBookPage> with AutomaticKeepAliveClient
 
   @override
   bool get wantKeepAlive => true;  
+  bool _wasError = false;
 
   List<LogBookEntity> _getSortedAndFilteredLogBooks(List<LogBookEntity> logBooks) {
     var filteredBooks = logBooks.where((logBook) {
@@ -48,8 +50,22 @@ class _LogBookPageState extends State<LogBookPage> with AutomaticKeepAliveClient
         create: (context) => LogBookStudentCubit()..displayLogBook(),
         child: BlocBuilder<LogBookStudentCubit, LogBookStudentState>(
           builder: (context, state) {
+            // Update error state
+            if (state is LoadLogBookFailure) {
+              _wasError = true;
+            } else if (state is LogBookLoaded) {
+              _wasError = false;
+            }
+
             if (state is LogBookLoading) {
               return const Center(child: CircularProgressIndicator());
+            }
+            if (state is LoadLogBookFailure) {
+              return ErrorContent(
+                errorMessage: state.errorMessage,
+                onRetry: () => context.read<LogBookStudentCubit>().displayLogBook(),
+                wasError: _wasError,
+              );
             }
             if (state is LogBookLoaded) {
               final sortedAndFilteredLogBooks = 

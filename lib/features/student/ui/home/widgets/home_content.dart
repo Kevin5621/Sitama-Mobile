@@ -33,10 +33,10 @@ class HomeContent extends StatefulWidget {
 class _HomeContentState extends State<HomeContent> with AutomaticKeepAliveClientMixin {
   late final StudentDisplayCubit _studentCubit;
   late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
-  bool _wasError = false;
 
   @override
   bool get wantKeepAlive => true;
+  bool _wasError = false;
 
   @override
   void initState() {
