@@ -23,7 +23,14 @@ class LecturerDisplayCubit extends Cubit<LecturerDisplayState> {
         displayLecturer();
       }
     });
-    _loadCachedData();
+    // Immediately load cached data when cubit is created
+    _initializeData();
+  }
+
+  Future<void> _initializeData() async {
+    await _loadCachedData();
+    // After loading cache, try to fetch fresh data
+    displayLecturer();
   }
 
   Future<void> _loadCachedData() async {
@@ -32,21 +39,21 @@ class LecturerDisplayCubit extends Cubit<LecturerDisplayState> {
       try {
         final Map<String, dynamic> jsonData = json.decode(cachedJson);
         _cachedData = LecturerHomeEntity(
-          name: jsonData['name'],
-          id: jsonData['id'],
+          name: jsonData['name'] ?? '',
+          id: jsonData['id'] ?? '',
           students: (jsonData['students'] as List?)
               ?.map((s) => LecturerStudentsEntity(
-                  id: s['id'],
-                  user_id: s['user_id'],
-                  name: s['name'],
-                  username: s['username'],
-                  photo_profile: s['photo_profile'],
-                  the_class: s['the_class'],
-                  study_program: s['study_program'],
-                  major: s['major'],
-                  academic_year: s['academic_year'],
-                  isFinished: s['isFinished'],
-                  activities: Map<String, bool>.from(s['activities']),
+                  id: s['id'] ?? 0,
+                  user_id: s['user_id'] ?? '',
+                  name: s['name'] ?? '',
+                  username: s['username'] ?? '',
+                  photo_profile: s['photo_profile'] ?? '',
+                  the_class: s['the_class'] ?? '',
+                  study_program: s['study_program'] ?? '',
+                  major: s['major'] ?? '',
+                  academic_year: s['academic_year'] ?? '',
+                  isFinished: s['isFinished'] ?? false,
+                  activities: Map<String, bool>.from(s['activities'] ?? {}),
                   hasNewLogbook: s['hasNewLogbook'] ?? false,
                   lastUpdated: s['lastUpdated'] != null 
                       ? DateTime.parse(s['lastUpdated'])
@@ -55,72 +62,43 @@ class LecturerDisplayCubit extends Cubit<LecturerDisplayState> {
               .toSet(),
           activities: Map<String, bool>.from(jsonData['activities'] ?? {}),
         );
-        emit(LecturerLoaded(
-          lecturerHomeEntity: _cachedData!,
-          isOffline: true,
-        ));
-      // ignore: empty_catches
+        
+        if (_cachedData != null) {
+          emit(LecturerLoaded(
+            lecturerHomeEntity: _cachedData!,
+            isOffline: true,
+          ));
+        }
       } catch (e) {
+        // Log error but don't throw
+        print('Error loading cached data: $e');
       }
     }
   }
 
-  Future<void> _cacheData(LecturerHomeEntity data) async {
-    try {
-      final jsonData = {
-        'name': data.name,
-        'id': data.id,
-        'students': data.students?.map((s) => {
-            'id': s.id,
-            'name': s.name,
-            'username': s.username,
-            'photo_profile': s.photo_profile,
-            'the_class': s.the_class,
-            'study_program': s.study_program,
-            'major': s.major,
-            'academic_year': s.academic_year,
-            'isFinished': s.isFinished,
-            'activities': s.activities,
-            'hasNewLogbook': s.hasNewLogbook,
-            'lastUpdated': s.lastUpdated?.toIso8601String(),
-          }).toList(),
-        'activities': data.activities,
-      };
-      await _prefs.setString(cacheKey, json.encode(jsonData));
-    // ignore: empty_catches
-    } catch (e) {
-    }
-  }
-
-  Future<bool> _checkConnectivity() async {
-    final connectivityResult = await Connectivity().checkConnectivity();
-    return connectivityResult != ConnectivityResult.none;
-  }
-
-  void displayLecturer() async {
+  Future<void> displayLecturer() async {
     final bool isOnline = await _checkConnectivity();
     
-    // If offline and we have cached data, show it
-    if (!isOnline && _cachedData != null) {
-      emit(LecturerLoaded(
-        lecturerHomeEntity: _cachedData!,
-        isOffline: true,
-      ));
+    if (!isOnline) {
+      if (_cachedData != null) {
+        emit(LecturerLoaded(
+          lecturerHomeEntity: _cachedData!,
+          isOffline: true,
+        ));
+      } else {
+        emit(LoadLecturerFailure(
+          errorMessage: 'No cached data available',
+          isOffline: true,
+        ));
+      }
       return;
     }
 
-    // If we're getting fresh data, only show loading if no cache
-    if (_cachedData == null) {
-      emit(LecturerLoading());
-    }
-
-    // Try to fetch fresh data
     try {
       var result = await sl<GetHomeLecturerUseCase>().call();
       result.fold(
         (error) {
           if (_cachedData != null) {
-            // If error but we have cached data, show cached data
             emit(LoadLecturerFailure(
               errorMessage: error,
               isOffline: true,
@@ -151,6 +129,38 @@ class LecturerDisplayCubit extends Cubit<LecturerDisplayState> {
         ));
       }
     }
+  }
+
+Future<void> _cacheData(LecturerHomeEntity data) async {
+    try {
+      final jsonData = {
+        'name': data.name,
+        'id': data.id,
+        'students': data.students?.map((s) => {
+            'id': s.id,
+            'name': s.name,
+            'username': s.username,
+            'photo_profile': s.photo_profile,
+            'the_class': s.the_class,
+            'study_program': s.study_program,
+            'major': s.major,
+            'academic_year': s.academic_year,
+            'isFinished': s.isFinished,
+            'activities': s.activities,
+            'hasNewLogbook': s.hasNewLogbook,
+            'lastUpdated': s.lastUpdated?.toIso8601String(),
+          }).toList(),
+        'activities': data.activities,
+      };
+      await _prefs.setString(cacheKey, json.encode(jsonData));
+    // ignore: empty_catches
+    } catch (e) {
+    }
+  }
+
+  Future<bool> _checkConnectivity() async {
+    final connectivityResult = await Connectivity().checkConnectivity();
+    return connectivityResult != ConnectivityResult.none;
   }
 
   void updateLocalData(LecturerHomeEntity newData) {
