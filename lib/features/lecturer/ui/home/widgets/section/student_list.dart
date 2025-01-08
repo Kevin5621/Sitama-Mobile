@@ -180,7 +180,7 @@ class _StudentListState extends State<StudentList> {
     );
 
     if (result == true) {
-      bloc.add(ArchiveSelectedItems());
+        bloc.add(ArchiveSelectedItems());
     }
   }
 

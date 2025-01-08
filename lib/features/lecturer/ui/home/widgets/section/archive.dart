@@ -43,7 +43,7 @@ class _ArchivePageState extends State<ArchivePage> {
     // Filter students based on current archived IDs
     setState(() {
       _filteredStudents = widget.archivedStudents
-          .where((student) => archivedIds.contains(student.id))
+          .where((student) => archivedIds.contains(student.user_id))
           .toList();
     });
   }
@@ -62,7 +62,7 @@ class _ArchivePageState extends State<ArchivePage> {
     if (query.isEmpty) {
       setState(() {
         _filteredStudents = widget.archivedStudents
-            .where((student) => archivedIds.contains(student.id))
+            .where((student) => archivedIds.contains(student.user_id))
             .toList();
       });
       return;
@@ -169,6 +169,7 @@ class _ArchivePageState extends State<ArchivePage> {
                 ),
                 actions: [
                   if (selectionState.isSelectionMode && selectionState.selectedIds.isNotEmpty)
+                    Text(selectionState.selectedIds.toString()),
                     TextButton.icon(
                       onPressed: () =>
                           _showUnarchiveConfirmation(context, selectionState.selectedIds),
@@ -233,7 +234,7 @@ class _ArchivePageState extends State<ArchivePage> {
 
         return StudentCard(
           student: student,
-          isSelected: state.selectedIds.contains(student.id),
+          isSelected: state.selectedIds.contains(student.user_id),
           isFinished: student.isFinished,
           onTap: () => _handleStudentTap(context, student),
           onLongPress: () => _handleStudentLongPress(context, student),
@@ -269,7 +270,7 @@ Widget _buildFloatingActionButton(BuildContext context, List<int> selectedIds) {
   void _handleStudentTap(BuildContext context, LecturerStudentsEntity student) {
     final state = context.read<SelectionBloc>().state;
     if (state.isSelectionMode) {
-      context.read<SelectionBloc>().add(ToggleItemSelection(student.id));
+      context.read<SelectionBloc>().add(ToggleItemSelection(student.user_id));
     } else {
       Navigator.push(
         context,
@@ -285,6 +286,6 @@ Widget _buildFloatingActionButton(BuildContext context, List<int> selectedIds) {
     final state = context.read<SelectionBloc>().state;
     if (!state.isSelectionMode) {
       context.read<SelectionBloc>().add(ToggleSelectionMode());
-      context.read<SelectionBloc>().add(ToggleItemSelection(student.id));
+      context.read<SelectionBloc>().add(ToggleItemSelection(student.user_id));
     }
   }
