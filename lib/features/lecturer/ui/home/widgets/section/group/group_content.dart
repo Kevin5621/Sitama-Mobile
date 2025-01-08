@@ -61,7 +61,7 @@ class _GroupContentState extends State<GroupContent> with SingleTickerProviderSt
             builder: (context, state) {
               return StudentCard(
                 student: student,
-                isSelected: state.selectedIds.contains(student.id),
+                isSelected: state.selectedIds.contains(student.user_id),
                 isFinished: student.isFinished,
                 onTap: () => _handleStudentTap(context, student),
                 onLongPress: () => _handleStudentLongPress(context, student),
@@ -77,7 +77,7 @@ class _GroupContentState extends State<GroupContent> with SingleTickerProviderSt
   void _handleStudentTap(BuildContext context, LecturerStudentsEntity student) {
     final state = context.read<SelectionBloc>().state;
     if (state.isSelectionMode) {
-      context.read<SelectionBloc>().add(ToggleItemSelection(student.id));
+      context.read<SelectionBloc>().add(ToggleItemSelection(student.user_id));
     } else {
       Navigator.push(
         context,
@@ -93,7 +93,7 @@ class _GroupContentState extends State<GroupContent> with SingleTickerProviderSt
     final state = context.read<SelectionBloc>().state;
     if (!state.isSelectionMode) {
       context.read<SelectionBloc>().add(ToggleSelectionMode());
-      context.read<SelectionBloc>().add(ToggleItemSelection(student.id));
+      context.read<SelectionBloc>().add(ToggleItemSelection(student.user_id));
     }
   }
 }

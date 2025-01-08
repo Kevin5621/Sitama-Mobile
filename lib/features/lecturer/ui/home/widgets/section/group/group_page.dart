@@ -45,7 +45,7 @@ class _GroupPageState extends State<GroupPage> {
     // Filter students based on group membership
     setState(() {
       _filteredStudents = widget.groupStudents
-          .where((student) => group!.studentIds.contains(student.id))
+          .where((student) => group!.studentIds.contains(student.user_id))
           .toList();
     });
   }

@@ -58,7 +58,7 @@ class GroupCard extends StatelessWidget {
 
         // Filter and create a list of students that belong to the group
         final groupStudentsList = groupStudents
-            .where((student) => group.studentIds.contains(student.id))
+            .where((student) => group.studentIds.contains(student.user_id))
             .toList();
 
         // Handle case where no students are in the group by deleting the group

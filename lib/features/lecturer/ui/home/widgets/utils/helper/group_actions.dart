@@ -19,8 +19,8 @@ class GroupActions {
       ScaffoldMessenger.of(context).showSnackBar(
           CustomSnackBar(
             message: ('Group harus memiliki minimal 1 anggota'),
-            icon: Icons.warning_outlined,  
-            backgroundColor: Colors.orange.shade800,  
+            icon: Icons.warning_outlined,
+            backgroundColor: Colors.orange.shade800,
           ),
         );
       return;
