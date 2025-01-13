@@ -90,8 +90,8 @@ Sitama is a comprehensive mobile application designed to revolutionize the inter
 | Dashboard | Guidance | Logbook Page |
 |:---------------:|:---------------:|:---------------:|
 | ![Dashboard](assets/screenshot/homeMahasiswa.jpg) | ![Guidance](assets/screenshot/bimbingan.jpg) | ![Logbook Page](assets/screenshot/logbook.jpg) |
-| Profile | Profile (darkMode) |
-| ![Profile](assets/screenshot/profile.jpg) | ![Profile (darkMode)](assets/screenshot/darkModeProfile.jpg) |
+| Add Guidance |Profile | Profile (darkMode) |
+| ![Profile](assets/screenshot/addBimbingan.jpg) | ![Profile](assets/screenshot/profile.jpg) | ![Profile (darkMode)](assets/screenshot/darkModeProfile.jpg) |
 
 ### 👨‍🏫 Lecturers
 | Dashboard | Detail Student | Guidance |
