@@ -76,7 +76,32 @@ Sitama is a comprehensive mobile application designed to revolutionize the inter
 
 ## 📱 Screenshots
 
-*Coming soon!*
+### 🔑 Authentication
+| Login |
+|:---------------:|
+| ![Login](assets/screenshot/login.jpg) |
+
+### ⚠️ Error Page
+| Error Page |
+|:---------------:|
+| ![Error Page](assets/screenshot/errorPage.jpg) |
+
+### 👨‍🎓 Students
+| Dashboard | Guidance | Logbook Page |
+|:---------------:|:---------------:|:---------------:|
+| ![Dashboard](assets/screenshot/homeMahasiswa.jpg) | ![Guidance](assets/screenshot/bimbingan.jpg) | ![Logbook Page](assets/screenshot/logbook.jpg) |
+| Profile | Profile (darkMode) |
+| ![Profile](assets/screenshot/profile.jpg) | ![Profile (darkMode)](assets/screenshot/darkModeProfile.jpg) |
+
+### 👨‍🏫 Lecturers
+| Dashboard | Detail Student | Guidance |
+|:---------------:|:---------------:|:---------------:|
+| ![Dashboard](assets/screenshot/homeDosen.jpg) | ![Detail Student](assets/screenshot/detailStudent.jpg) | ![Guidance](assets/screenshot/actionBimbingan.jpg) |
+| Additional Guidance View |
+| ![Guidance](assets/screenshot/actionBimbingan2.jpg) |
+| Score Page | Score | Score Input |
+| ![Score](assets/screenshot/detailNilai.jpg) | ![Profile](assets/screenshot/falseNilai.jpg) | ![Profile DarkMode](assets/screenshot/inputNilai.jpg) |
+
 
 ## 📞 Contact
 
